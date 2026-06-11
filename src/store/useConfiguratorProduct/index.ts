@@ -1,0 +1,1 @@
+export { useConfiguratorProduct } from './useConfiguratorProduct';

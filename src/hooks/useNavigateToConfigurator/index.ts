@@ -1,0 +1,1 @@
+export { useNavigateToConfigurator } from './useNavigateToConfigurator';
