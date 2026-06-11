@@ -46,53 +46,6 @@ configurator_clothes3/
 └── ARCHITECTURE.md         # This document
 ```
 
----
-
-## High-level data flow
-
-```mermaid
-flowchart LR
-  subgraph routes [app/]
-    Page[Thin page.tsx]
-  end
-
-  subgraph ui [src/ui]
-    Pages[@pages]
-    Organisms[@organisms]
-    Molecules[@molecules]
-    Atoms[@atoms]
-  end
-
-  subgraph state [State & domain]
-    Hooks[@hooks]
-    Store[@store]
-    Types[@types]
-  end
-
-  subgraph assets [Data & 3D]
-    Data[@data]
-    Utils[@utils]
-    Shaders[@shaders]
-    Gizmo[@gizmo]
-  end
-
-  Page --> Pages
-  Pages --> Organisms
-  Organisms --> Molecules
-  Molecules --> Atoms
-  Molecules --> Hooks
-  Hooks --> Store
-  Store --> Types
-  Data --> Types
-  Organisms --> Utils
-  Organisms --> Shaders
-  Hooks --> Gizmo
-```
-
-**Catalog data** (`src/data/`) defines products and garment options. **Entity types** in `src/types/entities/` mirror that JSON. **Runtime types** in `src/types/garment/` compose entity shapes for live configuration state held in Zustand stores. **Hooks** bridge stores to UI and 3D layers; **utils** and **shaders** apply print/color/design changes to GPU textures and materials.
-
----
-
 ## UI layer (Atomic Design)
 
 All UI lives under `src/ui/` and follows Atomic Design tiers.
@@ -167,15 +120,6 @@ src/types/
 ├── utils/          # PbrMaps, GarmentPrintState, PatternMaskPair, etc.
 └── index.ts        # Barrel export
 ```
-
-#### Type conventions
-
-1. **Naming:** camelCase with a `Type` suffix — e.g. `garmentConfigType`, `nameInstanceType`.
-2. **Shape:** object shapes use `interface`; unions, intersections, generics, and tuples use `type`.
-3. **Entity types** (`garmentConfigType`, `modalInfoTabType`, `namePositionConfigType`, `uvPointType`, …) describe JSON in `src/data/` and live in `src/types/entities/`.
-4. **Runtime types** (`nameInstanceType`, `logoPositionType`, `partGradientType`, …) **extend or compose** entity types via `Pick`, `Omit`, or `extends` — **never duplicate fields manually**.
-5. Component prop types belong in `src/types/ui/`, not in component files.
-6. `@data` exports **data and accessor functions only** (`getProduct`, `faqContent`, `measureContent`, …). Types are imported from `@types` — no intermediate `types.ts` in `data/`, `gizmo/`, etc.
 
 ### `src/data/` (`@data`)
 
