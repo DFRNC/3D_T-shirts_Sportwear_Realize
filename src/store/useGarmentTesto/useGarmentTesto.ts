@@ -31,12 +31,6 @@ const resolveTestoInstancesForRender = (instances: testoInstanceType[], preview:
   if (!preview) return instances;
 
   const { instanceId, patch } = preview;
-
-  if (patch.text !== undefined) {
-    const text = patch.text;
-    return instances.map((instance) => (instance.id === instanceId ? { ...instance, ...patch } : { ...instance, text }));
-  }
-
   return instances.map((instance) => (instance.id === instanceId ? { ...instance, ...patch } : instance));
 };
 
@@ -79,12 +73,7 @@ const useGarmentTesto = create<GarmentTestoState>((set, get) => ({
     });
   },
   addInstance: (instance) => {
-    set((state) => {
-      const sharedText = state.instances[0]?.text;
-      const nextInstance = sharedText !== undefined ? { ...instance, text: sharedText } : instance;
-
-      return { instances: [...state.instances, nextInstance] };
-    });
+    set((state) => ({ instances: [...state.instances, instance] }));
   },
   removeInstance: (id) => {
     set((state) => ({
@@ -126,18 +115,9 @@ const useGarmentTesto = create<GarmentTestoState>((set, get) => ({
     });
   },
   updateInstance: (id, patch) => {
-    set((state) => {
-      if (patch.text !== undefined) {
-        const text = patch.text;
-        return {
-          instances: state.instances.map((instance) => (instance.id === id ? { ...instance, ...patch } : { ...instance, text })),
-        };
-      }
-
-      return {
-        instances: state.instances.map((instance) => (instance.id === id ? { ...instance, ...patch } : instance)),
-      };
-    });
+    set((state) => ({
+      instances: state.instances.map((instance) => (instance.id === id ? { ...instance, ...patch } : instance)),
+    }));
   },
   setPreview: (instanceId, patch) => {
     set((state) => {

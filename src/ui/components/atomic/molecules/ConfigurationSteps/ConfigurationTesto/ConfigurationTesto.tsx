@@ -25,10 +25,6 @@ const TestoPartForm = ({ instanceId, limits, placeholder, lineHeightShow, letter
   const setPreview = useGarmentTesto((state) => state.setPreview);
   const clearPreview = useGarmentTesto((state) => state.clearPreview);
   const previewPatch = useGarmentTesto((state) => (state.preview?.instanceId === instanceId ? state.preview.patch : null));
-  const sharedPreviewText = useGarmentTesto((state) => {
-    const text = state.preview?.patch.text;
-    return text !== undefined ? text : null;
-  });
   const previewText = previewPatch?.text;
   const previewTextColor = previewPatch?.textColor;
   const previewStrokeColor = previewPatch?.strokeColor;
@@ -66,7 +62,7 @@ const TestoPartForm = ({ instanceId, limits, placeholder, lineHeightShow, letter
         <Text variant="configurator_control_label">Carattere</Text>
         <input
           type="text"
-          value={sharedPreviewText ?? previewText ?? instance.text}
+          value={previewText ?? instance.text}
           maxLength={limits.maxLength}
           onChange={(e) => setPreview(instanceId, { text: e.target.value })}
           onBlur={commitFromPreview}
