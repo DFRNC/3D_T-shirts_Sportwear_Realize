@@ -1,4 +1,4 @@
-export type { catalogProductRefType } from './catalog';
+export type { catalogProductEntryType, catalogProductRefType, productCollectionIdType, productCollectionType } from './catalog';
 export type {
   modalInfoImagePartType,
   modalInfoListPartType,

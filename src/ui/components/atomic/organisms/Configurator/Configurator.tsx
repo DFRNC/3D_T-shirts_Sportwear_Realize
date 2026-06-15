@@ -3,6 +3,7 @@
 import { Suspense } from 'react';
 
 import { Canvas } from '@react-three/fiber';
+import { Environment } from '@react-three/drei';
 import * as THREE from 'three';
 
 import { CanvasControl } from './CanvasControl';
@@ -24,6 +25,7 @@ const Configurator = () => {
       dpr={[1, 1.5]}
     >
       <CanvasControl />
+      <Environment preset="sunset" />
       <Suspense fallback={null}>
         <Model />
       </Suspense>

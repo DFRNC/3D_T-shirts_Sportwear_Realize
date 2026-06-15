@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 
-import { getProduct } from '@data';
+import { getProduct } from '@utils';
 import { useCheckout } from '@store';
 
 const useCheckoutSummary = () => {

@@ -1,7 +1,7 @@
 'use client';
 
 import type { garmentConfigType, styleIdType } from '@types';
-import { getProduct } from '@data';
+import { getProduct } from '@utils';
 
 import { create } from 'zustand';
 

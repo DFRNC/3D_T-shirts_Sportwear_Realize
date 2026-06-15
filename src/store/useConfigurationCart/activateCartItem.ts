@@ -1,5 +1,5 @@
 import type { cartItemConfigurationType, styleIdType } from '@types';
-import { getProduct } from '@data';
+import { getProduct } from '@utils';
 
 import { useConfigurationControl } from '../useConfigurationControl';
 import { useConfiguratorProduct } from '../useConfiguratorProduct';

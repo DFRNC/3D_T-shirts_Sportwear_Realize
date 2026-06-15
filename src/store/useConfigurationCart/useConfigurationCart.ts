@@ -1,7 +1,7 @@
 'use client';
 
-import type { cartItemConfigurationType, cartItemType, styleIdType } from '@types';
-import { getProduct } from '@data';
+import type { cartItemConfigurationType, cartItemType, catalogProductRefType } from '@types';
+import { getProduct } from '@utils';
 
 import { create } from 'zustand';
 
@@ -14,7 +14,7 @@ interface ConfigurationCartState {
   items: cartItemType[];
   activeItemId: string;
   configurations: Record<string, cartItemConfigurationType>;
-  addItem: (styleId: styleIdType, productIndex: number) => void;
+  addItem: (product: Pick<catalogProductRefType, 'collection' | 'slug' | 'styleId' | 'productIndex'>) => void;
   duplicateActiveItem: () => void;
   selectItem: (id: string) => void;
   removeItem: (id: string) => void;
@@ -30,10 +30,10 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
   activeItemId: initialItem.id,
   configurations: {},
 
-  addItem: (styleId, productIndex) => {
+  addItem: (productRef) => {
     const { items, activeItemId, configurations } = get();
-    const item = createCartItem(styleId, productIndex);
-    const newProduct = getProduct(styleId, productIndex);
+    const item = createCartItem(productRef);
+    const newProduct = getProduct(productRef.styleId, productRef.productIndex);
     if (!newProduct) return;
 
     const nextConfigurations: Record<string, cartItemConfigurationType> = {
@@ -73,7 +73,12 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
       [activeItemId]: currentConfiguration,
     };
 
-    const duplicatedItem = createCartItem(activeItem.styleId, activeItem.productIndex);
+    const duplicatedItem = createCartItem({
+      collection: activeItem.collection,
+      slug: activeItem.slug,
+      styleId: activeItem.styleId,
+      productIndex: activeItem.productIndex,
+    });
 
     set({
       items: [...items, duplicatedItem],

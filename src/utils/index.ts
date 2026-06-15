@@ -80,6 +80,16 @@ export {
 export { resolveDesignThumbSrc } from './resolveDesignThumbSrc/resolveDesignThumbSrc';
 export { resolveProductFlipCardSrc } from './resolveProductFlipCardSrc/resolveProductFlipCardSrc';
 export type { productFlipCardSideType } from './resolveProductFlipCardSrc/resolveProductFlipCardSrc';
+export { resolveProductCatalogPreviewSrc } from './resolveProductCatalogPreviewSrc/resolveProductCatalogPreviewSrc';
+export {
+  getCatalogProductEntry,
+  listCatalogProducts,
+  listCatalogProductsByCollection,
+  listOtherProductCollections,
+  resolveCartItemPreviewSrc,
+  toCatalogProductRef,
+} from './productCatalog';
+export { getProduct, getStyle, resolveProductPreviewSrc, STYLES } from './garmentCatalog';
 export { getCheckoutDeliveryTimeline } from './checkoutDeliveryDates';
 export { CHECKOUT_SUMMARY_ICON_MAP } from './checkoutSummaryIcons';
 export { priceFormat } from './priceFormat';

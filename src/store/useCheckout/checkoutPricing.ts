@@ -1,5 +1,5 @@
 import type { checkoutProductType } from '@types';
-import { getProduct } from '@data';
+import { getProduct } from '@utils';
 
 const getProductRowQuantity = (product: checkoutProductType) => product.rows.reduce((sum, row) => sum + row.quantity, 0);
 

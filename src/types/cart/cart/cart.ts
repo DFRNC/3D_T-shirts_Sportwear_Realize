@@ -1,7 +1,9 @@
-import type { logoInstanceType, nameInstanceType, numberInstanceType, partGradientType, styleIdType, testoInstanceType } from '@types';
+import type { logoInstanceType, nameInstanceType, numberInstanceType, partGradientType, productCollectionIdType, styleIdType, testoInstanceType } from '@types';
 
 interface cartItemType {
   id: string;
+  collection: productCollectionIdType;
+  slug: string;
   styleId: styleIdType;
   productIndex: number;
 }

@@ -5,11 +5,10 @@ import { useMemo } from 'react';
 import { AtomImage, Box, Button, Flex, Grid, SvgIcon, Text } from '@atoms';
 
 import { CHECKOUT_SHIPPING_DAYS_LABEL } from '@constants';
-import { getProduct, resolveProductPreviewSrc } from '@data';
 import { useNavigateToConfigurator } from '@hooks';
 import { resolveCheckoutPrintAvailability, resolveTestoLimits, useCheckout, useConfigurationCart } from '@store';
 import type { checkoutProductCardPropsType } from '@types';
-import { priceFormat } from '@utils';
+import { getProduct, priceFormat, resolveProductPreviewSrc } from '@utils';
 
 import { CheckoutConfigurationTable } from '../CheckoutConfigurationTable';
 

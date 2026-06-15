@@ -1,6 +1,6 @@
-import type { ButtonHTMLAttributes, ReactElement } from 'react';
+import type { ButtonHTMLAttributes, ReactElement, ReactNode } from 'react';
 
-import type { catalogProductRefType } from '@types';
+import type { catalogProductRefType, productCollectionIdType } from '@types';
 import type { ReactPlayerProps } from 'react-player/types';
 
 type videoPlayerVariantType = 'default' | 'tutorial';
@@ -14,12 +14,16 @@ type videoPlayerPropsType = Omit<ReactPlayerProps, 'width' | 'height' | 'style' 
 interface productCatalogOptionPropsType {
   name: string;
   previewSrc: string;
+  disabled?: boolean;
   onSelect: () => void;
 }
 
 interface productCatalogPopoverPropsType {
-  products: catalogProductRefType[];
-  onSelect: (styleId: catalogProductRefType['styleId'], productIndex: number) => void;
+  activeCollection: productCollectionIdType;
+  onSelect: (product: Pick<catalogProductRefType, 'collection' | 'slug' | 'styleId' | 'productIndex'>) => void;
+  children: ReactNode;
+  contentSide?: 'top' | 'right' | 'bottom' | 'left';
+  contentAlign?: 'start' | 'center' | 'end';
 }
 
 type productSessionAddButtonPropsType = ButtonHTMLAttributes<HTMLButtonElement>;
