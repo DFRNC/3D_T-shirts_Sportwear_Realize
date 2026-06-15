@@ -185,11 +185,11 @@ vec2 garmentLogoStampAtlasUv( vec2 stampUv, float slotIndex ) {
 }
 
 vec2 garmentTextMaskFillUv( vec2 stampUv ) {
-  return vec2( stampUv.x, stampUv.y * 0.5 + 0.5 );
+  return vec2( stampUv.x, stampUv.y * 0.5 );
 }
 
 vec2 garmentTextMaskStrokeUv( vec2 stampUv ) {
-  return vec2( stampUv.x, stampUv.y * 0.5 );
+  return vec2( stampUv.x, stampUv.y * 0.5 + 0.5 );
 }
 
 float garmentNameFillChannel( sampler2D tex, vec2 uv, float channel ) {
