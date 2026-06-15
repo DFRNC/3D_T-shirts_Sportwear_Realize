@@ -262,7 +262,7 @@
           "rotation": 0,
           "fontSize": 200,
           "show_frame": true,
-          "show_gizmo": true
+          "show_gizmo": false
         },
         {
           "label": "Bottom Back",
@@ -271,7 +271,7 @@
           "rotation": 0,
           "fontSize": 200,
           "show_frame": true,
-          "show_gizmo": true
+          "show_gizmo": false
         }
       ],
       "numberPositions": [
@@ -282,7 +282,7 @@
           "rotation": 0,
           "fontSize": 180,
           "show_frame": true,
-          "show_gizmo": true
+          "show_gizmo": false
         },
         {
           "label": "Front Right",
@@ -291,7 +291,7 @@
           "rotation": 0,
           "fontSize": 180,
           "show_frame": true,
-          "show_gizmo": true
+          "show_gizmo": false
         },
         {
           "label": "Back",
@@ -300,7 +300,7 @@
           "rotation": 0,
           "fontSize": 580,
           "show_frame": true,
-          "show_gizmo": true
+          "show_gizmo": false
         }
       ],
       "testoDefaults": {
@@ -330,7 +330,7 @@
           "rotation": 0,
           "fontSize": 180,
           "show_frame": true,
-          "show_gizmo": true
+          "show_gizmo": false
         },
         {
           "label": "Bottom Back",
@@ -342,7 +342,7 @@
           "rotation": 0,
           "fontSize": 180,
           "show_frame": true,
-          "show_gizmo": true
+          "show_gizmo": false
         },
         {
           "label": "Top Back",
@@ -354,7 +354,7 @@
           "rotation": 0,
           "fontSize": 60,
           "show_frame": true,
-          "show_gizmo": true
+          "show_gizmo": false
         }
       ],
       "logoPositions": []
