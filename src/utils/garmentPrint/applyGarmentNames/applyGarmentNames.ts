@@ -11,11 +11,8 @@ let pendingNumberGizmoFrame: gizmoFrameStateType | null = null;
 let pendingGizmoIcons: Texture | null = null;
 
 const applyNameMasksToUniforms = (material: MeshStandardMaterial, state: garmentNameMaskStateType) => {
-  const fillUniform = material.userData.uNameFillMaskUniform as { value: Texture } | undefined;
-  if (fillUniform) fillUniform.value = state.fillMask;
-
-  const strokeUniform = material.userData.uNameStrokeMaskUniform as { value: Texture } | undefined;
-  if (strokeUniform) strokeUniform.value = state.strokeMask;
+  const maskUniform = material.userData.uNameMaskUniform as { value: Texture } | undefined;
+  if (maskUniform) maskUniform.value = state.mask;
 };
 
 const applyNameStyleToUniforms = (material: MeshStandardMaterial, style: nameStyleUniformsType) => {
@@ -106,11 +103,8 @@ const applyGarmentNameStyle = (material: MeshStandardMaterial, style: nameStyleU
 };
 
 const applyNumberMasksToUniforms = (material: MeshStandardMaterial, state: garmentNameMaskStateType) => {
-  const fillUniform = material.userData.uNumberFillMaskUniform as { value: Texture } | undefined;
-  if (fillUniform) fillUniform.value = state.fillMask;
-
-  const strokeUniform = material.userData.uNumberStrokeMaskUniform as { value: Texture } | undefined;
-  if (strokeUniform) strokeUniform.value = state.strokeMask;
+  const maskUniform = material.userData.uNumberMaskUniform as { value: Texture } | undefined;
+  if (maskUniform) maskUniform.value = state.mask;
 };
 
 const applyNumberStyleToUniforms = (material: MeshStandardMaterial, style: nameStyleUniformsType) => {
@@ -314,8 +308,7 @@ const applyGarmentGizmoHover = (material: MeshStandardMaterial, hover: { slot: n
 const hydrateGarmentNameUniforms = (
   material: MeshStandardMaterial,
   uniforms: {
-    uNameFillMask: { value: Texture };
-    uNameStrokeMask: { value: Texture };
+    uNameMask: { value: Texture };
     uNameStampSize: { value: Vector2 };
     uNameAnchorUv: { value: Vector2[] };
     uNameRotation: { value: number[] };
@@ -337,11 +330,9 @@ const hydrateGarmentNameUniforms = (
   const gizmoState = (material.userData.garmentGizmoFrameState as gizmoFrameStateType | undefined) ?? pendingGizmoFrame;
 
   if (maskState) {
-    uniforms.uNameFillMask.value = maskState.fillMask;
-    uniforms.uNameStrokeMask.value = maskState.strokeMask;
+    uniforms.uNameMask.value = maskState.mask;
     material.userData.garmentNameMaskState = maskState;
-    material.userData.uNameFillMaskUniform = uniforms.uNameFillMask;
-    material.userData.uNameStrokeMaskUniform = uniforms.uNameStrokeMask;
+    material.userData.uNameMaskUniform = uniforms.uNameMask;
   }
 
   if (styleState) {
@@ -377,8 +368,7 @@ const hydrateGarmentNameUniforms = (
 const hydrateGarmentNumberUniforms = (
   material: MeshStandardMaterial,
   uniforms: {
-    uNumberFillMask: { value: Texture };
-    uNumberStrokeMask: { value: Texture };
+    uNumberMask: { value: Texture };
     uNumberStampSize: { value: Vector2 };
     uNumberAnchorUv: { value: Vector2[] };
     uNumberRotation: { value: number[] };
@@ -400,11 +390,9 @@ const hydrateGarmentNumberUniforms = (
   const gizmoState = (material.userData.garmentNumberGizmoFrameState as gizmoFrameStateType | undefined) ?? pendingNumberGizmoFrame;
 
   if (maskState) {
-    uniforms.uNumberFillMask.value = maskState.fillMask;
-    uniforms.uNumberStrokeMask.value = maskState.strokeMask;
+    uniforms.uNumberMask.value = maskState.mask;
     material.userData.garmentNumberMaskState = maskState;
-    material.userData.uNumberFillMaskUniform = uniforms.uNumberFillMask;
-    material.userData.uNumberStrokeMaskUniform = uniforms.uNumberStrokeMask;
+    material.userData.uNumberMaskUniform = uniforms.uNumberMask;
   }
 
   if (styleState) {

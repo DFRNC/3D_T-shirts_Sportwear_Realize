@@ -5,16 +5,16 @@ const garmentNumberMapFragment = /* glsl */ `
   vec2 numberStampUv3 = garmentNumberToStampUv( vPrintUv, uNumberAnchorUv[3], uNumberRotation[3], uNumberPlacementRotation[3], uNumberUploadRotation[3], uNumberPartRotation[3], uNumberScale[3], uNumberLineHeight[3] );
 
   vec4 numberFillMasks = vec4(
-    garmentNameSampleFillChannel( uNumberFillMask, numberStampUv0, 0.0 ),
-    garmentNameSampleFillChannel( uNumberFillMask, numberStampUv1, 1.0 ),
-    garmentNameSampleFillChannel( uNumberFillMask, numberStampUv2, 2.0 ),
-    garmentNameSampleFillChannel( uNumberFillMask, numberStampUv3, 3.0 )
+    garmentNameSampleFillChannel( uNumberMask, numberStampUv0, 0.0 ),
+    garmentNameSampleFillChannel( uNumberMask, numberStampUv1, 1.0 ),
+    garmentNameSampleFillChannel( uNumberMask, numberStampUv2, 2.0 ),
+    garmentNameSampleFillChannel( uNumberMask, numberStampUv3, 3.0 )
   );
   vec4 numberStrokeMasks = vec4(
-    garmentNameFillChannel( uNumberStrokeMask, numberStampUv0, 0.0 ),
-    garmentNameFillChannel( uNumberStrokeMask, numberStampUv1, 1.0 ),
-    garmentNameFillChannel( uNumberStrokeMask, numberStampUv2, 2.0 ),
-    garmentNameFillChannel( uNumberStrokeMask, numberStampUv3, 3.0 )
+    garmentNameSampleStrokeChannel( uNumberMask, numberStampUv0, 0.0 ),
+    garmentNameSampleStrokeChannel( uNumberMask, numberStampUv1, 1.0 ),
+    garmentNameSampleStrokeChannel( uNumberMask, numberStampUv2, 2.0 ),
+    garmentNameSampleStrokeChannel( uNumberMask, numberStampUv3, 3.0 )
   );
   float numberInside0 = garmentNameInsidePart( vPrintUv, uNumberPartBounds[0] ) * uNumberSlotActive[0];
   float numberInside1 = garmentNameInsidePart( vPrintUv, uNumberPartBounds[1] ) * uNumberSlotActive[1];

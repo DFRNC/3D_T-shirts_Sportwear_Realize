@@ -61,6 +61,8 @@ export { resolveTextContentRotationDeg, resolveTextGizmoHalf, resolveTextGizmoMe
 export { resolveRotatedGizmoHalf } from './composeLogoAtlas/composeLogoPrintAtlas';
 export { applyGarmentPatternTints, applyGarmentPrint, emptyMaskPair } from './garmentPrint/applyGarmentPrint';
 export { getEmptyPrintTexture } from './garmentPrint/emptyPrintTexture';
+export { packPatternMaskChannels } from './garmentPrint/packPatternMaskChannels';
+export { packStackedTextMaskCanvas, packStackedTextMaskTexture } from './garmentPrint/packStackedTextMask';
 export { canvasToMaskTexture } from './garmentPrint/canvasToMaskTexture';
 export { canvasToTexture } from './garmentPrint/canvasToTexture';
 export { clearImageTextureCache, imageToTexture } from './garmentPrint/imageToTexture';

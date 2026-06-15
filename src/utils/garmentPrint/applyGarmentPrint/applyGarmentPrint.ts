@@ -15,11 +15,8 @@ const applyGarmentPrint = (material: MeshStandardMaterial, state: garmentPrintSt
   const logosUniform = material.userData.uDefaultLogosUniform as { value: Texture } | undefined;
   if (logosUniform) logosUniform.value = state.defaultLogos;
 
-  const mask0Uniform = material.userData.uPatternMask0Uniform as { value: Texture } | undefined;
-  if (mask0Uniform) mask0Uniform.value = state.patternMasks[0];
-
-  const mask1Uniform = material.userData.uPatternMask1Uniform as { value: Texture } | undefined;
-  if (mask1Uniform) mask1Uniform.value = state.patternMasks[1];
+  const maskUniform = material.userData.uPatternMaskUniform as { value: Texture } | undefined;
+  if (maskUniform) maskUniform.value = state.patternMask;
 
   applyGarmentPatternTints(material, state.patternColors, state.patternOpacity);
 };

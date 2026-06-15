@@ -27,6 +27,7 @@ import {
   GARMENT_SHADER_VERSION,
   imageToTexture,
   isColorOnlyGarmentPart,
+  packPatternMaskChannels,
   readProductAppearanceTextures,
   resolvePartUvBounds,
   resolvePbrTexturePaths,
@@ -75,6 +76,8 @@ const useGarmentTextures = () => {
 
   const logosTextureRef = useRef<Texture | null>(null);
   const maskTexturesRef = useRef<patternMaskPairType>(emptyMaskPair());
+  const patternMaskCombinedRef = useRef<Texture | null>(null);
+  const patternMaskCombinedCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const masksPatternKeyRef = useRef<string | null>(null);
   const loadSessionRef = useRef(0);
   const pendingFrameReapplyRef = useRef(false);
@@ -101,9 +104,11 @@ const useGarmentTextures = () => {
   );
 
   const buildPrintState = useCallback((): garmentPrintStateType => {
+    const empty = emptyMaskPair()[0];
     return {
-      defaultLogos: logosTextureRef.current ?? emptyMaskPair()[0],
+      defaultLogos: logosTextureRef.current ?? empty,
       patternMasks: maskTexturesRef.current,
+      patternMask: patternMaskCombinedRef.current ?? empty,
       patternColors: buildPatternColors(activePattern, patternColors),
       patternOpacity: activeOpacity,
     };
@@ -114,6 +119,7 @@ const useGarmentTextures = () => {
     return {
       defaultLogos: emptyMasks[0],
       patternMasks: emptyMasks,
+      patternMask: emptyMasks[0],
       patternColors: buildPatternColors(null, {}),
       patternOpacity: 0,
     };
@@ -379,6 +385,9 @@ const useGarmentTextures = () => {
 
     if (!activePatternKey) {
       maskTexturesRef.current = emptyMaskPair();
+      patternMaskCombinedRef.current?.dispose();
+      patternMaskCombinedRef.current = null;
+      patternMaskCombinedCanvasRef.current = null;
       masksPatternKeyRef.current = null;
       syncAppearanceCache(product.path);
       reapplyAppearance();
@@ -404,6 +413,14 @@ const useGarmentTextures = () => {
         if (cancelled || !isLoadSessionActive(session, targetPath)) return;
 
         maskTexturesRef.current = masks;
+        patternMaskCombinedRef.current?.dispose();
+        patternMaskCombinedRef.current = packPatternMaskChannels(
+          masks[0],
+          masks[1],
+          patternMaskCombinedCanvasRef.current ?? undefined,
+          patternMaskCombinedRef.current,
+        );
+        patternMaskCombinedCanvasRef.current = patternMaskCombinedRef.current.image as HTMLCanvasElement;
         masksPatternKeyRef.current = activePatternKey;
         syncAppearanceCache(targetPath);
         reapplyAppearance();

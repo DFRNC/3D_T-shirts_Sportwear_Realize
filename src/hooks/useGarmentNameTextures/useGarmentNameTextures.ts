@@ -46,9 +46,9 @@ import {
   buildNameStyleUniforms,
   buildNumberStyleUniforms,
   buildTestoStyleUniforms,
-  canvasToMaskTexture,
   composeNameMaskAtlas,
   getEmptyPrintTexture,
+  packStackedTextMaskTexture,
   repairPrintInstancePlacement,
   resolveNameStampSize,
   resolvePrintAtlasSize,
@@ -119,20 +119,20 @@ const useGarmentNameTextures = () => {
 
   const nameFillCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const nameStrokeCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const nameFillTextureRef = useRef<Texture | null>(null);
-  const nameStrokeTextureRef = useRef<Texture | null>(null);
+  const nameStackedCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const nameStackedTextureRef = useRef<Texture | null>(null);
   const nameStampSizeRef = useRef<stampPixelSizeType>(DEFAULT_STAMP_SIZE);
 
   const numberFillCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const numberStrokeCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const numberFillTextureRef = useRef<Texture | null>(null);
-  const numberStrokeTextureRef = useRef<Texture | null>(null);
+  const numberStackedCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const numberStackedTextureRef = useRef<Texture | null>(null);
   const numberStampSizeRef = useRef<stampPixelSizeType>(DEFAULT_STAMP_SIZE);
 
   const testoFillCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const testoStrokeCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const testoFillTextureRef = useRef<Texture | null>(null);
-  const testoStrokeTextureRef = useRef<Texture | null>(null);
+  const testoStackedCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const testoStackedTextureRef = useRef<Texture | null>(null);
   const testoStampSizeRef = useRef<stampPixelSizeType>(DEFAULT_STAMP_SIZE);
 
   const nameMaskGenerationRef = useRef(0);
@@ -205,34 +205,31 @@ const useGarmentNameTextures = () => {
   const isTestoReady = isTestoSynced && sceneReady;
 
   const clearNameRuntime = useCallback(() => {
-    nameFillTextureRef.current?.dispose();
-    nameStrokeTextureRef.current?.dispose();
-    nameFillTextureRef.current = null;
-    nameStrokeTextureRef.current = null;
+    nameStackedTextureRef.current?.dispose();
+    nameStackedTextureRef.current = null;
     nameFillCanvasRef.current = null;
     nameStrokeCanvasRef.current = null;
+    nameStackedCanvasRef.current = null;
     nameStampSizeRef.current = DEFAULT_STAMP_SIZE;
     prevNameFillSignatureRef.current = '';
   }, []);
 
   const clearNumberRuntime = useCallback(() => {
-    numberFillTextureRef.current?.dispose();
-    numberStrokeTextureRef.current?.dispose();
-    numberFillTextureRef.current = null;
-    numberStrokeTextureRef.current = null;
+    numberStackedTextureRef.current?.dispose();
+    numberStackedTextureRef.current = null;
     numberFillCanvasRef.current = null;
     numberStrokeCanvasRef.current = null;
+    numberStackedCanvasRef.current = null;
     numberStampSizeRef.current = DEFAULT_STAMP_SIZE;
     prevNumberFillSignatureRef.current = '';
   }, []);
 
   const clearTestoRuntime = useCallback(() => {
-    testoFillTextureRef.current?.dispose();
-    testoStrokeTextureRef.current?.dispose();
-    testoFillTextureRef.current = null;
-    testoStrokeTextureRef.current = null;
+    testoStackedTextureRef.current?.dispose();
+    testoStackedTextureRef.current = null;
     testoFillCanvasRef.current = null;
     testoStrokeCanvasRef.current = null;
+    testoStackedCanvasRef.current = null;
     testoStampSizeRef.current = DEFAULT_STAMP_SIZE;
     prevTestoFillSignatureRef.current = '';
   }, []);
@@ -243,19 +240,22 @@ const useGarmentNameTextures = () => {
       refs: {
         fillCanvasRef: { current: HTMLCanvasElement | null };
         strokeCanvasRef: { current: HTMLCanvasElement | null };
-        fillTextureRef: { current: Texture | null };
-        strokeTextureRef: { current: Texture | null };
+        stackedCanvasRef: { current: HTMLCanvasElement | null };
+        stackedTextureRef: { current: Texture | null };
         stampSizeRef: { current: stampPixelSizeType };
       },
     ) => {
       if (!refs.fillCanvasRef.current) {
         refs.fillCanvasRef.current = document.createElement('canvas');
-        refs.fillTextureRef.current = canvasToMaskTexture(refs.fillCanvasRef.current);
       }
 
       if (!refs.strokeCanvasRef.current) {
         refs.strokeCanvasRef.current = document.createElement('canvas');
-        refs.strokeTextureRef.current = canvasToMaskTexture(refs.strokeCanvasRef.current);
+      }
+
+      if (!refs.stackedCanvasRef.current) {
+        refs.stackedCanvasRef.current = document.createElement('canvas');
+        refs.stackedTextureRef.current = packStackedTextMaskTexture(refs.fillCanvasRef.current, refs.strokeCanvasRef.current, refs.stackedCanvasRef.current);
       }
 
       if (!stampSizeChanged(refs.stampSizeRef.current, stampSize)) return;
@@ -264,20 +264,19 @@ const useGarmentNameTextures = () => {
       refs.fillCanvasRef.current.height = stampSize.height;
       refs.strokeCanvasRef.current.width = stampSize.width;
       refs.strokeCanvasRef.current.height = stampSize.height;
-      refs.fillTextureRef.current?.dispose();
-      refs.strokeTextureRef.current?.dispose();
-      refs.fillTextureRef.current = canvasToMaskTexture(refs.fillCanvasRef.current);
-      refs.strokeTextureRef.current = canvasToMaskTexture(refs.strokeCanvasRef.current);
+      refs.stackedTextureRef.current?.dispose();
+      refs.stackedCanvasRef.current = document.createElement('canvas');
+      refs.stackedTextureRef.current = packStackedTextMaskTexture(refs.fillCanvasRef.current, refs.strokeCanvasRef.current, refs.stackedCanvasRef.current);
       refs.stampSizeRef.current = stampSize;
     },
     [],
   );
 
   const applyNameMasksToMaterials = useCallback(
-    (fillMask: Texture, strokeMask: Texture) => {
+    (mask: Texture) => {
       for (const part of product.parts) {
         for (const material of getMaterials(part.id)) {
-          applyGarmentNameMasks(material, { fillMask, strokeMask });
+          applyGarmentNameMasks(material, { mask });
         }
       }
       invalidate();
@@ -286,10 +285,10 @@ const useGarmentNameTextures = () => {
   );
 
   const applyNumberMasksToMaterials = useCallback(
-    (fillMask: Texture, strokeMask: Texture) => {
+    (mask: Texture) => {
       for (const part of product.parts) {
         for (const material of getMaterials(part.id)) {
-          applyGarmentNumberMasks(material, { fillMask, strokeMask });
+          applyGarmentNumberMasks(material, { mask });
         }
       }
       invalidate();
@@ -298,10 +297,10 @@ const useGarmentNameTextures = () => {
   );
 
   const applyTestoMasksToMaterials = useCallback(
-    (fillMask: Texture, strokeMask: Texture) => {
+    (mask: Texture) => {
       for (const part of product.parts) {
         for (const material of getMaterials(part.id)) {
-          applyGarmentTestoMasks(material, { fillMask, strokeMask });
+          applyGarmentTestoMasks(material, { mask });
         }
       }
       invalidate();
@@ -437,7 +436,7 @@ const useGarmentNameTextures = () => {
 
       if (nameInstancesForRender.length === 0) {
         nameStampSizeRef.current = DEFAULT_STAMP_SIZE;
-        applyNameMasksToMaterials(empty, empty);
+        applyNameMasksToMaterials(empty);
         applyNameStyleToMaterials(DEFAULT_STAMP_SIZE);
         return;
       }
@@ -449,8 +448,8 @@ const useGarmentNameTextures = () => {
       ensureMaskResources(stampSize, {
         fillCanvasRef: nameFillCanvasRef,
         strokeCanvasRef: nameStrokeCanvasRef,
-        fillTextureRef: nameFillTextureRef,
-        strokeTextureRef: nameStrokeTextureRef,
+        stackedCanvasRef: nameStackedCanvasRef,
+        stackedTextureRef: nameStackedTextureRef,
         stampSizeRef: nameStampSizeRef,
       });
       if (generation !== nameMaskGenerationRef.current) return;
@@ -465,9 +464,15 @@ const useGarmentNameTextures = () => {
 
       if (generation !== nameMaskGenerationRef.current) return;
 
-      nameFillTextureRef.current!.needsUpdate = true;
-      nameStrokeTextureRef.current!.needsUpdate = true;
-      applyNameMasksToMaterials(nameFillTextureRef.current!, nameStrokeTextureRef.current!);
+      const nameMask = packStackedTextMaskTexture(
+        nameFillCanvasRef.current!,
+        nameStrokeCanvasRef.current!,
+        nameStackedCanvasRef.current,
+        nameStackedTextureRef.current,
+      );
+      nameStackedTextureRef.current = nameMask;
+      nameStackedCanvasRef.current = nameMask.image as HTMLCanvasElement;
+      applyNameMasksToMaterials(nameMask);
       applyNameStyleToMaterials(stampSize);
     },
     [applyNameMasksToMaterials, applyNameStyleToMaterials, ensureMaskResources, isNameReady, nameInstancesForRender],
@@ -482,7 +487,7 @@ const useGarmentNameTextures = () => {
 
       if (numberInstancesForRender.length === 0) {
         numberStampSizeRef.current = DEFAULT_STAMP_SIZE;
-        applyNumberMasksToMaterials(empty, empty);
+        applyNumberMasksToMaterials(empty);
         applyNumberStyleToMaterials(DEFAULT_STAMP_SIZE);
         return;
       }
@@ -494,8 +499,8 @@ const useGarmentNameTextures = () => {
       ensureMaskResources(stampSize, {
         fillCanvasRef: numberFillCanvasRef,
         strokeCanvasRef: numberStrokeCanvasRef,
-        fillTextureRef: numberFillTextureRef,
-        strokeTextureRef: numberStrokeTextureRef,
+        stackedCanvasRef: numberStackedCanvasRef,
+        stackedTextureRef: numberStackedTextureRef,
         stampSizeRef: numberStampSizeRef,
       });
       if (generation !== numberMaskGenerationRef.current) return;
@@ -510,9 +515,15 @@ const useGarmentNameTextures = () => {
 
       if (generation !== numberMaskGenerationRef.current) return;
 
-      numberFillTextureRef.current!.needsUpdate = true;
-      numberStrokeTextureRef.current!.needsUpdate = true;
-      applyNumberMasksToMaterials(numberFillTextureRef.current!, numberStrokeTextureRef.current!);
+      const numberMask = packStackedTextMaskTexture(
+        numberFillCanvasRef.current!,
+        numberStrokeCanvasRef.current!,
+        numberStackedCanvasRef.current,
+        numberStackedTextureRef.current,
+      );
+      numberStackedTextureRef.current = numberMask;
+      numberStackedCanvasRef.current = numberMask.image as HTMLCanvasElement;
+      applyNumberMasksToMaterials(numberMask);
       applyNumberStyleToMaterials(stampSize);
     },
     [applyNumberMasksToMaterials, applyNumberStyleToMaterials, ensureMaskResources, isNumberReady, numberInstancesForRender],
@@ -527,7 +538,7 @@ const useGarmentNameTextures = () => {
 
       if (testoInstancesForRender.length === 0) {
         testoStampSizeRef.current = DEFAULT_STAMP_SIZE;
-        applyTestoMasksToMaterials(empty, empty);
+        applyTestoMasksToMaterials(empty);
         applyTestoStyleToMaterials(DEFAULT_STAMP_SIZE);
         return;
       }
@@ -539,8 +550,8 @@ const useGarmentNameTextures = () => {
       ensureMaskResources(stampSize, {
         fillCanvasRef: testoFillCanvasRef,
         strokeCanvasRef: testoStrokeCanvasRef,
-        fillTextureRef: testoFillTextureRef,
-        strokeTextureRef: testoStrokeTextureRef,
+        stackedCanvasRef: testoStackedCanvasRef,
+        stackedTextureRef: testoStackedTextureRef,
         stampSizeRef: testoStampSizeRef,
       });
       if (generation !== testoMaskGenerationRef.current) return;
@@ -555,9 +566,15 @@ const useGarmentNameTextures = () => {
 
       if (generation !== testoMaskGenerationRef.current) return;
 
-      testoFillTextureRef.current!.needsUpdate = true;
-      testoStrokeTextureRef.current!.needsUpdate = true;
-      applyTestoMasksToMaterials(testoFillTextureRef.current!, testoStrokeTextureRef.current!);
+      const testoMask = packStackedTextMaskTexture(
+        testoFillCanvasRef.current!,
+        testoStrokeCanvasRef.current!,
+        testoStackedCanvasRef.current,
+        testoStackedTextureRef.current,
+      );
+      testoStackedTextureRef.current = testoMask;
+      testoStackedCanvasRef.current = testoMask.image as HTMLCanvasElement;
+      applyTestoMasksToMaterials(testoMask);
       applyTestoStyleToMaterials(stampSize);
     },
     [applyTestoMasksToMaterials, applyTestoStyleToMaterials, ensureMaskResources, isTestoReady, testoInstancesForRender],
@@ -611,24 +628,24 @@ const useGarmentNameTextures = () => {
     if (isNameSynced) {
       applyNameStyleToMaterials();
 
-      if (nameFillTextureRef.current && nameStrokeTextureRef.current) {
-        applyNameMasksToMaterials(nameFillTextureRef.current, nameStrokeTextureRef.current);
+      if (nameStackedTextureRef.current) {
+        applyNameMasksToMaterials(nameStackedTextureRef.current);
       }
     }
 
     if (isNumberSynced) {
       applyNumberStyleToMaterials();
 
-      if (numberFillTextureRef.current && numberStrokeTextureRef.current) {
-        applyNumberMasksToMaterials(numberFillTextureRef.current, numberStrokeTextureRef.current);
+      if (numberStackedTextureRef.current) {
+        applyNumberMasksToMaterials(numberStackedTextureRef.current);
       }
     }
 
     if (isTestoSynced) {
       applyTestoStyleToMaterials();
 
-      if (testoFillTextureRef.current && testoStrokeTextureRef.current) {
-        applyTestoMasksToMaterials(testoFillTextureRef.current, testoStrokeTextureRef.current);
+      if (testoStackedTextureRef.current) {
+        applyTestoMasksToMaterials(testoStackedTextureRef.current);
       }
     }
 

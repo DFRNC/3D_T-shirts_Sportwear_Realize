@@ -26,10 +26,10 @@ import { hydrateGarmentNameUniforms, hydrateGarmentNumberUniforms } from '../gar
 import { hydrateGarmentTestoUniforms } from '../garmentPrint/applyGarmentTesto';
 import { getEmptyPrintTexture } from '../garmentPrint/emptyPrintTexture';
 
-import { applyGarmentPrintBase, applyPbrMaps, createDummyNormal } from './applyPbrMaps';
+import { applyGarmentPrintBase, applyPbrMaps } from './applyPbrMaps';
 
 const SLEEVE_POLYGON_OFFSET = { factor: -1, units: -1 } as const;
-const GARMENT_SHADER_VERSION = 'garment-pbr-print-v62-testo-metrics';
+const GARMENT_SHADER_VERSION = 'garment-pbr-print-v71-texture-budget';
 
 const isSleeveMesh = (meshName: string) => {
   const name = meshName.toLowerCase();
@@ -54,12 +54,10 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
   material.userData.uPartUvBounds = material.userData.uPartUvBounds ?? new Vector4(0, 0, 1, 1);
 
   material.onBeforeCompile = (shader) => {
-    const bakeNormal = (material.userData.pbrBakeNormal as Texture | undefined) ?? createDummyNormal();
     const printState = material.userData.garmentPrintState as garmentPrintStateType | undefined;
     const gradient = material.userData.garmentGradient as GarmentGradientState | undefined;
 
     shader.defines = { ...shader.defines, USE_UV1: '', USE_GRADIENT: '', USE_PRINT: '' };
-    shader.uniforms.uBakeNormal = { value: bakeNormal };
     shader.uniforms.uPartUvBounds = { value: material.userData.uPartUvBounds };
     material.userData.uPartUvBoundsUniform = shader.uniforms.uPartUvBounds;
     shader.uniforms.uGradientEnabled = { value: gradient?.enabled ? 1 : 0 };
@@ -76,8 +74,7 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
     material.userData.uGradientOpacityUniform = shader.uniforms.uGradientOpacity;
     shader.uniforms.uDefaultLogos = { value: printState?.defaultLogos ?? emptyPrint };
     shader.uniforms.uPrintAtlasSize = { value: new Vector2(PRINT_ATLAS_WIDTH, PRINT_ATLAS_HEIGHT) };
-    shader.uniforms.uNameFillMask = { value: emptyPrint };
-    shader.uniforms.uNameStrokeMask = { value: emptyPrint };
+    shader.uniforms.uNameMask = { value: emptyPrint };
     shader.uniforms.uNameStampSize = { value: new Vector2(1, 1) };
     shader.uniforms.uNameAnchorUv = { value: Array.from({ length: NAME_SLOT_COUNT }, () => new Vector2()) };
     shader.uniforms.uNameRotation = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 0) };
@@ -101,8 +98,7 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
     shader.uniforms.uNameGizmoBtnFill = { value: new Color(NAME_GIZMO_BTN_FILL_COLOR) };
     shader.uniforms.uNameGizmoBtnFillActive = { value: new Color(NAME_GIZMO_BTN_ACTIVE_COLOR) };
     shader.uniforms.uNameGizmoIconColor = { value: new Color(NAME_GIZMO_ICON_COLOR) };
-    shader.uniforms.uTestoFillMask = { value: emptyPrint };
-    shader.uniforms.uTestoStrokeMask = { value: emptyPrint };
+    shader.uniforms.uTestoMask = { value: emptyPrint };
     shader.uniforms.uTestoStampSize = { value: new Vector2(1, 1) };
     shader.uniforms.uTestoAnchorUv = { value: Array.from({ length: NAME_SLOT_COUNT }, () => new Vector2()) };
     shader.uniforms.uTestoRotation = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 0) };
@@ -120,8 +116,7 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
     shader.uniforms.uTestoGizmoButtonsReveal = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 0) };
     shader.uniforms.uTestoGizmoHalf = { value: Array.from({ length: NAME_SLOT_COUNT }, () => new Vector2(0, 0)) };
     shader.uniforms.uTestoLineHeight = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 1) };
-    shader.uniforms.uNumberFillMask = { value: emptyPrint };
-    shader.uniforms.uNumberStrokeMask = { value: emptyPrint };
+    shader.uniforms.uNumberMask = { value: emptyPrint };
     shader.uniforms.uNumberStampSize = { value: new Vector2(1, 1) };
     shader.uniforms.uNumberAnchorUv = { value: Array.from({ length: NAME_SLOT_COUNT }, () => new Vector2()) };
     shader.uniforms.uNumberRotation = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 0) };
@@ -153,16 +148,14 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
     shader.uniforms.uLogoGizmoButtonsActive = { value: Array.from({ length: LOGO_SLOT_COUNT }, () => 0) };
     shader.uniforms.uLogoGizmoButtonsReveal = { value: Array.from({ length: LOGO_SLOT_COUNT }, () => 0) };
     shader.uniforms.uLogoGizmoHalf = { value: Array.from({ length: LOGO_SLOT_COUNT }, () => new Vector2(0, 0)) };
-    shader.uniforms.uPatternMask0 = { value: printState?.patternMasks[0] ?? emptyPrint };
-    shader.uniforms.uPatternMask1 = { value: printState?.patternMasks[1] ?? emptyPrint };
+    shader.uniforms.uPatternMask = { value: printState?.patternMask ?? emptyPrint };
     shader.uniforms.uPatternColor0 = { value: new Color(printState?.patternColors[0] ?? '#000000') };
     shader.uniforms.uPatternColor1 = { value: new Color(printState?.patternColors[1] ?? '#000000') };
     shader.uniforms.uPatternOpacity = { value: printState?.patternOpacity ?? 1 };
 
     material.userData.uDefaultLogosUniform = shader.uniforms.uDefaultLogos;
     material.userData.uPrintAtlasSizeUniform = shader.uniforms.uPrintAtlasSize;
-    material.userData.uNameFillMaskUniform = shader.uniforms.uNameFillMask;
-    material.userData.uNameStrokeMaskUniform = shader.uniforms.uNameStrokeMask;
+    material.userData.uNameMaskUniform = shader.uniforms.uNameMask;
     material.userData.uNameStampSizeUniform = shader.uniforms.uNameStampSize;
     material.userData.uNameAnchorUvUniform = shader.uniforms.uNameAnchorUv;
     material.userData.uNameRotationUniform = shader.uniforms.uNameRotation;
@@ -183,8 +176,7 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
     material.userData.uNameGizmoHoverSlotUniform = shader.uniforms.uNameGizmoHoverSlot;
     material.userData.uNameGizmoHoverCornerUniform = shader.uniforms.uNameGizmoHoverCorner;
     material.userData.uNameGizmoHoverScaleUniform = shader.uniforms.uNameGizmoHoverScale;
-    material.userData.uTestoFillMaskUniform = shader.uniforms.uTestoFillMask;
-    material.userData.uTestoStrokeMaskUniform = shader.uniforms.uTestoStrokeMask;
+    material.userData.uTestoMaskUniform = shader.uniforms.uTestoMask;
     material.userData.uTestoStampSizeUniform = shader.uniforms.uTestoStampSize;
     material.userData.uTestoAnchorUvUniform = shader.uniforms.uTestoAnchorUv;
     material.userData.uTestoRotationUniform = shader.uniforms.uTestoRotation;
@@ -202,8 +194,7 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
     material.userData.uTestoGizmoButtonsRevealUniform = shader.uniforms.uTestoGizmoButtonsReveal;
     material.userData.uTestoGizmoHalfUniform = shader.uniforms.uTestoGizmoHalf;
     material.userData.uTestoLineHeightUniform = shader.uniforms.uTestoLineHeight;
-    material.userData.uNumberFillMaskUniform = shader.uniforms.uNumberFillMask;
-    material.userData.uNumberStrokeMaskUniform = shader.uniforms.uNumberStrokeMask;
+    material.userData.uNumberMaskUniform = shader.uniforms.uNumberMask;
     material.userData.uNumberStampSizeUniform = shader.uniforms.uNumberStampSize;
     material.userData.uNumberAnchorUvUniform = shader.uniforms.uNumberAnchorUv;
     material.userData.uNumberRotationUniform = shader.uniforms.uNumberRotation;
@@ -235,15 +226,13 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
     material.userData.uLogoGizmoButtonsActiveUniform = shader.uniforms.uLogoGizmoButtonsActive;
     material.userData.uLogoGizmoButtonsRevealUniform = shader.uniforms.uLogoGizmoButtonsReveal;
     material.userData.uLogoGizmoHalfUniform = shader.uniforms.uLogoGizmoHalf;
-    material.userData.uPatternMask0Uniform = shader.uniforms.uPatternMask0;
-    material.userData.uPatternMask1Uniform = shader.uniforms.uPatternMask1;
+    material.userData.uPatternMaskUniform = shader.uniforms.uPatternMask;
     material.userData.uPatternColor0Uniform = shader.uniforms.uPatternColor0;
     material.userData.uPatternColor1Uniform = shader.uniforms.uPatternColor1;
     material.userData.uPatternOpacityUniform = shader.uniforms.uPatternOpacity;
 
     hydrateGarmentNameUniforms(material, {
-      uNameFillMask: shader.uniforms.uNameFillMask,
-      uNameStrokeMask: shader.uniforms.uNameStrokeMask,
+      uNameMask: shader.uniforms.uNameMask,
       uNameStampSize: shader.uniforms.uNameStampSize,
       uNameAnchorUv: shader.uniforms.uNameAnchorUv,
       uNameRotation: shader.uniforms.uNameRotation,
@@ -261,8 +250,7 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
     });
 
     hydrateGarmentTestoUniforms(material, {
-      uTestoFillMask: shader.uniforms.uTestoFillMask,
-      uTestoStrokeMask: shader.uniforms.uTestoStrokeMask,
+      uTestoMask: shader.uniforms.uTestoMask,
       uTestoStampSize: shader.uniforms.uTestoStampSize,
       uTestoAnchorUv: shader.uniforms.uTestoAnchorUv,
       uTestoRotation: shader.uniforms.uTestoRotation,
@@ -280,8 +268,7 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
     });
 
     hydrateGarmentNumberUniforms(material, {
-      uNumberFillMask: shader.uniforms.uNumberFillMask,
-      uNumberStrokeMask: shader.uniforms.uNumberStrokeMask,
+      uNumberMask: shader.uniforms.uNumberMask,
       uNumberStampSize: shader.uniforms.uNumberStampSize,
       uNumberAnchorUv: shader.uniforms.uNumberAnchorUv,
       uNumberRotation: shader.uniforms.uNumberRotation,

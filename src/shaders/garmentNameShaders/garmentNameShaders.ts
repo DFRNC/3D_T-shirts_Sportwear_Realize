@@ -5,16 +5,16 @@ const garmentNameMapFragment = /* glsl */ `
   vec2 nameStampUv3 = garmentNameToStampUv( vPrintUv, uNameAnchorUv[3], uNameRotation[3], uNamePlacementRotation[3], uNameUploadRotation[3], uNamePartRotation[3], uNameScale[3] );
 
   vec4 nameFillMasks = vec4(
-    garmentNameSampleFillChannel( uNameFillMask, nameStampUv0, 0.0 ),
-    garmentNameSampleFillChannel( uNameFillMask, nameStampUv1, 1.0 ),
-    garmentNameSampleFillChannel( uNameFillMask, nameStampUv2, 2.0 ),
-    garmentNameSampleFillChannel( uNameFillMask, nameStampUv3, 3.0 )
+    garmentNameSampleFillChannel( uNameMask, nameStampUv0, 0.0 ),
+    garmentNameSampleFillChannel( uNameMask, nameStampUv1, 1.0 ),
+    garmentNameSampleFillChannel( uNameMask, nameStampUv2, 2.0 ),
+    garmentNameSampleFillChannel( uNameMask, nameStampUv3, 3.0 )
   );
   vec4 nameStrokeMasks = vec4(
-    garmentNameFillChannel( uNameStrokeMask, nameStampUv0, 0.0 ),
-    garmentNameFillChannel( uNameStrokeMask, nameStampUv1, 1.0 ),
-    garmentNameFillChannel( uNameStrokeMask, nameStampUv2, 2.0 ),
-    garmentNameFillChannel( uNameStrokeMask, nameStampUv3, 3.0 )
+    garmentNameSampleStrokeChannel( uNameMask, nameStampUv0, 0.0 ),
+    garmentNameSampleStrokeChannel( uNameMask, nameStampUv1, 1.0 ),
+    garmentNameSampleStrokeChannel( uNameMask, nameStampUv2, 2.0 ),
+    garmentNameSampleStrokeChannel( uNameMask, nameStampUv3, 3.0 )
   );
   float nameInside0 = garmentNameInsidePart( vPrintUv, uNamePartBounds[0] ) * uNameSlotActive[0];
   float nameInside1 = garmentNameInsidePart( vPrintUv, uNamePartBounds[1] ) * uNameSlotActive[1];

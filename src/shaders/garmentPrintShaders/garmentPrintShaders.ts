@@ -8,15 +8,17 @@ const garmentPrintMapFragment = /* glsl */ `
   vec4 printColor = vec4( 0.0 );
   garmentGizmoUiColor = vec4( 0.0 );
 
+  vec4 patternMasks = texture2D( uPatternMask, vPrintUv );
+
   vec4 layer0 = vec4(
     uPatternColor0,
-    texture2D( uPatternMask0, vPrintUv ).a * uPatternOpacity
+    patternMasks.r * uPatternOpacity
   );
   printColor = layer0;
 
   vec4 layer1 = vec4(
     uPatternColor1,
-    texture2D( uPatternMask1, vPrintUv ).a * uPatternOpacity
+    patternMasks.g * uPatternOpacity
   );
   printColor.rgb = layer1.rgb * layer1.a + printColor.rgb * ( 1.0 - layer1.a );
   printColor.a = layer1.a + printColor.a * ( 1.0 - layer1.a );

@@ -7,11 +7,8 @@ let pendingTestoStyle: nameStyleUniformsType | null = null;
 let pendingTestoGizmoFrame: gizmoFrameStateType | null = null;
 
 const applyTestoMasksToUniforms = (material: MeshStandardMaterial, state: garmentNameMaskStateType) => {
-  const fillUniform = material.userData.uTestoFillMaskUniform as { value: Texture } | undefined;
-  if (fillUniform) fillUniform.value = state.fillMask;
-
-  const strokeUniform = material.userData.uTestoStrokeMaskUniform as { value: Texture } | undefined;
-  if (strokeUniform) strokeUniform.value = state.strokeMask;
+  const maskUniform = material.userData.uTestoMaskUniform as { value: Texture } | undefined;
+  if (maskUniform) maskUniform.value = state.mask;
 };
 
 const applyTestoStyleToUniforms = (material: MeshStandardMaterial, style: nameStyleUniformsType) => {
@@ -152,8 +149,7 @@ const applyGarmentTestoGizmoButtonsReveal = (material: MeshStandardMaterial, rev
 const hydrateGarmentTestoUniforms = (
   material: MeshStandardMaterial,
   uniforms: {
-    uTestoFillMask: { value: Texture };
-    uTestoStrokeMask: { value: Texture };
+    uTestoMask: { value: Texture };
     uTestoStampSize: { value: Vector2 };
     uTestoAnchorUv: { value: Vector2[] };
     uTestoRotation: { value: number[] };
@@ -175,11 +171,9 @@ const hydrateGarmentTestoUniforms = (
   const gizmoState = (material.userData.garmentTestoGizmoFrameState as gizmoFrameStateType | undefined) ?? pendingTestoGizmoFrame;
 
   if (maskState) {
-    uniforms.uTestoFillMask.value = maskState.fillMask;
-    uniforms.uTestoStrokeMask.value = maskState.strokeMask;
+    uniforms.uTestoMask.value = maskState.mask;
     material.userData.garmentTestoMaskState = maskState;
-    material.userData.uTestoFillMaskUniform = uniforms.uTestoFillMask;
-    material.userData.uTestoStrokeMaskUniform = uniforms.uTestoStrokeMask;
+    material.userData.uTestoMaskUniform = uniforms.uTestoMask;
   }
 
   if (styleState) {

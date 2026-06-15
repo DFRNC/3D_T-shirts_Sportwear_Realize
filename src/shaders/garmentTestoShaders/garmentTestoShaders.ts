@@ -5,16 +5,16 @@ const garmentTestoMapFragment = /* glsl */ `
   vec2 testoStampUv3 = garmentTestoToStampUv( vPrintUv, uTestoAnchorUv[3], uTestoRotation[3], uTestoPlacementRotation[3], uTestoUploadRotation[3], uTestoPartRotation[3], uTestoScale[3], uTestoLineHeight[3] );
 
   vec4 testoFillMasks = vec4(
-    garmentNameSampleFillChannel( uTestoFillMask, testoStampUv0, 0.0 ),
-    garmentNameSampleFillChannel( uTestoFillMask, testoStampUv1, 1.0 ),
-    garmentNameSampleFillChannel( uTestoFillMask, testoStampUv2, 2.0 ),
-    garmentNameSampleFillChannel( uTestoFillMask, testoStampUv3, 3.0 )
+    garmentNameSampleFillChannel( uTestoMask, testoStampUv0, 0.0 ),
+    garmentNameSampleFillChannel( uTestoMask, testoStampUv1, 1.0 ),
+    garmentNameSampleFillChannel( uTestoMask, testoStampUv2, 2.0 ),
+    garmentNameSampleFillChannel( uTestoMask, testoStampUv3, 3.0 )
   );
   vec4 testoStrokeMasks = vec4(
-    garmentNameFillChannel( uTestoStrokeMask, testoStampUv0, 0.0 ),
-    garmentNameFillChannel( uTestoStrokeMask, testoStampUv1, 1.0 ),
-    garmentNameFillChannel( uTestoStrokeMask, testoStampUv2, 2.0 ),
-    garmentNameFillChannel( uTestoStrokeMask, testoStampUv3, 3.0 )
+    garmentNameSampleStrokeChannel( uTestoMask, testoStampUv0, 0.0 ),
+    garmentNameSampleStrokeChannel( uTestoMask, testoStampUv1, 1.0 ),
+    garmentNameSampleStrokeChannel( uTestoMask, testoStampUv2, 2.0 ),
+    garmentNameSampleStrokeChannel( uTestoMask, testoStampUv3, 3.0 )
   );
   float testoInside0 = garmentNameInsidePart( vPrintUv, uTestoPartBounds[0] ) * uTestoSlotActive[0];
   float testoInside1 = garmentNameInsidePart( vPrintUv, uTestoPartBounds[1] ) * uTestoSlotActive[1];

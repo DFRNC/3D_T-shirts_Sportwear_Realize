@@ -18,7 +18,6 @@ const garmentFragmentUvPars = /* glsl */ `
 #include <uv_pars_fragment>
 varying vec2 vRawUv1;
 varying vec2 vPrintUv;
-uniform sampler2D uBakeNormal;
 #ifdef USE_GRADIENT
 uniform vec4 uPartUvBounds;
 uniform float uGradientEnabled;
@@ -47,7 +46,7 @@ float garmentGradientMask( vec2 uv ) {
 #ifdef USE_PRINT
 uniform sampler2D uDefaultLogos;
 uniform vec2 uPrintAtlasSize;
-uniform sampler2D uNameFillMask;
+uniform sampler2D uNameMask;
 uniform vec2 uNameStampSize;
 uniform vec2 uNameAnchorUv[4];
 uniform float uNameRotation[4];
@@ -55,12 +54,11 @@ uniform float uNamePlacementRotation[4];
 uniform float uNameUploadRotation[4];
 uniform float uNamePartRotation[4];
 uniform float uNameScale[4];
-uniform sampler2D uNameStrokeMask;
 uniform float uNameSlotActive[4];
 uniform vec4 uNamePartBounds[4];
 uniform vec3 uNameTextColors[4];
 uniform vec3 uNameStrokeColors[4];
-uniform sampler2D uTestoFillMask;
+uniform sampler2D uTestoMask;
 uniform vec2 uTestoStampSize;
 uniform vec2 uTestoAnchorUv[4];
 uniform float uTestoRotation[4];
@@ -68,7 +66,6 @@ uniform float uTestoPlacementRotation[4];
 uniform float uTestoUploadRotation[4];
 uniform float uTestoPartRotation[4];
 uniform float uTestoScale[4];
-uniform sampler2D uTestoStrokeMask;
 uniform float uTestoSlotActive[4];
 uniform vec4 uTestoPartBounds[4];
 uniform vec3 uTestoTextColors[4];
@@ -79,8 +76,7 @@ uniform float uTestoGizmoButtonsActive[4];
 uniform float uTestoGizmoButtonsReveal[4];
 uniform vec2 uTestoGizmoHalf[4];
 uniform float uTestoLineHeight[4];
-uniform sampler2D uNumberFillMask;
-uniform sampler2D uNumberStrokeMask;
+uniform sampler2D uNumberMask;
 uniform vec2 uNumberStampSize;
 uniform vec2 uNumberAnchorUv[4];
 uniform float uNumberRotation[4];
@@ -124,8 +120,7 @@ uniform float uNameGizmoHoverScale;
 uniform vec3 uNameGizmoBtnFill;
 uniform vec3 uNameGizmoBtnFillActive;
 uniform vec3 uNameGizmoIconColor;
-uniform sampler2D uPatternMask0;
-uniform sampler2D uPatternMask1;
+uniform sampler2D uPatternMask;
 uniform vec3 uPatternColor0;
 uniform vec3 uPatternColor1;
 uniform float uPatternOpacity;
@@ -189,6 +184,14 @@ vec2 garmentLogoStampAtlasUv( vec2 stampUv, float slotIndex ) {
   return ( cell + stampUv ) * 0.5;
 }
 
+vec2 garmentTextMaskFillUv( vec2 stampUv ) {
+  return vec2( stampUv.x, stampUv.y * 0.5 + 0.5 );
+}
+
+vec2 garmentTextMaskStrokeUv( vec2 stampUv ) {
+  return vec2( stampUv.x, stampUv.y * 0.5 );
+}
+
 float garmentNameFillChannel( sampler2D tex, vec2 uv, float channel ) {
   vec4 masks = texture2D( tex, uv );
   if ( channel < 0.5 ) return masks.r;
@@ -202,7 +205,11 @@ float garmentNameInsideStamp( vec2 stampUv ) {
 }
 
 float garmentNameSampleFillChannel( sampler2D tex, vec2 stampUv, float channel ) {
-  return garmentNameFillChannel( tex, stampUv, channel ) * garmentNameInsideStamp( stampUv );
+  return garmentNameFillChannel( tex, garmentTextMaskFillUv( stampUv ), channel ) * garmentNameInsideStamp( stampUv );
+}
+
+float garmentNameSampleStrokeChannel( sampler2D tex, vec2 stampUv, float channel ) {
+  return garmentNameFillChannel( tex, garmentTextMaskStrokeUv( stampUv ), channel ) * garmentNameInsideStamp( stampUv );
 }
 
 float garmentNameInsidePart( vec2 worldUv, vec4 bounds ) {
@@ -331,7 +338,7 @@ vec4 garmentGizmoButtons( vec2 worldUv, vec2 anchor, float scale, vec2 halfPx, f
 
 const garmentNormalFragment = /* glsl */ `
 #ifdef USE_NORMALMAP_TANGENTSPACE
-  vec3 bakeN = texture2D( uBakeNormal, vRawUv1 ).xyz;
+  vec3 bakeN = texture2D( normalMap, vRawUv1 ).xyz;
   normal = normalize( tbn * bakeN );
 
   #ifdef FLIP_SIDED
