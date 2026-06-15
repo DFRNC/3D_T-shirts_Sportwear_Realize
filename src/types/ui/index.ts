@@ -53,16 +53,28 @@ export type { accordionAtomPropsType, atomInputHexPropsType, colorPickerPropsTyp
 export type {
   colorControlPropsType,
   colorTabType,
+  colorTabVariantType,
   colorTabControlPropsType,
+  configurationPositionOptionType,
+  configurationPositionSelectPropsType,
   fontSelectRowPropsType,
   hiddenLogoFileInputPropsType,
   logoEditPanelPropsType,
+  logoListRowPropsType,
+  logoUploadedFilesSectionPropsType,
   partColorSwitchPropsType,
   rangeControlPropsType,
   shadingControlPropsType,
   toggleControlPropsType,
 } from './configurationToolsProps';
-export type { filePickContextType, namePartFormPropsType, numberPartFormPropsType, partColorControlPropsType } from './configurationStepsProps';
+export type {
+  filePickContextType,
+  namePartFormPropsType,
+  numberPartFormPropsType,
+  partColorControlPropsType,
+  configurationPositionPickerInstanceType,
+  configurationPositionPickerPositionType,
+} from './configurationStepsProps';
 export type {
   productCatalogOptionPropsType,
   productCatalogPopoverPropsType,

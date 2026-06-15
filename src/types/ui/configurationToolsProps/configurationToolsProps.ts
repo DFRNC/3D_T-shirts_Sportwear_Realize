@@ -1,5 +1,7 @@
 import type { ChangeEvent } from 'react';
 
+import type { stepLogoPartStateType } from '../../garment/logo/logo';
+
 interface colorControlPropsType {
   color: string;
   label?: string;
@@ -9,6 +11,8 @@ interface colorControlPropsType {
 
 type colorTabType = 'colori' | 'contorno';
 
+type colorTabVariantType = 'design' | 'text';
+
 interface colorTabControlPropsType {
   textColor: string;
   strokeColor: string;
@@ -17,6 +21,7 @@ interface colorTabControlPropsType {
   onPreviewTextColor?: (color: string) => void;
   onPreviewStrokeColor?: (color: string) => void;
   label?: string;
+  tabVariant?: colorTabVariantType;
 }
 
 interface fontSelectRowPropsType {
@@ -36,9 +41,22 @@ interface logoEditPanelPropsType {
   replacing?: boolean;
 }
 
+interface logoListRowPropsType {
+  part: stepLogoPartStateType;
+  onEdit?: () => void;
+  onDelete?: () => void;
+}
+
+interface logoUploadedFilesSectionPropsType {
+  userLogos: stepLogoPartStateType[];
+  onEdit: (partId: string) => void;
+  onDelete: (partId: string) => void;
+}
+
 interface partColorSwitchPropsType {
   color: string;
   label: string;
+  statusLabel?: string;
 }
 
 interface rangeControlPropsType {
@@ -61,13 +79,30 @@ interface toggleControlPropsType {
   onChange: (value: boolean) => void;
 }
 
+interface configurationPositionOptionType {
+  key: string;
+  label: string;
+}
+
+interface configurationPositionSelectPropsType {
+  label: string;
+  positions: configurationPositionOptionType[];
+  onSelect: (positionKey: string) => void;
+  placeholder?: string;
+}
+
 export type {
   colorControlPropsType,
   colorTabType,
+  colorTabVariantType,
   colorTabControlPropsType,
+  configurationPositionOptionType,
+  configurationPositionSelectPropsType,
   fontSelectRowPropsType,
   hiddenLogoFileInputPropsType,
   logoEditPanelPropsType,
+  logoListRowPropsType,
+  logoUploadedFilesSectionPropsType,
   partColorSwitchPropsType,
   rangeControlPropsType,
   shadingControlPropsType,

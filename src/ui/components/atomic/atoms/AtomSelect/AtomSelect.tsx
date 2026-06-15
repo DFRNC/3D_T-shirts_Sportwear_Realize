@@ -10,6 +10,7 @@ const variantTrigger = cva('font-inter', {
       default: '',
       leng_switcher: 'text-[14px] px-4 py-1.5 rounded-full border border-border',
       font: 'w-full h-10 justify-between border border-input-border rounded-[8px] px-3 text-sm bg-white text-default',
+      position: 'w-full h-10 justify-between border border-input-border rounded-[8px] px-3 text-sm bg-white text-default',
     },
   },
   defaultVariants: {
@@ -23,6 +24,7 @@ const variantContent = cva('', {
       default: '',
       leng_switcher: 'text-[14px] border border-border',
       font: 'border border-gray-200 rounded-[8px] shadow-lg',
+      position: 'border border-gray-200 rounded-[8px] shadow-lg',
     },
   },
   defaultVariants: {
@@ -34,6 +36,7 @@ interface AtomSelectOption {
   label: string;
   value: string;
   fontFamily?: string;
+  disabled?: boolean;
 }
 
 interface AtomSelectProps extends React.ComponentProps<typeof Select> {
@@ -44,11 +47,13 @@ interface AtomSelectProps extends React.ComponentProps<typeof Select> {
   variant?: VariantProps<typeof variantTrigger>['variant'];
 }
 
-const AtomSelect = ({ options, value, onChange, variant = 'default', icon = false }: AtomSelectProps) => {
+const AtomSelect = ({ options, value, onChange, variant = 'default', icon = false, disabled }: AtomSelectProps) => {
   const isFont = variant === 'font';
+  const isField = variant === 'font' || variant === 'position';
 
   return (
     <Select
+      disabled={disabled}
       value={value.value}
       onValueChange={(val) => {
         if (val == null) return;
@@ -66,10 +71,11 @@ const AtomSelect = ({ options, value, onChange, variant = 'default', icon = fals
           <SelectItem
             key={option.value}
             value={option.value}
-            className={isFont ? 'px-3 py-2.5' : ''}
+            disabled={option.disabled}
+            className={isField ? 'px-3 py-2.5' : ''}
             style={option.fontFamily ? { fontFamily: option.fontFamily } : undefined}
           >
-            <span className={isFont ? 'uppercase tracking-wide text-sm text-default' : ''}>{option.label}</span>
+            <span className={isFont ? 'uppercase tracking-wide text-sm text-default' : isField ? 'text-sm text-default' : ''}>{option.label}</span>
           </SelectItem>
         ))}
       </SelectContent>

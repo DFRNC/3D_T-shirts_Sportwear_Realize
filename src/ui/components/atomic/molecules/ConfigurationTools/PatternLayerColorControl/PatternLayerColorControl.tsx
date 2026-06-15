@@ -17,7 +17,7 @@ const PatternLayerColorControl = ({ layers, colors, onColorChange, onPreviewColo
 
   return (
     <Flex variant="configurator_part">
-      <Text variant="configurator_part_label">{label}</Text>
+      <Text variant="configurator_control_label">{label}</Text>
       <div className="flex w-full border-b border-gray-200">
         {layers.map((layer) => (
           <button

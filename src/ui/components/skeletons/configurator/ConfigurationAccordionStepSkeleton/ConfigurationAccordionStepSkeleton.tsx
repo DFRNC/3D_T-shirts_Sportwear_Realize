@@ -12,7 +12,7 @@ const ConfigurationAccordionStepSkeleton = ({ expandedContent = 'color' }: { exp
           <Flex key={index} className="w-full flex-col gap-3 rounded-[8px] border border-input-border p-3">
             <SkeletonAccordionTrigger />
             {index === 0 && (
-              <Flex className="w-full min-w-0 flex-col gap-4 pt-1">
+              <Flex className="w-full min-w-0 flex-col gap-5 pt-1">
                 <AtomSkeleton className="h-10 w-full rounded-[8px]" />
                 <SkeletonColorPalette />
                 {expandedContent === 'shading' && (

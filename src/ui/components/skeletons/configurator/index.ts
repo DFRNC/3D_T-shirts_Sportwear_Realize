@@ -4,6 +4,7 @@ export { ConfigurationLogoStepSkeleton } from './ConfigurationLogoStepSkeleton';
 export { ConfigurationNamingStepSkeleton } from './ConfigurationNamingStepSkeleton';
 export { ConfigurationStepSkeleton } from './ConfigurationStepSkeleton';
 export { ConfiguratorProductSkeleton } from './ConfiguratorProductSkeleton';
+export { ConfiguratorProductDescriptionSkeleton } from './ConfiguratorProductDescriptionSkeleton';
 export { LogoUploadSkeleton } from './LogoUploadSkeleton';
 export { PatternPreviewSkeleton } from './PatternPreviewSkeleton';
 export { ProductSessionPreviewSkeleton } from './ProductSessionPreviewSkeleton';

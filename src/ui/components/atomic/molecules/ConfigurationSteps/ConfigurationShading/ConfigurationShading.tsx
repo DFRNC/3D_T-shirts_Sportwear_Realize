@@ -5,6 +5,7 @@ import { useCallback, useMemo } from 'react';
 import { AccordionAtom, Flex } from '@atoms';
 import { PartColorSwitch } from '../../ConfigurationTools/PartColorSwitch';
 import { ShadingControl } from '../../ConfigurationTools/ShadingControl';
+import { CONFIGURATOR_GRADIENT_ACTIVE_LABEL } from '@constants';
 import { DEFAULT_COLOR, useConfiguratorProduct, useGarmentColor } from '@store';
 
 const ConfigurationShading = () => {
@@ -32,10 +33,16 @@ const ConfigurationShading = () => {
     () =>
       parts.map((part) => ({
         value: part.id,
-        trigger: <PartColorSwitch color={getShadingPreview(part.id)} label={part.label} />,
+        trigger: (
+          <PartColorSwitch
+            color={getShadingPreview(part.id)}
+            label={part.label}
+            statusLabel={gradientsByPart[part.id]?.enabled ? CONFIGURATOR_GRADIENT_ACTIVE_LABEL : undefined}
+          />
+        ),
         content: <ShadingControl partId={part.id} />,
       })),
-    [getShadingPreview, parts],
+    [getShadingPreview, gradientsByPart, parts],
   );
 
   if (parts.length === 0) return null;

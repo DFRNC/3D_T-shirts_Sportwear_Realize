@@ -19,7 +19,7 @@ const ConfiguratorProduct = memo(() => {
   }
 
   return (
-    <Flex className="flex-col">
+    <Flex className="flex-col gap-3">
       <Grid className="grid-cols-[1fr_auto] gap-3">
         <Text variant="product_name" asChild>
           <h3>{name}</h3>

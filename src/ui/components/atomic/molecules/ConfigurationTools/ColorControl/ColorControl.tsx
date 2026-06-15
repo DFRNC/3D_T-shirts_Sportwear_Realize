@@ -9,7 +9,7 @@ import type { colorControlPropsType } from '@types';
 const ColorControl = memo(({ color, label, onSelect, onPreviewSelect }: colorControlPropsType) => {
   return (
     <Flex variant="configurator_part">
-      {label && <Text variant="configurator_part_label">{label}</Text>}
+      {label && <Text variant="configurator_control_label">{label}</Text>}
       <Grid className="grid-cols-[auto_auto] items-center justify-between gap-2 w-full">
         <ColorPicker
           color={color}

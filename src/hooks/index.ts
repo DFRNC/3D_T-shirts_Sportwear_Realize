@@ -4,6 +4,7 @@ export { useCheckoutSummary } from './useCheckoutSummary';
 export { useNavigateToCheckout } from './useNavigateToCheckout';
 export { useNavigateToConfigurator } from './useNavigateToConfigurator';
 export { useConfigurationCartSync } from './useConfigurationCartSync';
+export { useConfigurationPositionPicker } from './useConfigurationPositionPicker';
 export { useControlledState } from './useControlledState';
 export { useSlidingIndicator } from './useSlidingIndicator';
 export { useAsyncGarmentPbrMaps, useGarmentPbrMaps } from './useGarmentPbrMaps';

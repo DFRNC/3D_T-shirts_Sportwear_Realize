@@ -16,8 +16,26 @@ interface partColorControlPropsType {
   partId: string;
 }
 
+interface configurationPositionPickerPositionType {
+  key: string;
+  label: string;
+  interactive: boolean;
+}
+
+interface configurationPositionPickerInstanceType {
+  id: string;
+  positionKey: string;
+}
+
 type filePickContextUploadType = { mode: 'upload' };
 type filePickContextReplaceType = { mode: 'replace'; partId: string };
 type filePickContextType = filePickContextUploadType | filePickContextReplaceType;
 
-export type { filePickContextType, namePartFormPropsType, numberPartFormPropsType, partColorControlPropsType };
+export type {
+  configurationPositionPickerInstanceType,
+  configurationPositionPickerPositionType,
+  filePickContextType,
+  namePartFormPropsType,
+  numberPartFormPropsType,
+  partColorControlPropsType,
+};

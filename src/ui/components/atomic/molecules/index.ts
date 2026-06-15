@@ -1,6 +1,7 @@
 export { ProductFlipCard } from './ProductFlipCard';
 export { ProductGalleryBlock } from './ProductGalleryBlock';
 export { ConfiguratorProduct } from './ConfiguratorProduct';
+export { ConfiguratorProductDescription } from './ConfiguratorProductDescription';
 export { CardAddProduct } from './CardAddProduct';
 export { ProductCatalogOption } from './ProductCatalogOption';
 export { ProductCatalogPopover } from './ProductCatalogPopover';

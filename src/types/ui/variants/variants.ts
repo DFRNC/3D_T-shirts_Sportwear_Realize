@@ -6,6 +6,7 @@ type textVariantType =
   | 'menu_step_buy'
   | 'slider_label'
   | 'configurator_part_label'
+  | 'configurator_control_label'
   | 'h2'
   | 'h3'
   | 'small'

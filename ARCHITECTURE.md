@@ -82,7 +82,7 @@ The **only** place for React custom hooks:
 | Store wrappers | `useConfigurationCartSync`                                                                                                     |
 | 3D / textures  | `useGarmentTextures`, `useGarmentPbrMaps`                                                                                      |
 | Gizmo          | `useGizmoSelection`, `usePrintGizmoDrag`, `useGizmoIconAtlas`                                                                  |
-| UI state       | `useSlidingIndicator`, `useControlledState`, `useShowConfigurationSkeleton`                                                    |
+| UI state       | `useSlidingIndicator`, `useControlledState`, `useShowConfigurationSkeleton`, `useConfigurationPositionPicker`                  |
 | Domain actions | `useLogoFileHandler`, `useStepLogo`, `useNavigateToCheckout`                                                                   |
 | Checkout       | `useCheckoutInit`, `useCheckoutSummary`, `useCheckoutConfigurationTable`, `useNavigateToCheckout`, `useNavigateToConfigurator` |
 
@@ -167,7 +167,7 @@ Framework-agnostic 3D gizmo logic: hit-testing, drag handling, mesh element cons
 
 ### `src/constants/` (`@constants`)
 
-Configuration constants: wizard steps, color palette, print-atlas dimensions, fonts, checkout limits (`CHECKOUT/`), table column sizing (`CHECKOUT_CONFIGURATION_TABLE/`).
+Configuration constants: wizard steps, color palette, print-atlas dimensions, fonts, checkout limits (`CHECKOUT/`), table column sizing (`CHECKOUT_CONFIGURATION_TABLE/`), configurator copy and labels (`CONFIGURATOR/`).
 
 ### `src/providers/` (`@providers`)
 

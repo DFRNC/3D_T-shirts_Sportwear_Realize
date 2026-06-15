@@ -57,7 +57,7 @@ const atomTabsListVariants = cva('', {
 const atomTabsTriggerVariants = cva('', {
   variants: {
     variant: {
-      default: cn('text-default text-[14px] font-[500] flex items-center justify-center gap-2 bg-transparent', 'px-6.5 pb-3 [&_svg]:size-5'),
+      default: cn('text-default text-[14px] font-[500] flex items-center justify-center gap-2 bg-transparent', 'px-6.5 [&_svg]:size-5'),
       line: '',
       configurator: cn(
         'h-auto flex-none rounded-none border-transparent bg-transparent shadow-none',

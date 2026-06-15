@@ -7,7 +7,10 @@ const FORM_FIELD_COUNT = 4;
 const ConfigurationNamingStepSkeleton = () => {
   return (
     <Flex variant="step_design" className="gap-3" data-testid="skeleton-step-naming">
-      <AtomSkeleton className="h-10 w-full rounded-[8px]" data-testid="skeleton-add-button" />
+      <Flex className="w-full flex-col gap-3">
+        <AtomSkeleton className="h-4 w-[220px]" />
+        <AtomSkeleton className="h-10 w-full rounded-[8px]" data-testid="skeleton-position-select" />
+      </Flex>
       {Array.from({ length: 2 }, (_, index) => (
         <Flex key={index} className="w-full flex-col gap-3 rounded-[8px] border border-input-border p-3">
           <SkeletonAccordionTrigger />

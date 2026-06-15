@@ -1,15 +1,14 @@
 'use client';
 
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
-import { AccordionAtom, AtomPopover, AtomPopoverContent, AtomPopoverTrigger, Button, Flex, SvgIcon, Text } from '@atoms';
-import { ColorTabControl } from '../../ConfigurationTools/ColorTabControl';
-import { FontSelectRow } from '../../ConfigurationTools/FontSelectRow';
-import { PartColorSwitch } from '../../ConfigurationTools/PartColorSwitch';
-import { RangeControl } from '../../ConfigurationTools/RangeControl';
+import { AccordionAtom, Button, Flex, SvgIcon, Text } from '@atoms';
+import { useConfigurationPositionPicker } from '@hooks';
+import { CONFIGURATOR_NUMBER_POSITION_SELECT_LABEL } from '@constants';
 import { createNumberInstance, resolveNumberDefaults, resolveNumberLimits, sanitizeNumberText, useConfiguratorProduct, useGarmentNumber } from '@store';
 import type { numberPartFormPropsType, numberPositionType } from '@types';
-import { cn } from '@utils';
+
+import { ColorTabControl, ConfigurationPositionSelect, FontSelectRow, PartColorSwitch, RangeControl } from '../../ConfigurationTools';
 
 const NumberPartForm = ({ instanceId, limits, placeholder }: numberPartFormPropsType) => {
   const instance = useGarmentNumber((state) => state.instances.find((item) => item.id === instanceId));
@@ -52,11 +51,9 @@ const NumberPartForm = ({ instanceId, limits, placeholder }: numberPartFormProps
   if (!instance) return null;
 
   return (
-    <Flex variant="configurator_part" className="gap-4 pt-2">
-      <FontSelectRow font={instance.font} onChange={(font) => commit({ font })} />
-
+    <Flex variant="configurator_part" className="gap-5 pt-2">
       <Flex variant="configurator_part">
-        <Text variant="configurator_part_label">Numero</Text>
+        <Text variant="configurator_control_label">Carattere</Text>
         <input
           type="text"
           inputMode="numeric"
@@ -69,8 +66,10 @@ const NumberPartForm = ({ instanceId, limits, placeholder }: numberPartFormProps
           placeholder={placeholder}
         />
       </Flex>
+      <FontSelectRow font={instance.font} onChange={(font) => commit({ font })} />
 
       <ColorTabControl
+        tabVariant="text"
         textColor={previewTextColor ?? instance.textColor}
         strokeColor={previewStrokeColor ?? instance.strokeColor}
         onTextColor={(textColor) => commit({ textColor })}
@@ -112,32 +111,22 @@ const ConfigurationNumbers = () => {
   const positions = useGarmentNumber((state) => state.positions);
   const instances = useGarmentNumber((state) => state.instances);
   const addInstance = useGarmentNumber((state) => state.addInstance);
-  const [isLocationPickerOpen, setIsLocationPickerOpen] = useState(false);
-  const [openItems, setOpenItems] = useState<string[]>([]);
-  const nextInstanceIdRef = useRef(0);
 
   const numberDefaults = useMemo(() => (positions.length > 0 ? resolveNumberDefaults(product) : null), [positions.length, product]);
   const limits = useMemo(() => (positions.length > 0 ? resolveNumberLimits(product) : null), [positions.length, product]);
 
-  const availablePositions = useMemo(() => {
-    const used = new Set(instances.map((instance) => instance.positionKey));
-    return positions.filter((position) => position.interactive && !used.has(position.key));
-  }, [instances, positions]);
+  const handleAddInstance = useCallback(
+    (position: numberPositionType, instanceId: string) => {
+      addInstance(createNumberInstance(product, position, instanceId));
+    },
+    [addInstance, product],
+  );
 
-  const resolvedOpenItems = useMemo(() => {
-    const validIds = new Set(instances.map((instance) => instance.id));
-    return openItems.filter((id) => validIds.has(id));
-  }, [instances, openItems]);
-
-  const createInstanceForPosition = (position: numberPositionType) => {
-    if (!position.interactive) return;
-
-    nextInstanceIdRef.current += 1;
-    const instanceId = `${position.key}_${nextInstanceIdRef.current}`;
-    addInstance(createNumberInstance(product, position, instanceId));
-    setOpenItems((current) => [...current, instanceId]);
-    setIsLocationPickerOpen(false);
-  };
+  const { availablePositions, openItems, handleOpenItemsChange, handlePositionSelect } = useConfigurationPositionPicker({
+    positions,
+    instances,
+    onAddInstance: handleAddInstance,
+  });
 
   const items = useMemo(
     () =>
@@ -153,37 +142,9 @@ const ConfigurationNumbers = () => {
 
   return (
     <Flex key={product.path} variant="step_design" className="gap-3">
-      <AtomPopover open={isLocationPickerOpen && availablePositions.length > 0} onOpenChange={setIsLocationPickerOpen}>
-        <AtomPopoverTrigger asChild>
-          <Button variant="default" size="sm" className="w-full justify-center" disabled={availablePositions.length === 0}>
-            + Aggiungi numero
-          </Button>
-        </AtomPopoverTrigger>
-        <AtomPopoverContent className="w-(--anchor-width) p-3" gap="sm">
-          <Text variant="configurator_part_label">Scegli posizione</Text>
-          {availablePositions.map((position) => (
-            <Button
-              key={position.key}
-              variant="outline"
-              className={cn('w-full justify-start rounded-[8px] bg-gray-100 px-3 py-2', 'hover:bg-gray-200')}
-              onClick={() => createInstanceForPosition(position)}
-            >
-              {position.label}
-            </Button>
-          ))}
-          {availablePositions.length === 0 && <Text variant="configurator_part_label">Nessuna posizione disponibile</Text>}
-        </AtomPopoverContent>
-      </AtomPopover>
+      <ConfigurationPositionSelect label={CONFIGURATOR_NUMBER_POSITION_SELECT_LABEL} positions={availablePositions} onSelect={handlePositionSelect} />
 
-      {instances.length > 0 && (
-        <AccordionAtom
-          items={items}
-          value={resolvedOpenItems}
-          onValueChange={(value) => setOpenItems(Array.isArray(value) ? value : value ? [value] : [])}
-          multiple
-          className="gap-2"
-        />
-      )}
+      {instances.length > 0 && <AccordionAtom items={items} value={openItems} onValueChange={handleOpenItemsChange} multiple className="gap-2" />}
     </Flex>
   );
 };

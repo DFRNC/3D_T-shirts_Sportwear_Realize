@@ -24,8 +24,8 @@ const ShadingControl = ({ partId }: shadingControlPropsType) => {
       {gradient.enabled && (
         <>
           <Flex className="gap-2 items-start flex-col">
-            <Text variant="configurator_part_label">Colore primario</Text>
-            <div className="w-10 h-10 rounded-[3px] shrink-0 border-[.3px] border-gray-30 transition-colors duration-150" style={{ background: baseColor }} />
+            <Text variant="configurator_control_label">Colore primario</Text>
+            <div className="w-15 h-15 rounded-[8px] shrink-0 border-[.2px] border-gray-30 transition-colors duration-150" style={{ background: baseColor }} />
           </Flex>
           <ColorControl
             label="Colore sfumatura"

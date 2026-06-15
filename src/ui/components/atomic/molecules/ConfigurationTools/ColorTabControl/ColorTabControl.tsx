@@ -3,14 +3,20 @@
 import { useState } from 'react';
 
 import { Flex, Text } from '@atoms';
-import type { colorTabControlPropsType, colorTabType } from '@types';
+import type { colorTabControlPropsType, colorTabType, colorTabVariantType } from '@types';
 import { cn } from '@utils';
 import { ColorControl } from '../ColorControl';
 
-const COLOR_TABS: { id: colorTabType; label: string }[] = [
-  { id: 'colori', label: 'Colore 1' },
-  { id: 'contorno', label: 'Colore 2' },
-];
+const COLOR_TABS_BY_VARIANT: Record<colorTabVariantType, { id: colorTabType; label: string }[]> = {
+  design: [
+    { id: 'colori', label: 'Colore 1' },
+    { id: 'contorno', label: 'Colore 2' },
+  ],
+  text: [
+    { id: 'colori', label: 'Testo' },
+    { id: 'contorno', label: 'Carattere' },
+  ],
+};
 
 const ColorTabControl = ({
   textColor,
@@ -20,16 +26,18 @@ const ColorTabControl = ({
   onPreviewTextColor,
   onPreviewStrokeColor,
   label = 'Colore',
+  tabVariant = 'design',
 }: colorTabControlPropsType) => {
   const [colorTab, setColorTab] = useState<colorTabType>('colori');
 
   const colors: Record<colorTabType, string> = { colori: textColor, contorno: strokeColor };
+  const colorTabs = COLOR_TABS_BY_VARIANT[tabVariant];
 
   return (
     <Flex variant="configurator_part">
-      <Text variant="configurator_part_label">{label}</Text>
+      <Text variant="configurator_control_label">{label}</Text>
       <div className="flex w-full border-b border-gray-200">
-        {COLOR_TABS.map(({ id, label: tabLabel }) => (
+        {colorTabs.map(({ id, label: tabLabel }) => (
           <button
             key={id}
             onClick={() => setColorTab(id)}

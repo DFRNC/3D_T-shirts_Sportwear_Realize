@@ -30,7 +30,7 @@ const RangeControl = ({ label, value, onChange, onCommit, min = 0, max = 100, un
 
   return (
     <Flex variant="configurator_part" className="overflow-hidden">
-      {label && <Text variant="configurator_part_label">{label}</Text>}
+      {label && <Text variant="configurator_control_label">{label}</Text>}
       <Range
         value={[localValue]}
         min={safeMin}

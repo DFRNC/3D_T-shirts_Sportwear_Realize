@@ -1,11 +1,11 @@
 'use client';
 
-import { Grid, ScrollArea } from '@atoms';
-import { CardAddProduct, ConfiguratorProduct } from '@molecules';
+import { Flex, Grid, ScrollArea } from '@atoms';
+import { CardAddProduct, ConfiguratorProduct, ConfiguratorProductDescription } from '@molecules';
 
 import { STEPS_CONFIGURATION } from '@constants';
 import { useShowConfigurationSkeleton } from '@hooks';
-import { ConfigurationStepSkeleton } from '@skeletons';
+import { ConfigurationStepSkeleton, ConfiguratorProductDescriptionSkeleton } from '@skeletons';
 import { useConfigurationControl } from '@store';
 
 const ActiveStepContent = () => {
@@ -19,7 +19,12 @@ const ActiveStepContent = () => {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col py-1">
-      <ScrollArea className="min-h-0 flex-1 w-full pt-0">{showSkeleton ? <ConfigurationStepSkeleton step={activeStep} /> : <Content />}</ScrollArea>
+      <ScrollArea className="min-h-0 flex-1 w-full pt-0">
+        <Flex variant="step_design">
+          {showSkeleton ? <ConfiguratorProductDescriptionSkeleton /> : <ConfiguratorProductDescription />}
+          {showSkeleton ? <ConfigurationStepSkeleton step={activeStep} /> : <Content />}
+        </Flex>
+      </ScrollArea>
     </div>
   );
 };
