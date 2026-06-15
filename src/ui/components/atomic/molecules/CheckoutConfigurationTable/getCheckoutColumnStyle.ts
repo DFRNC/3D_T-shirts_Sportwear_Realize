@@ -1,19 +1,16 @@
-import type { Column } from '@tanstack/react-table';
 import type { CSSProperties } from 'react';
 
-import type { checkoutLineRowType } from '@types';
+import type { checkoutConfigurationTableColumnType } from '@types';
 
-const getCheckoutColumnStyle = (column: Column<checkoutLineRowType, unknown>): CSSProperties => {
-  const { minSize, maxSize, meta } = column.columnDef;
-
-  if (meta?.grow) {
-    return { minWidth: minSize ?? column.getSize() };
+const getCheckoutColumnStyle = (column: checkoutConfigurationTableColumnType): CSSProperties => {
+  if (column.meta?.grow) {
+    return { minWidth: column.minSize };
   }
 
   return {
-    width: column.getSize(),
-    minWidth: minSize,
-    maxWidth: maxSize,
+    width: column.size,
+    minWidth: column.minSize,
+    maxWidth: column.maxSize,
   };
 };
 

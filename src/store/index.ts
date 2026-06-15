@@ -18,6 +18,7 @@ export {
   resolveNumberInstancesForRender,
   resolveNumberLimits,
   sanitizeNumberText,
+  NUMBER_MAX_LENGTH,
   useGarmentNumber,
 } from './useGarmentNumber';
 export { resolveLogoInstancesForRender, useGarmentLogo } from './useGarmentLogo';

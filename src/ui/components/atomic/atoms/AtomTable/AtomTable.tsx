@@ -87,7 +87,7 @@ const atomTableHeadVariants = cva('align-middle font-medium whitespace-nowrap te
       discounts:
         'h-auto border border-gray-20 bg-gray-100 px-3 py-4 text-left align-middle font-medium text-[16px] leading-none text-default whitespace-normal',
       checkout:
-        'h-auto border border-gray-20 bg-gray-100 px-3 py-3 text-center align-middle font-medium text-[14px] leading-none text-default whitespace-normal',
+        'h-auto border border-gray-20 bg-gray-100 px-3 py-3 text-center align-middle font-medium text-[16px] leading-none text-default whitespace-normal',
     },
   },
   defaultVariants: {

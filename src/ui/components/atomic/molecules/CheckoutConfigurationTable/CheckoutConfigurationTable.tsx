@@ -2,8 +2,6 @@
 
 import { useMemo } from 'react';
 
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-
 import { AtomTable, AtomTableBody, AtomTableCell, AtomTableHead, AtomTableHeader, AtomTableRow, Button, SvgIcon } from '@atoms';
 
 import { CHECKOUT_CONFIGURATION_TABLE_MIN_WIDTH, CHECKOUT_TABLE_ADD_ROW_LABEL } from '@constants';
@@ -26,33 +24,24 @@ const CheckoutConfigurationTable = ({ cartItemId, rows }: checkoutConfigurationT
     [handlePatchRow, handleRemoveRow],
   );
 
-  const table = useReactTable({
-    data: rows,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getRowId: (row) => row.id,
-  });
-
   return (
     <div className="w-full min-w-0">
       <AtomTable variant="checkout" className="table-fixed w-full" style={{ minWidth: CHECKOUT_CONFIGURATION_TABLE_MIN_WIDTH }}>
         <AtomTableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <AtomTableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <AtomTableHead key={header.id} style={getCheckoutColumnStyle(header.column)}>
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                </AtomTableHead>
-              ))}
-            </AtomTableRow>
-          ))}
+          <AtomTableRow>
+            {columns.map((column) => (
+              <AtomTableHead key={column.id} style={getCheckoutColumnStyle(column)}>
+                {column.header}
+              </AtomTableHead>
+            ))}
+          </AtomTableRow>
         </AtomTableHeader>
         <AtomTableBody>
-          {table.getRowModel().rows.map((row) => (
+          {rows.map((row, index) => (
             <AtomTableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <AtomTableCell key={cell.id} className={cn(cell.column.columnDef.meta?.cellClassName)} style={getCheckoutColumnStyle(cell.column)}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              {columns.map((column) => (
+                <AtomTableCell key={column.id} className={cn(column.meta?.cellClassName)} style={getCheckoutColumnStyle(column)}>
+                  {column.cell({ row, index })}
                 </AtomTableCell>
               ))}
             </AtomTableRow>

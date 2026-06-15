@@ -1,1 +1,1 @@
-export type { checkoutLineRowPatchType, checkoutLineRowType, checkoutProductType } from './checkout';
+export type { checkoutLineRowPatchType, checkoutLineRowType, checkoutProductType, checkoutRowPresetType } from './checkout';

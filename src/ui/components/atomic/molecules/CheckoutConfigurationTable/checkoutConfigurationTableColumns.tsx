@@ -1,14 +1,14 @@
 'use client';
 
-import type { ColumnDef } from '@tanstack/react-table';
-
-import { AtomInput, Button, SvgIcon } from '@atoms';
+import { Button, SvgIcon } from '@atoms';
 
 import { CHECKOUT_CONFIGURATION_TABLE_COLUMNS } from '@constants';
-import type { checkoutConfigurationTableColumnHandlersType, checkoutLineRowType } from '@types';
+import type { checkoutConfigurationTableColumnHandlersType, checkoutConfigurationTableColumnType } from '@types';
+import { NUMBER_MAX_LENGTH, sanitizeNumberText } from '@store';
 
 import { CheckoutQuantityStepper } from '../CheckoutQuantityStepper';
 import { CheckoutSizePopover } from '../CheckoutSizePopover';
+import { CheckoutTableEditableCell } from '../CheckoutTableEditableCell';
 
 const getColumnSizing = (id: (typeof CHECKOUT_CONFIGURATION_TABLE_COLUMNS)[number]['id']) => {
   const column = CHECKOUT_CONFIGURATION_TABLE_COLUMNS.find((item) => item.id === id);
@@ -29,60 +29,51 @@ const getColumnSizing = (id: (typeof CHECKOUT_CONFIGURATION_TABLE_COLUMNS)[numbe
 const createCheckoutConfigurationTableColumns = ({
   onPatchRow,
   onRemoveRow,
-}: checkoutConfigurationTableColumnHandlersType): ColumnDef<checkoutLineRowType>[] => [
+}: checkoutConfigurationTableColumnHandlersType): checkoutConfigurationTableColumnType[] => [
   {
     id: 'row',
     header: 'Riga',
     ...getColumnSizing('row'),
-    cell: ({ row }) => <span className="text-[14px] font-medium">{row.index + 1}</span>,
+    cell: ({ index }) => <span className="text-[16px]">{index + 1}</span>,
   },
   {
     id: 'size',
     header: 'Taglia',
-    accessorKey: 'size',
     ...getColumnSizing('size'),
-    cell: ({ row }) => <CheckoutSizePopover value={row.original.size} onChange={(size) => onPatchRow(row.original.id, { size })} />,
     meta: { cellClassName: 'p-0' },
+    cell: ({ row }) => <CheckoutSizePopover value={row.size} onChange={(size) => onPatchRow(row.id, { size })} />,
   },
   {
     id: 'name',
     header: 'Nome',
-    accessorKey: 'name',
     ...getColumnSizing('name'),
     meta: { grow: true },
-    cell: ({ row }) => (
-      <AtomInput
-        variant="checkout"
-        value={row.original.name}
-        onChange={(event) => onPatchRow(row.original.id, { name: event.target.value })}
-        placeholder="Nome"
-      />
-    ),
+    cell: ({ row }) => <CheckoutTableEditableCell value={row.name} placeholder="Nome" onChange={(name) => onPatchRow(row.id, { name })} />,
   },
   {
     id: 'number',
     header: 'Numero',
-    accessorKey: 'number',
     ...getColumnSizing('number'),
     cell: ({ row }) => (
-      <AtomInput
-        variant="checkout"
-        value={row.original.number}
-        onChange={(event) => onPatchRow(row.original.id, { number: event.target.value })}
-        placeholder="N."
+      <CheckoutTableEditableCell
+        value={row.number}
+        placeholder="00"
+        inputMode="numeric"
+        maxLength={NUMBER_MAX_LENGTH}
+        formatValue={sanitizeNumberText}
+        onChange={(number) => onPatchRow(row.id, { number })}
       />
     ),
   },
   {
     id: 'quantity',
     header: 'Quantità',
-    accessorKey: 'quantity',
     ...getColumnSizing('quantity'),
     cell: ({ row }) => (
       <CheckoutQuantityStepper
-        quantity={row.original.quantity}
-        onDecrease={() => onPatchRow(row.original.id, { quantity: row.original.quantity - 1 })}
-        onIncrease={() => onPatchRow(row.original.id, { quantity: row.original.quantity + 1 })}
+        quantity={row.quantity}
+        onDecrease={() => onPatchRow(row.id, { quantity: row.quantity - 1 })}
+        onIncrease={() => onPatchRow(row.id, { quantity: row.quantity + 1 })}
       />
     ),
   },
@@ -91,7 +82,7 @@ const createCheckoutConfigurationTableColumns = ({
     header: 'Modifica',
     ...getColumnSizing('actions'),
     cell: ({ row }) => (
-      <Button type="button" variant="delete" size="delete" className="mx-auto" onClick={() => onRemoveRow(row.original.id)}>
+      <Button type="button" variant="delete" size="delete" className="mx-auto" onClick={() => onRemoveRow(row.id)}>
         <SvgIcon name="delete" className="w-[14px] h-[15.75px]" />
         Eliminare
       </Button>

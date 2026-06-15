@@ -25,7 +25,7 @@ const CheckoutSizePopover = ({ value, onChange }: checkoutSizePopoverPropsType) 
       <AtomPopoverTrigger asChild>
         <button
           type="button"
-          className="flex h-full min-h-10 w-full items-center justify-center gap-1 px-2 py-2 text-[14px] font-medium text-default outline-none transition-colors hover:bg-gray-100/60 focus-visible:ring-2 focus-visible:ring-active focus-visible:ring-inset"
+          className="flex h-full min-h-10 w-full items-center justify-center gap-1 px-2 py-2 text-[16px] text-default outline-none transition-colors hover:bg-gray-100/60 focus-visible:ring-2 focus-visible:ring-active focus-visible:ring-inset"
           aria-label={`Taglia: ${value}`}
         >
           <span>{value}</span>
@@ -40,7 +40,7 @@ const CheckoutSizePopover = ({ value, onChange }: checkoutSizePopoverPropsType) 
                 type="button"
                 onClick={() => handleSelect(option.value)}
                 className={cn(
-                  'w-full rounded-[6px] px-3 py-2 text-center text-[14px] font-medium transition-colors hover:bg-gray-100',
+                  'w-full rounded-[6px] px-3 py-2 text-center text-[16px] transition-colors hover:bg-gray-100',
                   option.value === value && 'bg-gray-100 text-default',
                 )}
               >

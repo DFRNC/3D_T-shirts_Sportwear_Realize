@@ -6,7 +6,7 @@ const CHECKOUT_CONFIGURATION_TABLE_COLUMNS = [
   { id: 'name', header: 'Nome', size: 250, minSize: 250 },
   { id: 'number', header: 'Numero', size: 100, minSize: 80, maxSize: 100 },
   { id: 'quantity', header: 'Quantità', size: 200, minSize: 200, maxSize: 200 },
-  { id: 'actions', header: 'Modifica', size: 200, minSize: 200, maxSize: 200 },
+  { id: 'actions', header: 'Modifica', size: 200, minSize: 160, maxSize: 160 },
 ] as const;
 
 const CHECKOUT_CONFIGURATION_TABLE_MIN_WIDTH = CHECKOUT_CONFIGURATION_TABLE_COLUMNS.reduce((total, column) => total + column.minSize, 0);

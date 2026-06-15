@@ -6,9 +6,11 @@ import { clampCheckoutRowQuantity } from '@constants';
 import { create } from 'zustand';
 
 import { captureGarmentConfiguration, useConfigurationCart } from '../useConfigurationCart';
+import { sanitizeNumberText } from '../useGarmentNumber';
 
-import { buildCheckoutRows, createCheckoutRow } from './buildCheckoutRows';
+import { buildCheckoutRows, createCheckoutRowFromPreset, extractCheckoutRowPreset } from './buildCheckoutRows';
 import { getCheckoutDiscountPercent, getProductRowQuantity, getProductsSubtotal, getProductUnitPrice } from './checkoutPricing';
+import { syncCheckoutPresetToCartConfiguration } from './syncCheckoutPresetToCartConfiguration';
 
 interface CheckoutState {
   products: checkoutProductType[];
@@ -26,6 +28,17 @@ interface CheckoutState {
   getGrandTotal: () => number;
 }
 
+const toCheckoutRowPreset = (product: checkoutProductType) => {
+  const firstRow = product.rows[0];
+  if (!firstRow) return product.rowPreset;
+
+  return {
+    size: firstRow.size,
+    name: firstRow.name,
+    number: firstRow.number,
+  };
+};
+
 const useCheckout = create<CheckoutState>((set, get) => ({
   products: [],
 
@@ -37,12 +50,17 @@ const useCheckout = create<CheckoutState>((set, get) => ({
       [cartState.activeItemId]: activeConfiguration,
     };
 
-    const products: checkoutProductType[] = cartState.items.map((item) => ({
-      cartItemId: item.id,
-      styleId: item.styleId,
-      productIndex: item.productIndex,
-      rows: buildCheckoutRows(configurations[item.id]),
-    }));
+    const products: checkoutProductType[] = cartState.items.map((item) => {
+      const rowPreset = extractCheckoutRowPreset(configurations[item.id]);
+
+      return {
+        cartItemId: item.id,
+        styleId: item.styleId,
+        productIndex: item.productIndex,
+        rowPreset,
+        rows: buildCheckoutRows(configurations[item.id]),
+      };
+    });
 
     set({ products });
   },
@@ -53,7 +71,7 @@ const useCheckout = create<CheckoutState>((set, get) => ({
         product.cartItemId === cartItemId
           ? {
               ...product,
-              rows: [...product.rows, createCheckoutRow('L')],
+              rows: [...product.rows, createCheckoutRowFromPreset(product.rowPreset)],
             }
           : product,
       ),
@@ -73,17 +91,34 @@ const useCheckout = create<CheckoutState>((set, get) => ({
   },
 
   updateRow: (cartItemId, rowId, patch) => {
-    const normalizedPatch = patch.quantity !== undefined ? { ...patch, quantity: clampCheckoutRowQuantity(patch.quantity) } : patch;
+    const normalizedPatch: checkoutLineRowPatchType = { ...patch };
+
+    if (patch.quantity !== undefined) {
+      normalizedPatch.quantity = clampCheckoutRowQuantity(patch.quantity);
+    }
+
+    if (patch.number !== undefined) {
+      normalizedPatch.number = sanitizeNumberText(patch.number);
+    }
 
     set((state) => ({
-      products: state.products.map((product) =>
-        product.cartItemId === cartItemId
-          ? {
-              ...product,
-              rows: product.rows.map((row) => (row.id === rowId ? { ...row, ...normalizedPatch } : row)),
-            }
-          : product,
-      ),
+      products: state.products.map((product) => {
+        if (product.cartItemId !== cartItemId) return product;
+
+        const rows = product.rows.map((row) => (row.id === rowId ? { ...row, ...normalizedPatch } : row));
+        const isFirstRow = product.rows[0]?.id === rowId;
+        const nextProduct = { ...product, rows };
+
+        if (!isFirstRow) return nextProduct;
+
+        const rowPreset = toCheckoutRowPreset(nextProduct);
+        syncCheckoutPresetToCartConfiguration(cartItemId, rowPreset);
+
+        return {
+          ...nextProduct,
+          rowPreset,
+        };
+      }),
     }));
   },
 
