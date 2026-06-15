@@ -10,10 +10,7 @@ import { sanitizeNumberText } from '../useGarmentNumber';
 
 import { buildCheckoutRows, createCheckoutRowFromPreset, extractCheckoutRowPreset } from './buildCheckoutRows';
 import { getCheckoutDiscountPercent, getProductRowQuantity, getProductsSubtotal, getProductUnitPrice } from './checkoutPricing';
-import { extractUniqueTestoTexts } from './extractUniqueTestoTexts';
 import { resolveCheckoutPrintAvailability } from './resolveCheckoutPrintAvailability';
-import { syncCheckoutPresetToCartConfiguration } from './syncCheckoutPresetToCartConfiguration';
-import { syncTestoTextInCartConfiguration } from './syncTestoTextInCartConfiguration';
 
 interface CheckoutState {
   products: checkoutProductType[];
@@ -31,18 +28,6 @@ interface CheckoutState {
   getGrandTotal: () => number;
 }
 
-const toCheckoutRowPreset = (product: checkoutProductType) => {
-  const firstRow = product.rows[0];
-  if (!firstRow) return product.rowPreset;
-
-  return {
-    size: firstRow.size,
-    name: firstRow.name,
-    number: firstRow.number,
-    testoTexts: [...firstRow.testoTexts],
-  };
-};
-
 const useCheckout = create<CheckoutState>((set, get) => ({
   products: [],
 
@@ -54,7 +39,7 @@ const useCheckout = create<CheckoutState>((set, get) => ({
       [cartState.activeItemId]: activeConfiguration,
     };
 
-    const products: checkoutProductType[] = cartState.items.map((item) => {
+    const products = cartState.items.map((item) => {
       const rowPreset = extractCheckoutRowPreset(configurations[item.id]);
 
       return {
@@ -115,22 +100,16 @@ const useCheckout = create<CheckoutState>((set, get) => ({
         products: state.products.map((product) => {
           if (product.cartItemId !== cartItemId) return product;
 
-          const row = product.rows.find((item) => item.id === rowId);
-          const previousText = row?.testoTexts[patch.testoTextIndex!];
-          if (previousText === undefined) return product;
+          const rows = product.rows.map((row) => {
+            if (row.id !== rowId) return row;
 
-          syncTestoTextInCartConfiguration(cartItemId, previousText, patch.testoText!);
+            const testoTexts = [...row.testoTexts];
+            testoTexts[patch.testoTextIndex!] = patch.testoText!;
 
-          const configuration = useConfigurationCart.getState().getConfiguration(cartItemId);
-          const nextTestoTexts = extractUniqueTestoTexts(configuration);
-          const rows = product.rows.map((item) => ({ ...item, testoTexts: nextTestoTexts }));
-          const rowPreset = { ...toCheckoutRowPreset({ ...product, rows }), testoTexts: nextTestoTexts };
+            return { ...row, testoTexts };
+          });
 
-          return {
-            ...product,
-            rows,
-            rowPreset,
-          };
+          return { ...product, rows };
         }),
       }));
       return;
@@ -151,18 +130,8 @@ const useCheckout = create<CheckoutState>((set, get) => ({
         if (product.cartItemId !== cartItemId) return product;
 
         const rows = product.rows.map((row) => (row.id === rowId ? { ...row, ...normalizedPatch } : row));
-        const isFirstRow = product.rows[0]?.id === rowId;
-        const nextProduct = { ...product, rows };
 
-        if (!isFirstRow) return nextProduct;
-
-        const rowPreset = toCheckoutRowPreset(nextProduct);
-        syncCheckoutPresetToCartConfiguration(cartItemId, rowPreset);
-
-        return {
-          ...nextProduct,
-          rowPreset,
-        };
+        return { ...product, rows };
       }),
     }));
   },
