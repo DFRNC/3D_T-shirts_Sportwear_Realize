@@ -1,6 +1,6 @@
 export type {
+  checkoutConfigurationTableColumnHandlersType,
   checkoutConfigurationTablePropsType,
-  checkoutConfigurationTableRowPropsType,
   checkoutProductCardPropsType,
   checkoutQuantityStepperPropsType,
   checkoutSizePopoverPropsType,

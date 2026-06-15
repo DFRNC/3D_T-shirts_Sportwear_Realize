@@ -2,6 +2,7 @@
 
 import type { checkoutLineRowPatchType, checkoutProductType } from '@types';
 
+import { clampCheckoutRowQuantity } from '@constants';
 import { create } from 'zustand';
 
 import { captureGarmentConfiguration, useConfigurationCart } from '../useConfigurationCart';
@@ -72,12 +73,14 @@ const useCheckout = create<CheckoutState>((set, get) => ({
   },
 
   updateRow: (cartItemId, rowId, patch) => {
+    const normalizedPatch = patch.quantity !== undefined ? { ...patch, quantity: clampCheckoutRowQuantity(patch.quantity) } : patch;
+
     set((state) => ({
       products: state.products.map((product) =>
         product.cartItemId === cartItemId
           ? {
               ...product,
-              rows: product.rows.map((row) => (row.id === rowId ? { ...row, ...patch } : row)),
+              rows: product.rows.map((row) => (row.id === rowId ? { ...row, ...normalizedPatch } : row)),
             }
           : product,
       ),

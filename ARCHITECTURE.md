@@ -167,7 +167,7 @@ Framework-agnostic 3D gizmo logic: hit-testing, drag handling, mesh element cons
 
 ### `src/constants/` (`@constants`)
 
-Configuration constants: wizard steps, color palette, print-atlas dimensions, fonts.
+Configuration constants: wizard steps, color palette, print-atlas dimensions, fonts, checkout limits (`CHECKOUT/`), table column sizing (`CHECKOUT_CONFIGURATION_TABLE/`).
 
 ### `src/providers/` (`@providers`)
 
@@ -203,22 +203,23 @@ Routes remain **thin**: they import page components from `@pages` and contain no
 
 ## Technology stack
 
-| Library                                                           | Role                                   |
-| ----------------------------------------------------------------- | -------------------------------------- |
-| **Next.js 16**                                                    | SSR/SSG, App Router, routing           |
-| **React 19**                                                      | UI runtime                             |
-| **TypeScript 5**                                                  | Static typing                          |
-| **Tailwind CSS 4**                                                | Styling                                |
-| **Zustand**                                                       | Global client state                    |
-| **React Three Fiber + drei**                                      | 3D canvas, GLTF loading, controls      |
-| **Three.js**                                                      | Rendering, textures, custom shaders    |
-| **Radix UI / Base UI**                                            | Accessible primitives (shadcn)         |
-| **Motion**                                                        | UI animations                          |
-| **@uiw/react-color**                                              | Color picker                           |
-| **pdfjs-dist, @okathira/ghostpdl-wasm, @imagemagick/magick-wasm** | In-browser PDF/EPS logo conversion     |
-| **sharp** (dev)                                                   | Image processing in Node asset scripts |
-| **Playwright** (dev)                                              | End-to-end tests                       |
-| **ESLint + Prettier + Husky**                                     | Linting, formatting, pre-commit hooks  |
+| Library                                                           | Role                                                        |
+| ----------------------------------------------------------------- | ----------------------------------------------------------- |
+| **Next.js 16**                                                    | SSR/SSG, App Router, routing                                |
+| **React 19**                                                      | UI runtime                                                  |
+| **TypeScript 5**                                                  | Static typing                                               |
+| **Tailwind CSS 4**                                                | Styling                                                     |
+| **Zustand**                                                       | Global client state                                         |
+| **@tanstack/react-table**                                         | Checkout configuration table (columns, sizing, cell render) |
+| **React Three Fiber + drei**                                      | 3D canvas, GLTF loading, controls                           |
+| **Three.js**                                                      | Rendering, textures, custom shaders                         |
+| **Radix UI / Base UI**                                            | Accessible primitives (shadcn)                              |
+| **Motion**                                                        | UI animations                                               |
+| **@uiw/react-color**                                              | Color picker                                                |
+| **pdfjs-dist, @okathira/ghostpdl-wasm, @imagemagick/magick-wasm** | In-browser PDF/EPS logo conversion                          |
+| **sharp** (dev)                                                   | Image processing in Node asset scripts                      |
+| **Playwright** (dev)                                              | End-to-end tests                                            |
+| **ESLint + Prettier + Husky**                                     | Linting, formatting, pre-commit hooks                       |
 
 ---
 

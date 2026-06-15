@@ -1,4 +1,4 @@
-import type { checkoutLineRowType, checkoutProductType } from '../../checkout';
+import type { checkoutLineRowPatchType, checkoutLineRowType, checkoutProductType } from '../../checkout';
 
 interface checkoutProductCardPropsType {
   product: checkoutProductType;
@@ -9,14 +9,9 @@ interface checkoutConfigurationTablePropsType {
   rows: checkoutProductType['rows'];
 }
 
-interface checkoutConfigurationTableRowPropsType {
-  row: checkoutLineRowType;
-  rowNumber: number;
-  onSizeChange: (size: string) => void;
-  onNameChange: (name: string) => void;
-  onNumberChange: (number: string) => void;
-  onQuantityChange: (quantity: number) => void;
-  onRemove: () => void;
+interface checkoutConfigurationTableColumnHandlersType {
+  onPatchRow: (rowId: string, patch: checkoutLineRowPatchType) => void;
+  onRemoveRow: (rowId: string) => void;
 }
 
 interface checkoutQuantityStepperPropsType {
@@ -31,8 +26,8 @@ interface checkoutSizePopoverPropsType {
 }
 
 export type {
+  checkoutConfigurationTableColumnHandlersType,
   checkoutConfigurationTablePropsType,
-  checkoutConfigurationTableRowPropsType,
   checkoutProductCardPropsType,
   checkoutQuantityStepperPropsType,
   checkoutSizePopoverPropsType,

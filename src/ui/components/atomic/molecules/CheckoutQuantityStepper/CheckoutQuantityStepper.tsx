@@ -1,33 +1,21 @@
 'use client';
 
+import { FiMinusCircle, FiPlusCircle } from 'react-icons/fi';
+
 import { Button, Flex, Text } from '@atoms';
 
+import { CHECKOUT_MAX_ROW_QUANTITY, CHECKOUT_MIN_ROW_QUANTITY } from '@constants';
 import type { checkoutQuantityStepperPropsType } from '@types';
 
 const CheckoutQuantityStepper = ({ quantity, onDecrease, onIncrease }: checkoutQuantityStepperPropsType) => {
   return (
-    <Flex className="items-center justify-center gap-2">
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        className="size-8 rounded-full border border-gray-20"
-        onClick={onDecrease}
-        disabled={quantity <= 1}
-        aria-label="Diminuisci quantità"
-      >
-        −
+    <Flex className="items-center justify-center mx-auto">
+      <Button type="button" variant="ghost" size="icon" onClick={onDecrease} disabled={quantity <= CHECKOUT_MIN_ROW_QUANTITY} aria-label="Diminuisci quantità">
+        <FiMinusCircle className="size-6 text-primary-10" />
       </Button>
-      <Text className="min-w-4 text-center text-[14px] font-medium">{quantity}</Text>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        className="size-8 rounded-full border border-gray-20"
-        onClick={onIncrease}
-        aria-label="Aumenta quantità"
-      >
-        +
+      <Text className="text-[16px] leading-[19px] min-w-11 text-center">{quantity}</Text>
+      <Button type="button" variant="ghost" size="icon" onClick={onIncrease} disabled={quantity >= CHECKOUT_MAX_ROW_QUANTITY} aria-label="Aumenta quantità">
+        <FiPlusCircle className="size-6 text-primary-10" />
       </Button>
     </Flex>
   );

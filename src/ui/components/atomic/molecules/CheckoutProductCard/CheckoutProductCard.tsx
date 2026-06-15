@@ -26,7 +26,7 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
   if (!garment) return null;
 
   return (
-    <article className="w-full p-5 border border-primary-10 rounded-[12px]">
+    <article className="w-full min-w-0 p-5 border border-primary-10 rounded-[12px]">
       <Grid className="grid-cols-[auto_1fr_auto] items-start gap-5">
         <AtomImage src={previewSrc} alt={productName} className="w-[101px] h-[126.73249053955078px] object-cover" />
         <Flex className="flex-col items-start justify-start gap-3">

@@ -82,8 +82,8 @@ export type {
 } from './organismsConfiguratorProps';
 export type { configurationStepSkeletonPropsType } from './skeletonsProps';
 export type {
+  checkoutConfigurationTableColumnHandlersType,
   checkoutConfigurationTablePropsType,
-  checkoutConfigurationTableRowPropsType,
   checkoutProductCardPropsType,
   checkoutQuantityStepperPropsType,
   checkoutSizePopoverPropsType,
