@@ -35,7 +35,7 @@ import {
 } from '@utils';
 
 const NAME_STEP = 4;
-const LOGO_STEP = 6;
+const LOGO_STEP = 7;
 
 const buildLogoStampSignature = (instances: ReturnType<typeof resolveLogoInstancesForRender>) =>
   JSON.stringify(

@@ -1,4 +1,4 @@
-import type { nameLimitsType, numberLimitsType } from '@types';
+import type { nameLimitsType, numberLimitsType, testoLimitsType } from '@types';
 
 interface namePartFormPropsType {
   instanceId: string;
@@ -11,6 +11,14 @@ interface numberPartFormPropsType {
   limits: numberLimitsType;
   placeholder: string;
   lineHeightShow: boolean;
+}
+
+interface testoPartFormPropsType {
+  instanceId: string;
+  limits: testoLimitsType;
+  placeholder: string;
+  lineHeightShow: boolean;
+  letterSpacingShow: boolean;
 }
 
 interface partColorControlPropsType {
@@ -38,5 +46,6 @@ export type {
   filePickContextType,
   namePartFormPropsType,
   numberPartFormPropsType,
+  testoPartFormPropsType,
   partColorControlPropsType,
 };

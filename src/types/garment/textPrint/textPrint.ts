@@ -41,7 +41,16 @@ type numberPreviewType = {
 };
 type numberLimitsType = textPrintLimitsType & Required<Pick<textDefaultsConfigType, 'lineHeightMin' | 'lineHeightMax'>>;
 
-type garmentTextRenderInstanceType = nameInstanceType | numberInstanceType;
+type testoPositionType = textPrintPositionType & { lineHeight?: number; letterSpacing?: number };
+type testoInstanceType = textPrintInstanceType & { lineHeight: number; letterSpacing: number };
+type testoPreviewType = {
+  instanceId: string;
+  patch: Partial<Pick<testoInstanceType, 'text' | 'textColor' | 'strokeColor' | 'fontSize' | 'strokeWidth' | 'lineHeight' | 'letterSpacing'>>;
+};
+type testoLimitsType = textPrintLimitsType &
+  Required<Pick<textDefaultsConfigType, 'lineHeightMin' | 'lineHeightMax' | 'letterSpacingMin' | 'letterSpacingMax'>>;
+
+type garmentTextRenderInstanceType = nameInstanceType | numberInstanceType | testoInstanceType;
 
 export type {
   garmentTextRenderInstanceType,
@@ -54,4 +63,8 @@ export type {
   numberLimitsType,
   numberPositionType,
   numberPreviewType,
+  testoInstanceType,
+  testoLimitsType,
+  testoPositionType,
+  testoPreviewType,
 };

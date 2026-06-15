@@ -6,4 +6,5 @@ export type {
   garmentLogoSnapshotType,
   garmentNameSnapshotType,
   garmentNumberSnapshotType,
+  garmentTestoSnapshotType,
 } from './cart';

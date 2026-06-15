@@ -10,5 +10,6 @@ export { garmentGradientMapFragment } from './garmentGradientShaders';
 export { garmentLogoMapFragment } from './garmentLogoShaders';
 export { garmentNameMapFragment } from './garmentNameShaders';
 export { garmentNumberMapFragment } from './garmentNumberShaders';
+export { garmentTestoMapFragment } from './garmentTestoShaders';
 export { garmentPrintMapFragment } from './garmentPrintShaders';
 export { printAtlasTintFragmentShader, printAtlasTintVertexShader } from './printAtlasTintShaders';

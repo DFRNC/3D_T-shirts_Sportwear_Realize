@@ -1,6 +1,7 @@
 import { garmentLogoMapFragment } from '../garmentLogoShaders';
 import { garmentNameMapFragment } from '../garmentNameShaders';
 import { garmentNumberMapFragment } from '../garmentNumberShaders';
+import { garmentTestoMapFragment } from '../garmentTestoShaders';
 
 const garmentPrintMapFragment = /* glsl */ `
 #ifdef USE_PRINT
@@ -23,6 +24,8 @@ const garmentPrintMapFragment = /* glsl */ `
 ${garmentLogoMapFragment}
 
 ${garmentNameMapFragment}
+
+${garmentTestoMapFragment}
 
 ${garmentNumberMapFragment}
 

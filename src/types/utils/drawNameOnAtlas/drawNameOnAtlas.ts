@@ -1,6 +1,7 @@
 interface drawNameMaskGeometryInputType {
   text: string;
   font: string;
+  letterSpacing?: number;
 }
 
 interface drawNameStrokeMaskGeometryInputType {
@@ -8,6 +9,11 @@ interface drawNameStrokeMaskGeometryInputType {
   font: string;
   strokeWidth: number;
   fontSize: number;
+  letterSpacing?: number;
 }
 
-export type { drawNameMaskGeometryInputType, drawNameStrokeMaskGeometryInputType };
+interface textCanvasDrawOptionsType {
+  letterSpacing?: number;
+}
+
+export type { drawNameMaskGeometryInputType, drawNameStrokeMaskGeometryInputType, textCanvasDrawOptionsType };

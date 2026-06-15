@@ -17,10 +17,12 @@ import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@provid
 import {
   resolveInstancesForRender,
   resolveNumberInstancesForRender,
+  resolveTestoInstancesForRender,
   useConfigurationControl,
   useConfiguratorProduct,
   useGarmentName,
   useGarmentNumber,
+  useGarmentTesto,
 } from '@store';
 import type { garmentTextRenderInstanceType, stampPixelSizeType } from '@types';
 import { NAME_SLOT_COUNT } from '@constants';
@@ -36,9 +38,14 @@ import {
   applyGarmentNumberMasks,
   applyGarmentNumberStyle,
   applyGarmentPrintAtlasSize,
+  applyGarmentTestoGizmoButtonsReveal,
+  applyGarmentTestoGizmoFrame,
+  applyGarmentTestoMasks,
+  applyGarmentTestoStyle,
   buildGizmoFrameUniforms,
   buildNameStyleUniforms,
   buildNumberStyleUniforms,
+  buildTestoStyleUniforms,
   canvasToMaskTexture,
   composeNameMaskAtlas,
   getEmptyPrintTexture,
@@ -49,12 +56,19 @@ import {
 
 const NAME_STEP = 4;
 const NUMBER_STEP = 5;
-const LOGO_STEP = 6;
+const TESTO_STEP = 6;
+const LOGO_STEP = 7;
 
 const DEFAULT_STAMP_SIZE: stampPixelSizeType = { width: 1, height: 1 };
 
 const buildFillSignature = (instances: garmentTextRenderInstanceType[]) =>
-  JSON.stringify(instances.map((instance) => ({ text: instance.text, font: instance.font })));
+  JSON.stringify(
+    instances.map((instance) => ({
+      text: instance.text,
+      font: instance.font,
+      ...('letterSpacing' in instance ? { letterSpacing: instance.letterSpacing } : {}),
+    })),
+  );
 
 const buildStrokeSignature = (instances: garmentTextRenderInstanceType[]) =>
   JSON.stringify(
@@ -63,6 +77,7 @@ const buildStrokeSignature = (instances: garmentTextRenderInstanceType[]) =>
       font: instance.font,
       strokeWidth: instance.strokeWidth,
       fontSize: instance.fontSize,
+      ...('letterSpacing' in instance ? { letterSpacing: instance.letterSpacing } : {}),
     })),
   );
 
@@ -94,6 +109,10 @@ const useGarmentNameTextures = () => {
   const numberInstances = useGarmentNumber((state) => state.instances);
   const numberPreview = useGarmentNumber((state) => state.preview);
   const numberSelectedInstanceId = useGarmentNumber((state) => state.selectedInstanceId);
+  const testoProductPath = useGarmentTesto((state) => state.productPath);
+  const testoInstances = useGarmentTesto((state) => state.instances);
+  const testoPreview = useGarmentTesto((state) => state.preview);
+  const testoSelectedInstanceId = useGarmentTesto((state) => state.selectedInstanceId);
   const { getMaterials, hasMaterialsForParts } = useGarmentMaterialRegistry();
   const materialRevision = useMaterialRegistryRevision();
   const invalidate = useThree((state) => state.invalidate);
@@ -110,14 +129,24 @@ const useGarmentNameTextures = () => {
   const numberStrokeTextureRef = useRef<Texture | null>(null);
   const numberStampSizeRef = useRef<stampPixelSizeType>(DEFAULT_STAMP_SIZE);
 
+  const testoFillCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const testoStrokeCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const testoFillTextureRef = useRef<Texture | null>(null);
+  const testoStrokeTextureRef = useRef<Texture | null>(null);
+  const testoStampSizeRef = useRef<stampPixelSizeType>(DEFAULT_STAMP_SIZE);
+
   const nameMaskGenerationRef = useRef(0);
   const numberMaskGenerationRef = useRef(0);
+  const testoMaskGenerationRef = useRef(0);
   const prevNameFillSignatureRef = useRef('');
   const prevNumberFillSignatureRef = useRef('');
+  const prevTestoFillSignatureRef = useRef('');
   const prevSelectedSlotRef = useRef(-1);
   const prevSelectedIdRef = useRef<string | null>(null);
   const prevNumberSelectedSlotRef = useRef(-1);
   const prevNumberSelectedIdRef = useRef<string | null>(null);
+  const prevTestoSelectedSlotRef = useRef(-1);
+  const prevTestoSelectedIdRef = useRef<string | null>(null);
 
   const nameInstancesForRender = useMemo(
     () => resolveInstancesForRender(nameInstances, namePreview).map((instance) => repairPrintInstancePlacement(instance, product.parts)),
@@ -130,6 +159,13 @@ const useGarmentNameTextures = () => {
         .map((instance) => repairPrintInstancePlacement(instance, product.parts)),
     [numberInstances, numberPreview, product.parts],
   );
+  const testoInstancesForRender = useMemo(
+    () =>
+      resolveTestoInstancesForRender(testoInstances, testoPreview)
+        .slice(0, NAME_SLOT_COUNT)
+        .map((instance) => repairPrintInstancePlacement(instance, product.parts)),
+    [testoInstances, testoPreview, product.parts],
+  );
 
   const selectedSlotIndex = useMemo(() => {
     if (activeStep !== NAME_STEP || !selectedInstanceId) return -1;
@@ -141,6 +177,11 @@ const useGarmentNameTextures = () => {
     return numberInstancesForRender.findIndex((instance) => instance.id === numberSelectedInstanceId);
   }, [activeStep, numberInstancesForRender, numberSelectedInstanceId]);
 
+  const testoSelectedSlotIndex = useMemo(() => {
+    if (activeStep !== TESTO_STEP || !testoSelectedInstanceId) return -1;
+    return testoInstancesForRender.slice(0, NAME_SLOT_COUNT).findIndex((instance) => instance.id === testoSelectedInstanceId);
+  }, [activeStep, testoInstancesForRender, testoSelectedInstanceId]);
+
   const nameFillSignature = useMemo(() => buildFillSignature(nameInstancesForRender), [nameInstancesForRender]);
   const nameStrokeSignature = useMemo(() => buildStrokeSignature(nameInstancesForRender), [nameInstancesForRender]);
   const nameStyleSignature = useMemo(() => buildStyleSignature(nameInstancesForRender), [nameInstancesForRender]);
@@ -149,13 +190,19 @@ const useGarmentNameTextures = () => {
   const numberStrokeSignature = useMemo(() => buildStrokeSignature(numberInstancesForRender), [numberInstancesForRender]);
   const numberStyleSignature = useMemo(() => buildStyleSignature(numberInstancesForRender), [numberInstancesForRender]);
 
+  const testoFillSignature = useMemo(() => buildFillSignature(testoInstancesForRender), [testoInstancesForRender]);
+  const testoStrokeSignature = useMemo(() => buildStrokeSignature(testoInstancesForRender), [testoInstancesForRender]);
+  const testoStyleSignature = useMemo(() => buildStyleSignature(testoInstancesForRender), [testoInstancesForRender]);
+
   const atlasSize = useMemo(() => resolvePrintAtlasSize(product), [product]);
 
   const isNameSynced = nameProductPath === product.path;
   const isNumberSynced = numberProductPath === product.path;
+  const isTestoSynced = testoProductPath === product.path;
   const sceneReady = hasMaterialsForParts(partIds);
   const isNameReady = isNameSynced && sceneReady;
   const isNumberReady = isNumberSynced && sceneReady;
+  const isTestoReady = isTestoSynced && sceneReady;
 
   const clearNameRuntime = useCallback(() => {
     nameFillTextureRef.current?.dispose();
@@ -177,6 +224,17 @@ const useGarmentNameTextures = () => {
     numberStrokeCanvasRef.current = null;
     numberStampSizeRef.current = DEFAULT_STAMP_SIZE;
     prevNumberFillSignatureRef.current = '';
+  }, []);
+
+  const clearTestoRuntime = useCallback(() => {
+    testoFillTextureRef.current?.dispose();
+    testoStrokeTextureRef.current?.dispose();
+    testoFillTextureRef.current = null;
+    testoStrokeTextureRef.current = null;
+    testoFillCanvasRef.current = null;
+    testoStrokeCanvasRef.current = null;
+    testoStampSizeRef.current = DEFAULT_STAMP_SIZE;
+    prevTestoFillSignatureRef.current = '';
   }, []);
 
   const ensureMaskResources = useCallback(
@@ -239,6 +297,18 @@ const useGarmentNameTextures = () => {
     [getMaterials, invalidate, product.parts],
   );
 
+  const applyTestoMasksToMaterials = useCallback(
+    (fillMask: Texture, strokeMask: Texture) => {
+      for (const part of product.parts) {
+        for (const material of getMaterials(part.id)) {
+          applyGarmentTestoMasks(material, { fillMask, strokeMask });
+        }
+      }
+      invalidate();
+    },
+    [getMaterials, invalidate, product.parts],
+  );
+
   const applyNameStyleToMaterials = useCallback(
     (stampSize: stampPixelSizeType = nameStampSizeRef.current) => {
       for (const part of product.parts) {
@@ -271,23 +341,42 @@ const useGarmentNameTextures = () => {
     [atlasSize.height, atlasSize.width, getMaterials, numberInstancesForRender, invalidate, product.parts],
   );
 
+  const applyTestoStyleToMaterials = useCallback(
+    (stampSize: stampPixelSizeType = testoStampSizeRef.current) => {
+      for (const part of product.parts) {
+        const style = buildTestoStyleUniforms(testoInstancesForRender, product.parts, stampSize, part.id);
+
+        for (const material of getMaterials(part.id)) {
+          applyGarmentPrintAtlasSize(material, atlasSize.width, atlasSize.height);
+          applyGarmentTestoStyle(material, style);
+        }
+      }
+
+      invalidate();
+    },
+    [atlasSize.height, atlasSize.width, getMaterials, testoInstancesForRender, invalidate, product.parts],
+  );
+
   const applyGizmoFrames = useCallback(() => {
     const nameGizmoEnabled = activeStep === NAME_STEP;
     const numberGizmoEnabled = activeStep === NUMBER_STEP;
+    const testoGizmoEnabled = activeStep === TESTO_STEP;
 
     for (const part of product.parts) {
       const nameFrame = buildGizmoFrameUniforms(nameInstancesForRender, part.id, nameGizmoEnabled);
       const numberFrame = buildGizmoFrameUniforms(numberInstancesForRender, part.id, numberGizmoEnabled);
+      const testoFrame = buildGizmoFrameUniforms(testoInstancesForRender, part.id, testoGizmoEnabled);
 
       for (const material of getMaterials(part.id)) {
         applyGarmentGizmoFrame(material, nameFrame);
         applyGarmentNumberGizmoFrame(material, numberFrame);
+        applyGarmentTestoGizmoFrame(material, testoFrame);
         if (gizmoIcons) applyGarmentGizmoIcons(material, gizmoIcons);
       }
     }
 
     invalidate();
-  }, [activeStep, getMaterials, gizmoIcons, nameInstancesForRender, numberInstancesForRender, invalidate, product.parts]);
+  }, [activeStep, getMaterials, gizmoIcons, nameInstancesForRender, numberInstancesForRender, testoInstancesForRender, invalidate, product.parts]);
 
   useEffect(() => {
     if (activeStep !== NAME_STEP) return;
@@ -320,7 +409,22 @@ const useGarmentNameTextures = () => {
   }, [activeStep, numberSelectedInstanceId, numberSelectedSlotIndex]);
 
   useEffect(() => {
-    if (activeStep === NAME_STEP || activeStep === NUMBER_STEP || activeStep === LOGO_STEP) return;
+    if (activeStep !== TESTO_STEP) return;
+
+    const snap =
+      prevTestoSelectedIdRef.current === testoSelectedInstanceId &&
+      prevTestoSelectedSlotRef.current !== testoSelectedSlotIndex &&
+      prevTestoSelectedSlotRef.current >= 0 &&
+      testoSelectedSlotIndex >= 0;
+
+    prevTestoSelectedIdRef.current = testoSelectedInstanceId;
+    prevTestoSelectedSlotRef.current = testoSelectedSlotIndex;
+
+    setGizmoButtonsRevealTarget(testoSelectedSlotIndex, snap);
+  }, [activeStep, testoSelectedInstanceId, testoSelectedSlotIndex]);
+
+  useEffect(() => {
+    if (activeStep === NAME_STEP || activeStep === NUMBER_STEP || activeStep === TESTO_STEP || activeStep === LOGO_STEP) return;
     setGizmoButtonsRevealTarget(-1);
   }, [activeStep]);
 
@@ -414,6 +518,51 @@ const useGarmentNameTextures = () => {
     [applyNumberMasksToMaterials, applyNumberStyleToMaterials, ensureMaskResources, isNumberReady, numberInstancesForRender],
   );
 
+  const updateTestoMasks = useCallback(
+    async (redrawFill: boolean, redrawStroke: boolean) => {
+      if (!isTestoReady) return;
+
+      const generation = ++testoMaskGenerationRef.current;
+      const empty = getEmptyPrintTexture();
+
+      if (testoInstancesForRender.length === 0) {
+        testoStampSizeRef.current = DEFAULT_STAMP_SIZE;
+        applyTestoMasksToMaterials(empty, empty);
+        applyTestoStyleToMaterials(DEFAULT_STAMP_SIZE);
+        return;
+      }
+
+      await document.fonts.ready;
+      if (generation !== testoMaskGenerationRef.current) return;
+
+      const stampSize = resolveNameStampSize(testoInstancesForRender);
+      ensureMaskResources(stampSize, {
+        fillCanvasRef: testoFillCanvasRef,
+        strokeCanvasRef: testoStrokeCanvasRef,
+        fillTextureRef: testoFillTextureRef,
+        strokeTextureRef: testoStrokeTextureRef,
+        stampSizeRef: testoStampSizeRef,
+      });
+      if (generation !== testoMaskGenerationRef.current) return;
+
+      composeNameMaskAtlas({
+        instances: testoInstancesForRender,
+        fillCanvas: testoFillCanvasRef.current!,
+        strokeCanvas: testoStrokeCanvasRef.current!,
+        redrawFill,
+        redrawStroke,
+      });
+
+      if (generation !== testoMaskGenerationRef.current) return;
+
+      testoFillTextureRef.current!.needsUpdate = true;
+      testoStrokeTextureRef.current!.needsUpdate = true;
+      applyTestoMasksToMaterials(testoFillTextureRef.current!, testoStrokeTextureRef.current!);
+      applyTestoStyleToMaterials(stampSize);
+    },
+    [applyTestoMasksToMaterials, applyTestoStyleToMaterials, ensureMaskResources, isTestoReady, testoInstancesForRender],
+  );
+
   useEffect(() => {
     if (!isNameReady) {
       if (nameProductPath !== product.path) {
@@ -442,6 +591,20 @@ const useGarmentNameTextures = () => {
     void updateNumberMasks(fillChanged, true);
   }, [clearNumberRuntime, isNumberReady, numberFillSignature, numberProductPath, numberStrokeSignature, product.path, updateNumberMasks]);
 
+  useEffect(() => {
+    if (!isTestoReady) {
+      if (testoProductPath !== product.path) {
+        clearTestoRuntime();
+      }
+      return;
+    }
+
+    const fillChanged = prevTestoFillSignatureRef.current !== testoFillSignature;
+    prevTestoFillSignatureRef.current = testoFillSignature;
+
+    void updateTestoMasks(fillChanged, true);
+  }, [clearTestoRuntime, isTestoReady, testoFillSignature, testoProductPath, testoStrokeSignature, product.path, updateTestoMasks]);
+
   useLayoutEffect(() => {
     if (!hasMaterialsForParts(partIds)) return;
 
@@ -461,7 +624,15 @@ const useGarmentNameTextures = () => {
       }
     }
 
-    if (isNameSynced || isNumberSynced) {
+    if (isTestoSynced) {
+      applyTestoStyleToMaterials();
+
+      if (testoFillTextureRef.current && testoStrokeTextureRef.current) {
+        applyTestoMasksToMaterials(testoFillTextureRef.current, testoStrokeTextureRef.current);
+      }
+    }
+
+    if (isNameSynced || isNumberSynced || isTestoSynced) {
       applyGizmoFrames();
     }
   }, [
@@ -470,12 +641,16 @@ const useGarmentNameTextures = () => {
     applyNameStyleToMaterials,
     applyNumberMasksToMaterials,
     applyNumberStyleToMaterials,
+    applyTestoMasksToMaterials,
+    applyTestoStyleToMaterials,
     hasMaterialsForParts,
     isNameSynced,
     isNumberSynced,
+    isTestoSynced,
     materialRevision,
     nameStyleSignature,
     numberStyleSignature,
+    testoStyleSignature,
     partIds,
   ]);
 
@@ -501,6 +676,7 @@ const useGarmentNameTextures = () => {
         for (const material of getMaterials(part.id)) {
           applyGarmentGizmoButtonsReveal(material, reveal);
           applyGarmentNumberGizmoButtonsReveal(material, reveal);
+          applyGarmentTestoGizmoButtonsReveal(material, reveal);
         }
       }
       invalidate();
@@ -514,8 +690,9 @@ const useGarmentNameTextures = () => {
     () => () => {
       clearNameRuntime();
       clearNumberRuntime();
+      clearTestoRuntime();
     },
-    [clearNameRuntime, clearNumberRuntime],
+    [clearNameRuntime, clearNumberRuntime, clearTestoRuntime],
   );
 };
 

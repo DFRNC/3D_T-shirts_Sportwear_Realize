@@ -2,7 +2,7 @@ export type { composeLogoStampAtlasInputType, logoStampAtlasType } from './compo
 export type { composeNameMaskAtlasInputType, nameMaskAtlasType } from './composeNameMaskAtlas';
 export type { composePrintAtlasFboInputType } from './composePrintAtlasFbo';
 export type { composePrintAtlasInputType } from './composePrintAtlas';
-export type { drawNameMaskGeometryInputType, drawNameStrokeMaskGeometryInputType } from './drawNameOnAtlas';
+export type { drawNameMaskGeometryInputType, drawNameStrokeMaskGeometryInputType, textCanvasDrawOptionsType } from './drawNameOnAtlas';
 export type { productAppearanceTexturesType } from './garmentAppearance';
 export type {
   garmentLogoStampStateType,

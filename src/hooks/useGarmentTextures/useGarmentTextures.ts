@@ -24,6 +24,7 @@ import {
   applyGarmentPatternTints,
   applyGarmentPrint,
   emptyMaskPair,
+  GARMENT_SHADER_VERSION,
   imageToTexture,
   isColorOnlyGarmentPart,
   readProductAppearanceTextures,
@@ -215,7 +216,11 @@ const useGarmentTextures = () => {
   );
 
   const materialsNeedShaderUpgrade = useCallback(() => {
-    return product.parts.some((part) => getMaterials(part.id).some((material) => material.userData.garmentShaderMode !== 'full'));
+    return product.parts.some((part) =>
+      getMaterials(part.id).some(
+        (material) => material.userData.garmentShaderMode !== 'full' || material.userData.garmentShaderVersion !== GARMENT_SHADER_VERSION,
+      ),
+    );
   }, [getMaterials, product.parts]);
 
   const scheduleFullShaderUpgrade = useCallback(

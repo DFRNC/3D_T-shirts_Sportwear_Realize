@@ -1,1 +1,1 @@
-export type { drawNameMaskGeometryInputType, drawNameStrokeMaskGeometryInputType } from './drawNameOnAtlas';
+export type { drawNameMaskGeometryInputType, drawNameStrokeMaskGeometryInputType, textCanvasDrawOptionsType } from './drawNameOnAtlas';

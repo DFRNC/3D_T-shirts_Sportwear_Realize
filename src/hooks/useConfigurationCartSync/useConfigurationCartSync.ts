@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useRef } from 'react';
 
-import { activateCartItem, useConfigurationCart, useGarmentDesign } from '@store';
+import { activateCartItem, areGarmentPrintStoresSynced, useConfigurationCart, useConfiguratorProduct } from '@store';
 
 const useConfigurationCartSync = () => {
   const initializedRef = useRef(false);
@@ -20,7 +20,8 @@ const useConfigurationCartSync = () => {
     }
 
     // After HMR the zustand store may reset while this ref survives.
-    if (!useGarmentDesign.getState().productPath) {
+    const { product } = useConfiguratorProduct.getState();
+    if (!areGarmentPrintStoresSynced(product.path)) {
       syncActiveCartItem();
     }
   }, []);

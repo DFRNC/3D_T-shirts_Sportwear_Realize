@@ -2,16 +2,18 @@
 
 import { memo, useEffect, useMemo } from 'react';
 
-import { buildLogoGizmoElements, buildNameGizmoElements, buildNumberGizmoElements, buildPrintablePartMeshes } from '@gizmo';
+import { buildLogoGizmoElements, buildNameGizmoElements, buildNumberGizmoElements, buildPrintablePartMeshes, buildTestoGizmoElements } from '@gizmo';
 import { useGizmoButtonHover, useGizmoSelection } from '@hooks';
 import {
   resolveNameLimits,
   resolveNumberLimits,
+  resolveTestoLimits,
   useConfigurationControl,
   useConfiguratorProduct,
   useGarmentLogo,
   useGarmentName,
   useGarmentNumber,
+  useGarmentTesto,
 } from '@store';
 import { repairPrintInstancePlacement, resolvePrintAtlasSize } from '@utils';
 
@@ -19,7 +21,8 @@ import { PrintGizmoInstance } from './PrintGizmoInstance';
 
 const NAME_STEP = 4;
 const NUMBER_STEP = 5;
-const LOGO_STEP = 6;
+const TESTO_STEP = 6;
+const LOGO_STEP = 7;
 
 const PrintGizmoLayer = memo(() => {
   const product = useConfiguratorProduct((state) => state.product);
@@ -37,6 +40,12 @@ const PrintGizmoLayer = memo(() => {
   const clearNumberSelectedInstance = useGarmentNumber((state) => state.clearSelectedInstance);
   const bringNumberInstanceToFront = useGarmentNumber((state) => state.bringInstanceToFront);
 
+  const testoInstances = useGarmentTesto((state) => state.instances);
+  const testoSelectedInstanceId = useGarmentTesto((state) => state.selectedInstanceId);
+  const setTestoSelectedInstance = useGarmentTesto((state) => state.setSelectedInstance);
+  const clearTestoSelectedInstance = useGarmentTesto((state) => state.clearSelectedInstance);
+  const bringTestoInstanceToFront = useGarmentTesto((state) => state.bringInstanceToFront);
+
   const logoInstances = useGarmentLogo((state) => state.instances);
   const logoSelectedInstanceId = useGarmentLogo((state) => state.selectedInstanceId);
   const setLogoSelectedInstance = useGarmentLogo((state) => state.setSelectedInstance);
@@ -45,8 +54,18 @@ const PrintGizmoLayer = memo(() => {
 
   const nameLimits = useMemo(() => (product.nameDefaults ? resolveNameLimits(product) : null), [product]);
   const numberLimits = useMemo(() => (product.numberDefaults ? resolveNumberLimits(product) : null), [product]);
+  const testoLimits = useMemo(() => (product.testoDefaults ? resolveTestoLimits(product) : null), [product]);
 
-  const gizmoStep = activeStep === NAME_STEP ? NAME_STEP : activeStep === NUMBER_STEP ? NUMBER_STEP : activeStep === LOGO_STEP ? LOGO_STEP : null;
+  const gizmoStep =
+    activeStep === NAME_STEP
+      ? NAME_STEP
+      : activeStep === NUMBER_STEP
+        ? NUMBER_STEP
+        : activeStep === TESTO_STEP
+          ? TESTO_STEP
+          : activeStep === LOGO_STEP
+            ? LOGO_STEP
+            : null;
 
   const nameInstancesForGizmo = useMemo(
     () => nameInstances.map((instance) => repairPrintInstancePlacement(instance, product.parts)),
@@ -55,6 +74,10 @@ const PrintGizmoLayer = memo(() => {
   const numberInstancesForGizmo = useMemo(
     () => numberInstances.map((instance) => repairPrintInstancePlacement(instance, product.parts)),
     [numberInstances, product.parts],
+  );
+  const testoInstancesForGizmo = useMemo(
+    () => testoInstances.map((instance) => repairPrintInstancePlacement(instance, product.parts)),
+    [testoInstances, product.parts],
   );
   const logoInstancesForGizmo = useMemo(
     () => logoInstances.map((instance) => repairPrintInstancePlacement(instance, product.parts)),
@@ -96,6 +119,23 @@ const PrintGizmoLayer = memo(() => {
   }, [activeStep, numberInstances, product.parts]);
 
   useEffect(() => {
+    if (activeStep !== TESTO_STEP) return;
+
+    testoInstances.forEach((instance) => {
+      const repaired = repairPrintInstancePlacement(instance, product.parts);
+      const needsPlacementMigration = instance.placementRotation === undefined && instance.rotation !== 0;
+      const needsUvRepair = repaired.partId !== instance.partId || repaired.uv.x !== instance.uv.x || repaired.uv.y !== instance.uv.y;
+
+      if (!needsPlacementMigration && !needsUvRepair) return;
+
+      useGarmentTesto.getState().updateInstance(instance.id, {
+        ...(needsUvRepair ? { partId: repaired.partId, uv: repaired.uv } : {}),
+        ...(needsPlacementMigration ? { placementRotation: instance.rotation, rotation: 0 } : {}),
+      });
+    });
+  }, [activeStep, testoInstances, product.parts]);
+
+  useEffect(() => {
     if (activeStep !== LOGO_STEP) return;
 
     logoInstances.forEach((instance) => {
@@ -123,20 +163,40 @@ const PrintGizmoLayer = memo(() => {
         fontSizeMax: numberLimits.fontSizeMax,
       });
     }
+    if (activeStep === TESTO_STEP && testoLimits) {
+      return buildTestoGizmoElements({
+        product,
+        instances: testoInstancesForGizmo,
+        fontSizeMin: testoLimits.fontSizeMin,
+        fontSizeMax: testoLimits.fontSizeMax,
+      });
+    }
     if (activeStep === LOGO_STEP) {
       return buildLogoGizmoElements({ product, instances: logoInstancesForGizmo });
     }
     return [];
-  }, [activeStep, logoInstancesForGizmo, nameInstancesForGizmo, nameLimits, numberInstancesForGizmo, numberLimits, product]);
+  }, [
+    activeStep,
+    logoInstancesForGizmo,
+    nameInstancesForGizmo,
+    nameLimits,
+    numberInstancesForGizmo,
+    numberLimits,
+    product,
+    testoInstancesForGizmo,
+    testoLimits,
+  ]);
 
   const selectedInstanceId =
     activeStep === NAME_STEP
       ? nameSelectedInstanceId
       : activeStep === NUMBER_STEP
         ? numberSelectedInstanceId
-        : activeStep === LOGO_STEP
-          ? logoSelectedInstanceId
-          : null;
+        : activeStep === TESTO_STEP
+          ? testoSelectedInstanceId
+          : activeStep === LOGO_STEP
+            ? logoSelectedInstanceId
+            : null;
 
   const selectionStore = useMemo(() => {
     if (activeStep === NUMBER_STEP) {
@@ -145,6 +205,14 @@ const PrintGizmoLayer = memo(() => {
         setSelectedInstance: setNumberSelectedInstance,
         clearSelectedInstance: clearNumberSelectedInstance,
         bringInstanceToFront: bringNumberInstanceToFront,
+      };
+    }
+    if (activeStep === TESTO_STEP) {
+      return {
+        selectedInstanceId: testoSelectedInstanceId,
+        setSelectedInstance: setTestoSelectedInstance,
+        clearSelectedInstance: clearTestoSelectedInstance,
+        bringInstanceToFront: bringTestoInstanceToFront,
       };
     }
     if (activeStep === LOGO_STEP) {
@@ -166,15 +234,19 @@ const PrintGizmoLayer = memo(() => {
     bringLogoInstanceToFront,
     bringNameInstanceToFront,
     bringNumberInstanceToFront,
+    bringTestoInstanceToFront,
     clearLogoSelectedInstance,
     clearNameSelectedInstance,
     clearNumberSelectedInstance,
+    clearTestoSelectedInstance,
     logoSelectedInstanceId,
     nameSelectedInstanceId,
     numberSelectedInstanceId,
     setLogoSelectedInstance,
     setNameSelectedInstance,
     setNumberSelectedInstance,
+    setTestoSelectedInstance,
+    testoSelectedInstanceId,
   ]);
 
   const atlasSize = useMemo(() => resolvePrintAtlasSize(product), [product]);
@@ -187,6 +259,10 @@ const PrintGizmoLayer = memo(() => {
   useEffect(() => {
     if (activeStep !== NUMBER_STEP) clearNumberSelectedInstance();
   }, [activeStep, clearNumberSelectedInstance]);
+
+  useEffect(() => {
+    if (activeStep !== TESTO_STEP) clearTestoSelectedInstance();
+  }, [activeStep, clearTestoSelectedInstance]);
 
   useEffect(() => {
     if (activeStep !== LOGO_STEP) clearLogoSelectedInstance();

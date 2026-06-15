@@ -13,7 +13,7 @@ import {
   toPrintLocalPx,
 } from '@gizmo';
 import type { gizmoButtonHitType, printablePartMeshesType, printDragMoveStateType, printGizmoElementType, uvPointType } from '@types';
-import { useConfiguratorProduct, useGarmentLogo, useGarmentName, useGarmentNumber } from '@store';
+import { useConfiguratorProduct, useGarmentLogo, useGarmentName, useGarmentNumber, useGarmentTesto } from '@store';
 
 type DragMode = 'move' | 'rotate' | 'scale';
 
@@ -101,8 +101,8 @@ const usePrintGizmoDrag = ({ element, elements, printableParts, atlasSize, gizmo
         });
       };
 
-      if (el.kind === 'name' || el.kind === 'number') {
-        const garmentStore = el.kind === 'name' ? useGarmentName : useGarmentNumber;
+      if (el.kind === 'name' || el.kind === 'number' || el.kind === 'testo') {
+        const garmentStore = el.kind === 'name' ? useGarmentName : el.kind === 'number' ? useGarmentNumber : useGarmentTesto;
         const instance = garmentStore.getState().instances.find((item) => item.id === el.id);
         if (!instance) return;
 
@@ -261,6 +261,9 @@ const usePrintGizmoDrag = ({ element, elements, printableParts, atlasSize, gizmo
       } else if (target.element.kind === 'number') {
         useGarmentNumber.getState().bringInstanceToFront(target.element.id);
         useGarmentNumber.getState().setSelectedInstance(target.element.id);
+      } else if (target.element.kind === 'testo') {
+        useGarmentTesto.getState().bringInstanceToFront(target.element.id);
+        useGarmentTesto.getState().setSelectedInstance(target.element.id);
       } else {
         useGarmentLogo.getState().bringInstanceToFront(target.element.id);
         useGarmentLogo.getState().setSelectedInstance(target.element.id);
@@ -275,6 +278,8 @@ const usePrintGizmoDrag = ({ element, elements, printableParts, atlasSize, gizmo
           useGarmentName.getState().duplicateInstance(target.element.id);
         } else if (target.element.kind === 'number') {
           useGarmentNumber.getState().duplicateInstance(target.element.id);
+        } else if (target.element.kind === 'testo') {
+          useGarmentTesto.getState().duplicateInstance(target.element.id);
         } else {
           useGarmentLogo.getState().duplicateInstance(target.element.id);
         }
@@ -286,6 +291,8 @@ const usePrintGizmoDrag = ({ element, elements, printableParts, atlasSize, gizmo
           useGarmentName.getState().removeInstance(target.element.id);
         } else if (target.element.kind === 'number') {
           useGarmentNumber.getState().removeInstance(target.element.id);
+        } else if (target.element.kind === 'testo') {
+          useGarmentTesto.getState().removeInstance(target.element.id);
         } else {
           useGarmentLogo.getState().removeInstance(target.element.id);
         }

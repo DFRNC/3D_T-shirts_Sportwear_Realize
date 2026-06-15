@@ -1,6 +1,8 @@
 import { FONT_FAMILY_BY_NAME, NAME_REFERENCE_FONT_SIZE } from '@constants';
 import type { drawNameStrokeMaskGeometryInputType } from '@types';
 
+import { applyTextCanvasDrawOptions } from '../applyTextCanvasDrawOptions';
+
 const resolveFontFamily = (fontName: string) => FONT_FAMILY_BY_NAME[fontName] ?? fontName;
 
 const resolveReferenceStrokeWidth = (strokeWidth: number, fontSize: number) => strokeWidth * (NAME_REFERENCE_FONT_SIZE / Math.max(fontSize, 1));
@@ -21,6 +23,7 @@ const drawNameStrokeMaskGeometry = (
   ctx.imageSmoothingQuality = 'high';
   ctx.translate(canvasWidth / 2, canvasHeight / 2);
   ctx.font = `${NAME_REFERENCE_FONT_SIZE}px ${fontFamily}`;
+  applyTextCanvasDrawOptions(ctx, { letterSpacing: instance.letterSpacing });
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.lineJoin = 'round';

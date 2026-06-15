@@ -60,6 +60,25 @@ uniform float uNameSlotActive[4];
 uniform vec4 uNamePartBounds[4];
 uniform vec3 uNameTextColors[4];
 uniform vec3 uNameStrokeColors[4];
+uniform sampler2D uTestoFillMask;
+uniform vec2 uTestoStampSize;
+uniform vec2 uTestoAnchorUv[4];
+uniform float uTestoRotation[4];
+uniform float uTestoPlacementRotation[4];
+uniform float uTestoUploadRotation[4];
+uniform float uTestoPartRotation[4];
+uniform float uTestoScale[4];
+uniform sampler2D uTestoStrokeMask;
+uniform float uTestoSlotActive[4];
+uniform vec4 uTestoPartBounds[4];
+uniform vec3 uTestoTextColors[4];
+uniform vec3 uTestoStrokeColors[4];
+uniform float uTestoGizmoEnabled;
+uniform float uTestoGizmoFrameActive[4];
+uniform float uTestoGizmoButtonsActive[4];
+uniform float uTestoGizmoButtonsReveal[4];
+uniform vec2 uTestoGizmoHalf[4];
+uniform float uTestoLineHeight[4];
 uniform sampler2D uNumberFillMask;
 uniform sampler2D uNumberStrokeMask;
 uniform vec2 uNumberStampSize;
@@ -141,6 +160,14 @@ vec2 garmentNameToStampUv( vec2 worldUv, vec2 anchor, float rotation, float plac
   vec2 localPx = garmentPrintToLocalPx( worldUv, anchor, partRotation );
   localPx = garmentPrintRotateLocalPx( localPx, rotation + placementRotation + uploadRotation ) / max( scale, 0.001 );
   return vec2( 0.5 ) + localPx / uNameStampSize;
+}
+
+vec2 garmentTestoToStampUv( vec2 worldUv, vec2 anchor, float rotation, float placementRotation, float uploadRotation, float partRotation, float scale, float lineHeight ) {
+  vec2 localPx = garmentPrintToLocalPx( worldUv, anchor, partRotation );
+  localPx = garmentPrintRotateLocalPx( localPx, rotation + placementRotation + uploadRotation );
+  localPx.x /= max( scale, 0.001 );
+  localPx.y /= max( scale * lineHeight, 0.001 );
+  return vec2( 0.5 ) + localPx / uTestoStampSize;
 }
 
 vec2 garmentNumberToStampUv( vec2 worldUv, vec2 anchor, float rotation, float placementRotation, float uploadRotation, float partRotation, float scale, float lineHeight ) {

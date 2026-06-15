@@ -4,3 +4,4 @@ export { ConfigurationNumbers } from './ConfigurationNumbers';
 export { ConfigurationDesign } from './ConfigurationDesign';
 export { ConfigurationNaming } from './ConfigurationNaming';
 export { ConfigurationLogo } from './ConfigurationLogo';
+export { ConfigurationTesto } from './ConfigurationTesto';

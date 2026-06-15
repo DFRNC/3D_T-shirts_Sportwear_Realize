@@ -9,6 +9,10 @@ export type {
   numberLimitsType,
   numberPositionType,
   numberPreviewType,
+  testoInstanceType,
+  testoLimitsType,
+  testoPositionType,
+  testoPreviewType,
 } from './textPrint';
 export type { logoInstanceType, logoPositionType, logoPreviewType, stepLogoPartStateType, stepLogoPositionStateType, stepLogoStoreViewType } from './logo';
 export type { partGradientType } from './gradient';

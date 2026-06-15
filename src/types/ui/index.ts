@@ -71,6 +71,7 @@ export type {
   filePickContextType,
   namePartFormPropsType,
   numberPartFormPropsType,
+  testoPartFormPropsType,
   partColorControlPropsType,
   configurationPositionPickerInstanceType,
   configurationPositionPickerPositionType,

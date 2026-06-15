@@ -6,6 +6,7 @@ import type {
   nameInstanceType,
   numberInstanceType,
   partGradientType,
+  testoInstanceType,
   uvPointType,
 } from '@types';
 import { PALETTE_COLORS } from '@constants';
@@ -15,6 +16,7 @@ import { useGarmentDesign } from '../useGarmentDesign';
 import { useGarmentLogo } from '../useGarmentLogo';
 import { useGarmentName } from '../useGarmentName';
 import { useGarmentNumber } from '../useGarmentNumber';
+import { useGarmentTesto } from '../useGarmentTesto';
 
 const DEFAULT_COLOR = PALETTE_COLORS[0];
 const DEFAULT_OPACITY = 1;
@@ -34,6 +36,11 @@ const cloneNameInstance = (instance: nameInstanceType): nameInstanceType => ({
 });
 
 const cloneNumberInstance = (instance: numberInstanceType): numberInstanceType => ({
+  ...instance,
+  uv: cloneUvPoint(instance.uv),
+});
+
+const cloneTestoInstance = (instance: testoInstanceType): testoInstanceType => ({
   ...instance,
   uv: cloneUvPoint(instance.uv),
 });
@@ -63,6 +70,10 @@ const cloneCartItemConfiguration = (configuration: cartItemConfigurationType): c
     instances: configuration.number.instances.map(cloneNumberInstance),
     selectedInstanceId: configuration.number.selectedInstanceId,
   },
+  testo: {
+    instances: (configuration.testo?.instances ?? []).map(cloneTestoInstance),
+    selectedInstanceId: configuration.testo?.selectedInstanceId ?? null,
+  },
   logo: {
     instances: configuration.logo.instances.map(cloneLogoInstance),
     selectedInstanceId: configuration.logo.selectedInstanceId,
@@ -86,6 +97,10 @@ const createDefaultCartItemConfiguration = (product: garmentConfigType): cartIte
     instances: [],
     selectedInstanceId: null,
   },
+  testo: {
+    instances: [],
+    selectedInstanceId: null,
+  },
   logo: {
     instances: [],
     selectedInstanceId: null,
@@ -97,6 +112,7 @@ const captureGarmentConfiguration = (): cartItemConfigurationType => {
   const design = useGarmentDesign.getState();
   const name = useGarmentName.getState();
   const number = useGarmentNumber.getState();
+  const testo = useGarmentTesto.getState();
   const logo = useGarmentLogo.getState();
 
   return cloneCartItemConfiguration({
@@ -119,6 +135,10 @@ const captureGarmentConfiguration = (): cartItemConfigurationType => {
       instances: number.instances,
       selectedInstanceId: number.selectedInstanceId,
     },
+    testo: {
+      instances: testo.instances,
+      selectedInstanceId: testo.selectedInstanceId,
+    },
     logo: {
       instances: logo.instances,
       selectedInstanceId: logo.selectedInstanceId,
@@ -132,6 +152,7 @@ const applyGarmentConfiguration = (product: garmentConfigType, configuration: ca
     useGarmentDesign.getState().initForProduct(product);
     useGarmentName.getState().initForProduct(product);
     useGarmentNumber.getState().initForProduct(product);
+    useGarmentTesto.getState().initForProduct(product);
     useGarmentLogo.getState().initForProduct(product);
     return;
   }
@@ -142,6 +163,7 @@ const applyGarmentConfiguration = (product: garmentConfigType, configuration: ca
   useGarmentDesign.getState().restoreSnapshot(product, snapshot.design);
   useGarmentName.getState().restoreSnapshot(product, snapshot.name);
   useGarmentNumber.getState().restoreSnapshot(product, snapshot.number);
+  useGarmentTesto.getState().restoreSnapshot(product, snapshot.testo ?? { instances: [], selectedInstanceId: null });
   useGarmentLogo.getState().restoreSnapshot(product, snapshot.logo);
 };
 

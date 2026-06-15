@@ -52,6 +52,7 @@ interface textPositionConfigType {
   rotation: number;
   fontSize: number;
   line_height?: number;
+  letter_spacing?: number;
   interactive?: boolean;
   show_frame?: boolean;
   show_gizmo?: boolean;
@@ -71,6 +72,10 @@ interface textDefaultsConfigType {
   lineHeightMin?: number;
   lineHeightMax?: number;
   line_height_show?: boolean;
+  letterSpacing?: number;
+  letterSpacingMin?: number;
+  letterSpacingMax?: number;
+  letter_spacing_show?: boolean;
 }
 
 interface namePositionConfigType extends textPositionConfigType {
@@ -128,6 +133,8 @@ interface garmentConfigType {
   namePositions?: namePositionConfigType[];
   numberDefaults?: textDefaultsConfigType;
   numberPositions?: numberPositionConfigType[];
+  testoDefaults?: textDefaultsConfigType;
+  testoPositions?: namePositionConfigType[];
   logoPositions?: logoPositionConfigType[];
 }
 

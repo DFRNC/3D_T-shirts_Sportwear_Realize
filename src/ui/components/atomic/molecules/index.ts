@@ -29,4 +29,5 @@ export {
   ConfigurationNaming,
   ConfigurationNumbers,
   ConfigurationShading,
+  ConfigurationTesto,
 } from './ConfigurationSteps';

@@ -1,5 +1,10 @@
-export type { buildLogoGizmoElementsInputType, buildNameGizmoElementsInputType, buildNumberGizmoElementsInputType } from './buildGizmoElements';
-export type { gizmoHandleKindType, printGizmoElementType } from './gizmo';
+export type {
+  buildLogoGizmoElementsInputType,
+  buildNameGizmoElementsInputType,
+  buildNumberGizmoElementsInputType,
+  buildTestoGizmoElementsInputType,
+} from './buildGizmoElements';
+export type { gizmoHandleKindType, printGizmoElementKindType, printGizmoElementType } from './gizmo';
 export type {
   gizmoButtonHitType,
   gizmoButtonHoverTargetType,

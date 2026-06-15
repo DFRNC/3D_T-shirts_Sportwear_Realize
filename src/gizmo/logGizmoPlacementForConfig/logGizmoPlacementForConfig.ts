@@ -57,9 +57,9 @@ const logGizmoPlacementForConfig = ({ kind, label, partId, uv, product }: LogGiz
     return;
   }
 
-  if (kind === 'name') {
+  if (kind === 'name' || kind === 'testo') {
     console.log(
-      `[gizmo] ${label} — namePositions JSON snippet:\n` +
+      `[gizmo] ${label} — ${kind === 'testo' ? 'testo' : 'name'}Positions JSON snippet:\n` +
         JSON.stringify(
           {
             label,

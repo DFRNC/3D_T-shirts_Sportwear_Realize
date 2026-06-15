@@ -13,13 +13,15 @@ export { measureNameGizmoHalf, measureNameStampPixelSize, unionStampPixelSize } 
 export { composePrintAtlas } from './composePrintAtlas/composePrintAtlas';
 export { composePrintAtlasFbo } from './composePrintAtlasFbo/composePrintAtlasFbo';
 export { PrintAtlasFbo } from './composePrintAtlasFbo/printAtlasFbo';
-export { createGarmentMaterial, upgradeGarmentMaterialShader } from './createGarmentMaterial';
+export { GARMENT_SHADER_VERSION, createGarmentMaterial, upgradeGarmentMaterialShader } from './createGarmentMaterial';
 export { scheduleGarmentShaderUpgrade } from './scheduleGarmentShaderUpgrade/scheduleGarmentShaderUpgrade';
 export { getProductAppearanceTextures, readProductAppearanceTextures, syncProductAppearanceTextures } from './garmentAppearance/garmentProductAppearanceCache';
 export { createPartAlbedoTexture } from './createPartAlbedoTexture/createPartAlbedoTexture';
 export { applyGarmentGradient, applyGarmentPartUvBounds } from './garmentGradient/applyGarmentGradient';
+export { buildLineHeightStyleUniforms, DEFAULT_LINE_HEIGHT } from './garmentPrint/buildLineHeightStyleUniforms';
 export { buildNameStyleUniforms } from './garmentPrint/buildNameStyleUniforms';
 export { buildNumberStyleUniforms } from './garmentPrint/buildNumberStyleUniforms';
+export { buildTestoStyleUniforms } from './garmentPrint/buildTestoStyleUniforms';
 export {
   applyGarmentGizmoButtonsReveal,
   applyGarmentGizmoFrame,
@@ -36,6 +38,13 @@ export {
   hydrateGarmentNumberUniforms,
 } from './garmentPrint/applyGarmentNames';
 export {
+  applyGarmentTestoGizmoButtonsReveal,
+  applyGarmentTestoGizmoFrame,
+  applyGarmentTestoMasks,
+  applyGarmentTestoStyle,
+  hydrateGarmentTestoUniforms,
+} from './garmentPrint/applyGarmentTesto';
+export {
   applyGarmentLogoGizmoButtonsReveal,
   applyGarmentLogoGizmoFrame,
   applyGarmentLogoStamp,
@@ -48,7 +57,7 @@ export { buildGizmoFrameUniforms } from './garmentPrint/buildGizmoFrameUniforms'
 export { canvasToPngBlobUrl } from './logoFile/canvasToBlobUrl';
 export { drawNameMaskGeometry } from './drawNameOnAtlas/drawNameMaskGeometry';
 export { drawNameStrokeMaskGeometry } from './drawNameOnAtlas/drawNameStrokeMaskGeometry';
-export { resolveTextContentRotationDeg, resolveTextGizmoHalf } from './garmentPrint/resolveTextGizmoHalf';
+export { resolveTextContentRotationDeg, resolveTextGizmoHalf, resolveTextGizmoMeasureOptions } from './garmentPrint/resolveTextGizmoHalf';
 export { resolveRotatedGizmoHalf } from './composeLogoAtlas/composeLogoPrintAtlas';
 export { applyGarmentPatternTints, applyGarmentPrint, emptyMaskPair } from './garmentPrint/applyGarmentPrint';
 export { getEmptyPrintTexture } from './garmentPrint/emptyPrintTexture';

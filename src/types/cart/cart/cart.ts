@@ -1,4 +1,4 @@
-import type { logoInstanceType, nameInstanceType, numberInstanceType, partGradientType, styleIdType } from '@types';
+import type { logoInstanceType, nameInstanceType, numberInstanceType, partGradientType, styleIdType, testoInstanceType } from '@types';
 
 interface cartItemType {
   id: string;
@@ -29,6 +29,11 @@ interface garmentNumberSnapshotType {
   selectedInstanceId: string | null;
 }
 
+interface garmentTestoSnapshotType {
+  instances: testoInstanceType[];
+  selectedInstanceId: string | null;
+}
+
 interface garmentLogoSnapshotType {
   instances: logoInstanceType[];
   selectedInstanceId: string | null;
@@ -39,6 +44,7 @@ interface cartItemConfigurationType {
   design: garmentDesignSnapshotType;
   name: garmentNameSnapshotType;
   number: garmentNumberSnapshotType;
+  testo: garmentTestoSnapshotType;
   logo: garmentLogoSnapshotType;
 }
 
@@ -50,4 +56,5 @@ export type {
   garmentLogoSnapshotType,
   garmentNameSnapshotType,
   garmentNumberSnapshotType,
+  garmentTestoSnapshotType,
 };

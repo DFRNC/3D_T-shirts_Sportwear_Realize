@@ -1,6 +1,8 @@
 import { FONT_FAMILY_BY_NAME, NAME_REFERENCE_FONT_SIZE } from '@constants';
 import type { drawNameMaskGeometryInputType } from '@types';
 
+import { applyTextCanvasDrawOptions } from '../applyTextCanvasDrawOptions';
+
 const resolveFontFamily = (fontName: string) => FONT_FAMILY_BY_NAME[fontName] ?? fontName;
 
 const drawNameMaskGeometry = (ctx: CanvasRenderingContext2D, instance: drawNameMaskGeometryInputType, canvasWidth: number, canvasHeight: number) => {
@@ -13,6 +15,7 @@ const drawNameMaskGeometry = (ctx: CanvasRenderingContext2D, instance: drawNameM
   ctx.imageSmoothingQuality = 'high';
   ctx.translate(canvasWidth / 2, canvasHeight / 2);
   ctx.font = `${NAME_REFERENCE_FONT_SIZE}px ${fontFamily}`;
+  applyTextCanvasDrawOptions(ctx, { letterSpacing: instance.letterSpacing });
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#ffffff';

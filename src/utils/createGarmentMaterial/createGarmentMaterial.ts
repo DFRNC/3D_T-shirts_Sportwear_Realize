@@ -23,11 +23,13 @@ import {
 } from '@shaders';
 import { hydrateGarmentLogoUniforms } from '../garmentPrint/applyGarmentLogos';
 import { hydrateGarmentNameUniforms, hydrateGarmentNumberUniforms } from '../garmentPrint/applyGarmentNames';
+import { hydrateGarmentTestoUniforms } from '../garmentPrint/applyGarmentTesto';
 import { getEmptyPrintTexture } from '../garmentPrint/emptyPrintTexture';
 
 import { applyGarmentPrintBase, applyPbrMaps, createDummyNormal } from './applyPbrMaps';
 
 const SLEEVE_POLYGON_OFFSET = { factor: -1, units: -1 } as const;
+const GARMENT_SHADER_VERSION = 'garment-pbr-print-v62-testo-metrics';
 
 const isSleeveMesh = (meshName: string) => {
   const name = meshName.toLowerCase();
@@ -99,6 +101,25 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
     shader.uniforms.uNameGizmoBtnFill = { value: new Color(NAME_GIZMO_BTN_FILL_COLOR) };
     shader.uniforms.uNameGizmoBtnFillActive = { value: new Color(NAME_GIZMO_BTN_ACTIVE_COLOR) };
     shader.uniforms.uNameGizmoIconColor = { value: new Color(NAME_GIZMO_ICON_COLOR) };
+    shader.uniforms.uTestoFillMask = { value: emptyPrint };
+    shader.uniforms.uTestoStrokeMask = { value: emptyPrint };
+    shader.uniforms.uTestoStampSize = { value: new Vector2(1, 1) };
+    shader.uniforms.uTestoAnchorUv = { value: Array.from({ length: NAME_SLOT_COUNT }, () => new Vector2()) };
+    shader.uniforms.uTestoRotation = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 0) };
+    shader.uniforms.uTestoPlacementRotation = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 0) };
+    shader.uniforms.uTestoUploadRotation = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 0) };
+    shader.uniforms.uTestoPartRotation = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 0) };
+    shader.uniforms.uTestoScale = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 1) };
+    shader.uniforms.uTestoSlotActive = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 0) };
+    shader.uniforms.uTestoPartBounds = { value: Array.from({ length: NAME_SLOT_COUNT }, () => new Vector4(0, 0, 1, 1)) };
+    shader.uniforms.uTestoTextColors = { value: Array.from({ length: NAME_SLOT_COUNT }, () => new Color('#000000')) };
+    shader.uniforms.uTestoStrokeColors = { value: Array.from({ length: NAME_SLOT_COUNT }, () => new Color('#ffffff')) };
+    shader.uniforms.uTestoGizmoEnabled = { value: 0 };
+    shader.uniforms.uTestoGizmoFrameActive = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 0) };
+    shader.uniforms.uTestoGizmoButtonsActive = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 0) };
+    shader.uniforms.uTestoGizmoButtonsReveal = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 0) };
+    shader.uniforms.uTestoGizmoHalf = { value: Array.from({ length: NAME_SLOT_COUNT }, () => new Vector2(0, 0)) };
+    shader.uniforms.uTestoLineHeight = { value: Array.from({ length: NAME_SLOT_COUNT }, () => 1) };
     shader.uniforms.uNumberFillMask = { value: emptyPrint };
     shader.uniforms.uNumberStrokeMask = { value: emptyPrint };
     shader.uniforms.uNumberStampSize = { value: new Vector2(1, 1) };
@@ -162,6 +183,25 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
     material.userData.uNameGizmoHoverSlotUniform = shader.uniforms.uNameGizmoHoverSlot;
     material.userData.uNameGizmoHoverCornerUniform = shader.uniforms.uNameGizmoHoverCorner;
     material.userData.uNameGizmoHoverScaleUniform = shader.uniforms.uNameGizmoHoverScale;
+    material.userData.uTestoFillMaskUniform = shader.uniforms.uTestoFillMask;
+    material.userData.uTestoStrokeMaskUniform = shader.uniforms.uTestoStrokeMask;
+    material.userData.uTestoStampSizeUniform = shader.uniforms.uTestoStampSize;
+    material.userData.uTestoAnchorUvUniform = shader.uniforms.uTestoAnchorUv;
+    material.userData.uTestoRotationUniform = shader.uniforms.uTestoRotation;
+    material.userData.uTestoPlacementRotationUniform = shader.uniforms.uTestoPlacementRotation;
+    material.userData.uTestoUploadRotationUniform = shader.uniforms.uTestoUploadRotation;
+    material.userData.uTestoPartRotationUniform = shader.uniforms.uTestoPartRotation;
+    material.userData.uTestoScaleUniform = shader.uniforms.uTestoScale;
+    material.userData.uTestoSlotActiveUniform = shader.uniforms.uTestoSlotActive;
+    material.userData.uTestoPartBoundsUniform = shader.uniforms.uTestoPartBounds;
+    material.userData.uTestoTextColorsUniform = shader.uniforms.uTestoTextColors;
+    material.userData.uTestoStrokeColorsUniform = shader.uniforms.uTestoStrokeColors;
+    material.userData.uTestoGizmoEnabledUniform = shader.uniforms.uTestoGizmoEnabled;
+    material.userData.uTestoGizmoFrameActiveUniform = shader.uniforms.uTestoGizmoFrameActive;
+    material.userData.uTestoGizmoButtonsActiveUniform = shader.uniforms.uTestoGizmoButtonsActive;
+    material.userData.uTestoGizmoButtonsRevealUniform = shader.uniforms.uTestoGizmoButtonsReveal;
+    material.userData.uTestoGizmoHalfUniform = shader.uniforms.uTestoGizmoHalf;
+    material.userData.uTestoLineHeightUniform = shader.uniforms.uTestoLineHeight;
     material.userData.uNumberFillMaskUniform = shader.uniforms.uNumberFillMask;
     material.userData.uNumberStrokeMaskUniform = shader.uniforms.uNumberStrokeMask;
     material.userData.uNumberStampSizeUniform = shader.uniforms.uNumberStampSize;
@@ -220,6 +260,25 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
       uNameGizmoIcons: shader.uniforms.uNameGizmoIcons,
     });
 
+    hydrateGarmentTestoUniforms(material, {
+      uTestoFillMask: shader.uniforms.uTestoFillMask,
+      uTestoStrokeMask: shader.uniforms.uTestoStrokeMask,
+      uTestoStampSize: shader.uniforms.uTestoStampSize,
+      uTestoAnchorUv: shader.uniforms.uTestoAnchorUv,
+      uTestoRotation: shader.uniforms.uTestoRotation,
+      uTestoPlacementRotation: shader.uniforms.uTestoPlacementRotation,
+      uTestoUploadRotation: shader.uniforms.uTestoUploadRotation,
+      uTestoPartRotation: shader.uniforms.uTestoPartRotation,
+      uTestoScale: shader.uniforms.uTestoScale,
+      uTestoSlotActive: shader.uniforms.uTestoSlotActive,
+      uTestoPartBounds: shader.uniforms.uTestoPartBounds,
+      uTestoTextColors: shader.uniforms.uTestoTextColors,
+      uTestoStrokeColors: shader.uniforms.uTestoStrokeColors,
+      uTestoGizmoEnabled: shader.uniforms.uTestoGizmoEnabled,
+      uTestoGizmoHalf: shader.uniforms.uTestoGizmoHalf,
+      uTestoLineHeight: shader.uniforms.uTestoLineHeight,
+    });
+
     hydrateGarmentNumberUniforms(material, {
       uNumberFillMask: shader.uniforms.uNumberFillMask,
       uNumberStrokeMask: shader.uniforms.uNumberStrokeMask,
@@ -263,7 +322,7 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
       .replace('#include <tonemapping_fragment>', `#include <tonemapping_fragment>\n${garmentGizmoLightsFragment}`);
   };
 
-  material.customProgramCacheKey = () => 'garment-pbr-print-v60-number-line-height';
+  material.customProgramCacheKey = () => GARMENT_SHADER_VERSION;
 };
 
 const createGarmentMaterial = (pbrMaps: pbrMapsType | null, source: MeshStandardMaterial | null | undefined, meshName = ''): MeshStandardMaterial => {
@@ -288,11 +347,14 @@ const createGarmentMaterial = (pbrMaps: pbrMapsType | null, source: MeshStandard
 };
 
 const upgradeGarmentMaterialShader = (material: MeshStandardMaterial) => {
-  if (material.userData.garmentShaderMode === 'full') return;
+  const isCurrentVersion = material.userData.garmentShaderVersion === GARMENT_SHADER_VERSION;
+  if (material.userData.garmentShaderMode === 'full' && isCurrentVersion) return;
 
+  material.userData.garmentShaderConfigured = false;
   configureGarmentShader(material);
   material.userData.garmentShaderMode = 'full';
+  material.userData.garmentShaderVersion = GARMENT_SHADER_VERSION;
   material.needsUpdate = true;
 };
 
-export { createGarmentMaterial, upgradeGarmentMaterialShader };
+export { GARMENT_SHADER_VERSION, createGarmentMaterial, upgradeGarmentMaterialShader };

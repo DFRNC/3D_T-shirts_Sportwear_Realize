@@ -18,6 +18,8 @@ const ConfigurationStepSkeleton = ({ step }: configurationStepSkeletonPropsType)
     case 5:
       return <ConfigurationNamingStepSkeleton />;
     case 6:
+      return <ConfigurationNamingStepSkeleton />;
+    case 7:
       return <ConfigurationLogoStepSkeleton />;
     default:
       return null;

@@ -1,4 +1,4 @@
-import type { garmentConfigType, logoInstanceType, nameInstanceType, numberInstanceType } from '@types';
+import type { garmentConfigType, logoInstanceType, nameInstanceType, numberInstanceType, testoInstanceType } from '@types';
 
 interface buildLogoGizmoElementsInputType {
   product: garmentConfigType;
@@ -19,4 +19,11 @@ interface buildNumberGizmoElementsInputType {
   fontSizeMax: number;
 }
 
-export type { buildLogoGizmoElementsInputType, buildNameGizmoElementsInputType, buildNumberGizmoElementsInputType };
+interface buildTestoGizmoElementsInputType {
+  product: garmentConfigType;
+  instances: testoInstanceType[];
+  fontSizeMin: number;
+  fontSizeMax: number;
+}
+
+export type { buildLogoGizmoElementsInputType, buildNameGizmoElementsInputType, buildNumberGizmoElementsInputType, buildTestoGizmoElementsInputType };

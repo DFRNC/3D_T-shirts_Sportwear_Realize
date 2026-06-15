@@ -28,7 +28,11 @@ const resolveNameStampSize = (instances: garmentTextRenderInstanceType[]): stamp
   return unionStampPixelSize(
     instances
       .slice(0, NAME_SLOT_COUNT)
-      .map((instance) => measureNameStampPixelSize(instance.text, instance.font, measureCtx))
+      .map((instance) =>
+        measureNameStampPixelSize(instance.text, instance.font, measureCtx, {
+          letterSpacing: 'letterSpacing' in instance ? instance.letterSpacing : undefined,
+        }),
+      )
       .filter((size): size is stampPixelSizeType => size !== null),
   );
 };
@@ -58,7 +62,16 @@ const composeNameMaskAtlas = (input: composeNameMaskAtlasInputType): nameMaskAtl
 
     activeInstances.forEach((instance, slotIndex) => {
       scratchCtx.clearRect(0, 0, scratchCanvas.width, scratchCanvas.height);
-      drawNameMaskGeometry(scratchCtx, { text: instance.text, font: instance.font }, scratchCanvas.width, scratchCanvas.height);
+      drawNameMaskGeometry(
+        scratchCtx,
+        {
+          text: instance.text,
+          font: instance.font,
+          letterSpacing: 'letterSpacing' in instance ? instance.letterSpacing : undefined,
+        },
+        scratchCanvas.width,
+        scratchCanvas.height,
+      );
       mergeMaskChannel(fillCtx, scratchCtx, slotIndex as 0 | 1 | 2 | 3);
     });
   }
@@ -70,7 +83,13 @@ const composeNameMaskAtlas = (input: composeNameMaskAtlasInputType): nameMaskAtl
       scratchCtx.clearRect(0, 0, scratchCanvas.width, scratchCanvas.height);
       drawNameStrokeMaskGeometry(
         scratchCtx,
-        { text: instance.text, font: instance.font, strokeWidth: instance.strokeWidth, fontSize: instance.fontSize },
+        {
+          text: instance.text,
+          font: instance.font,
+          strokeWidth: instance.strokeWidth,
+          fontSize: instance.fontSize,
+          letterSpacing: 'letterSpacing' in instance ? instance.letterSpacing : undefined,
+        },
         scratchCanvas.width,
         scratchCanvas.height,
       );
