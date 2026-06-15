@@ -18,6 +18,10 @@ const NumberPartForm = ({ instanceId, limits, placeholder }: numberPartFormProps
   const setPreview = useGarmentNumber((state) => state.setPreview);
   const clearPreview = useGarmentNumber((state) => state.clearPreview);
   const previewPatch = useGarmentNumber((state) => (state.preview?.instanceId === instanceId ? state.preview.patch : null));
+  const sharedPreviewText = useGarmentNumber((state) => {
+    const text = state.preview?.patch.text;
+    return text !== undefined ? text : null;
+  });
   const previewText = previewPatch?.text;
   const previewTextColor = previewPatch?.textColor;
   const previewStrokeColor = previewPatch?.strokeColor;
@@ -57,7 +61,7 @@ const NumberPartForm = ({ instanceId, limits, placeholder }: numberPartFormProps
           type="text"
           inputMode="numeric"
           pattern="[0-9]*"
-          value={previewText ?? instance.text}
+          value={sharedPreviewText ?? previewText ?? instance.text}
           maxLength={limits.maxLength}
           onChange={(e) => setPreview(instanceId, { text: sanitizeNumberText(e.target.value) })}
           onBlur={commitFromPreview}

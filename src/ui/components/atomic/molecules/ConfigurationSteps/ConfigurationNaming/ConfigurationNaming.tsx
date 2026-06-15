@@ -18,6 +18,10 @@ const NamePartForm = ({ instanceId, limits, placeholder }: namePartFormPropsType
   const setPreview = useGarmentName((state) => state.setPreview);
   const clearPreview = useGarmentName((state) => state.clearPreview);
   const previewPatch = useGarmentName((state) => (state.preview?.instanceId === instanceId ? state.preview.patch : null));
+  const sharedPreviewText = useGarmentName((state) => {
+    const text = state.preview?.patch.text;
+    return text !== undefined ? text : null;
+  });
   const previewText = previewPatch?.text;
   const previewTextColor = previewPatch?.textColor;
   const previewStrokeColor = previewPatch?.strokeColor;
@@ -55,7 +59,7 @@ const NamePartForm = ({ instanceId, limits, placeholder }: namePartFormPropsType
         <Text variant="configurator_part_label">Testo</Text>
         <input
           type="text"
-          value={previewText ?? instance.text}
+          value={sharedPreviewText ?? previewText ?? instance.text}
           maxLength={limits.maxLength}
           onChange={(e) => setPreview(instanceId, { text: e.target.value })}
           onBlur={commitFromPreview}

@@ -25,7 +25,14 @@ interface GarmentNumberState {
 const resolveNumberInstancesForRender = (instances: numberInstanceType[], preview: numberPreviewType | null): numberInstanceType[] => {
   if (!preview) return instances;
 
-  return instances.map((instance) => (instance.id === preview.instanceId ? { ...instance, ...preview.patch } : instance));
+  const { instanceId, patch } = preview;
+
+  if (patch.text !== undefined) {
+    const text = patch.text;
+    return instances.map((instance) => (instance.id === instanceId ? { ...instance, ...patch } : { ...instance, text }));
+  }
+
+  return instances.map((instance) => (instance.id === instanceId ? { ...instance, ...patch } : instance));
 };
 
 const buildPositionsKey = (product: garmentConfigType) => JSON.stringify(product.numberPositions ?? []);
@@ -75,7 +82,12 @@ const useGarmentNumber = create<GarmentNumberState>((set, get) => ({
     });
   },
   addInstance: (instance) => {
-    set((state) => ({ instances: [...state.instances, instance] }));
+    set((state) => {
+      const sharedText = state.instances[0]?.text;
+      const nextInstance = sharedText !== undefined ? { ...instance, text: sharedText } : instance;
+
+      return { instances: [...state.instances, nextInstance] };
+    });
   },
   removeInstance: (id) => {
     set((state) => ({
@@ -84,9 +96,18 @@ const useGarmentNumber = create<GarmentNumberState>((set, get) => ({
     }));
   },
   updateInstance: (id, patch) => {
-    set((state) => ({
-      instances: state.instances.map((instance) => (instance.id === id ? { ...instance, ...patch } : instance)),
-    }));
+    set((state) => {
+      if (patch.text !== undefined) {
+        const text = patch.text;
+        return {
+          instances: state.instances.map((instance) => (instance.id === id ? { ...instance, ...patch } : { ...instance, text })),
+        };
+      }
+
+      return {
+        instances: state.instances.map((instance) => (instance.id === id ? { ...instance, ...patch } : instance)),
+      };
+    });
   },
   setPreview: (instanceId, patch) => {
     set((state) => {
