@@ -11,7 +11,7 @@ const ConfigurationShading = () => {
   const product = useConfiguratorProduct((state) => state.product);
   const byPart = useGarmentColor((state) => state.byPart);
   const gradientsByPart = useGarmentColor((state) => state.gradientsByPart);
-  const parts = product.parts;
+  const parts = useMemo(() => product.parts.filter((part) => !part.colorOnly), [product.parts]);
 
   const getShadingPreview = useCallback(
     (partId: string) => {

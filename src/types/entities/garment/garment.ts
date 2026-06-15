@@ -32,6 +32,8 @@ interface garmentPartConfigType {
   uvBounds?: uvBoundsType;
   printRotation?: number;
   gradient?: partGradientConfigType;
+  /** Solid color only — excluded from design, gradient, and pattern layers. */
+  colorOnly?: boolean;
 }
 
 interface patternPartConfigType {

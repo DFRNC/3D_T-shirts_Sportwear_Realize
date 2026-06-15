@@ -30,7 +30,7 @@ const copyColorSnapshotForProduct = (reference: garmentColorSnapshotType, newPro
     }
 
     const referenceGradient = reference.gradientsByPart[part.id];
-    if (referenceGradient !== undefined) {
+    if (!part.colorOnly && referenceGradient !== undefined) {
       gradientsByPart[part.id] = { ...referenceGradient };
     }
   }

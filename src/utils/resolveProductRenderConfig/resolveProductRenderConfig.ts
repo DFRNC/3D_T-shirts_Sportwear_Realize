@@ -15,6 +15,8 @@ const resolvePartUvBounds = (part: garmentPartConfigType): uvBoundsType => part.
 
 const resolvePartPrintRotation = (part: garmentPartConfigType): number => part.printRotation ?? part.gradient?.rotation ?? 0;
 
+const isColorOnlyGarmentPart = (part: garmentPartConfigType): boolean => part.colorOnly === true;
+
 const isUvInsidePartBounds = (uv: uvPointType, bounds: uvBoundsType = FULL_UV_BOUNDS): boolean =>
   uv.x >= bounds.minX && uv.x <= bounds.maxX && uv.y >= bounds.minY && uv.y <= bounds.maxY;
 
@@ -41,6 +43,7 @@ const repairPrintInstancePlacement = <T extends { partId: string; uv: uvPointTyp
 
 export {
   clampUvToPartBounds,
+  isColorOnlyGarmentPart,
   isUvInsidePartBounds,
   repairPrintInstancePlacement,
   resolvePartPrintRotation,

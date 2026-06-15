@@ -58,6 +58,7 @@ export { loadCachedImage } from './loadCachedImage/loadCachedImage';
 export { loadImage } from './loadImage/loadImage';
 export {
   clampUvToPartBounds,
+  isColorOnlyGarmentPart,
   isUvInsidePartBounds,
   repairPrintInstancePlacement,
   resolvePartPrintRotation,

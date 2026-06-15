@@ -76,6 +76,14 @@
             "softness": 0.5,
             "opacity": 1
           }
+        },
+        {
+          "name": "Collo",
+          "label": "Collar",
+          "id": "collar_crewneck",
+          "meshNames": ["crewneck_collar"],
+          "renderOrder": 1,
+          "colorOnly": true
         }
       ],
       "pbrTextures": {
@@ -84,12 +92,6 @@
         "fabricNormal": "cotton_jersey_nor_gl.jpg",
         "fabricRoughness": "cotton_jersey_rough.jpg"
       },
-      "staticMeshes": [
-        {
-          "meshNames": ["crewneck_collar"],
-          "renderOrder": 1
-        }
-      ],
       "preserveGltfMeshes": ["crewneck_inside"],
       "patterns": [
         {

@@ -25,6 +25,7 @@ import {
   applyGarmentPrint,
   emptyMaskPair,
   imageToTexture,
+  isColorOnlyGarmentPart,
   readProductAppearanceTextures,
   resolvePartUvBounds,
   resolvePbrTexturePaths,
@@ -107,22 +108,36 @@ const useGarmentTextures = () => {
     };
   }, [activeOpacity, activePattern, patternColors]);
 
+  const buildEmptyPrintState = useCallback((): garmentPrintStateType => {
+    const emptyMasks = emptyMaskPair();
+    return {
+      defaultLogos: emptyMasks[0],
+      patternMasks: emptyMasks,
+      patternColors: buildPatternColors(null, {}),
+      patternOpacity: 0,
+    };
+  }, []);
+
   const applyPrintState = useCallback(
     (state: garmentPrintStateType) => {
+      const emptyState = buildEmptyPrintState();
+
       for (const part of product.parts) {
+        const partState = isColorOnlyGarmentPart(part) ? emptyState : state;
+
         for (const material of getMaterials(part.id)) {
-          applyGarmentPrint(material, state);
+          applyGarmentPrint(material, partState);
         }
       }
       invalidate();
     },
-    [getMaterials, invalidate, product.parts],
+    [buildEmptyPrintState, getMaterials, invalidate, product.parts],
   );
 
   const applyPartColors = useCallback(() => {
     for (const part of product.parts) {
       const color = byPart[part.id] ?? DEFAULT_COLOR;
-      const gradient = gradientsByPart[part.id] ?? DISABLED_PART_GRADIENT;
+      const gradient = isColorOnlyGarmentPart(part) ? DISABLED_PART_GRADIENT : (gradientsByPart[part.id] ?? DISABLED_PART_GRADIENT);
       const { fabricColor, gradientColor2 } = resolveGradientColors(color, gradient);
       const uvBounds = resolvePartUvBounds(part);
 
@@ -142,6 +157,8 @@ const useGarmentTextures = () => {
     const colors = buildPatternColors(activePattern, patternColors);
 
     for (const part of product.parts) {
+      if (isColorOnlyGarmentPart(part)) continue;
+
       for (const material of getMaterials(part.id)) {
         applyGarmentPatternTints(material, colors, activeOpacity);
       }
