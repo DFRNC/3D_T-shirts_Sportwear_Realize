@@ -229,7 +229,7 @@
         }
       ],
       "nameDefaults": {
-        "text": "PLAYER NAME",
+        "text": "PLAYER",
         "font": "Oswald",
         "textColor": "#000000",
         "strokeColor": "#ffffff",
@@ -247,56 +247,60 @@
         "strokeWidth": 2,
         "maxLength": 2,
         "fontSizeMin": 50,
-        "fontSizeMax": 500,
-        "strokeWidthMax": 20
+        "fontSizeMax": 600,
+        "strokeWidthMax": 20,
+        "lineHeight": 1.5,
+        "lineHeightMin": 0.5,
+        "lineHeightMax": 2,
+        "line_height_show": false
       },
       "namePositions": [
         {
           "label": "Top Back",
           "partId": "back_crewneck",
-          "uv": { "x": 0.36, "y": 0.36 },
+          "uv": { "x": 0.41, "y": 0.36 },
           "rotation": 0,
-          "fontSize": 80,
+          "fontSize": 200,
           "show_frame": true,
-          "show_gizmo": false
+          "show_gizmo": true
         },
         {
           "label": "Bottom Back",
           "partId": "back_crewneck",
-          "uv": { "x": 0.1, "y": 0.35 },
+          "uv": { "x": 0.13, "y": 0.35 },
           "rotation": 0,
-          "fontSize": 80,
+          "fontSize": 200,
           "show_frame": true,
-          "show_gizmo": false
+          "show_gizmo": true
         }
       ],
       "numberPositions": [
         {
           "label": "Front Center",
           "zone": "front",
-          "uv": { "x": 0.4, "y": 0.5 },
+          "uv": { "x": 0.3, "y": 0.5 },
           "rotation": 0,
-          "fontSize": 128,
+          "fontSize": 180,
           "show_frame": true,
-          "show_gizmo": false
+          "show_gizmo": true
         },
         {
           "label": "Front Right",
           "zone": "front",
-          "uv": { "x": 0.32, "y": 0.28 },
+          "uv": { "x": 0.26, "y": 0.29 },
           "rotation": 0,
-          "fontSize": 128,
+          "fontSize": 180,
           "show_frame": true,
-          "show_gizmo": false
+          "show_gizmo": true
         },
         {
           "label": "Back",
           "zone": "back",
-          "uv": { "x": 0.5, "y": 0.5 },
+          "uv": { "x": 0.573, "y": 0.5 },
           "rotation": 0,
-          "fontSize": 300,
+          "fontSize": 580,
           "show_frame": true,
-          "show_gizmo": false
+          "show_gizmo": true
         }
       ],
       "logoPositions": []

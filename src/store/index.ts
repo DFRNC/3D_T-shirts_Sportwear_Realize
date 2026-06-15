@@ -17,6 +17,7 @@ export {
   resolveNumberDefaults,
   resolveNumberInstancesForRender,
   resolveNumberLimits,
+  resolveNumberLineHeightShow,
   sanitizeNumberText,
   NUMBER_MAX_LENGTH,
   useGarmentNumber,

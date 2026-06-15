@@ -33,10 +33,13 @@ type nameInstanceType = textPrintInstanceType;
 type namePreviewType = textPrintPreviewType<nameInstanceType>;
 type nameLimitsType = textPrintLimitsType;
 
-type numberPositionType = textPrintPositionType;
-type numberInstanceType = textPrintInstanceType;
-type numberPreviewType = textPrintPreviewType<numberInstanceType>;
-type numberLimitsType = textPrintLimitsType;
+type numberPositionType = textPrintPositionType & { lineHeight?: number };
+type numberInstanceType = textPrintInstanceType & { lineHeight: number };
+type numberPreviewType = {
+  instanceId: string;
+  patch: Partial<Pick<numberInstanceType, 'text' | 'textColor' | 'strokeColor' | 'fontSize' | 'strokeWidth' | 'lineHeight'>>;
+};
+type numberLimitsType = textPrintLimitsType & Required<Pick<textDefaultsConfigType, 'lineHeightMin' | 'lineHeightMax'>>;
 
 type garmentTextRenderInstanceType = nameInstanceType | numberInstanceType;
 

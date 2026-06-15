@@ -3,9 +3,17 @@
 import { useEffect, useRef } from 'react';
 import { useThree } from '@react-three/fiber';
 
-import { GIZMO_CORNERS, raycastPrintUv, resolveGizmoPointerTarget, resolvePrintDragMove, setGizmoButtonDragActive, toPrintLocalPx } from '@gizmo';
-import type { gizmoButtonHitType, printablePartMeshesType, printDragMoveStateType, printGizmoElementType } from '@types';
-import { useGarmentLogo, useGarmentName } from '@store';
+import {
+  GIZMO_CORNERS,
+  logGizmoPlacementForConfig,
+  raycastPrintUv,
+  resolveGizmoPointerTarget,
+  resolvePrintDragMove,
+  setGizmoButtonDragActive,
+  toPrintLocalPx,
+} from '@gizmo';
+import type { gizmoButtonHitType, printablePartMeshesType, printDragMoveStateType, printGizmoElementType, uvPointType } from '@types';
+import { useConfiguratorProduct, useGarmentLogo, useGarmentName, useGarmentNumber } from '@store';
 
 type DragMode = 'move' | 'rotate' | 'scale';
 
@@ -78,9 +86,24 @@ const usePrintGizmoDrag = ({ element, elements, printableParts, atlasSize, gizmo
 
     const startDrag = (mode: DragMode, clientX: number, clientY: number, buttonHit: gizmoButtonHitType | null) => {
       const el = ctx.current.element;
+      let didMove = false;
 
-      if (el.kind === 'name') {
-        const instance = useGarmentName.getState().instances.find((item) => item.id === el.id);
+      const logPlacementIfMoved = (instance: { label: string; partId: string; uv: uvPointType }) => {
+        if (mode !== 'move' || !didMove) return;
+
+        const product = useConfiguratorProduct.getState().product;
+        logGizmoPlacementForConfig({
+          kind: el.kind,
+          label: instance.label,
+          partId: instance.partId,
+          uv: instance.uv,
+          product,
+        });
+      };
+
+      if (el.kind === 'name' || el.kind === 'number') {
+        const garmentStore = el.kind === 'name' ? useGarmentName : useGarmentNumber;
+        const instance = garmentStore.getState().instances.find((item) => item.id === el.id);
         if (!instance) return;
 
         const startRotation = instance.rotation;
@@ -110,7 +133,8 @@ const usePrintGizmoDrag = ({ element, elements, printableParts, atlasSize, gizmo
             if (!move) return;
 
             dragMoveState = move.state;
-            useGarmentName.getState().updateInstance(el.id, {
+            didMove = true;
+            garmentStore.getState().updateInstance(el.id, {
               uv: move.uv,
               partId: move.partId,
             });
@@ -119,14 +143,14 @@ const usePrintGizmoDrag = ({ element, elements, printableParts, atlasSize, gizmo
             const local = toPrintLocalPx(hit.uv, centerUv, ctx.current.atlasSize, partRotation, startRotation);
             const angle = Math.atan2(local.y, local.x);
             const deltaDeg = ((angle - startAngle) * 180) / Math.PI;
-            useGarmentName.getState().updateInstance(el.id, { rotation: startRotation + deltaDeg });
+            garmentStore.getState().updateInstance(el.id, { rotation: startRotation + deltaDeg });
           } else {
             const partRotation = resolvePrintRotation(ctx.current.printableParts, hit.partId, el.partRotation);
             const local = toPrintLocalPx(hit.uv, centerUv, ctx.current.atlasSize, partRotation, startRotation);
             const distance = Math.hypot(local.x, local.y);
             const ratio = distance / Math.max(startDistance, 0.0001);
             const next = Math.min(el.fontSizeMax ?? Infinity, Math.max(el.fontSizeMin ?? 0, Math.round(startFontSize * ratio)));
-            useGarmentName.getState().updateInstance(el.id, { fontSize: next });
+            garmentStore.getState().updateInstance(el.id, { fontSize: next });
           }
           ctx.current.invalidate();
         };
@@ -137,6 +161,8 @@ const usePrintGizmoDrag = ({ element, elements, printableParts, atlasSize, gizmo
           window.removeEventListener('pointercancel', onUp);
           setGizmoButtonDragActive(null);
           setControls(true);
+          const latest = garmentStore.getState().instances.find((item) => item.id === el.id);
+          if (latest) logPlacementIfMoved(latest);
           ctx.current.invalidate();
         };
 
@@ -176,6 +202,7 @@ const usePrintGizmoDrag = ({ element, elements, printableParts, atlasSize, gizmo
           if (!move) return;
 
           dragMoveState = move.state;
+          didMove = true;
           useGarmentLogo.getState().updateInstance(el.id, {
             uv: move.uv,
             partId: move.partId,
@@ -203,6 +230,8 @@ const usePrintGizmoDrag = ({ element, elements, printableParts, atlasSize, gizmo
         window.removeEventListener('pointercancel', onUp);
         setGizmoButtonDragActive(null);
         setControls(true);
+        const latest = useGarmentLogo.getState().instances.find((item) => item.id === el.id);
+        if (latest) logPlacementIfMoved(latest);
         ctx.current.invalidate();
       };
 
@@ -229,6 +258,9 @@ const usePrintGizmoDrag = ({ element, elements, printableParts, atlasSize, gizmo
       if (target.element.kind === 'name') {
         useGarmentName.getState().bringInstanceToFront(target.element.id);
         useGarmentName.getState().setSelectedInstance(target.element.id);
+      } else if (target.element.kind === 'number') {
+        useGarmentNumber.getState().bringInstanceToFront(target.element.id);
+        useGarmentNumber.getState().setSelectedInstance(target.element.id);
       } else {
         useGarmentLogo.getState().bringInstanceToFront(target.element.id);
         useGarmentLogo.getState().setSelectedInstance(target.element.id);
@@ -241,6 +273,8 @@ const usePrintGizmoDrag = ({ element, elements, printableParts, atlasSize, gizmo
       if (corner?.kind === 'duplicate') {
         if (target.element.kind === 'name') {
           useGarmentName.getState().duplicateInstance(target.element.id);
+        } else if (target.element.kind === 'number') {
+          useGarmentNumber.getState().duplicateInstance(target.element.id);
         } else {
           useGarmentLogo.getState().duplicateInstance(target.element.id);
         }
@@ -250,6 +284,8 @@ const usePrintGizmoDrag = ({ element, elements, printableParts, atlasSize, gizmo
       if (corner?.kind === 'delete') {
         if (target.element.kind === 'name') {
           useGarmentName.getState().removeInstance(target.element.id);
+        } else if (target.element.kind === 'number') {
+          useGarmentNumber.getState().removeInstance(target.element.id);
         } else {
           useGarmentLogo.getState().removeInstance(target.element.id);
         }

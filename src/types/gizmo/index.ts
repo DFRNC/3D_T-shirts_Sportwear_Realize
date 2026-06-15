@@ -1,4 +1,4 @@
-export type { buildLogoGizmoElementsInputType, buildNameGizmoElementsInputType } from './buildGizmoElements';
+export type { buildLogoGizmoElementsInputType, buildNameGizmoElementsInputType, buildNumberGizmoElementsInputType } from './buildGizmoElements';
 export type { gizmoHandleKindType, printGizmoElementType } from './gizmo';
 export type {
   gizmoButtonHitType,

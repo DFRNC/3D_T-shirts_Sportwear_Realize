@@ -19,6 +19,7 @@ export { getProductAppearanceTextures, readProductAppearanceTextures, syncProduc
 export { createPartAlbedoTexture } from './createPartAlbedoTexture/createPartAlbedoTexture';
 export { applyGarmentGradient, applyGarmentPartUvBounds } from './garmentGradient/applyGarmentGradient';
 export { buildNameStyleUniforms } from './garmentPrint/buildNameStyleUniforms';
+export { buildNumberStyleUniforms } from './garmentPrint/buildNumberStyleUniforms';
 export {
   applyGarmentGizmoButtonsReveal,
   applyGarmentGizmoFrame,
@@ -26,6 +27,7 @@ export {
   applyGarmentGizmoIcons,
   applyGarmentNameMasks,
   applyGarmentNameStyle,
+  applyGarmentNumberGizmoButtonsReveal,
   applyGarmentNumberGizmoFrame,
   applyGarmentNumberMasks,
   applyGarmentNumberStyle,

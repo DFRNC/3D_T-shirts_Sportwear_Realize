@@ -3,6 +3,7 @@ export {
   mapProductNumberPositions,
   resolveNumberDefaults,
   resolveNumberLimits,
+  resolveNumberLineHeightShow,
   sanitizeNumberText,
   NUMBER_MAX_LENGTH,
 } from './mapProductNumbers';

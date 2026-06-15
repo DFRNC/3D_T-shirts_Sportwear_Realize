@@ -22,7 +22,8 @@ const buildGizmoFrameUniforms = (instances: garmentTextRenderInstanceType[], mes
 
       const measured = measureNameGizmoHalf(instance.text, instance.font, measureCtx);
       if (measured) {
-        half[index] = resolveTextGizmoHalf(measured, instance);
+        const lineHeight = 'lineHeight' in instance ? instance.lineHeight : 1;
+        half[index] = resolveTextGizmoHalf({ x: measured.x, y: measured.y * lineHeight }, instance);
       }
     });
   }

@@ -12,11 +12,16 @@ interface GarmentNumberState {
   positions: numberPositionType[];
   instances: numberInstanceType[];
   preview: numberPreviewType | null;
+  selectedInstanceId: string | null;
   initForProduct: (product: garmentConfigType) => void;
   restoreSnapshot: (product: garmentConfigType, snapshot: garmentNumberSnapshotType) => void;
   addInstance: (instance: numberInstanceType) => void;
   removeInstance: (id: string) => void;
+  duplicateInstance: (id: string) => void;
   updateInstance: (id: string, patch: Partial<numberInstanceType>) => void;
+  setSelectedInstance: (id: string | null) => void;
+  clearSelectedInstance: () => void;
+  bringInstanceToFront: (id: string) => void;
   setPreview: (instanceId: string, patch: numberPreviewType['patch']) => void;
   clearPreview: () => void;
   getInstancesForRender: () => numberInstanceType[];
@@ -43,6 +48,7 @@ const useGarmentNumber = create<GarmentNumberState>((set, get) => ({
   positions: [],
   instances: [],
   preview: null,
+  selectedInstanceId: null,
   initForProduct: (product) => {
     const positionsKey = buildPositionsKey(product);
     const positions = mapProductNumberPositions(product);
@@ -53,7 +59,7 @@ const useGarmentNumber = create<GarmentNumberState>((set, get) => ({
         const position = positions.find((item) => item.key === instance.positionKey);
         if (!position) return instance;
 
-        return { ...instance, partId: position.partId, uv: position.uv };
+        return { ...instance, partId: position.partId, uv: position.uv, lineHeight: position.lineHeight ?? instance.lineHeight ?? 1.5 };
       });
 
     if (state.productPath === product.path && state.positionsKey === positionsKey) {
@@ -67,6 +73,7 @@ const useGarmentNumber = create<GarmentNumberState>((set, get) => ({
       positions,
       instances: [],
       preview: null,
+      selectedInstanceId: null,
     });
   },
   restoreSnapshot: (product, snapshot) => {
@@ -79,6 +86,7 @@ const useGarmentNumber = create<GarmentNumberState>((set, get) => ({
       positions,
       instances: snapshot.instances,
       preview: null,
+      selectedInstanceId: snapshot.selectedInstanceId ?? null,
     });
   },
   addInstance: (instance) => {
@@ -93,7 +101,40 @@ const useGarmentNumber = create<GarmentNumberState>((set, get) => ({
     set((state) => ({
       instances: state.instances.filter((instance) => instance.id !== id),
       preview: state.preview?.instanceId === id ? null : state.preview,
+      selectedInstanceId: state.selectedInstanceId === id ? null : state.selectedInstanceId,
     }));
+  },
+  duplicateInstance: (id) => {
+    set((state) => {
+      const source = state.instances.find((instance) => instance.id === id);
+      if (!source) return state;
+
+      const copy: numberInstanceType = {
+        ...source,
+        id: `${source.id}-copy-${Date.now()}`,
+        uv: { x: source.uv.x, y: Math.min(0.98, source.uv.y + 0.04) },
+      };
+
+      return { instances: [...state.instances, copy], selectedInstanceId: copy.id };
+    });
+  },
+  setSelectedInstance: (id) => {
+    set({ selectedInstanceId: id });
+  },
+  clearSelectedInstance: () => {
+    set({ selectedInstanceId: null });
+  },
+  bringInstanceToFront: (id) => {
+    set((state) => {
+      const index = state.instances.findIndex((instance) => instance.id === id);
+      if (index < 0 || index === state.instances.length - 1) return state;
+
+      const next = [...state.instances];
+      const [instance] = next.splice(index, 1);
+      next.push(instance);
+
+      return { instances: next };
+    });
   },
   updateInstance: (id, patch) => {
     set((state) => {

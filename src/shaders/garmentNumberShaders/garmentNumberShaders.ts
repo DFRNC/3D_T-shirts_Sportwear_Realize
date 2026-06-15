@@ -1,8 +1,8 @@
 const garmentNumberMapFragment = /* glsl */ `
-  vec2 numberStampUv0 = garmentNumberToStampUv( vPrintUv, uNumberAnchorUv[0], uNumberRotation[0], uNumberPlacementRotation[0], uNumberUploadRotation[0], uNumberPartRotation[0], uNumberScale[0] );
-  vec2 numberStampUv1 = garmentNumberToStampUv( vPrintUv, uNumberAnchorUv[1], uNumberRotation[1], uNumberPlacementRotation[1], uNumberUploadRotation[1], uNumberPartRotation[1], uNumberScale[1] );
-  vec2 numberStampUv2 = garmentNumberToStampUv( vPrintUv, uNumberAnchorUv[2], uNumberRotation[2], uNumberPlacementRotation[2], uNumberUploadRotation[2], uNumberPartRotation[2], uNumberScale[2] );
-  vec2 numberStampUv3 = garmentNumberToStampUv( vPrintUv, uNumberAnchorUv[3], uNumberRotation[3], uNumberPlacementRotation[3], uNumberUploadRotation[3], uNumberPartRotation[3], uNumberScale[3] );
+  vec2 numberStampUv0 = garmentNumberToStampUv( vPrintUv, uNumberAnchorUv[0], uNumberRotation[0], uNumberPlacementRotation[0], uNumberUploadRotation[0], uNumberPartRotation[0], uNumberScale[0], uNumberLineHeight[0] );
+  vec2 numberStampUv1 = garmentNumberToStampUv( vPrintUv, uNumberAnchorUv[1], uNumberRotation[1], uNumberPlacementRotation[1], uNumberUploadRotation[1], uNumberPartRotation[1], uNumberScale[1], uNumberLineHeight[1] );
+  vec2 numberStampUv2 = garmentNumberToStampUv( vPrintUv, uNumberAnchorUv[2], uNumberRotation[2], uNumberPlacementRotation[2], uNumberUploadRotation[2], uNumberPartRotation[2], uNumberScale[2], uNumberLineHeight[2] );
+  vec2 numberStampUv3 = garmentNumberToStampUv( vPrintUv, uNumberAnchorUv[3], uNumberRotation[3], uNumberPlacementRotation[3], uNumberUploadRotation[3], uNumberPartRotation[3], uNumberScale[3], uNumberLineHeight[3] );
 
   vec4 numberFillMasks = vec4(
     garmentNameSampleFillChannel( uNumberFillMask, numberStampUv0, 0.0 ),
@@ -44,6 +44,16 @@ const garmentNumberMapFragment = /* glsl */ `
   slotNumber3 = garmentCompositeNameLayer( slotNumber3, uNumberTextColors[3], numberFillMasks.a * numberInside3 );
   printColor = garmentCompositeUiLayer( printColor, slotNumber3 );
   printColor = garmentCompositeUiLayer( printColor, garmentGizmoFrameColor( vPrintUv, uNumberAnchorUv[3], uNumberScale[3], uNumberGizmoHalf[3], uNumberRotation[3], uNumberPartRotation[3], uNumberGizmoEnabled * uNumberGizmoFrameActive[3], numberInside3 ) );
+
+  vec4 numBtn0 = garmentGizmoButtons( vPrintUv, uNumberAnchorUv[0], uNumberScale[0], uNumberGizmoHalf[0], uNumberRotation[0], uNumberPartRotation[0], uNumberGizmoEnabled * uNumberGizmoButtonsActive[0], uNumberGizmoButtonsReveal[0], numberInside0, uNameGizmoIcons, 0.0 );
+  vec4 numBtn1 = garmentGizmoButtons( vPrintUv, uNumberAnchorUv[1], uNumberScale[1], uNumberGizmoHalf[1], uNumberRotation[1], uNumberPartRotation[1], uNumberGizmoEnabled * uNumberGizmoButtonsActive[1], uNumberGizmoButtonsReveal[1], numberInside1, uNameGizmoIcons, 1.0 );
+  vec4 numBtn2 = garmentGizmoButtons( vPrintUv, uNumberAnchorUv[2], uNumberScale[2], uNumberGizmoHalf[2], uNumberRotation[2], uNumberPartRotation[2], uNumberGizmoEnabled * uNumberGizmoButtonsActive[2], uNumberGizmoButtonsReveal[2], numberInside2, uNameGizmoIcons, 2.0 );
+  vec4 numBtn3 = garmentGizmoButtons( vPrintUv, uNumberAnchorUv[3], uNumberScale[3], uNumberGizmoHalf[3], uNumberRotation[3], uNumberPartRotation[3], uNumberGizmoEnabled * uNumberGizmoButtonsActive[3], uNumberGizmoButtonsReveal[3], numberInside3, uNameGizmoIcons, 3.0 );
+
+  garmentGizmoUiColor = garmentCompositeUiLayer( garmentGizmoUiColor, numBtn0 );
+  garmentGizmoUiColor = garmentCompositeUiLayer( garmentGizmoUiColor, numBtn1 );
+  garmentGizmoUiColor = garmentCompositeUiLayer( garmentGizmoUiColor, numBtn2 );
+  garmentGizmoUiColor = garmentCompositeUiLayer( garmentGizmoUiColor, numBtn3 );
 `;
 
 export { garmentNumberMapFragment };

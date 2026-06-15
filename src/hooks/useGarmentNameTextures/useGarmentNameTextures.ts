@@ -31,12 +31,14 @@ import {
   applyGarmentGizmoIcons,
   applyGarmentNameMasks,
   applyGarmentNameStyle,
+  applyGarmentNumberGizmoButtonsReveal,
   applyGarmentNumberGizmoFrame,
   applyGarmentNumberMasks,
   applyGarmentNumberStyle,
   applyGarmentPrintAtlasSize,
   buildGizmoFrameUniforms,
   buildNameStyleUniforms,
+  buildNumberStyleUniforms,
   canvasToMaskTexture,
   composeNameMaskAtlas,
   getEmptyPrintTexture,
@@ -73,6 +75,7 @@ const buildStyleSignature = (instances: garmentTextRenderInstanceType[]) =>
       uv: instance.uv,
       rotation: instance.rotation,
       partId: instance.partId,
+      ...('lineHeight' in instance ? { lineHeight: instance.lineHeight } : {}),
     })),
   );
 
@@ -90,6 +93,7 @@ const useGarmentNameTextures = () => {
   const numberProductPath = useGarmentNumber((state) => state.productPath);
   const numberInstances = useGarmentNumber((state) => state.instances);
   const numberPreview = useGarmentNumber((state) => state.preview);
+  const numberSelectedInstanceId = useGarmentNumber((state) => state.selectedInstanceId);
   const { getMaterials, hasMaterialsForParts } = useGarmentMaterialRegistry();
   const materialRevision = useMaterialRegistryRevision();
   const invalidate = useThree((state) => state.invalidate);
@@ -112,6 +116,8 @@ const useGarmentNameTextures = () => {
   const prevNumberFillSignatureRef = useRef('');
   const prevSelectedSlotRef = useRef(-1);
   const prevSelectedIdRef = useRef<string | null>(null);
+  const prevNumberSelectedSlotRef = useRef(-1);
+  const prevNumberSelectedIdRef = useRef<string | null>(null);
 
   const nameInstancesForRender = useMemo(
     () => resolveInstancesForRender(nameInstances, namePreview).map((instance) => repairPrintInstancePlacement(instance, product.parts)),
@@ -129,6 +135,11 @@ const useGarmentNameTextures = () => {
     if (activeStep !== NAME_STEP || !selectedInstanceId) return -1;
     return nameInstancesForRender.slice(0, NAME_SLOT_COUNT).findIndex((instance) => instance.id === selectedInstanceId);
   }, [activeStep, nameInstancesForRender, selectedInstanceId]);
+
+  const numberSelectedSlotIndex = useMemo(() => {
+    if (activeStep !== NUMBER_STEP || !numberSelectedInstanceId) return -1;
+    return numberInstancesForRender.findIndex((instance) => instance.id === numberSelectedInstanceId);
+  }, [activeStep, numberInstancesForRender, numberSelectedInstanceId]);
 
   const nameFillSignature = useMemo(() => buildFillSignature(nameInstancesForRender), [nameInstancesForRender]);
   const nameStrokeSignature = useMemo(() => buildStrokeSignature(nameInstancesForRender), [nameInstancesForRender]);
@@ -247,7 +258,7 @@ const useGarmentNameTextures = () => {
   const applyNumberStyleToMaterials = useCallback(
     (stampSize: stampPixelSizeType = numberStampSizeRef.current) => {
       for (const part of product.parts) {
-        const style = buildNameStyleUniforms(numberInstancesForRender, product.parts, stampSize, part.id);
+        const style = buildNumberStyleUniforms(numberInstancesForRender, product.parts, stampSize, part.id);
 
         for (const material of getMaterials(part.id)) {
           applyGarmentPrintAtlasSize(material, atlasSize.width, atlasSize.height);
@@ -294,7 +305,22 @@ const useGarmentNameTextures = () => {
   }, [activeStep, selectedInstanceId, selectedSlotIndex]);
 
   useEffect(() => {
-    if (activeStep === NAME_STEP || activeStep === LOGO_STEP) return;
+    if (activeStep !== NUMBER_STEP) return;
+
+    const snap =
+      prevNumberSelectedIdRef.current === numberSelectedInstanceId &&
+      prevNumberSelectedSlotRef.current !== numberSelectedSlotIndex &&
+      prevNumberSelectedSlotRef.current >= 0 &&
+      numberSelectedSlotIndex >= 0;
+
+    prevNumberSelectedIdRef.current = numberSelectedInstanceId;
+    prevNumberSelectedSlotRef.current = numberSelectedSlotIndex;
+
+    setGizmoButtonsRevealTarget(numberSelectedSlotIndex, snap);
+  }, [activeStep, numberSelectedInstanceId, numberSelectedSlotIndex]);
+
+  useEffect(() => {
+    if (activeStep === NAME_STEP || activeStep === NUMBER_STEP || activeStep === LOGO_STEP) return;
     setGizmoButtonsRevealTarget(-1);
   }, [activeStep]);
 
@@ -474,6 +500,7 @@ const useGarmentNameTextures = () => {
       for (const part of product.parts) {
         for (const material of getMaterials(part.id)) {
           applyGarmentGizmoButtonsReveal(material, reveal);
+          applyGarmentNumberGizmoButtonsReveal(material, reveal);
         }
       }
       invalidate();

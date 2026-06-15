@@ -26,6 +26,7 @@ interface garmentNameSnapshotType {
 
 interface garmentNumberSnapshotType {
   instances: numberInstanceType[];
+  selectedInstanceId: string | null;
 }
 
 interface garmentLogoSnapshotType {

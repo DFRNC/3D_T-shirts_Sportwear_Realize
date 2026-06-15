@@ -1,7 +1,7 @@
 import type { uvPointType } from '@types';
 
 type gizmoHandleKindType = 'duplicate' | 'delete' | 'rotate' | 'scale';
-type printGizmoElementKindType = 'name' | 'logo';
+type printGizmoElementKindType = 'name' | 'number' | 'logo';
 
 interface printGizmoElementType {
   kind: printGizmoElementKindType;

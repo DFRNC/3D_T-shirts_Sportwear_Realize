@@ -61,6 +61,7 @@ const cloneCartItemConfiguration = (configuration: cartItemConfigurationType): c
   },
   number: {
     instances: configuration.number.instances.map(cloneNumberInstance),
+    selectedInstanceId: configuration.number.selectedInstanceId,
   },
   logo: {
     instances: configuration.logo.instances.map(cloneLogoInstance),
@@ -83,6 +84,7 @@ const createDefaultCartItemConfiguration = (product: garmentConfigType): cartIte
   },
   number: {
     instances: [],
+    selectedInstanceId: null,
   },
   logo: {
     instances: [],
@@ -115,6 +117,7 @@ const captureGarmentConfiguration = (): cartItemConfigurationType => {
     },
     number: {
       instances: number.instances,
+      selectedInstanceId: number.selectedInstanceId,
     },
     logo: {
       instances: logo.instances,

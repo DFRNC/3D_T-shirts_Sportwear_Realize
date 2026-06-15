@@ -1,1 +1,1 @@
-export type { buildLogoGizmoElementsInputType, buildNameGizmoElementsInputType } from './buildGizmoElements';
+export type { buildLogoGizmoElementsInputType, buildNameGizmoElementsInputType, buildNumberGizmoElementsInputType } from './buildGizmoElements';

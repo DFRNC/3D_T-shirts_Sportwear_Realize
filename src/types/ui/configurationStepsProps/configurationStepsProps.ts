@@ -10,6 +10,7 @@ interface numberPartFormPropsType {
   instanceId: string;
   limits: numberLimitsType;
   placeholder: string;
+  lineHeightShow: boolean;
 }
 
 interface partColorControlPropsType {

@@ -47,6 +47,7 @@ interface nameStyleUniformsType {
   uploadRotation: nameSlotFloat4Type;
   partRotation: nameSlotFloat4Type;
   scale: nameSlotFloat4Type;
+  lineHeight?: nameSlotFloat4Type;
   slotActive: nameSlotFloat4Type;
   partBounds: nameSlotBounds4Type;
   textColors: nameSlotColor4Type;

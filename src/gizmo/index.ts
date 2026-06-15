@@ -1,5 +1,7 @@
 export { buildLogoGizmoElements } from './buildLogoGizmoElements';
 export { buildNameGizmoElements } from './buildNameGizmoElements';
+export { buildNumberGizmoElements } from './buildNumberGizmoElements';
+export { logGizmoPlacementForConfig } from './logGizmoPlacementForConfig';
 export {
   clearGizmoButtonHover,
   getGizmoHoverUniforms,

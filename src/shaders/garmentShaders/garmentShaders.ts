@@ -69,12 +69,15 @@ uniform float uNumberPlacementRotation[4];
 uniform float uNumberUploadRotation[4];
 uniform float uNumberPartRotation[4];
 uniform float uNumberScale[4];
+uniform float uNumberLineHeight[4];
 uniform float uNumberSlotActive[4];
 uniform vec4 uNumberPartBounds[4];
 uniform vec3 uNumberTextColors[4];
 uniform vec3 uNumberStrokeColors[4];
 uniform float uNumberGizmoEnabled;
 uniform float uNumberGizmoFrameActive[4];
+uniform float uNumberGizmoButtonsActive[4];
+uniform float uNumberGizmoButtonsReveal[4];
 uniform vec2 uNumberGizmoHalf[4];
 uniform sampler2D uLogoStamp;
 uniform vec2 uLogoStampCellSize;
@@ -140,9 +143,11 @@ vec2 garmentNameToStampUv( vec2 worldUv, vec2 anchor, float rotation, float plac
   return vec2( 0.5 ) + localPx / uNameStampSize;
 }
 
-vec2 garmentNumberToStampUv( vec2 worldUv, vec2 anchor, float rotation, float placementRotation, float uploadRotation, float partRotation, float scale ) {
+vec2 garmentNumberToStampUv( vec2 worldUv, vec2 anchor, float rotation, float placementRotation, float uploadRotation, float partRotation, float scale, float lineHeight ) {
   vec2 localPx = garmentPrintToLocalPx( worldUv, anchor, partRotation );
-  localPx = garmentPrintRotateLocalPx( localPx, rotation + placementRotation + uploadRotation ) / max( scale, 0.001 );
+  localPx = garmentPrintRotateLocalPx( localPx, rotation + placementRotation + uploadRotation );
+  localPx.x /= max( scale, 0.001 );
+  localPx.y /= max( scale * lineHeight, 0.001 );
   return vec2( 0.5 ) + localPx / uNumberStampSize;
 }
 

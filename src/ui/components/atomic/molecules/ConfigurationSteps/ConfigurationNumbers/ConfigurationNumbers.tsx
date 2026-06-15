@@ -5,12 +5,20 @@ import { useCallback, useMemo } from 'react';
 import { AccordionAtom, Button, Flex, SvgIcon, Text } from '@atoms';
 import { useConfigurationPositionPicker } from '@hooks';
 import { CONFIGURATOR_NUMBER_POSITION_SELECT_LABEL } from '@constants';
-import { createNumberInstance, resolveNumberDefaults, resolveNumberLimits, sanitizeNumberText, useConfiguratorProduct, useGarmentNumber } from '@store';
+import {
+  createNumberInstance,
+  resolveNumberDefaults,
+  resolveNumberLimits,
+  resolveNumberLineHeightShow,
+  sanitizeNumberText,
+  useConfiguratorProduct,
+  useGarmentNumber,
+} from '@store';
 import type { numberPartFormPropsType, numberPositionType } from '@types';
 
 import { ColorTabControl, ConfigurationPositionSelect, FontSelectRow, PartColorSwitch, RangeControl } from '../../ConfigurationTools';
 
-const NumberPartForm = ({ instanceId, limits, placeholder }: numberPartFormPropsType) => {
+const NumberPartForm = ({ instanceId, limits, placeholder, lineHeightShow }: numberPartFormPropsType) => {
   const instance = useGarmentNumber((state) => state.instances.find((item) => item.id === instanceId));
   const updateInstance = useGarmentNumber((state) => state.updateInstance);
   const removeInstance = useGarmentNumber((state) => state.removeInstance);
@@ -26,6 +34,7 @@ const NumberPartForm = ({ instanceId, limits, placeholder }: numberPartFormProps
   const previewStrokeColor = previewPatch?.strokeColor;
   const previewFontSize = previewPatch?.fontSize;
   const previewStrokeWidth = previewPatch?.strokeWidth;
+  const previewLineHeight = previewPatch?.lineHeight;
 
   const commit = useCallback(
     (patch: Parameters<typeof updateInstance>[1]) => {
@@ -88,6 +97,18 @@ const NumberPartForm = ({ instanceId, limits, placeholder }: numberPartFormProps
         unit="px"
       />
 
+      {lineHeightShow && (
+        <RangeControl
+          label="Altezza carattere"
+          value={Math.round((previewLineHeight ?? instance.lineHeight ?? 1.5) * 100)}
+          onChange={(percent) => setPreview(instanceId, { lineHeight: percent / 100 })}
+          onCommit={commitFromPreview}
+          min={Math.round(limits.lineHeightMin * 100)}
+          max={Math.round(limits.lineHeightMax * 100)}
+          unit="%"
+        />
+      )}
+
       <RangeControl
         label="Spessore contorno"
         value={previewStrokeWidth ?? instance.strokeWidth}
@@ -114,6 +135,7 @@ const ConfigurationNumbers = () => {
 
   const numberDefaults = useMemo(() => (positions.length > 0 ? resolveNumberDefaults(product) : null), [positions.length, product]);
   const limits = useMemo(() => (positions.length > 0 ? resolveNumberLimits(product) : null), [positions.length, product]);
+  const lineHeightShow = useMemo(() => (positions.length > 0 ? resolveNumberLineHeightShow(product) : false), [positions.length, product]);
 
   const handleAddInstance = useCallback(
     (position: numberPositionType, instanceId: string) => {
@@ -133,9 +155,9 @@ const ConfigurationNumbers = () => {
       instances.map((instance) => ({
         value: instance.id,
         trigger: <PartColorSwitch color={instance.textColor} label={instance.label} />,
-        content: <NumberPartForm instanceId={instance.id} limits={limits!} placeholder={numberDefaults?.text ?? '00'} />,
+        content: <NumberPartForm instanceId={instance.id} limits={limits!} placeholder={numberDefaults?.text ?? '00'} lineHeightShow={lineHeightShow} />,
       })),
-    [instances, limits, numberDefaults?.text],
+    [instances, limits, lineHeightShow, numberDefaults?.text],
   );
 
   if (positions.length === 0 || !limits || !numberDefaults) return null;

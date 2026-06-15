@@ -51,6 +51,7 @@ interface textPositionConfigType {
   uv: uvPointType;
   rotation: number;
   fontSize: number;
+  line_height?: number;
   interactive?: boolean;
   show_frame?: boolean;
   show_gizmo?: boolean;
@@ -66,6 +67,10 @@ interface textDefaultsConfigType {
   fontSizeMin?: number;
   fontSizeMax?: number;
   strokeWidthMax?: number;
+  lineHeight?: number;
+  lineHeightMin?: number;
+  lineHeightMax?: number;
+  line_height_show?: boolean;
 }
 
 interface namePositionConfigType extends textPositionConfigType {

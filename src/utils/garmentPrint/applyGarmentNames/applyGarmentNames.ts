@@ -159,6 +159,13 @@ const applyNumberStyleToUniforms = (material: MeshStandardMaterial, style: nameS
     });
   }
 
+  const lineHeightUniform = material.userData.uNumberLineHeightUniform as { value: number[] } | undefined;
+  if (lineHeightUniform && style.lineHeight) {
+    style.lineHeight.forEach((value, index) => {
+      lineHeightUniform.value[index] = value;
+    });
+  }
+
   const slotActiveUniform = material.userData.uNumberSlotActiveUniform as { value: number[] } | undefined;
   if (slotActiveUniform) {
     style.slotActive.forEach((value, index) => {
@@ -254,6 +261,13 @@ const applyNumberGizmoFrameToUniforms = (material: MeshStandardMaterial, state: 
       frameActiveUniform.value[index] = value;
     });
   }
+
+  const gizmoActiveUniform = material.userData.uNumberGizmoButtonsActiveUniform as { value: number[] } | undefined;
+  if (gizmoActiveUniform) {
+    state.gizmoActive.forEach((value, index) => {
+      gizmoActiveUniform.value[index] = value;
+    });
+  }
 };
 
 const applyGarmentNumberGizmoFrame = (material: MeshStandardMaterial, state: gizmoFrameStateType) => {
@@ -271,6 +285,15 @@ const applyGarmentGizmoIcons = (material: MeshStandardMaterial, texture: Texture
 
 const applyGarmentGizmoButtonsReveal = (material: MeshStandardMaterial, reveal: number[]) => {
   const revealUniform = material.userData.uNameGizmoButtonsRevealUniform as { value: number[] } | undefined;
+  if (!revealUniform) return;
+
+  reveal.forEach((value, index) => {
+    revealUniform.value[index] = value;
+  });
+};
+
+const applyGarmentNumberGizmoButtonsReveal = (material: MeshStandardMaterial, reveal: number[]) => {
+  const revealUniform = material.userData.uNumberGizmoButtonsRevealUniform as { value: number[] } | undefined;
   if (!revealUniform) return;
 
   reveal.forEach((value, index) => {
@@ -363,6 +386,7 @@ const hydrateGarmentNumberUniforms = (
     uNumberUploadRotation: { value: number[] };
     uNumberPartRotation: { value: number[] };
     uNumberScale: { value: number[] };
+    uNumberLineHeight: { value: number[] };
     uNumberSlotActive: { value: number[] };
     uNumberPartBounds: { value: Vector4[] };
     uNumberTextColors: { value: Color[] };
@@ -393,6 +417,7 @@ const hydrateGarmentNumberUniforms = (
     material.userData.uNumberUploadRotationUniform = uniforms.uNumberUploadRotation;
     material.userData.uNumberPartRotationUniform = uniforms.uNumberPartRotation;
     material.userData.uNumberScaleUniform = uniforms.uNumberScale;
+    material.userData.uNumberLineHeightUniform = uniforms.uNumberLineHeight;
     material.userData.uNumberSlotActiveUniform = uniforms.uNumberSlotActive;
     material.userData.uNumberPartBoundsUniform = uniforms.uNumberPartBounds;
     material.userData.uNumberTextColorsUniform = uniforms.uNumberTextColors;
@@ -401,6 +426,7 @@ const hydrateGarmentNumberUniforms = (
 
   material.userData.uNumberGizmoEnabledUniform = uniforms.uNumberGizmoEnabled;
   material.userData.uNumberGizmoHalfUniform = uniforms.uNumberGizmoHalf;
+  material.userData.uNumberLineHeightUniform = uniforms.uNumberLineHeight;
   if (gizmoState) {
     applyNumberGizmoFrameToUniforms(material, gizmoState);
     material.userData.garmentNumberGizmoFrameState = gizmoState;
@@ -414,6 +440,7 @@ export {
   applyGarmentGizmoIcons,
   applyGarmentNameMasks,
   applyGarmentNameStyle,
+  applyGarmentNumberGizmoButtonsReveal,
   applyGarmentNumberGizmoFrame,
   applyGarmentNumberMasks,
   applyGarmentNumberStyle,

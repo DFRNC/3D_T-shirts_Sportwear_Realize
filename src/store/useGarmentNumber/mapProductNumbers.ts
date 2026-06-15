@@ -3,6 +3,7 @@ import type { garmentConfigType, numberInstanceType, numberLimitsType, numberPos
 import { resolvePartUvBounds } from '@utils';
 
 const NUMBER_MAX_LENGTH = 2;
+const NUMBER_DEFAULT_LINE_HEIGHT = 1.5;
 
 const resolveZonePartId = (product: garmentConfigType, zone: string): string => {
   const normalized = zone.toLowerCase();
@@ -40,6 +41,8 @@ const resolveNumberDefaults = (product: garmentConfigType): textDefaultsConfigTy
   return product.numberDefaults;
 };
 
+const resolveNumberLineHeightShow = (product: garmentConfigType) => resolveNumberDefaults(product).line_height_show ?? false;
+
 const resolveNumberLimits = (product: garmentConfigType): numberLimitsType => {
   const defaults = resolveNumberDefaults(product);
 
@@ -48,6 +51,8 @@ const resolveNumberLimits = (product: garmentConfigType): numberLimitsType => {
     fontSizeMin: defaults.fontSizeMin ?? 50,
     fontSizeMax: defaults.fontSizeMax ?? 500,
     strokeWidthMax: defaults.strokeWidthMax ?? 20,
+    lineHeightMin: defaults.lineHeightMin ?? 0.5,
+    lineHeightMax: defaults.lineHeightMax ?? 2,
   };
 };
 
@@ -59,6 +64,7 @@ const mapProductNumberPositions = (product: garmentConfigType): numberPositionTy
     uv: resolveZoneLocalUvToAtlas(product, position.zone, position.uv),
     rotation: position.rotation,
     fontSize: position.fontSize,
+    lineHeight: position.line_height,
     showFrame: position.show_frame ?? true,
     showGizmo: position.show_gizmo ?? position.interactive === true,
     interactive: position.interactive ?? true,
@@ -83,6 +89,7 @@ const createNumberInstance = (product: garmentConfigType, position: numberPositi
     textColor: defaults.textColor,
     strokeColor: defaults.strokeColor,
     strokeWidth: defaults.strokeWidth,
+    lineHeight: position.lineHeight ?? defaults.lineHeight ?? NUMBER_DEFAULT_LINE_HEIGHT,
     showFrame: position.showFrame,
     showGizmo: position.showGizmo,
   };
@@ -93,7 +100,9 @@ export {
   mapProductNumberPositions,
   resolveNumberDefaults,
   resolveNumberLimits,
+  resolveNumberLineHeightShow,
   resolveZoneLocalUvToAtlas,
   sanitizeNumberText,
+  NUMBER_DEFAULT_LINE_HEIGHT,
   NUMBER_MAX_LENGTH,
 };
