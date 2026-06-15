@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import type { checkoutLineRowPatchType, checkoutLineRowType, checkoutProductType } from '../../checkout';
+import type { checkoutLineRowPatchType, checkoutLineRowType, checkoutPrintAvailabilityType, checkoutProductType } from '../../checkout';
 
 interface checkoutProductCardPropsType {
   product: checkoutProductType;
@@ -9,11 +9,15 @@ interface checkoutProductCardPropsType {
 interface checkoutConfigurationTablePropsType {
   cartItemId: string;
   rows: checkoutProductType['rows'];
+  testoMaxLength?: number;
+  printAvailability?: checkoutPrintAvailabilityType;
 }
 
 interface checkoutConfigurationTableColumnHandlersType {
   onPatchRow: (rowId: string, patch: checkoutLineRowPatchType) => void;
   onRemoveRow: (rowId: string) => void;
+  testoMaxLength?: number;
+  printAvailability?: checkoutPrintAvailabilityType;
 }
 
 interface checkoutConfigurationTableCellContextType {
@@ -52,6 +56,19 @@ interface checkoutTableEditableCellPropsType {
   formatValue?: (value: string) => string;
   inputMode?: 'text' | 'numeric';
   maxLength?: number;
+  layout?: 'centered' | 'spread';
+  canEdit?: boolean;
+}
+
+interface checkoutTestoEditableCellPropsType {
+  texts: string[];
+  maxLength?: number;
+  canEdit?: boolean;
+  onChangeText: (index: number, value: string) => void;
+}
+
+interface checkoutTablePlaceholderPropsType {
+  className?: string;
 }
 
 export type {
@@ -63,4 +80,6 @@ export type {
   checkoutQuantityStepperPropsType,
   checkoutSizePopoverPropsType,
   checkoutTableEditableCellPropsType,
+  checkoutTablePlaceholderPropsType,
+  checkoutTestoEditableCellPropsType,
 };

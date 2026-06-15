@@ -12,7 +12,7 @@ import { cn } from '@utils';
 import { createCheckoutConfigurationTableColumns } from './checkoutConfigurationTableColumns';
 import { getCheckoutColumnStyle } from './getCheckoutColumnStyle';
 
-const CheckoutConfigurationTable = ({ cartItemId, rows }: checkoutConfigurationTablePropsType) => {
+const CheckoutConfigurationTable = ({ cartItemId, rows, testoMaxLength, printAvailability }: checkoutConfigurationTablePropsType) => {
   const { handleAddRow, handleRemoveRow, handlePatchRow } = useCheckoutConfigurationTable(cartItemId);
 
   const columns = useMemo(
@@ -20,8 +20,10 @@ const CheckoutConfigurationTable = ({ cartItemId, rows }: checkoutConfigurationT
       createCheckoutConfigurationTableColumns({
         onPatchRow: handlePatchRow,
         onRemoveRow: handleRemoveRow,
+        testoMaxLength,
+        printAvailability,
       }),
-    [handlePatchRow, handleRemoveRow],
+    [handlePatchRow, handleRemoveRow, testoMaxLength, printAvailability],
   );
 
   return (

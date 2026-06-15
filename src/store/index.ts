@@ -41,4 +41,4 @@ export {
 export { resolveLogoInstancesForRender, useGarmentLogo } from './useGarmentLogo';
 export { useInfoDialog } from './useInfoDialog';
 export { useTutorialDialog } from './useTutorialDialog';
-export { useCheckout } from './useCheckout';
+export { resolveCheckoutPrintAvailability, useCheckout } from './useCheckout';

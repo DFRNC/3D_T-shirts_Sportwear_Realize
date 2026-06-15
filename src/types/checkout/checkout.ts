@@ -5,6 +5,7 @@ interface checkoutLineRowType {
   size: string;
   name: string;
   number: string;
+  testoTexts: string[];
   quantity: number;
 }
 
@@ -12,6 +13,7 @@ interface checkoutRowPresetType {
   size: string;
   name: string;
   number: string;
+  testoTexts: string[];
 }
 
 interface checkoutProductType {
@@ -22,6 +24,15 @@ interface checkoutProductType {
   rows: checkoutLineRowType[];
 }
 
-type checkoutLineRowPatchType = Partial<Pick<checkoutLineRowType, 'size' | 'name' | 'number' | 'quantity'>>;
+type checkoutLineRowPatchType = Partial<Pick<checkoutLineRowType, 'size' | 'name' | 'number' | 'quantity'>> & {
+  testoTextIndex?: number;
+  testoText?: string;
+};
 
-export type { checkoutLineRowPatchType, checkoutLineRowType, checkoutProductType, checkoutRowPresetType };
+interface checkoutPrintAvailabilityType {
+  hasName: boolean;
+  hasNumber: boolean;
+  hasTesto: boolean;
+}
+
+export type { checkoutLineRowPatchType, checkoutLineRowType, checkoutPrintAvailabilityType, checkoutProductType, checkoutRowPresetType };

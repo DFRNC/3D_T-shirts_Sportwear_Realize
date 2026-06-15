@@ -7,7 +7,7 @@ import { AtomImage, Box, Button, Flex, Grid, SvgIcon, Text } from '@atoms';
 import { CHECKOUT_SHIPPING_DAYS_LABEL } from '@constants';
 import { getProduct, resolveProductPreviewSrc } from '@data';
 import { useNavigateToConfigurator } from '@hooks';
-import { useCheckout } from '@store';
+import { resolveCheckoutPrintAvailability, resolveTestoLimits, useCheckout, useConfigurationCart } from '@store';
 import type { checkoutProductCardPropsType } from '@types';
 import { priceFormat } from '@utils';
 
@@ -19,9 +19,15 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
   const subtotal = useCheckout((state) => state.getProductSubtotal(product.cartItemId));
 
   const garment = getProduct(product.styleId, product.productIndex);
+  const configuration = useConfigurationCart((state) => state.configurations[product.cartItemId]);
   const previewSrc = garment ? resolveProductPreviewSrc(garment) : '';
 
   const productName = useMemo(() => garment?.name ?? 'Prodotto', [garment?.name]);
+  const testoMaxLength = useMemo(() => {
+    if (!garment?.testoDefaults) return undefined;
+    return resolveTestoLimits(garment).maxLength;
+  }, [garment]);
+  const printAvailability = useMemo(() => resolveCheckoutPrintAvailability(configuration), [configuration]);
 
   if (!garment) return null;
 
@@ -64,7 +70,7 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
       </Grid>
 
       <div className="pt-6">
-        <CheckoutConfigurationTable cartItemId={product.cartItemId} rows={product.rows} />
+        <CheckoutConfigurationTable cartItemId={product.cartItemId} rows={product.rows} testoMaxLength={testoMaxLength} printAvailability={printAvailability} />
       </div>
     </article>
   );

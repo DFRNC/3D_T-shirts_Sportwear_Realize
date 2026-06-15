@@ -10,7 +10,10 @@ import { sanitizeNumberText } from '../useGarmentNumber';
 
 import { buildCheckoutRows, createCheckoutRowFromPreset, extractCheckoutRowPreset } from './buildCheckoutRows';
 import { getCheckoutDiscountPercent, getProductRowQuantity, getProductsSubtotal, getProductUnitPrice } from './checkoutPricing';
+import { extractUniqueTestoTexts } from './extractUniqueTestoTexts';
+import { resolveCheckoutPrintAvailability } from './resolveCheckoutPrintAvailability';
 import { syncCheckoutPresetToCartConfiguration } from './syncCheckoutPresetToCartConfiguration';
+import { syncTestoTextInCartConfiguration } from './syncTestoTextInCartConfiguration';
 
 interface CheckoutState {
   products: checkoutProductType[];
@@ -36,6 +39,7 @@ const toCheckoutRowPreset = (product: checkoutProductType) => {
     size: firstRow.size,
     name: firstRow.name,
     number: firstRow.number,
+    testoTexts: [...firstRow.testoTexts],
   };
 };
 
@@ -100,6 +104,47 @@ const useCheckout = create<CheckoutState>((set, get) => ({
     if (patch.number !== undefined) {
       normalizedPatch.number = sanitizeNumberText(patch.number);
     }
+
+    const isTestoTextPatch = patch.testoTextIndex !== undefined && patch.testoText !== undefined;
+    const printAvailability = resolveCheckoutPrintAvailability(useConfigurationCart.getState().getConfiguration(cartItemId));
+
+    if (isTestoTextPatch) {
+      if (!printAvailability.hasTesto) return;
+
+      set((state) => ({
+        products: state.products.map((product) => {
+          if (product.cartItemId !== cartItemId) return product;
+
+          const row = product.rows.find((item) => item.id === rowId);
+          const previousText = row?.testoTexts[patch.testoTextIndex!];
+          if (previousText === undefined) return product;
+
+          syncTestoTextInCartConfiguration(cartItemId, previousText, patch.testoText!);
+
+          const configuration = useConfigurationCart.getState().getConfiguration(cartItemId);
+          const nextTestoTexts = extractUniqueTestoTexts(configuration);
+          const rows = product.rows.map((item) => ({ ...item, testoTexts: nextTestoTexts }));
+          const rowPreset = { ...toCheckoutRowPreset({ ...product, rows }), testoTexts: nextTestoTexts };
+
+          return {
+            ...product,
+            rows,
+            rowPreset,
+          };
+        }),
+      }));
+      return;
+    }
+
+    if (patch.name !== undefined && !printAvailability.hasName) {
+      delete normalizedPatch.name;
+    }
+
+    if (patch.number !== undefined && !printAvailability.hasNumber) {
+      delete normalizedPatch.number;
+    }
+
+    if (Object.keys(normalizedPatch).length === 0) return;
 
     set((state) => ({
       products: state.products.map((product) => {

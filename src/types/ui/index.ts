@@ -103,4 +103,6 @@ export type {
   checkoutQuantityStepperPropsType,
   checkoutSizePopoverPropsType,
   checkoutTableEditableCellPropsType,
+  checkoutTablePlaceholderPropsType,
+  checkoutTestoEditableCellPropsType,
 } from './checkoutProps';
