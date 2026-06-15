@@ -29,7 +29,7 @@ import { getEmptyPrintTexture } from '../garmentPrint/emptyPrintTexture';
 import { applyGarmentPrintBase, applyPbrMaps } from './applyPbrMaps';
 
 const SLEEVE_POLYGON_OFFSET = { factor: -1, units: -1 } as const;
-const GARMENT_SHADER_VERSION = 'garment-pbr-print-v72-stacked-mask-uv-fix';
+const GARMENT_SHADER_VERSION = 'garment-pbr-print-v75-gizmo-icon-size';
 
 const isSleeveMesh = (meshName: string) => {
   const name = meshName.toLowerCase();

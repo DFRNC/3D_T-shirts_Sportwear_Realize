@@ -17,7 +17,7 @@ const buildLogoGizmoFrameUniforms = (instances: logoInstanceType[], meshPartId: 
     const naturalHeight = instance.naturalHeight || 1;
     const { width, height } = resolveLogoReferenceDrawSize(instance, naturalWidth, naturalHeight);
 
-    half[index] = resolveLogoGizmoHalf(width, height, instance.uploadRotation ?? 0);
+    half[index] = resolveLogoGizmoHalf(width, height, instance.rotation + (instance.uploadRotation ?? 0));
   });
 
   return { enabled: enabled ? 1 : 0, half, frameActive, gizmoActive };

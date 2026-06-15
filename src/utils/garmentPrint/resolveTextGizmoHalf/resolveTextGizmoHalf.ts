@@ -3,10 +3,10 @@ import type { garmentTextRenderInstanceType, textCanvasDrawOptionsType } from '@
 import { resolveRotatedGizmoHalf } from '../../composeLogoAtlas/composeLogoPrintAtlas';
 import { PRINT_UPLOAD_ROTATION_DEG } from '@constants';
 
-const resolveTextPlacementRotationDeg = (instance: garmentTextRenderInstanceType) =>
-  instance.placementRotation !== undefined ? instance.placementRotation : instance.rotation;
-
-const resolveTextContentRotationDeg = (instance: garmentTextRenderInstanceType) => resolveTextPlacementRotationDeg(instance) + PRINT_UPLOAD_ROTATION_DEG;
+const resolveTextContentRotationDeg = (instance: garmentTextRenderInstanceType) => {
+  const userRotationDeg = instance.placementRotation !== undefined ? instance.rotation + instance.placementRotation : instance.rotation;
+  return userRotationDeg + PRINT_UPLOAD_ROTATION_DEG;
+};
 
 const resolveTextGizmoMeasureOptions = (instance: garmentTextRenderInstanceType): textCanvasDrawOptionsType & { lineHeight?: number } => ({
   letterSpacing: 'letterSpacing' in instance ? instance.letterSpacing : undefined,

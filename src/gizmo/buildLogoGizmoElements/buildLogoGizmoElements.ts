@@ -20,7 +20,7 @@ const buildLogoGizmoElements = ({ product, instances }: buildLogoGizmoElementsIn
     const naturalHeight = instance.naturalHeight || 1;
     const { width, height } = resolveLogoReferenceDrawSize(instance, naturalWidth, naturalHeight);
 
-    const half = resolveLogoGizmoHalf(width, height, instance.uploadRotation ?? 0);
+    const half = resolveLogoGizmoHalf(width, height, instance.rotation + (instance.uploadRotation ?? 0));
 
     return [
       {

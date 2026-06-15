@@ -1,4 +1,4 @@
-import { Color, type MeshStandardMaterial, type Texture, Vector2, Vector4 } from 'three';
+import { Color, LinearFilter, LinearMipmapLinearFilter, type MeshStandardMaterial, type Texture, Vector2, Vector4 } from 'three';
 
 import type { garmentNameMaskStateType, gizmoFrameStateType, nameStyleUniformsType } from '@types';
 
@@ -271,6 +271,10 @@ const applyGarmentNumberGizmoFrame = (material: MeshStandardMaterial, state: giz
 };
 
 const applyGarmentGizmoIcons = (material: MeshStandardMaterial, texture: Texture) => {
+  texture.generateMipmaps = true;
+  texture.minFilter = LinearMipmapLinearFilter;
+  texture.magFilter = LinearFilter;
+  texture.anisotropy = Math.max(texture.anisotropy, 16);
   pendingGizmoIcons = texture;
   material.userData.garmentGizmoIcons = texture;
   const iconsUniform = material.userData.uNameGizmoIconsUniform as { value: Texture } | undefined;

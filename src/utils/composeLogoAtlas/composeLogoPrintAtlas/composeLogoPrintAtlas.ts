@@ -36,13 +36,17 @@ const resolveLogoDisplayScale = (instance: logoInstanceType, naturalWidth: numbe
 };
 
 const resolveRotatedGizmoHalf = (half: { x: number; y: number }, contentRotationDeg: number) => {
-  const normalized = Math.abs(((contentRotationDeg % 360) + 360) % 360);
-  const swap = normalized === 90 || normalized === 270;
-  return swap ? { x: half.y, y: half.x } : half;
+  const rad = (contentRotationDeg * Math.PI) / 180;
+  const cosA = Math.abs(Math.cos(rad));
+  const sinA = Math.abs(Math.sin(rad));
+  return {
+    x: half.x * cosA + half.y * sinA,
+    y: half.x * sinA + half.y * cosA,
+  };
 };
 
-const resolveLogoGizmoHalf = (width: number, height: number, uploadRotationDeg: number) =>
-  resolveRotatedGizmoHalf({ x: width / 2, y: height / 2 }, uploadRotationDeg);
+const resolveLogoGizmoHalf = (width: number, height: number, contentRotationDeg: number) =>
+  resolveRotatedGizmoHalf({ x: width / 2, y: height / 2 }, contentRotationDeg);
 
 const drawLogoInstance = (ctx: CanvasRenderingContext2D, image: HTMLImageElement, instance: logoInstanceType, atlasWidth: number, atlasHeight: number) => {
   const naturalWidth = instance.naturalWidth || image.naturalWidth;

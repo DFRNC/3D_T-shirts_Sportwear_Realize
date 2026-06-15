@@ -42,7 +42,7 @@ const buildLineHeightTextGizmoElements = ({
         slotIndex,
         meshNames: part.meshNames,
         uv: instance.uv,
-        rotation: instance.rotation,
+        rotation: 0,
         partRotation: resolvePartPrintRotation(part),
         half: resolveTextGizmoHalf(rawHalf, instance),
         scale: instance.fontSize / NAME_REFERENCE_FONT_SIZE,

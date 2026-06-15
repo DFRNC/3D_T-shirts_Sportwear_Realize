@@ -262,8 +262,13 @@ const float GIZMO_FRAME_LINE_HALF = 4.0;
 const float GIZMO_DASH_PERIOD = 40.0;
 const float GIZMO_BTN_HOVER_SCALE_RANGE = 0.1;
 const float GIZMO_BTN_REVEAL_SCALE_MIN = 0.9;
+// Icon fill within each 1/4 atlas strip; must match GIZMO_ICON_CELL_FILL in useGizmoIconAtlas.ts.
+const float GIZMO_ICON_CELL_FILL = 0.62;
+const float GIZMO_ICON_CELL_INSET = ( 1.0 - GIZMO_ICON_CELL_FILL ) * 0.5;
+// Icon display size inside the white inner circle (smaller = more padding).
+const float GIZMO_ICON_BTN_FILL = 0.54;
 
-// Frame in part-local space (part + element rotation). Extent uses scale; stroke/dash stay fixed px.
+// Frame in part-local space (axis-aligned). halfPx is the AABB of rotated content; extent uses scale.
 vec4 garmentGizmoFrameColor( vec2 worldUv, vec2 anchor, float scale, vec2 halfPx, float elementRotation, float partRotation, float enabled, float insidePart ) {
   if ( enabled < 0.5 || insidePart < 0.5 ) return vec4( 0.0 );
   vec2 localPx = garmentGizmoToLocalPx( worldUv, anchor, elementRotation, partRotation );
@@ -294,8 +299,14 @@ vec4 garmentGizmoButtonCell( sampler2D icons, vec2 localPx, vec2 center, float c
   // Fill stops at the inner stroke edge so the full-width dash ring matches the text frame.
   if ( r < GIZMO_BTN_HALF - GIZMO_FRAME_LINE_HALF ) {
     col = vec4( fillColor, 1.0 );
-    vec2 d = rel / ( 2.0 * GIZMO_BTN_HALF ) + 0.5;
-    vec4 icon = texture2D( icons, vec2( ( cell + d.x ) * 0.25, 1.0 - d.y ) );
+    float innerR = GIZMO_BTN_HALF - GIZMO_FRAME_LINE_HALF;
+    vec2 dInner = rel / ( 2.0 * innerR ) + 0.5;
+    vec2 d = ( dInner - 0.5 ) / GIZMO_ICON_BTN_FILL + 0.5;
+    vec2 iconUv = vec2(
+      ( cell + GIZMO_ICON_CELL_INSET + d.x * GIZMO_ICON_CELL_FILL ) * 0.25,
+      1.0 - ( GIZMO_ICON_CELL_INSET + d.y * GIZMO_ICON_CELL_FILL )
+    );
+    vec4 icon = texture2D( icons, iconUv );
     vec3 iconRgb = mix( uNameGizmoIconColor, vec3( 1.0 ), activeMix );
     col.rgb = iconRgb * icon.a + col.rgb * ( 1.0 - icon.a );
     col.a = icon.a + col.a * ( 1.0 - icon.a );
