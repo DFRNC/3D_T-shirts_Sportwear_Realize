@@ -251,10 +251,10 @@ vec2 garmentGizmoToLocalPx( vec2 worldUv, vec2 anchor, float elementRotation, fl
 // Fixed atlas-px chrome (NAME_GIZMO_* in nameStampConstants.ts). Independent of uNameScale.
 const float GIZMO_BTN_HALF = 24.0;
 const float GIZMO_BTN_OUTSET = 16.0;
-const float GIZMO_FRAME_LINE_HALF = 0.9;
-const float GIZMO_DASH_PERIOD = 9.2;
+const float GIZMO_FRAME_LINE_HALF = 4.0;
+const float GIZMO_DASH_PERIOD = 40.0;
 const float GIZMO_BTN_HOVER_SCALE_RANGE = 0.1;
-const float GIZMO_BTN_REVEAL_SCALE_MIN = 0.75;
+const float GIZMO_BTN_REVEAL_SCALE_MIN = 0.9;
 
 // Frame in part-local space (part + element rotation). Extent uses scale; stroke/dash stay fixed px.
 vec4 garmentGizmoFrameColor( vec2 worldUv, vec2 anchor, float scale, vec2 halfPx, float elementRotation, float partRotation, float enabled, float insidePart ) {

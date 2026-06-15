@@ -34,7 +34,7 @@ const measureNameStampPixelSize = (
 };
 
 // Half-size (in reference-font px) of the selection frame for one name: the raw glyph box plus a small gap.
-const GIZMO_FRAME_PADDING = 12;
+const GIZMO_FRAME_PADDING = 30;
 
 const measureNameGizmoHalf = (
   text: string,
