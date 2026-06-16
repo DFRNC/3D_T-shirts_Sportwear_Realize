@@ -6,6 +6,7 @@ type boxPropsType = childrenType & {
   variant?: boxVariantType;
   style?: CSSProperties;
   className?: string;
+  onClick?: () => void;
   asChild?: boolean;
 };
 

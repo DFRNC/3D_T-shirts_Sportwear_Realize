@@ -1,6 +1,6 @@
 'use client';
 
-import { Flex } from '@atoms';
+import { Flex, ScrollArea } from '@atoms';
 
 import { getCatalogProductEntry, getProduct, resolveCartItemPreviewSrc } from '@utils';
 import { useConfigurationCart } from '@store';
@@ -19,29 +19,34 @@ const CardAddProduct = () => {
   const activeItem = items.find((item) => item.id === activeItemId) ?? items[0];
 
   return (
-    <Flex className="absolute left-4 top-4 z-30 flex-col gap-0">
-      {items.map((item) => {
-        const product = getProduct(item.styleId, item.productIndex);
-        if (!product) return null;
+    <Flex className="absolute left-0 top-4 z-30 flex max-h-[calc(100%-1rem)] w-[92px] flex-col gap-0 overflow-visible">
+      <ScrollArea className="min-h-0 w-full flex-1 pr-0">
+        <Flex className="flex-col gap-0">
+          {items.map((item) => {
+            const product = getProduct(item.styleId, item.productIndex);
+            if (!product) return null;
 
-        const catalogEntry = getCatalogProductEntry(item.collection, item.slug);
-        const displayName = catalogEntry?.name ?? product.name;
+            const catalogEntry = getCatalogProductEntry(item.collection, item.slug);
+            const displayName = catalogEntry?.name ?? product.name;
 
-        return (
-          <ProductSessionRow
-            key={item.id}
-            name={displayName}
-            previewSrc={resolveCartItemPreviewSrc(item)}
-            active={item.id === activeItemId}
-            canRemove={items.length > 1}
-            onSelect={() => selectItem(item.id)}
-            onRemove={() => removeItem(item.id)}
-          />
-        );
-      })}
-      <ProductCatalogPopover activeCollection={activeItem.collection} onSelect={addItem}>
-        <ProductSessionAddButton />
-      </ProductCatalogPopover>
+            return (
+              <ProductSessionRow
+                key={item.id}
+                name={displayName}
+                previewSrc={resolveCartItemPreviewSrc(item)}
+                active={item.id === activeItemId}
+                onSelect={() => selectItem(item.id)}
+                onRemove={() => removeItem(item.id)}
+              />
+            );
+          })}
+        </Flex>
+      </ScrollArea>
+      <div className="shrink-0">
+        <ProductCatalogPopover activeCollection={activeItem.collection} onSelect={addItem}>
+          <ProductSessionAddButton />
+        </ProductCatalogPopover>
+      </div>
     </Flex>
   );
 };

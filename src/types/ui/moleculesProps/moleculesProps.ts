@@ -32,7 +32,6 @@ interface productSessionRowPropsType {
   name: string;
   previewSrc: string;
   active?: boolean;
-  canRemove?: boolean;
   onSelect: () => void;
   onRemove: () => void;
 }
