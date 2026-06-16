@@ -21,6 +21,12 @@ const disposeMeshResources = (object: Object3D) => {
   });
 };
 
+const tagGarmentMeshes = (object: Object3D) => {
+  object.traverse((child) => {
+    if ('isMesh' in child && child.isMesh) child.userData.configuratorGarment = true;
+  });
+};
+
 const applyStaticColor = (object: Object3D, color: string) => {
   object.traverse((child) => {
     if (!('isMesh' in child) || !child.isMesh) return;
@@ -39,6 +45,7 @@ const StaticGltfMesh = memo(({ meshName, node, renderOrder = 0 }: staticGltfMesh
   const instance = useMemo(() => {
     const clone = node.clone(true);
     applyStaticColor(clone, DEFAULT_COLOR);
+    tagGarmentMeshes(clone);
     return clone;
   }, [node]);
 

@@ -59,6 +59,7 @@ const GarmentPartMesh = memo(({ registryKey, meshName, node, renderOrder = 0 }: 
       quaternion={source.quaternion}
       scale={source.scale}
       renderOrder={renderOrder}
+      userData={{ configuratorGarment: true }}
     />
   );
 });

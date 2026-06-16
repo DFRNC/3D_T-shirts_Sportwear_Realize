@@ -101,3 +101,12 @@ export { isAcceptedLogoFile, LogoFileError, logoFileToDisplayUrl, preloadLogoDis
 export { withListPunctuation } from './modalInfo';
 
 export * from './orbitFlag';
+export {
+  ORBIT_SURFACE_CLEARANCE,
+  applyOrbitZoomAroundPoint,
+  clampOrbitCameraOutsideGarment,
+  clampOrbitTargetToGarment,
+  recenterOrbitTargetByZoom,
+  resolveCursorFocusPoint,
+  resolveGarmentCenter,
+} from './orbitCamera';

@@ -20,8 +20,18 @@ const disposeMeshResources = (object: Object3D) => {
   });
 };
 
+const tagGarmentMeshes = (object: Object3D) => {
+  object.traverse((child) => {
+    if ('isMesh' in child && child.isMesh) child.userData.configuratorGarment = true;
+  });
+};
+
 const PreserveGltfMesh = memo(({ meshName, node, renderOrder = 0 }: preserveGltfMeshPropsType) => {
-  const instance = useMemo(() => node.clone(true), [node]);
+  const instance = useMemo(() => {
+    const clone = node.clone(true);
+    tagGarmentMeshes(clone);
+    return clone;
+  }, [node]);
 
   useEffect(() => {
     return () => disposeMeshResources(instance);
