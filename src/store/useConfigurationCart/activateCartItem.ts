@@ -4,11 +4,13 @@ import { getProduct } from '@utils';
 import { useConfigurationControl } from '../useConfigurationControl';
 import { useConfiguratorProduct } from '../useConfiguratorProduct';
 import { applyGarmentConfiguration, captureGarmentConfiguration } from './cartItemConfiguration';
+import { persistCartItemSnapshot } from './persistCartItemSnapshot';
 
 interface ActivateCartItemGetState {
   items: Array<{ id: string; styleId: styleIdType; productIndex: number }>;
   saveConfiguration: (itemId: string, configuration: cartItemConfigurationType) => void;
   getConfiguration: (itemId: string) => cartItemConfigurationType | undefined;
+  savePreview: (itemId: string, previewSrc: string) => void;
 }
 
 const activateCartItem = (get: () => ActivateCartItemGetState, itemId: string, options?: { savePreviousId?: string | null }) => {
@@ -19,7 +21,7 @@ const activateCartItem = (get: () => ActivateCartItemGetState, itemId: string, o
 
   const savePreviousId = options?.savePreviousId;
   if (savePreviousId && savePreviousId !== itemId && items.some((item) => item.id === savePreviousId)) {
-    saveConfiguration(savePreviousId, captureGarmentConfiguration());
+    persistCartItemSnapshot(get, savePreviousId);
   }
 
   const product = getProduct(activeItem.styleId, activeItem.productIndex);

@@ -2,7 +2,7 @@
 
 import { Flex, ScrollArea } from '@atoms';
 
-import { getCatalogProductEntry, getProduct, resolveCartItemPreviewSrc } from '@utils';
+import { getCatalogProductEntry, getProduct, resolveCartItemDisplayPreview } from '@utils';
 import { useConfigurationCart } from '@store';
 
 import { ProductCatalogPopover } from '../ProductCatalogPopover';
@@ -12,6 +12,7 @@ import { ProductSessionRow } from '../ProductSessionRow';
 const CardAddProduct = () => {
   const items = useConfigurationCart((state) => state.items);
   const activeItemId = useConfigurationCart((state) => state.activeItemId);
+  const previews = useConfigurationCart((state) => state.previews);
   const addItem = useConfigurationCart((state) => state.addItem);
   const selectItem = useConfigurationCart((state) => state.selectItem);
   const removeItem = useConfigurationCart((state) => state.removeItem);
@@ -33,7 +34,7 @@ const CardAddProduct = () => {
               <ProductSessionRow
                 key={item.id}
                 name={displayName}
-                previewSrc={resolveCartItemPreviewSrc(item)}
+                previewSrc={resolveCartItemDisplayPreview(item, previews[item.id])}
                 active={item.id === activeItemId}
                 onSelect={() => selectItem(item.id)}
                 onRemove={() => removeItem(item.id)}

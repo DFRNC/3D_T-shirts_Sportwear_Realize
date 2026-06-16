@@ -127,7 +127,12 @@ const ProductSessionRow = ({ name, previewSrc, active = false, onSelect, onRemov
     >
       <div className="relative h-[40px] w-[40px] shrink-0">
         {!isPreviewLoaded && <ProductSessionPreviewSkeleton />}
-        <AtomImage src={previewSrc} alt={name} className={cn('h-full w-full', !isPreviewLoaded && 'opacity-0')} onLoad={() => setIsPreviewLoaded(true)} />
+        <AtomImage
+          src={previewSrc}
+          alt={name}
+          className={cn('h-full w-full object-contain', !isPreviewLoaded && 'opacity-0')}
+          onLoad={() => setIsPreviewLoaded(true)}
+        />
       </div>
       <Text
         className={cn(

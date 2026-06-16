@@ -8,7 +8,7 @@ import { CHECKOUT_SHIPPING_DAYS_LABEL } from '@constants';
 import { useNavigateToConfigurator } from '@hooks';
 import { resolveCheckoutPrintAvailability, resolveTestoLimits, useCheckout, useConfigurationCart } from '@store';
 import type { checkoutProductCardPropsType } from '@types';
-import { getProduct, priceFormat, resolveProductPreviewSrc } from '@utils';
+import { getProduct, priceFormat, resolveCartItemDisplayPreview } from '@utils';
 
 import { CheckoutConfigurationTable } from '../CheckoutConfigurationTable';
 
@@ -18,8 +18,10 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
   const subtotal = useCheckout((state) => state.getProductSubtotal(product.cartItemId));
 
   const garment = getProduct(product.styleId, product.productIndex);
+  const cartItem = useConfigurationCart((state) => state.items.find((item) => item.id === product.cartItemId));
   const configuration = useConfigurationCart((state) => state.configurations[product.cartItemId]);
-  const previewSrc = garment ? resolveProductPreviewSrc(garment) : '';
+  const capturedPreview = useConfigurationCart((state) => state.previews[product.cartItemId]);
+  const previewSrc = cartItem ? resolveCartItemDisplayPreview(cartItem, capturedPreview) : '';
 
   const productName = useMemo(() => garment?.name ?? 'Prodotto', [garment?.name]);
   const testoMaxLength = useMemo(() => {
@@ -33,7 +35,7 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
   return (
     <article className="w-full min-w-0 p-5 border border-primary-10 rounded-[12px]">
       <Grid className="grid-cols-[auto_1fr_auto] items-start gap-5">
-        <AtomImage src={previewSrc} alt={productName} className="w-[101px] h-[126.73249053955078px] object-cover" />
+        <AtomImage src={previewSrc} alt={productName} className="h-[101px] w-[126px]" />
         <Flex className="flex-col items-start justify-start gap-3">
           <Text variant="product_name" className="mb-0">
             {productName}

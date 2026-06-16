@@ -88,6 +88,7 @@ export {
   listCatalogProducts,
   listCatalogProductsByCollection,
   listOtherProductCollections,
+  resolveCartItemDisplayPreview,
   resolveCartItemPreviewSrc,
   toCatalogProductRef,
 } from './productCatalog';
@@ -99,6 +100,12 @@ export { resolveModelUrl } from './resolveModelUrl';
 export { resolvePbrTexturePaths } from './resolvePbrTexturePaths';
 export { isAcceptedLogoFile, LogoFileError, logoFileToDisplayUrl, preloadLogoDisplayUrl, warmupGhostscriptWorker, yieldToMain } from './logoFile';
 export { withListPunctuation } from './modalInfo';
+export {
+  captureConfiguratorPreview,
+  captureConfiguratorPreviewSnapshot,
+  registerConfiguratorPreviewCapture,
+  unregisterConfiguratorPreviewCapture,
+} from './configuratorPreviewCapture';
 
 export * from './orbitFlag';
 export {

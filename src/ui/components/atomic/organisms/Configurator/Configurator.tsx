@@ -18,6 +18,7 @@ const Configurator = () => {
       gl={{
         antialias: true,
         powerPreference: 'high-performance',
+        preserveDrawingBuffer: true,
         stencil: true,
         toneMapping: THREE.ACESFilmicToneMapping,
         toneMappingExposure: 1.12,
