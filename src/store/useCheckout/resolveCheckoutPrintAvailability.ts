@@ -1,9 +1,20 @@
-import type { cartItemConfigurationType, checkoutPrintAvailabilityType } from '@types';
+import type { cartItemConfigurationType, checkoutPrintAvailabilityType, garmentConfigType } from '@types';
+import { isConfiguratorStepAvailable } from '@utils';
 
-const resolveCheckoutPrintAvailability = (configuration?: cartItemConfigurationType): checkoutPrintAvailabilityType => ({
-  hasName: (configuration?.name.instances.length ?? 0) > 0,
-  hasNumber: (configuration?.number.instances.length ?? 0) > 0,
-  hasTesto: (configuration?.testo.instances.length ?? 0) > 0,
-});
+const resolveCheckoutPrintAvailability = (product?: garmentConfigType, _configuration?: cartItemConfigurationType): checkoutPrintAvailabilityType => {
+  if (!product) {
+    return {
+      hasName: true,
+      hasNumber: true,
+      hasTesto: true,
+    };
+  }
+
+  return {
+    hasName: isConfiguratorStepAvailable(product, 'name'),
+    hasNumber: isConfiguratorStepAvailable(product, 'number'),
+    hasTesto: isConfiguratorStepAvailable(product, 'testo'),
+  };
+};
 
 export { resolveCheckoutPrintAvailability };

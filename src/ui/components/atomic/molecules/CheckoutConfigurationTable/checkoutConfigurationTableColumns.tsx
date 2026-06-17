@@ -27,6 +27,31 @@ const getColumnSizing = (id: (typeof CHECKOUT_CONFIGURATION_TABLE_COLUMNS)[numbe
   };
 };
 
+const createNameColumn = (onPatchRow: checkoutConfigurationTableColumnHandlersType['onPatchRow']): checkoutConfigurationTableColumnType => ({
+  id: 'name',
+  header: 'Nome',
+  ...getColumnSizing('name'),
+  meta: { grow: true },
+  cell: ({ row }) => <CheckoutTableEditableCell value={row.name} placeholder="Nome" canEdit onChange={(name) => onPatchRow(row.id, { name })} />,
+});
+
+const createNumberColumn = (onPatchRow: checkoutConfigurationTableColumnHandlersType['onPatchRow']): checkoutConfigurationTableColumnType => ({
+  id: 'number',
+  header: 'Numero',
+  ...getColumnSizing('number'),
+  cell: ({ row }) => (
+    <CheckoutTableEditableCell
+      value={row.number}
+      placeholder="00"
+      inputMode="numeric"
+      maxLength={NUMBER_MAX_LENGTH}
+      formatValue={sanitizeNumberText}
+      canEdit
+      onChange={(number) => onPatchRow(row.id, { number })}
+    />
+  ),
+});
+
 const createTestoColumn = (
   onPatchRow: checkoutConfigurationTableColumnHandlersType['onPatchRow'],
   testoMaxLength?: number,
@@ -52,9 +77,9 @@ const createCheckoutConfigurationTableColumns = ({
   testoMaxLength,
   printAvailability,
 }: checkoutConfigurationTableColumnHandlersType): checkoutConfigurationTableColumnType[] => {
-  const canEditName = printAvailability?.hasName ?? false;
-  const canEditNumber = printAvailability?.hasNumber ?? false;
-  const canEditTesto = printAvailability?.hasTesto ?? false;
+  const showName = printAvailability?.hasName ?? false;
+  const showNumber = printAvailability?.hasNumber ?? false;
+  const showTesto = printAvailability?.hasTesto ?? false;
 
   return [
     {
@@ -70,32 +95,9 @@ const createCheckoutConfigurationTableColumns = ({
       meta: { cellClassName: 'p-0' },
       cell: ({ row }) => <CheckoutSizePopover value={row.size} onChange={(size) => onPatchRow(row.id, { size })} />,
     },
-    {
-      id: 'name',
-      header: 'Nome',
-      ...getColumnSizing('name'),
-      meta: { grow: true },
-      cell: ({ row }) => (
-        <CheckoutTableEditableCell value={row.name} placeholder="Nome" canEdit={canEditName} onChange={(name) => onPatchRow(row.id, { name })} />
-      ),
-    },
-    {
-      id: 'number',
-      header: 'Numero',
-      ...getColumnSizing('number'),
-      cell: ({ row }) => (
-        <CheckoutTableEditableCell
-          value={row.number}
-          placeholder="00"
-          inputMode="numeric"
-          maxLength={NUMBER_MAX_LENGTH}
-          formatValue={sanitizeNumberText}
-          canEdit={canEditNumber}
-          onChange={(number) => onPatchRow(row.id, { number })}
-        />
-      ),
-    },
-    createTestoColumn(onPatchRow, testoMaxLength, canEditTesto),
+    ...(showName ? [createNameColumn(onPatchRow)] : []),
+    ...(showNumber ? [createNumberColumn(onPatchRow)] : []),
+    ...(showTesto ? [createTestoColumn(onPatchRow, testoMaxLength, true)] : []),
     {
       id: 'quantity',
       header: 'Quantità',

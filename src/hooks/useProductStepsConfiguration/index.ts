@@ -1,0 +1,1 @@
+export { useProductStepsConfiguration } from './useProductStepsConfiguration';

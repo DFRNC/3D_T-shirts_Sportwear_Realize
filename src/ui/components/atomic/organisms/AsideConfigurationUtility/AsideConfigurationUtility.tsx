@@ -5,7 +5,7 @@ import { IoMdRedo, IoMdUndo } from 'react-icons/io';
 
 import { Button, Flex, Grid, SvgIcon, Text } from '@atoms';
 
-import { STEPS_CONFIGURATION } from '@constants';
+import { useProductStepsConfiguration } from '@hooks';
 import { useConfigurationControl, useTutorialDialog } from '@store';
 
 const AsideConfigurationUtility = () => {
@@ -13,6 +13,9 @@ const AsideConfigurationUtility = () => {
   const goToPreviousStep = useConfigurationControl((state) => state.goToPreviousStep);
   const goToNextStep = useConfigurationControl((state) => state.goToNextStep);
   const setTutorialOpen = useTutorialDialog((state) => state.setIsOpen);
+  const availableSteps = useProductStepsConfiguration();
+  const firstStep = availableSteps[0]?.step ?? 1;
+  const lastStep = availableSteps[availableSteps.length - 1]?.step ?? 1;
 
   const handleTutorial = useCallback(() => {
     setTutorialOpen(true);
@@ -22,11 +25,11 @@ const AsideConfigurationUtility = () => {
     <aside className="p-4 pr-12">
       <Flex className="flex-col justify-start h-full w-[253px] gap-6">
         <Grid className="grid-cols-2 gap-2">
-          <Button size="sm" onClick={goToPreviousStep} disabled={activeStep === 1}>
+          <Button size="sm" onClick={goToPreviousStep} disabled={activeStep === firstStep}>
             <IoMdUndo className="size-4" />
             Annulla
           </Button>
-          <Button size="sm" onClick={goToNextStep} disabled={activeStep === STEPS_CONFIGURATION.length}>
+          <Button size="sm" onClick={goToNextStep} disabled={activeStep === lastStep}>
             Ripristina
             <IoMdRedo className="size-4" />
           </Button>

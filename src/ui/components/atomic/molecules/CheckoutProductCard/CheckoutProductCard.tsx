@@ -28,7 +28,7 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
     if (!garment?.testoDefaults) return undefined;
     return resolveTestoLimits(garment).maxLength;
   }, [garment]);
-  const printAvailability = useMemo(() => resolveCheckoutPrintAvailability(configuration), [configuration]);
+  const printAvailability = useMemo(() => resolveCheckoutPrintAvailability(garment, configuration), [configuration, garment]);
 
   if (!garment) return null;
 

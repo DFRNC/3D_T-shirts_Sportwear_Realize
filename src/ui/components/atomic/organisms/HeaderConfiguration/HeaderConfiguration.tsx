@@ -3,25 +3,28 @@
 import { useCallback } from 'react';
 
 import { AtomTabs } from '@atoms';
-import { STEPS_CONFIGURATION } from '@constants';
+import { useProductStepsConfiguration } from '@hooks';
 import { useConfigurationControl } from '@store';
 
 const HeaderConfiguration = () => {
   const activeStep = useConfigurationControl((state) => state.activeStep);
   const setActiveStep = useConfigurationControl((state) => state.setActiveStep);
-  const activeItem = STEPS_CONFIGURATION[activeStep - 1];
+  const availableSteps = useProductStepsConfiguration();
+  const activeItem = availableSteps.find((item) => item.step === activeStep) ?? availableSteps[0];
 
   const handleValueChange = useCallback(
     (value: string) => {
-      const step = STEPS_CONFIGURATION.findIndex((item) => item.value === value) + 1;
-      if (step > 0) setActiveStep(step);
+      const step = availableSteps.find((item) => item.value === value)?.step;
+      if (step) setActiveStep(step);
     },
-    [setActiveStep],
+    [availableSteps, setActiveStep],
   );
+
+  if (!activeItem) return null;
 
   return (
     <header className="flex items-center justify-center bg-white py-2">
-      <AtomTabs variant="configurator" items={STEPS_CONFIGURATION} value={activeItem.value} onValueChange={handleValueChange} hideContent />
+      <AtomTabs variant="configurator" items={availableSteps} value={activeItem.value} onValueChange={handleValueChange} hideContent />
     </header>
   );
 };

@@ -3,6 +3,7 @@
 import type { checkoutLineRowPatchType, checkoutProductType } from '@types';
 
 import { clampCheckoutRowQuantity } from '@constants';
+import { getProduct } from '@utils';
 import { create } from 'zustand';
 
 import { captureGarmentConfiguration, useConfigurationCart } from '../useConfigurationCart';
@@ -91,7 +92,10 @@ const useCheckout = create<CheckoutState>((set, get) => ({
     }
 
     const isTestoTextPatch = patch.testoTextIndex !== undefined && patch.testoText !== undefined;
-    const printAvailability = resolveCheckoutPrintAvailability(useConfigurationCart.getState().getConfiguration(cartItemId));
+    const cartState = useConfigurationCart.getState();
+    const cartItem = cartState.items.find((item) => item.id === cartItemId);
+    const product = cartItem ? getProduct(cartItem.styleId, cartItem.productIndex) : undefined;
+    const printAvailability = resolveCheckoutPrintAvailability(product, cartState.getConfiguration(cartItemId));
 
     if (isTestoTextPatch) {
       if (!printAvailability.hasTesto) return;

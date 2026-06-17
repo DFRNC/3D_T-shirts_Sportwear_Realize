@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 
 import { AtomTable, AtomTableBody, AtomTableCell, AtomTableHead, AtomTableHeader, AtomTableRow, Button, SvgIcon } from '@atoms';
 
-import { CHECKOUT_CONFIGURATION_TABLE_MIN_WIDTH, CHECKOUT_TABLE_ADD_ROW_LABEL } from '@constants';
+import { CHECKOUT_TABLE_ADD_ROW_LABEL } from '@constants';
 import { useCheckoutConfigurationTable } from '@hooks';
 import type { checkoutConfigurationTablePropsType } from '@types';
 import { cn } from '@utils';
@@ -26,9 +26,11 @@ const CheckoutConfigurationTable = ({ cartItemId, rows, testoMaxLength, printAva
     [handlePatchRow, handleRemoveRow, testoMaxLength, printAvailability],
   );
 
+  const tableMinWidth = useMemo(() => columns.reduce((total, column) => total + column.minSize, 0), [columns]);
+
   return (
     <div className="w-full min-w-0">
-      <AtomTable variant="checkout" className="table-fixed w-full" style={{ minWidth: CHECKOUT_CONFIGURATION_TABLE_MIN_WIDTH }}>
+      <AtomTable variant="checkout" className="table-fixed w-full" style={{ minWidth: tableMinWidth }}>
         <AtomTableHeader>
           <AtomTableRow>
             {columns.map((column) => (

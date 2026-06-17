@@ -3,15 +3,15 @@
 import { Flex, Grid, ScrollArea } from '@atoms';
 import { CardAddProduct, ConfiguratorProduct, ConfiguratorProductDescription } from '@molecules';
 
-import { STEPS_CONFIGURATION } from '@constants';
-import { useShowConfigurationSkeleton } from '@hooks';
+import { useProductStepsConfiguration, useShowConfigurationSkeleton } from '@hooks';
 import { ConfigurationStepSkeleton, ConfiguratorProductDescriptionSkeleton } from '@skeletons';
 import { useConfigurationControl } from '@store';
 
 const ActiveStepContent = () => {
   const activeStep = useConfigurationControl((state) => state.activeStep);
   const showSkeleton = useShowConfigurationSkeleton();
-  const stepConfig = STEPS_CONFIGURATION.find(({ step }) => step === activeStep);
+  const availableSteps = useProductStepsConfiguration();
+  const stepConfig = availableSteps.find(({ step }) => step === activeStep);
 
   if (!stepConfig) return null;
 

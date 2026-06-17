@@ -87,6 +87,7 @@ export {
   resolvePrintAtlasSize,
   resolveProductGizmoRotation,
 } from './resolveProductRenderConfig/resolveProductRenderConfig';
+export { isConfiguratorStepAvailable, resolveAvailableConfiguratorStepNumbers, resolveProductStepsConfiguration } from './resolveProductStepsConfiguration';
 export { resolveDesignThumbSrc } from './resolveDesignThumbSrc/resolveDesignThumbSrc';
 export { resolveProductFlipCardSrc } from './resolveProductFlipCardSrc/resolveProductFlipCardSrc';
 export type { productFlipCardSideType } from './resolveProductFlipCardSrc/resolveProductFlipCardSrc';

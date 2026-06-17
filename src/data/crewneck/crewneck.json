@@ -372,6 +372,7 @@
       "modelFile": "mans_shorts.gltf",
       "printAtlas": { "width": 4096, "height": 2149 },
       "gizmoRotation": -90,
+      "hiddenSteps": ["name"],
       "parts": [
         {
           "name": "Davanti",
@@ -412,8 +413,7 @@
         "maxLength": 20,
         "fontSizeMin": 50,
         "fontSizeMax": 400,
-        "strokeWidthMax": 20,
-        "isAvailable": false
+        "strokeWidthMax": 20
       },
       "numberDefaults": {
         "text": "10",
@@ -439,7 +439,7 @@
           "rotation": -90,
           "fontSize": 220,
           "show_frame": true,
-          "show_gizmo": true
+          "show_gizmo": false
         },
         {
           "label": "Right Top",
@@ -448,7 +448,7 @@
           "rotation": -90,
           "fontSize": 220,
           "show_frame": true,
-          "show_gizmo": true
+          "show_gizmo": false
         },
         {
           "label": "Right Center",
@@ -457,7 +457,7 @@
           "rotation": -90,
           "fontSize": 220,
           "show_frame": true,
-          "show_gizmo": true
+          "show_gizmo": false
         },
         {
           "label": "Left Center",
@@ -466,7 +466,7 @@
           "rotation": -90,
           "fontSize": 220,
           "show_frame": true,
-          "show_gizmo": true
+          "show_gizmo": false
         }
       ],
       "testoDefaults": {
@@ -496,7 +496,7 @@
           "rotation": 0,
           "fontSize": 200,
           "show_frame": true,
-          "show_gizmo": true
+          "show_gizmo": false
         },
         {
           "label": "Right Leg",
@@ -505,7 +505,7 @@
           "rotation": 180,
           "fontSize": 200,
           "show_frame": true,
-          "show_gizmo": true
+          "show_gizmo": false
         }
       ],
       "logoPositions": []

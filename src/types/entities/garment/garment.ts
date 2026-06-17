@@ -1,3 +1,5 @@
+import type { configuratorStepValueType } from '../../configurator';
+
 interface uvPointType {
   x: number;
   y: number;
@@ -128,6 +130,7 @@ interface garmentConfigType {
   printAtlas?: printAtlasConfigType;
   partTextureSize?: number;
   gizmoRotation?: number;
+  hiddenSteps?: configuratorStepValueType[];
   patterns: patternConfigType[];
   default_pattern?: patternConfigType[];
   nameDefaults?: textDefaultsConfigType;

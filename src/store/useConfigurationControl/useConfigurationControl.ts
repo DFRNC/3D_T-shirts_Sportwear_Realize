@@ -2,7 +2,8 @@
 
 import { create } from 'zustand';
 
-import { STEPS_CONFIGURATION } from '@constants';
+import { useConfiguratorProduct } from '../useConfiguratorProduct';
+import { resolveAvailableConfiguratorStepNumbers } from '@utils';
 
 interface ConfigurationControlState {
   activeStep: number;
@@ -19,6 +20,8 @@ interface ConfigurationControlState {
   goToNextStep: () => void;
 }
 
+const resolveAvailableSteps = () => resolveAvailableConfiguratorStepNumbers(useConfiguratorProduct.getState().product);
+
 const useConfigurationControl = create<ConfigurationControlState>((set, get) => ({
   activeStep: 1,
   name: 'Maglia Federer',
@@ -29,19 +32,28 @@ const useConfigurationControl = create<ConfigurationControlState>((set, get) => 
   bonus_discount: 0,
   minimum_count: 5,
   setActiveStep: (step) => {
-    if (step < 1 || step > STEPS_CONFIGURATION.length) return;
+    const availableSteps = resolveAvailableSteps();
+    if (!availableSteps.includes(step)) return;
     set({ activeStep: step });
   },
   setNumberProduct: (numberProduct) => set({ numberProduct }),
   goToPreviousStep: () => {
+    const availableSteps = resolveAvailableSteps();
     const { activeStep } = get();
-    if (activeStep <= 1) return;
-    set({ activeStep: activeStep - 1 });
+    const currentIndex = availableSteps.indexOf(activeStep);
+    if (currentIndex <= 0) return;
+    set({ activeStep: availableSteps[currentIndex - 1] });
   },
   goToNextStep: () => {
+    const availableSteps = resolveAvailableSteps();
     const { activeStep } = get();
-    if (activeStep >= STEPS_CONFIGURATION.length) return;
-    set({ activeStep: activeStep + 1 });
+    const currentIndex = availableSteps.indexOf(activeStep);
+    if (currentIndex < 0) {
+      set({ activeStep: availableSteps[0] ?? 1 });
+      return;
+    }
+    if (currentIndex >= availableSteps.length - 1) return;
+    set({ activeStep: availableSteps[currentIndex + 1] });
   },
 }));
 
