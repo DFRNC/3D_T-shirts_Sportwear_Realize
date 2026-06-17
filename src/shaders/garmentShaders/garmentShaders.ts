@@ -350,8 +350,9 @@ vec4 garmentGizmoButtons( vec2 worldUv, vec2 anchor, float scale, vec2 halfPx, f
 
 const garmentNormalFragment = /* glsl */ `
 #ifdef USE_NORMALMAP_TANGENTSPACE
-  vec3 bakeN = texture2D( normalMap, vRawUv1 ).xyz;
-  normal = normalize( tbn * bakeN );
+  vec3 mapN = texture2D( normalMap, vRawUv1 ).xyz * 2.0 - 1.0;
+  mapN.xy *= normalScale;
+  normal = normalize( tbn * mapN );
 
   #ifdef FLIP_SIDED
     normal = -normal;
