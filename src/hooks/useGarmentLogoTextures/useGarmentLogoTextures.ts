@@ -19,6 +19,7 @@ import { LOGO_SLOT_COUNT } from '@constants';
 import {
   applyGarmentGizmoHover,
   applyGarmentGizmoIcons,
+  applyGarmentGizmoRotation,
   applyGarmentLogoGizmoButtonsReveal,
   applyGarmentLogoGizmoFrame,
   applyGarmentLogoStamp,
@@ -32,6 +33,7 @@ import {
   loadCachedImage,
   repairPrintInstancePlacement,
   resolvePrintAtlasSize,
+  resolveProductGizmoRotation,
 } from '@utils';
 
 const NAME_STEP = 4;
@@ -131,12 +133,14 @@ const useGarmentLogoTextures = () => {
 
   const applyLogoStyleAndFrame = useCallback(() => {
     const cellSize = stampCellSizeRef.current;
+    const gizmoRotation = resolveProductGizmoRotation(product);
 
     for (const part of product.parts) {
       const style = buildLogoStyleUniforms(instancesForRender, product.parts, part.id, cellSize, atlasSize.width, atlasSize.height);
-      const frame = buildLogoGizmoFrameUniforms(instancesForRender, part.id, activeStep === LOGO_STEP);
+      const frame = buildLogoGizmoFrameUniforms(instancesForRender, part.id, activeStep === LOGO_STEP, gizmoRotation);
 
       for (const material of getMaterials(part.id)) {
+        applyGarmentGizmoRotation(material, gizmoRotation);
         applyGarmentPrintAtlasSize(material, atlasSize.width, atlasSize.height);
         applyGarmentLogoStyle(material, style);
         applyGarmentLogoGizmoFrame(material, frame);
@@ -145,7 +149,7 @@ const useGarmentLogoTextures = () => {
     }
 
     invalidate();
-  }, [activeStep, atlasSize.height, atlasSize.width, getMaterials, gizmoIcons, instancesForRender, invalidate, product.parts]);
+  }, [activeStep, atlasSize.height, atlasSize.width, getMaterials, gizmoIcons, instancesForRender, invalidate, product]);
 
   const applyStampToMaterials = useCallback(
     (texture: Texture, cellSize: { width: number; height: number }) => {

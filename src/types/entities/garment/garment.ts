@@ -127,6 +127,7 @@ interface garmentConfigType {
   preserveGltfMeshes?: string[];
   printAtlas?: printAtlasConfigType;
   partTextureSize?: number;
+  gizmoRotation?: number;
   patterns: patternConfigType[];
   default_pattern?: patternConfigType[];
   nameDefaults?: textDefaultsConfigType;

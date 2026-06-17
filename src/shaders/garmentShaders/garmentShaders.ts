@@ -46,6 +46,7 @@ float garmentGradientMask( vec2 uv ) {
 #ifdef USE_PRINT
 uniform sampler2D uDefaultLogos;
 uniform vec2 uPrintAtlasSize;
+uniform float uGizmoRotation;
 uniform sampler2D uNameMask;
 uniform vec2 uNameStampSize;
 uniform vec2 uNameAnchorUv[4];
@@ -250,9 +251,9 @@ vec3 garmentGizmoDashColor( float dash ) {
   return mix( vec3( 1.0 ), uNameGizmoIconColor, dash );
 }
 
-vec2 garmentGizmoToLocalPx( vec2 worldUv, vec2 anchor, float elementRotation, float partRotation ) {
+vec2 garmentGizmoFrameLocalPx( vec2 worldUv, vec2 anchor, float gizmoRotation, float partRotation ) {
   vec2 localPx = garmentPrintToLocalPx( worldUv, anchor, partRotation );
-  return garmentPrintRotateLocalPx( localPx, elementRotation );
+  return garmentPrintRotateLocalPx( localPx, gizmoRotation );
 }
 
 // Fixed atlas-px chrome (NAME_GIZMO_* in nameStampConstants.ts). Independent of uNameScale.
@@ -268,10 +269,10 @@ const float GIZMO_ICON_CELL_INSET = ( 1.0 - GIZMO_ICON_CELL_FILL ) * 0.5;
 // Icon display size inside the white inner circle (smaller = more padding).
 const float GIZMO_ICON_BTN_FILL = 0.54;
 
-// Frame in part-local space (axis-aligned). halfPx is the AABB of rotated content; extent uses scale.
-vec4 garmentGizmoFrameColor( vec2 worldUv, vec2 anchor, float scale, vec2 halfPx, float elementRotation, float partRotation, float enabled, float insidePart ) {
+// Frame in product gizmo axes (uGizmoRotation). halfPx is content AABB half-size in that space.
+vec4 garmentGizmoFrameColor( vec2 worldUv, vec2 anchor, float scale, vec2 halfPx, float gizmoRotation, float partRotation, float enabled, float insidePart ) {
   if ( enabled < 0.5 || insidePart < 0.5 ) return vec4( 0.0 );
-  vec2 localPx = garmentGizmoToLocalPx( worldUv, anchor, elementRotation, partRotation );
+  vec2 localPx = garmentGizmoFrameLocalPx( worldUv, anchor, gizmoRotation, partRotation );
   vec2 halfWorld = halfPx * scale;
   float border = garmentGizmoRectBorder( localPx, halfWorld, GIZMO_FRAME_LINE_HALF );
   if ( border < 0.01 ) return vec4( 0.0 );
@@ -324,9 +325,9 @@ vec4 garmentGizmoButtonCell( sampler2D icons, vec2 localPx, vec2 center, float c
 }
 
 // Buttons sit at AABB corners in part-local px; icon size is fixed and does not follow scale.
-vec4 garmentGizmoButtons( vec2 worldUv, vec2 anchor, float scale, vec2 halfPx, float elementRotation, float partRotation, float enabled, float reveal, float insidePart, sampler2D icons, float slotIndex ) {
+vec4 garmentGizmoButtons( vec2 worldUv, vec2 anchor, float scale, vec2 halfPx, float gizmoRotation, float partRotation, float enabled, float reveal, float insidePart, sampler2D icons, float slotIndex ) {
   if ( enabled < 0.5 || reveal < 0.01 || insidePart < 0.5 ) return vec4( 0.0 );
-  vec2 localPx = garmentGizmoToLocalPx( worldUv, anchor, elementRotation, partRotation );
+  vec2 localPx = garmentGizmoFrameLocalPx( worldUv, anchor, gizmoRotation, partRotation );
   vec2 ext = halfPx * scale + vec2( GIZMO_BTN_OUTSET );
   float revealScale = mix( GIZMO_BTN_REVEAL_SCALE_MIN, 1.0, reveal );
 

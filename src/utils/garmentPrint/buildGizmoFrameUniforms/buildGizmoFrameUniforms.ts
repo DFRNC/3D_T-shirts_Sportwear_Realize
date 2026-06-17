@@ -8,7 +8,12 @@ const measureCtx = measureCanvas?.getContext('2d') ?? null;
 
 // Builds the per-slot selection-frame half sizes for one garment part. Slot indexing matches
 // buildNameStyleUniforms so each frame lines up with the name rendered in that slot.
-const buildGizmoFrameUniforms = (instances: garmentTextRenderInstanceType[], meshPartId: string, enabled: boolean): gizmoFrameStateType => {
+const buildGizmoFrameUniforms = (
+  instances: garmentTextRenderInstanceType[],
+  meshPartId: string,
+  enabled: boolean,
+  gizmoRotationDeg = 0,
+): gizmoFrameStateType => {
   const half = Array.from({ length: NAME_SLOT_COUNT }, () => ({ x: 0, y: 0 }));
   const frameActive = Array.from({ length: NAME_SLOT_COUNT }, () => 0);
   const gizmoActive = Array.from({ length: NAME_SLOT_COUNT }, () => 0);
@@ -22,7 +27,7 @@ const buildGizmoFrameUniforms = (instances: garmentTextRenderInstanceType[], mes
 
       const measured = measureNameGizmoHalf(instance.text, instance.font, measureCtx, resolveTextGizmoMeasureOptions(instance));
       if (measured) {
-        half[index] = resolveTextGizmoHalf(measured, instance);
+        half[index] = resolveTextGizmoHalf(measured, instance, gizmoRotationDeg);
       }
     });
   }

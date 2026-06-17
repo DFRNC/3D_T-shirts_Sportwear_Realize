@@ -1,15 +1,19 @@
 import type { garmentConfigType, printGizmoElementKindType, uvPointType } from '@types';
-import { resolvePartUvBounds } from '@utils';
+import { resolvePartUvBounds, resolveProductGizmoRotation } from '@utils';
+
+const round = (value: number, digits = 3) => Number(value.toFixed(digits));
 
 const roundUv = (uv: uvPointType, digits = 3): uvPointType => ({
-  x: Number(uv.x.toFixed(digits)),
-  y: Number(uv.y.toFixed(digits)),
+  x: round(uv.x, digits),
+  y: round(uv.y, digits),
 });
 
 const resolveZoneFromPartId = (partId: string) => {
   const lower = partId.toLowerCase();
   if (lower.includes('front')) return 'front';
   if (lower.includes('back')) return 'back';
+  if (lower.includes('left')) return 'left';
+  if (lower.includes('right')) return 'right';
   return partId;
 };
 
@@ -33,58 +37,57 @@ interface LogGizmoPlacementInput {
   partId: string;
   uv: uvPointType;
   product: garmentConfigType;
+  rotation?: number;
+  fontSize?: number;
+  scale?: number;
+  phase?: 'drag' | 'release';
 }
 
-const logGizmoPlacementForConfig = ({ kind, label, partId, uv, product }: LogGizmoPlacementInput) => {
+const logGizmoPlacementForConfig = ({ kind, label, partId, uv, product, rotation = 0, fontSize, scale, phase = 'release' }: LogGizmoPlacementInput) => {
   const atlasUv = roundUv(uv);
+  const phaseLabel = phase === 'drag' ? ' (drag)' : ' (release)';
+  const rotationRounded = round(rotation, 1);
+  const productGizmoRotation = resolveProductGizmoRotation(product);
 
   if (kind === 'number') {
     const zone = resolveZoneFromPartId(partId);
     const localUv = atlasUvToZoneLocalUv(product, partId, uv);
+    const snippet = {
+      label,
+      zone,
+      uv: localUv,
+      rotation: rotationRounded,
+      ...(fontSize !== undefined ? { fontSize: Math.round(fontSize) } : {}),
+    };
 
-    console.log(
-      `[gizmo] ${label} — numberPositions JSON snippet:\n` +
-        JSON.stringify(
-          {
-            label,
-            zone,
-            uv: localUv,
-          },
-          null,
-          2,
-        ),
-    );
+    console.log(`[gizmo]${phaseLabel} ${label} — numberPositions:\n${JSON.stringify(snippet, null, 2)}`);
+    console.log(`[gizmo]${phaseLabel} ${label} — atlas uv:`, atlasUv, 'partId:', partId, 'gizmoRotation:', productGizmoRotation);
     return;
   }
 
   if (kind === 'name' || kind === 'testo') {
-    console.log(
-      `[gizmo] ${label} — ${kind === 'testo' ? 'testo' : 'name'}Positions JSON snippet:\n` +
-        JSON.stringify(
-          {
-            label,
-            partId,
-            uv: atlasUv,
-          },
-          null,
-          2,
-        ),
-    );
+    const positionsKey = kind === 'testo' ? 'testoPositions' : 'namePositions';
+    const snippet = {
+      label,
+      partId,
+      uv: atlasUv,
+      rotation: rotationRounded,
+      ...(fontSize !== undefined ? { fontSize: Math.round(fontSize) } : {}),
+    };
+
+    console.log(`[gizmo]${phaseLabel} ${label} — ${positionsKey}:\n${JSON.stringify(snippet, null, 2)}`);
     return;
   }
 
-  console.log(
-    `[gizmo] ${label} — logoPositions JSON snippet:\n` +
-      JSON.stringify(
-        {
-          label,
-          partId,
-          uv: atlasUv,
-        },
-        null,
-        2,
-      ),
-  );
+  const snippet = {
+    label,
+    partId,
+    uv: atlasUv,
+    rotation: rotationRounded,
+    ...(scale !== undefined ? { scale: round(scale, 3) } : {}),
+  };
+
+  console.log(`[gizmo]${phaseLabel} ${label} — logoPositions:\n${JSON.stringify(snippet, null, 2)}`);
 };
 
 export { logGizmoPlacementForConfig };

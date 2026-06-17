@@ -15,6 +15,11 @@ const resolvePartUvBounds = (part: garmentPartConfigType): uvBoundsType => part.
 
 const resolvePartPrintRotation = (part: garmentPartConfigType): number => part.printRotation ?? part.gradient?.rotation ?? 0;
 
+const resolveProductGizmoRotation = (product: garmentConfigType): number => product.gizmoRotation ?? 0;
+
+const resolveGizmoElementRotationDeg = (product: garmentConfigType, instanceRotationDeg: number): number =>
+  resolveProductGizmoRotation(product) + instanceRotationDeg;
+
 const isColorOnlyGarmentPart = (part: garmentPartConfigType): boolean => part.colorOnly === true;
 
 const isUvInsidePartBounds = (uv: uvPointType, bounds: uvBoundsType = FULL_UV_BOUNDS): boolean =>
@@ -46,8 +51,10 @@ export {
   isColorOnlyGarmentPart,
   isUvInsidePartBounds,
   repairPrintInstancePlacement,
+  resolveGizmoElementRotationDeg,
   resolvePartPrintRotation,
   resolvePartTextureSize,
   resolvePartUvBounds,
   resolvePrintAtlasSize,
+  resolveProductGizmoRotation,
 };

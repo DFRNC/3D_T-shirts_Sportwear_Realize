@@ -12,6 +12,7 @@
       "path": "/models/crewneck/crewneck/",
       "modelFile": "crewneck.gltf",
       "printAtlas": { "width": 4096, "height": 2149 },
+      "gizmoRotation": 0,
       "parts": [
         {
           "name": "Davanti",
@@ -370,6 +371,7 @@
       "path": "/models/crewneck/mans_shorts/",
       "modelFile": "mans_shorts.gltf",
       "printAtlas": { "width": 4096, "height": 2149 },
+      "gizmoRotation": -90,
       "parts": [
         {
           "name": "Davanti",
@@ -377,7 +379,7 @@
           "id": "left_shorts",
           "meshNames": ["mans_shorts_left"],
           "renderOrder": 1,
-          "uvBounds": { "minX": 0, "maxX": 0.5, "minY": 0, "maxY": 1 }
+          "uvBounds": { "minX": 0.5, "maxX": 1, "minY": 0, "maxY": 1 }
         },
         {
           "name": "Retro",
@@ -385,7 +387,7 @@
           "id": "right_shorts",
           "meshNames": ["mans_shorts_right"],
           "renderOrder": 1,
-          "uvBounds": { "minX": 0.5, "maxX": 1, "minY": 0, "maxY": 1 }
+          "uvBounds": { "minX": 0, "maxX": 0.5, "minY": 0, "maxY": 1 }
         }
       ],
       "preserveGltfMeshes": ["mans_shorts_inside", "mans_shorts_laces"],
@@ -399,6 +401,111 @@
               "id": 0
             }
           ]
+        }
+      ],
+      "nameDefaults": {
+        "text": "PLAYER",
+        "font": "Oswald",
+        "textColor": "#000000",
+        "strokeColor": "#ffffff",
+        "strokeWidth": 2,
+        "maxLength": 20,
+        "fontSizeMin": 50,
+        "fontSizeMax": 400,
+        "strokeWidthMax": 20,
+        "isAvailable": false
+      },
+      "numberDefaults": {
+        "text": "10",
+        "font": "Oswald",
+        "textColor": "#000000",
+        "strokeColor": "#ffffff",
+        "strokeWidth": 2,
+        "maxLength": 2,
+        "fontSizeMin": 50,
+        "fontSizeMax": 600,
+        "strokeWidthMax": 20,
+        "lineHeight": 1.5,
+        "lineHeightMin": 0.5,
+        "lineHeightMax": 2,
+        "line_height_show": false
+      },
+      "namePositions": [],
+      "numberPositions": [
+        {
+          "label": "Right Bottom",
+          "zone": "right",
+          "uv": { "x": 0.767, "y": 0.73 },
+          "rotation": -90,
+          "fontSize": 220,
+          "show_frame": true,
+          "show_gizmo": true
+        },
+        {
+          "label": "Right Top",
+          "zone": "right",
+          "uv": { "x": 0.767, "y": 0.57 },
+          "rotation": -90,
+          "fontSize": 220,
+          "show_frame": true,
+          "show_gizmo": true
+        },
+        {
+          "label": "Right Center",
+          "zone": "right",
+          "uv": { "x": 0.647, "y": 0.659 },
+          "rotation": -90,
+          "fontSize": 220,
+          "show_frame": true,
+          "show_gizmo": true
+        },
+        {
+          "label": "Left Center",
+          "zone": "left",
+          "uv": { "x": 0.339, "y": 0.596 },
+          "rotation": -90,
+          "fontSize": 220,
+          "show_frame": true,
+          "show_gizmo": true
+        }
+      ],
+      "testoDefaults": {
+        "text": "TEAM",
+        "font": "Oswald",
+        "textColor": "#000000",
+        "strokeColor": "#ffffff",
+        "strokeWidth": 2,
+        "maxLength": 20,
+        "fontSizeMin": 50,
+        "fontSizeMax": 400,
+        "strokeWidthMax": 20,
+        "lineHeight": 1,
+        "lineHeightMin": 1,
+        "lineHeightMax": 2,
+        "line_height_show": true,
+        "letterSpacing": 0,
+        "letterSpacingMin": -10,
+        "letterSpacingMax": 40,
+        "letter_spacing_show": true
+      },
+      "testoPositions": [
+        {
+          "label": "Left Leg",
+          "partId": "left_shorts",
+          "uv": { "x": 0.734, "y": 0.529 },
+          "rotation": 0,
+          "fontSize": 200,
+          "show_frame": true,
+          "show_gizmo": true
+        },
+        {
+          "label": "Right Leg",
+          "partId": "right_shorts",
+          "uv": { "x": 0.26, "y": 0.541 },
+          "rotation": 180,
+          "fontSize": 200,
+          "show_frame": true,
+          "show_gizmo": true
         }
       ],
       "logoPositions": []

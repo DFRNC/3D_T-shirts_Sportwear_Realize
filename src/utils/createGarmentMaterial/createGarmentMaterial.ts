@@ -29,7 +29,7 @@ import { getEmptyPrintTexture } from '../garmentPrint/emptyPrintTexture';
 import { applyGarmentPrintBase, applyPbrMaps } from './applyPbrMaps';
 
 const SLEEVE_POLYGON_OFFSET = { factor: -1, units: -1 } as const;
-const GARMENT_SHADER_VERSION = 'garment-pbr-print-v75-gizmo-icon-size';
+const GARMENT_SHADER_VERSION = 'garment-pbr-print-v76-gizmo-rotation';
 
 const isSleeveMesh = (meshName: string) => {
   const name = meshName.toLowerCase();
@@ -74,6 +74,7 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
     material.userData.uGradientOpacityUniform = shader.uniforms.uGradientOpacity;
     shader.uniforms.uDefaultLogos = { value: printState?.defaultLogos ?? emptyPrint };
     shader.uniforms.uPrintAtlasSize = { value: new Vector2(PRINT_ATLAS_WIDTH, PRINT_ATLAS_HEIGHT) };
+    shader.uniforms.uGizmoRotation = { value: 0 };
     shader.uniforms.uNameMask = { value: emptyPrint };
     shader.uniforms.uNameStampSize = { value: new Vector2(1, 1) };
     shader.uniforms.uNameAnchorUv = { value: Array.from({ length: NAME_SLOT_COUNT }, () => new Vector2()) };
@@ -155,6 +156,7 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
 
     material.userData.uDefaultLogosUniform = shader.uniforms.uDefaultLogos;
     material.userData.uPrintAtlasSizeUniform = shader.uniforms.uPrintAtlasSize;
+    material.userData.uGizmoRotationUniform = shader.uniforms.uGizmoRotation;
     material.userData.uNameMaskUniform = shader.uniforms.uNameMask;
     material.userData.uNameStampSizeUniform = shader.uniforms.uNameStampSize;
     material.userData.uNameAnchorUvUniform = shader.uniforms.uNameAnchorUv;

@@ -31,6 +31,7 @@ import {
   applyGarmentGizmoFrame,
   applyGarmentGizmoHover,
   applyGarmentGizmoIcons,
+  applyGarmentGizmoRotation,
   applyGarmentNameMasks,
   applyGarmentNameStyle,
   applyGarmentNumberGizmoButtonsReveal,
@@ -52,6 +53,7 @@ import {
   repairPrintInstancePlacement,
   resolveNameStampSize,
   resolvePrintAtlasSize,
+  resolveProductGizmoRotation,
 } from '@utils';
 
 const NAME_STEP = 4;
@@ -360,13 +362,15 @@ const useGarmentNameTextures = () => {
     const nameGizmoEnabled = activeStep === NAME_STEP;
     const numberGizmoEnabled = activeStep === NUMBER_STEP;
     const testoGizmoEnabled = activeStep === TESTO_STEP;
+    const gizmoRotation = resolveProductGizmoRotation(product);
 
     for (const part of product.parts) {
-      const nameFrame = buildGizmoFrameUniforms(nameInstancesForRender, part.id, nameGizmoEnabled);
-      const numberFrame = buildGizmoFrameUniforms(numberInstancesForRender, part.id, numberGizmoEnabled);
-      const testoFrame = buildGizmoFrameUniforms(testoInstancesForRender, part.id, testoGizmoEnabled);
+      const nameFrame = buildGizmoFrameUniforms(nameInstancesForRender, part.id, nameGizmoEnabled, gizmoRotation);
+      const numberFrame = buildGizmoFrameUniforms(numberInstancesForRender, part.id, numberGizmoEnabled, gizmoRotation);
+      const testoFrame = buildGizmoFrameUniforms(testoInstancesForRender, part.id, testoGizmoEnabled, gizmoRotation);
 
       for (const material of getMaterials(part.id)) {
+        applyGarmentGizmoRotation(material, gizmoRotation);
         applyGarmentGizmoFrame(material, nameFrame);
         applyGarmentNumberGizmoFrame(material, numberFrame);
         applyGarmentTestoGizmoFrame(material, testoFrame);
@@ -375,7 +379,7 @@ const useGarmentNameTextures = () => {
     }
 
     invalidate();
-  }, [activeStep, getMaterials, gizmoIcons, nameInstancesForRender, numberInstancesForRender, testoInstancesForRender, invalidate, product.parts]);
+  }, [activeStep, getMaterials, gizmoIcons, nameInstancesForRender, numberInstancesForRender, product, testoInstancesForRender, invalidate]);
 
   useEffect(() => {
     if (activeStep !== NAME_STEP) return;

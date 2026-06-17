@@ -1,11 +1,20 @@
 import type { buildLogoGizmoElementsInputType, printGizmoElementType } from '@types';
 
-import { LOGO_SCALE_MAX, LOGO_SCALE_MIN, LOGO_SLOT_COUNT } from '@constants';
-import { resolveLogoDisplayScale, resolveLogoGizmoHalf, resolveLogoReferenceDrawSize, resolvePartPrintRotation, resolvePrintAtlasSize } from '@utils';
+import { LOGO_SCALE_MAX, LOGO_SCALE_MIN, LOGO_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@constants';
+import {
+  resolveGizmoElementRotationDeg,
+  resolveLogoDisplayScale,
+  resolveLogoGizmoHalf,
+  resolveLogoReferenceDrawSize,
+  resolvePartPrintRotation,
+  resolvePrintAtlasSize,
+  resolveProductGizmoRotation,
+} from '@utils';
 
 const buildLogoGizmoElements = ({ product, instances }: buildLogoGizmoElementsInputType): printGizmoElementType[] => {
   const partsById = Object.fromEntries(product.parts.map((part) => [part.id, part]));
   const atlasSize = resolvePrintAtlasSize(product);
+  const gizmoRotation = resolveProductGizmoRotation(product);
 
   return instances.flatMap((instance) => {
     if (!instance.showGizmo || !instance.src.trim()) return [];
@@ -20,7 +29,7 @@ const buildLogoGizmoElements = ({ product, instances }: buildLogoGizmoElementsIn
     const naturalHeight = instance.naturalHeight || 1;
     const { width, height } = resolveLogoReferenceDrawSize(instance, naturalWidth, naturalHeight);
 
-    const half = resolveLogoGizmoHalf(width, height, instance.rotation + (instance.uploadRotation ?? 0));
+    const half = resolveLogoGizmoHalf(width, height, instance.rotation + LOGO_UPLOAD_ROTATION_DEG - gizmoRotation);
 
     return [
       {
@@ -30,7 +39,8 @@ const buildLogoGizmoElements = ({ product, instances }: buildLogoGizmoElementsIn
         slotIndex,
         meshNames: part.meshNames,
         uv: instance.uv,
-        rotation: 0,
+        rotation: resolveGizmoElementRotationDeg(product, instance.rotation),
+        gizmoRotation,
         partRotation: resolvePartPrintRotation(part),
         scale: resolveLogoDisplayScale(instance, naturalWidth, naturalHeight, atlasSize.width, atlasSize.height),
         half,

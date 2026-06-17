@@ -37,7 +37,7 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
   previews: {},
 
   addItem: (productRef) => {
-    const { items, activeItemId, configurations, previews } = get();
+    const { items, activeItemId, configurations } = get();
     const item = createCartItem(productRef);
     const newProduct = getProduct(productRef.styleId, productRef.productIndex);
     if (!newProduct) return;

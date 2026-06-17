@@ -42,6 +42,14 @@ const resolveNumberInstancesForRender = (instances: numberInstanceType[], previe
 
 const buildPositionsKey = (product: garmentConfigType) => JSON.stringify(product.numberPositions ?? []);
 
+const syncNumberInstancesFromPositions = (instances: numberInstanceType[], positions: numberPositionType[]) =>
+  instances.map((instance) => {
+    const position = positions.find((item) => item.key === instance.positionKey);
+    if (!position) return instance;
+
+    return { ...instance, partId: position.partId, uv: position.uv, lineHeight: position.lineHeight ?? instance.lineHeight ?? 1.5 };
+  });
+
 const useGarmentNumber = create<GarmentNumberState>((set, get) => ({
   productPath: null,
   positionsKey: null,
@@ -54,13 +62,7 @@ const useGarmentNumber = create<GarmentNumberState>((set, get) => ({
     const positions = mapProductNumberPositions(product);
     const state = get();
 
-    const syncInstancesFromPositions = (instances: numberInstanceType[]) =>
-      instances.map((instance) => {
-        const position = positions.find((item) => item.key === instance.positionKey);
-        if (!position) return instance;
-
-        return { ...instance, partId: position.partId, uv: position.uv, lineHeight: position.lineHeight ?? instance.lineHeight ?? 1.5 };
-      });
+    const syncInstancesFromPositions = (instances: numberInstanceType[]) => syncNumberInstancesFromPositions(instances, positions);
 
     if (state.productPath === product.path && state.positionsKey === positionsKey) {
       set({ positions, instances: syncInstancesFromPositions(state.instances) });
@@ -84,7 +86,7 @@ const useGarmentNumber = create<GarmentNumberState>((set, get) => ({
       productPath: product.path,
       positionsKey,
       positions,
-      instances: snapshot.instances,
+      instances: syncNumberInstancesFromPositions(snapshot.instances, positions),
       preview: null,
       selectedInstanceId: snapshot.selectedInstanceId ?? null,
     });

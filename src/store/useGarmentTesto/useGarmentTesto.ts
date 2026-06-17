@@ -36,6 +36,20 @@ const resolveTestoInstancesForRender = (instances: testoInstanceType[], preview:
 
 const buildPositionsKey = (product: garmentConfigType) => JSON.stringify(product.testoPositions ?? []);
 
+const syncTestoInstancesFromPositions = (instances: testoInstanceType[], positions: testoPositionType[]) =>
+  instances.map((instance) => {
+    const position = positions.find((item) => item.key === instance.positionKey);
+    if (!position) return instance;
+
+    return {
+      ...instance,
+      partId: position.partId,
+      uv: position.uv,
+      lineHeight: position.lineHeight ?? instance.lineHeight ?? 1.5,
+      letterSpacing: position.letterSpacing ?? instance.letterSpacing ?? 0,
+    };
+  });
+
 const useGarmentTesto = create<GarmentTestoState>((set, get) => ({
   productPath: null,
   positionsKey: null,
@@ -67,7 +81,7 @@ const useGarmentTesto = create<GarmentTestoState>((set, get) => ({
       productPath: product.path,
       positionsKey,
       positions: mapProductTestoPositions(product),
-      instances: snapshot.instances,
+      instances: syncTestoInstancesFromPositions(snapshot.instances, mapProductTestoPositions(product)),
       preview: null,
       selectedInstanceId: snapshot.selectedInstanceId,
     });

@@ -11,6 +11,7 @@ interface printGizmoElementType {
   meshNames: string[];
   uv: uvPointType;
   rotation: number;
+  gizmoRotation: number;
   partRotation: number;
   scale: number;
   half: { x: number; y: number };

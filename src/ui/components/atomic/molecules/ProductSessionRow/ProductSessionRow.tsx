@@ -125,7 +125,7 @@ const ProductSessionRow = ({ name, previewSrc, active = false, onSelect, onRemov
       onClick={onSelect}
       className={cn('flex h-full min-w-0 flex-1 items-center gap-3 px-5 py-3 cursor-pointer', active && 'cursor-default')}
     >
-      <div className="relative h-[40px] w-[40px] shrink-0">
+      <div className="relative h-[60px] w-[40px] shrink-0">
         {!isPreviewLoaded && <ProductSessionPreviewSkeleton />}
         <AtomImage
           src={previewSrc}

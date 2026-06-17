@@ -19,7 +19,7 @@ import { hitTestGizmoButton, hitTestGizmoFrame } from '../hitTestGizmoButton/hit
 import { toPrintLocalPx } from '../printLocalSpace/printLocalSpace';
 
 const toLocalPx = (uv: { x: number; y: number }, element: printGizmoElementType, atlasSize: { width: number; height: number }) =>
-  toPrintLocalPx(uv, element.uv, atlasSize, element.partRotation, element.rotation);
+  toPrintLocalPx(uv, element.uv, atlasSize, element.partRotation, element.gizmoRotation);
 
 const buildPrintablePartMeshes = (parts: garmentPartConfigType[]): printablePartMeshesType[] =>
   parts.map((part) => ({

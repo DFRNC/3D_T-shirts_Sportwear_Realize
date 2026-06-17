@@ -13,7 +13,9 @@ const resolveTextGizmoMeasureOptions = (instance: garmentTextRenderInstanceType)
   lineHeight: 'lineHeight' in instance ? instance.lineHeight : undefined,
 });
 
-const resolveTextGizmoHalf = (half: { x: number; y: number }, instance: garmentTextRenderInstanceType) =>
-  resolveRotatedGizmoHalf(half, resolveTextContentRotationDeg(instance));
+const resolveGizmoContentRotationDeg = (contentRotationDeg: number, gizmoRotationDeg: number) => contentRotationDeg - gizmoRotationDeg;
 
-export { resolveTextContentRotationDeg, resolveTextGizmoHalf, resolveTextGizmoMeasureOptions };
+const resolveTextGizmoHalf = (half: { x: number; y: number }, instance: garmentTextRenderInstanceType, gizmoRotationDeg = 0) =>
+  resolveRotatedGizmoHalf(half, resolveGizmoContentRotationDeg(resolveTextContentRotationDeg(instance), gizmoRotationDeg));
+
+export { resolveGizmoContentRotationDeg, resolveTextContentRotationDeg, resolveTextGizmoHalf, resolveTextGizmoMeasureOptions };

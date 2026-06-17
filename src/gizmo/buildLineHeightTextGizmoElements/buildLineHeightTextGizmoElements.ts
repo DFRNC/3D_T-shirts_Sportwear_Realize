@@ -1,6 +1,13 @@
 import type { garmentConfigType, numberInstanceType, printGizmoElementKindType, printGizmoElementType, testoInstanceType } from '@types';
 import { NAME_REFERENCE_FONT_SIZE, NAME_SLOT_COUNT } from '@constants';
-import { measureNameGizmoHalf, resolvePartPrintRotation, resolveTextGizmoHalf, resolveTextGizmoMeasureOptions } from '@utils';
+import {
+  measureNameGizmoHalf,
+  resolveGizmoElementRotationDeg,
+  resolvePartPrintRotation,
+  resolveProductGizmoRotation,
+  resolveTextGizmoHalf,
+  resolveTextGizmoMeasureOptions,
+} from '@utils';
 
 const measureCanvas = typeof document !== 'undefined' ? document.createElement('canvas') : null;
 const measureCtx = measureCanvas?.getContext('2d') ?? null;
@@ -21,6 +28,7 @@ const buildLineHeightTextGizmoElements = ({
   fontSizeMax,
 }: BuildLineHeightTextGizmoElementsInput): printGizmoElementType[] => {
   const partsById = Object.fromEntries(product.parts.map((part) => [part.id, part]));
+  const gizmoRotation = resolveProductGizmoRotation(product);
 
   return instances.flatMap((instance) => {
     if (!instance.showGizmo || !instance.text.trim()) return [];
@@ -34,6 +42,8 @@ const buildLineHeightTextGizmoElements = ({
     const rawHalf = measureCtx ? measureNameGizmoHalf(instance.text, instance.font, measureCtx, resolveTextGizmoMeasureOptions(instance)) : null;
     if (!rawHalf) return [];
 
+    const half = resolveTextGizmoHalf(rawHalf, instance, gizmoRotation);
+
     return [
       {
         kind,
@@ -42,9 +52,10 @@ const buildLineHeightTextGizmoElements = ({
         slotIndex,
         meshNames: part.meshNames,
         uv: instance.uv,
-        rotation: 0,
+        rotation: resolveGizmoElementRotationDeg(product, instance.rotation),
+        gizmoRotation,
         partRotation: resolvePartPrintRotation(part),
-        half: resolveTextGizmoHalf(rawHalf, instance),
+        half,
         scale: instance.fontSize / NAME_REFERENCE_FONT_SIZE,
         fontSize: instance.fontSize,
         fontSizeMin,

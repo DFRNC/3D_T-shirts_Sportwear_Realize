@@ -51,13 +51,19 @@ export {
   applyGarmentLogoStyle,
   hydrateGarmentLogoUniforms,
 } from './garmentPrint/applyGarmentLogos';
+export { buildGizmoFrameUniforms } from './garmentPrint/buildGizmoFrameUniforms';
 export { buildLogoGizmoFrameUniforms } from './garmentPrint/buildLogoGizmoFrameUniforms';
 export { buildLogoStyleUniforms } from './garmentPrint/buildLogoStyleUniforms';
-export { buildGizmoFrameUniforms } from './garmentPrint/buildGizmoFrameUniforms';
+export { applyGarmentGizmoRotation } from './garmentPrint/applyGarmentGizmoRotation';
 export { canvasToPngBlobUrl } from './logoFile/canvasToBlobUrl';
 export { drawNameMaskGeometry } from './drawNameOnAtlas/drawNameMaskGeometry';
 export { drawNameStrokeMaskGeometry } from './drawNameOnAtlas/drawNameStrokeMaskGeometry';
-export { resolveTextContentRotationDeg, resolveTextGizmoHalf, resolveTextGizmoMeasureOptions } from './garmentPrint/resolveTextGizmoHalf';
+export {
+  resolveGizmoContentRotationDeg,
+  resolveTextContentRotationDeg,
+  resolveTextGizmoHalf,
+  resolveTextGizmoMeasureOptions,
+} from './garmentPrint/resolveTextGizmoHalf';
 export { resolveRotatedGizmoHalf } from './composeLogoAtlas/composeLogoPrintAtlas';
 export { applyGarmentPatternTints, applyGarmentPrint, emptyMaskPair } from './garmentPrint/applyGarmentPrint';
 export { getEmptyPrintTexture } from './garmentPrint/emptyPrintTexture';
@@ -74,10 +80,12 @@ export {
   isColorOnlyGarmentPart,
   isUvInsidePartBounds,
   repairPrintInstancePlacement,
+  resolveGizmoElementRotationDeg,
   resolvePartPrintRotation,
   resolvePartTextureSize,
   resolvePartUvBounds,
   resolvePrintAtlasSize,
+  resolveProductGizmoRotation,
 } from './resolveProductRenderConfig/resolveProductRenderConfig';
 export { resolveDesignThumbSrc } from './resolveDesignThumbSrc/resolveDesignThumbSrc';
 export { resolveProductFlipCardSrc } from './resolveProductFlipCardSrc/resolveProductFlipCardSrc';
