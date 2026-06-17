@@ -29,16 +29,13 @@ const useAsyncGarmentPbrMaps = (paths: pbrTexturePathsType): pbrMapsType | null 
     let cancelled = false;
 
     const load = async () => {
-      const bakeNormal = await loadPbrTexture(paths.bakeNormal);
-      if (cancelled) return;
+      const [bakeNormal, bakeAoRoughness, fabricNormal, fabricRoughness] = await Promise.all([
+        loadPbrTexture(paths.bakeNormal),
+        loadPbrTexture(paths.bakeAoRoughness),
+        loadPbrTexture(paths.fabricNormal),
+        loadPbrTexture(paths.fabricRoughness),
+      ]);
 
-      const bakeAoRoughness = await loadPbrTexture(paths.bakeAoRoughness);
-      if (cancelled) return;
-
-      const fabricNormal = await loadPbrTexture(paths.fabricNormal);
-      if (cancelled) return;
-
-      const fabricRoughness = await loadPbrTexture(paths.fabricRoughness);
       if (cancelled) return;
 
       setMaps({ bakeNormal, bakeAoRoughness, fabricNormal, fabricRoughness });

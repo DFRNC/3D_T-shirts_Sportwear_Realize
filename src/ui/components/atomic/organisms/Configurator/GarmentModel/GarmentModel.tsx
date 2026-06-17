@@ -1,11 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
-
-import { useGLTF } from '@react-three/drei';
+import { useLayoutEffect } from 'react';
 
 import { GarmentMaterialRegistryProvider } from '@providers';
-import { resolveModelUrl, resolvePbrTexturePaths } from '@utils';
+import { preloadGarmentProductAssets, resolveModelUrl, resolvePbrTexturePaths } from '@utils';
 import { useConfiguratorProduct } from '@store';
 
 import { GarmentMeshes } from '../GarmentMeshes';
@@ -16,9 +14,9 @@ const GarmentModel = () => {
   const modelUrl = resolveModelUrl(product);
   const pbrPaths = resolvePbrTexturePaths(product);
 
-  useEffect(() => {
-    useGLTF.preload(modelUrl);
-  }, [modelUrl]);
+  useLayoutEffect(() => {
+    preloadGarmentProductAssets(product);
+  }, [modelUrl, product]);
 
   const scene = <GarmentMeshes key={modelUrl} />;
 

@@ -87,6 +87,7 @@ const useGarmentTextures = () => {
   const cancelShaderUpgradeRef = useRef<(() => void) | null>(null);
   const logosTextureFailedRef = useRef(false);
   const maskTexturesFailedKeyRef = useRef<string | null>(null);
+  const lastPendingReapplyRef = useRef(0);
 
   const syncAppearanceCache = useCallback((targetPath: string) => {
     syncProductAppearanceTextures(targetPath, {
@@ -345,6 +346,11 @@ const useGarmentTextures = () => {
 
   useFrame(() => {
     if (!pendingFrameReapplyRef.current) return;
+
+    const now = performance.now();
+    if (now - lastPendingReapplyRef.current < 48) return;
+    lastPendingReapplyRef.current = now;
+
     reapplyAppearance();
   });
 

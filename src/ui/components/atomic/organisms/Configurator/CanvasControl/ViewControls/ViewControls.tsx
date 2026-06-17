@@ -53,7 +53,8 @@ const ViewControls = () => {
     let stableFrames = 0;
     let lastMeshCount = -1;
     let zoomedOut = false;
-    let attemptsLeft = 1200;
+    let attemptsLeft = 90;
+    let frameTick = 0;
 
     const zoomOutOnProductSwitch = () => {
       if (zoomedOut) return;
@@ -70,7 +71,10 @@ const ViewControls = () => {
     const centerOnGarment = () => {
       if (cancelled) return;
 
-      scene.updateMatrixWorld(true);
+      frameTick += 1;
+      if (frameTick % 2 === 0) {
+        scene.updateMatrixWorld(true);
+      }
 
       let meshCount = 0;
       scene.traverse((o) => {

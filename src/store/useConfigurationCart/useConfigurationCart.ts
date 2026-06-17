@@ -1,7 +1,7 @@
 'use client';
 
 import type { cartItemConfigurationType, cartItemType, catalogProductRefType } from '@types';
-import { getProduct } from '@utils';
+import { getProduct, preloadGarmentProduct } from '@utils';
 
 import { create } from 'zustand';
 
@@ -41,6 +41,8 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     const item = createCartItem(productRef);
     const newProduct = getProduct(productRef.styleId, productRef.productIndex);
     if (!newProduct) return;
+
+    preloadGarmentProduct(productRef.styleId, productRef.productIndex);
 
     persistCartItemSnapshot(get, activeItemId);
 

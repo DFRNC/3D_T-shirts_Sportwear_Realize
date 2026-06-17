@@ -1,5 +1,5 @@
 import type { cartItemConfigurationType, styleIdType } from '@types';
-import { getProduct } from '@utils';
+import { getProduct, preloadGarmentProduct } from '@utils';
 
 import { useConfigurationControl } from '../useConfigurationControl';
 import { useConfiguratorProduct } from '../useConfiguratorProduct';
@@ -27,6 +27,7 @@ const activateCartItem = (get: () => ActivateCartItemGetState, itemId: string, o
   const product = getProduct(activeItem.styleId, activeItem.productIndex);
   if (!product) return;
 
+  preloadGarmentProduct(activeItem.styleId, activeItem.productIndex);
   useConfiguratorProduct.getState().setProduct(activeItem.styleId, activeItem.productIndex);
   useConfigurationControl.getState().setNumberProduct(activeIndex + 1);
 

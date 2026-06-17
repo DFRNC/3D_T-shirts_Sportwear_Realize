@@ -50,7 +50,7 @@ const ConfiguratorCanvasLoader = () => {
       initial={false}
       animate={{ opacity: isVisible ? 1 : 0 }}
       transition={isVisible ? { duration: 0 } : { duration: 0.45, ease: 'easeInOut' }}
-      style={{ pointerEvents: isVisible ? 'auto' : 'none' }}
+      style={{ pointerEvents: 'none' }}
       aria-busy={isVisible}
       aria-hidden={!isVisible}
     >

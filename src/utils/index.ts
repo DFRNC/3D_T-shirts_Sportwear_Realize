@@ -107,6 +107,8 @@ export { CHECKOUT_SUMMARY_ICON_MAP } from './checkoutSummaryIcons';
 export { priceFormat } from './priceFormat';
 export { resolveModelUrl } from './resolveModelUrl';
 export { resolvePbrTexturePaths } from './resolvePbrTexturePaths';
+export { preloadConfiguratorScene } from './preloadConfiguratorScene';
+export { preloadGarmentProduct, preloadGarmentProductAssets } from './preloadGarmentProduct';
 export { isAcceptedLogoFile, LogoFileError, logoFileToDisplayUrl, preloadLogoDisplayUrl, warmupGhostscriptWorker, yieldToMain } from './logoFile';
 export { withListPunctuation } from './modalInfo';
 export {
