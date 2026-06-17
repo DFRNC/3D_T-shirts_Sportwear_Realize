@@ -1,1 +1,1 @@
-export { garmentPrintMapFragment } from './garmentPrintShaders';
+export { garmentPrintMapFragment, garmentPrintLightsFragment } from './garmentPrintShaders';

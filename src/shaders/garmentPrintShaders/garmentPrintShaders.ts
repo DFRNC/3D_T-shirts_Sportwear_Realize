@@ -31,11 +31,18 @@ ${garmentTestoMapFragment}
 
 ${garmentNumberMapFragment}
 
-  diffuseColor.rgb = printColor.rgb * printColor.a + diffuseColor.rgb * ( 1.0 - printColor.a );
-
   vec4 defaultDesign = texture2D( uDefaultLogos, vPrintUv );
-  diffuseColor.rgb = defaultDesign.rgb * defaultDesign.a + diffuseColor.rgb * ( 1.0 - defaultDesign.a );
+  garmentPrintColor = printColor;
+  garmentPrintColor.rgb = defaultDesign.rgb * defaultDesign.a + garmentPrintColor.rgb * ( 1.0 - defaultDesign.a );
+  garmentPrintColor.a = defaultDesign.a + garmentPrintColor.a * ( 1.0 - defaultDesign.a );
 #endif
 `;
 
-export { garmentPrintMapFragment };
+const garmentPrintLightsFragment = /* glsl */ `
+#ifdef USE_PRINT
+  gl_FragColor.rgb = garmentPrintColor.rgb * garmentPrintColor.a + gl_FragColor.rgb * ( 1.0 - garmentPrintColor.a );
+  gl_FragColor.a = garmentPrintColor.a + gl_FragColor.a * ( 1.0 - garmentPrintColor.a );
+#endif
+`;
+
+export { garmentPrintLightsFragment, garmentPrintMapFragment };

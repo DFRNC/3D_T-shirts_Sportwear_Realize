@@ -1,4 +1,16 @@
-import { DataTexture, FrontSide, MeshStandardMaterial, NoColorSpace, RepeatWrapping, RGBAFormat, TangentSpaceNormalMap, type Texture, Vector2 } from 'three';
+import {
+  DataTexture,
+  FrontSide,
+  LinearFilter,
+  LinearMipmapLinearFilter,
+  MeshStandardMaterial,
+  NoColorSpace,
+  RepeatWrapping,
+  RGBAFormat,
+  TangentSpaceNormalMap,
+  type Texture,
+  Vector2,
+} from 'three';
 
 import type { pbrMapsType } from '@types';
 
@@ -9,6 +21,10 @@ const cloneMap = (source: Texture, repeat = false) => {
   tex.channel = 1;
   tex.flipY = false;
   tex.colorSpace = NoColorSpace;
+  tex.generateMipmaps = true;
+  tex.minFilter = LinearMipmapLinearFilter;
+  tex.magFilter = LinearFilter;
+  tex.anisotropy = 16;
   if (repeat) {
     tex.wrapS = RepeatWrapping;
     tex.wrapT = RepeatWrapping;

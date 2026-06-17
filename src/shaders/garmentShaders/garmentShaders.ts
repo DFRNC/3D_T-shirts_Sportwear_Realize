@@ -127,6 +127,7 @@ uniform vec3 uPatternColor1;
 uniform float uPatternOpacity;
 
 vec4 garmentGizmoUiColor;
+vec4 garmentPrintColor;
 
 vec4 garmentCompositeUiLayer( vec4 base, vec4 layer ) {
   base.rgb = layer.rgb * layer.a + base.rgb * ( 1.0 - layer.a );
@@ -193,6 +194,10 @@ vec2 garmentTextMaskStrokeUv( vec2 stampUv ) {
   return vec2( stampUv.x, stampUv.y * 0.5 + 0.5 );
 }
 
+float garmentNameInsideStamp( vec2 stampUv ) {
+  return step( 0.0, stampUv.x ) * step( stampUv.x, 1.0 ) * step( 0.0, stampUv.y ) * step( stampUv.y, 1.0 );
+}
+
 float garmentNameFillChannel( sampler2D tex, vec2 uv, float channel ) {
   vec4 masks = texture2D( tex, uv );
   if ( channel < 0.5 ) return masks.r;
@@ -201,16 +206,17 @@ float garmentNameFillChannel( sampler2D tex, vec2 uv, float channel ) {
   return masks.a;
 }
 
-float garmentNameInsideStamp( vec2 stampUv ) {
-  return step( 0.0, stampUv.x ) * step( stampUv.x, 1.0 ) * step( 0.0, stampUv.y ) * step( stampUv.y, 1.0 );
+float garmentNameMaskAlphaAA( float alpha ) {
+  float fw = max( fwidth( alpha ), 0.0008 );
+  return smoothstep( 0.5 - fw, 0.5 + fw, alpha );
 }
 
 float garmentNameSampleFillChannel( sampler2D tex, vec2 stampUv, float channel ) {
-  return garmentNameFillChannel( tex, garmentTextMaskFillUv( stampUv ), channel ) * garmentNameInsideStamp( stampUv );
+  return garmentNameMaskAlphaAA( garmentNameFillChannel( tex, garmentTextMaskFillUv( stampUv ), channel ) ) * garmentNameInsideStamp( stampUv );
 }
 
 float garmentNameSampleStrokeChannel( sampler2D tex, vec2 stampUv, float channel ) {
-  return garmentNameFillChannel( tex, garmentTextMaskStrokeUv( stampUv ), channel ) * garmentNameInsideStamp( stampUv );
+  return garmentNameMaskAlphaAA( garmentNameFillChannel( tex, garmentTextMaskStrokeUv( stampUv ), channel ) ) * garmentNameInsideStamp( stampUv );
 }
 
 float garmentNameInsidePart( vec2 worldUv, vec4 bounds ) {

@@ -17,6 +17,7 @@ const Configurator = () => {
       frameloop="demand"
       gl={{
         antialias: true,
+        logarithmicDepthBuffer: true,
         powerPreference: 'high-performance',
         preserveDrawingBuffer: true,
         stencil: true,

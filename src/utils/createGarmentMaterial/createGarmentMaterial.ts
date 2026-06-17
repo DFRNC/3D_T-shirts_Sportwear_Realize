@@ -16,6 +16,7 @@ import {
   garmentGizmoLightsFragment,
   garmentGradientMapFragment,
   garmentNormalFragment,
+  garmentPrintLightsFragment,
   garmentPrintMapFragment,
   garmentRoughnessFragment,
   garmentVertexUv,
@@ -28,13 +29,7 @@ import { getEmptyPrintTexture } from '../garmentPrint/emptyPrintTexture';
 
 import { applyGarmentPrintBase, applyPbrMaps } from './applyPbrMaps';
 
-const SLEEVE_POLYGON_OFFSET = { factor: -1, units: -1 } as const;
-const GARMENT_SHADER_VERSION = 'garment-pbr-print-v77-normal-decode';
-
-const isSleeveMesh = (meshName: string) => {
-  const name = meshName.toLowerCase();
-  return name.includes('sleeve_left') || name.includes('sleeve_right');
-};
+const GARMENT_SHADER_VERSION = 'garment-pbr-print-v78-print-overlay';
 
 type GarmentGradientState = {
   color2: string;
@@ -308,20 +303,14 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
       .replace('#include <map_fragment>', `#include <map_fragment>\n${garmentGradientMapFragment}\n${garmentPrintMapFragment}`)
       .replace('#include <normal_fragment_maps>', garmentNormalFragment)
       .replace('#include <roughnessmap_fragment>', garmentRoughnessFragment)
-      .replace('#include <tonemapping_fragment>', `#include <tonemapping_fragment>\n${garmentGizmoLightsFragment}`);
+      .replace('#include <tonemapping_fragment>', `#include <tonemapping_fragment>\n${garmentPrintLightsFragment}\n${garmentGizmoLightsFragment}`);
   };
 
   material.customProgramCacheKey = () => GARMENT_SHADER_VERSION;
 };
 
-const createGarmentMaterial = (pbrMaps: pbrMapsType | null, source: MeshStandardMaterial | null | undefined, meshName = ''): MeshStandardMaterial => {
+const createGarmentMaterial = (pbrMaps: pbrMapsType | null, source: MeshStandardMaterial | null | undefined, _meshName = ''): MeshStandardMaterial => {
   const material = source ? source.clone() : new MeshStandardMaterial({ color: 0xffffff });
-
-  if (isSleeveMesh(meshName)) {
-    material.polygonOffset = true;
-    material.polygonOffsetFactor = SLEEVE_POLYGON_OFFSET.factor;
-    material.polygonOffsetUnits = SLEEVE_POLYGON_OFFSET.units;
-  }
 
   if (pbrMaps) {
     applyPbrMaps(material, pbrMaps);

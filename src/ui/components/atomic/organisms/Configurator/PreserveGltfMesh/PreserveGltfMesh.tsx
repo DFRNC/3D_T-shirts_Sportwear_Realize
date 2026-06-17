@@ -26,12 +26,32 @@ const tagGarmentMeshes = (object: Object3D) => {
   });
 };
 
+/** Push inside shell slightly back in depth — keeps GLTF materials, reduces seam flicker vs outer parts. */
+const biasInsideShellDepth = (object: Object3D) => {
+  object.traverse((child) => {
+    if (!('isMesh' in child) || !child.isMesh) return;
+
+    const mesh = child as Mesh;
+    const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    for (const material of materials) {
+      if (!material) continue;
+      material.polygonOffset = true;
+      material.polygonOffsetFactor = 1;
+      material.polygonOffsetUnits = 1;
+      material.needsUpdate = true;
+    }
+  });
+};
+
 const PreserveGltfMesh = memo(({ meshName, node, renderOrder = 0 }: preserveGltfMeshPropsType) => {
   const instance = useMemo(() => {
     const clone = node.clone(true);
+    if (meshName.toLowerCase().includes('inside')) {
+      biasInsideShellDepth(clone);
+    }
     tagGarmentMeshes(clone);
     return clone;
-  }, [node]);
+  }, [meshName, node]);
 
   useEffect(() => {
     return () => disposeMeshResources(instance);
