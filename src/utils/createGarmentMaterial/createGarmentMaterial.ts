@@ -29,7 +29,7 @@ import { getEmptyPrintTexture } from '../garmentPrint/emptyPrintTexture';
 
 import { applyGarmentPrintBase, applyPbrMaps } from './applyPbrMaps';
 
-const GARMENT_SHADER_VERSION = 'garment-pbr-print-v78-print-overlay';
+const GARMENT_SHADER_VERSION = 'garment-pbr-print-v79-pattern-mask-alpha';
 
 type GarmentGradientState = {
   color2: string;
@@ -144,7 +144,8 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
     shader.uniforms.uLogoGizmoButtonsActive = { value: Array.from({ length: LOGO_SLOT_COUNT }, () => 0) };
     shader.uniforms.uLogoGizmoButtonsReveal = { value: Array.from({ length: LOGO_SLOT_COUNT }, () => 0) };
     shader.uniforms.uLogoGizmoHalf = { value: Array.from({ length: LOGO_SLOT_COUNT }, () => new Vector2(0, 0)) };
-    shader.uniforms.uPatternMask = { value: printState?.patternMask ?? emptyPrint };
+    shader.uniforms.uPatternMask0 = { value: printState?.patternMasks[0] ?? emptyPrint };
+    shader.uniforms.uPatternMask1 = { value: printState?.patternMasks[1] ?? emptyPrint };
     shader.uniforms.uPatternColor0 = { value: new Color(printState?.patternColors[0] ?? '#000000') };
     shader.uniforms.uPatternColor1 = { value: new Color(printState?.patternColors[1] ?? '#000000') };
     shader.uniforms.uPatternOpacity = { value: printState?.patternOpacity ?? 1 };
@@ -223,7 +224,8 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
     material.userData.uLogoGizmoButtonsActiveUniform = shader.uniforms.uLogoGizmoButtonsActive;
     material.userData.uLogoGizmoButtonsRevealUniform = shader.uniforms.uLogoGizmoButtonsReveal;
     material.userData.uLogoGizmoHalfUniform = shader.uniforms.uLogoGizmoHalf;
-    material.userData.uPatternMaskUniform = shader.uniforms.uPatternMask;
+    material.userData.uPatternMask0Uniform = shader.uniforms.uPatternMask0;
+    material.userData.uPatternMask1Uniform = shader.uniforms.uPatternMask1;
     material.userData.uPatternColor0Uniform = shader.uniforms.uPatternColor0;
     material.userData.uPatternColor1Uniform = shader.uniforms.uPatternColor1;
     material.userData.uPatternOpacityUniform = shader.uniforms.uPatternOpacity;
@@ -309,7 +311,7 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
   material.customProgramCacheKey = () => GARMENT_SHADER_VERSION;
 };
 
-const createGarmentMaterial = (pbrMaps: pbrMapsType | null, source: MeshStandardMaterial | null | undefined, _meshName = ''): MeshStandardMaterial => {
+const createGarmentMaterial = (pbrMaps: pbrMapsType | null, source: MeshStandardMaterial | null | undefined): MeshStandardMaterial => {
   const material = source ? source.clone() : new MeshStandardMaterial({ color: 0xffffff });
 
   if (pbrMaps) {

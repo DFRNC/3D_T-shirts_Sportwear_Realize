@@ -1,27 +1,43 @@
-'use client';
+"use client";
 
-import type { cartItemConfigurationType, cartItemType, catalogProductRefType } from '@types';
-import { getProduct, preloadGarmentProduct } from '@utils';
+import type {
+  cartItemConfigurationType,
+  cartItemType,
+  catalogProductRefType,
+} from "@types";
+import { getProduct, preloadGarmentProduct } from "@utils";
 
-import { create } from 'zustand';
+import { create } from "zustand";
 
-import { activateCartItem } from './activateCartItem';
-import { captureGarmentConfiguration, cloneCartItemConfiguration, createDefaultCartItemConfiguration } from './cartItemConfiguration';
-import { inheritCartItemConfiguration } from './inheritCartItemConfiguration';
-import { createCartItem, createDefaultCartItem } from './mapCartItems';
-import { persistCartItemSnapshot } from './persistCartItemSnapshot';
+import { activateCartItem } from "./activateCartItem";
+import {
+  captureGarmentConfiguration,
+  cloneCartItemConfiguration,
+  createDefaultCartItemConfiguration,
+} from "./cartItemConfiguration";
+import { inheritCartItemConfiguration } from "./inheritCartItemConfiguration";
+import { createCartItem, createDefaultCartItem } from "./mapCartItems";
+import { persistCartItemSnapshot } from "./persistCartItemSnapshot";
 
 interface ConfigurationCartState {
   items: cartItemType[];
   activeItemId: string;
   configurations: Record<string, cartItemConfigurationType>;
   previews: Record<string, string>;
-  addItem: (product: Pick<catalogProductRefType, 'collection' | 'slug' | 'styleId' | 'productIndex'>) => void;
+  addItem: (
+    product: Pick<
+      catalogProductRefType,
+      "collection" | "slug" | "styleId" | "productIndex"
+    >,
+  ) => void;
   duplicateActiveItem: () => void;
   selectItem: (id: string) => void;
   removeItem: (id: string) => void;
   getActiveItemIndex: () => number;
-  saveConfiguration: (itemId: string, configuration: cartItemConfigurationType) => void;
+  saveConfiguration: (
+    itemId: string,
+    configuration: cartItemConfigurationType,
+  ) => void;
   getConfiguration: (itemId: string) => cartItemConfigurationType | undefined;
   savePreview: (itemId: string, previewSrc: string) => void;
   getPreview: (itemId: string) => string | undefined;
@@ -48,16 +64,24 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
 
     const nextConfigurations: Record<string, cartItemConfigurationType> = {
       ...configurations,
-      [activeItemId]: get().getConfiguration(activeItemId) ?? captureGarmentConfiguration(),
+      [activeItemId]:
+        get().getConfiguration(activeItemId) ?? captureGarmentConfiguration(),
     };
 
     const firstItem = items[0];
     const firstProduct = getProduct(firstItem.styleId, firstItem.productIndex);
     const referenceConfiguration =
-      nextConfigurations[firstItem.id] ?? (firstProduct ? createDefaultCartItemConfiguration(firstProduct) : createDefaultCartItemConfiguration(newProduct));
+      nextConfigurations[firstItem.id] ??
+      (firstProduct
+        ? createDefaultCartItemConfiguration(firstProduct)
+        : createDefaultCartItemConfiguration(newProduct));
 
     const inheritedConfiguration = firstProduct
-      ? inheritCartItemConfiguration(referenceConfiguration, firstProduct, newProduct)
+      ? inheritCartItemConfiguration(
+          referenceConfiguration,
+          firstProduct,
+          newProduct,
+        )
       : createDefaultCartItemConfiguration(newProduct);
 
     set({
@@ -80,7 +104,8 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
 
     persistCartItemSnapshot(get, activeItemId);
 
-    const currentConfiguration = get().getConfiguration(activeItemId) ?? captureGarmentConfiguration();
+    const currentConfiguration =
+      get().getConfiguration(activeItemId) ?? captureGarmentConfiguration();
     const activePreview = get().getPreview(activeItemId);
 
     const duplicatedItem = createCartItem({
@@ -98,7 +123,9 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
         [activeItemId]: currentConfiguration,
         [duplicatedItem.id]: cloneCartItemConfiguration(currentConfiguration),
       },
-      previews: activePreview ? { ...get().previews, [duplicatedItem.id]: activePreview } : get().previews,
+      previews: activePreview
+        ? { ...get().previews, [duplicatedItem.id]: activePreview }
+        : get().previews,
     });
 
     activateCartItem(get, duplicatedItem.id);
@@ -118,8 +145,12 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
 
     const nextItems = items.filter((item) => item.id !== id);
     const nextActiveId = activeItemId === id ? nextItems[0].id : activeItemId;
-    const nextConfigurations = Object.fromEntries(Object.entries(configurations).filter(([itemId]) => itemId !== id));
-    const nextPreviews = Object.fromEntries(Object.entries(previews).filter(([itemId]) => itemId !== id));
+    const nextConfigurations = Object.fromEntries(
+      Object.entries(configurations).filter(([itemId]) => itemId !== id),
+    );
+    const nextPreviews = Object.fromEntries(
+      Object.entries(previews).filter(([itemId]) => itemId !== id),
+    );
     const wasActive = activeItemId === id;
 
     set({

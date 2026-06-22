@@ -9,7 +9,7 @@ import type {
   testoInstanceType,
   uvPointType,
 } from '@types';
-import { PALETTE_COLORS } from '@constants';
+import { PALETTE_COLORS } from '../../constants/PALETTE_COLORS/PALETTE_COLORS';
 
 import { buildDefaultGradients, useGarmentColor } from '../useGarmentColor';
 import { useGarmentDesign } from '../useGarmentDesign';

@@ -1,5 +1,5 @@
-import type { Camera, Scene, WebGLRenderer } from 'three';
-import { Quaternion, Vector3 } from 'three';
+import type { Camera, ColorSpace, Scene, WebGLRenderer } from 'three';
+import { LinearFilter, PerspectiveCamera, RGBAFormat, SRGBColorSpace, Vector3, WebGLRenderTarget } from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 import { resolveGarmentCenter } from '../orbitCamera';
@@ -8,13 +8,6 @@ const THUMBNAIL_WIDTH = 160;
 const THUMBNAIL_HEIGHT = 128;
 const PREVIEW_CAMERA_OFFSET = new Vector3(0, 0.05, 0.78);
 
-interface cameraSnapshotType {
-  position: Vector3;
-  quaternion: Quaternion;
-  target: Vector3;
-  hadControls: boolean;
-}
-
 interface captureConfiguratorPreviewInput {
   gl: WebGLRenderer;
   scene: Scene;
@@ -22,43 +15,41 @@ interface captureConfiguratorPreviewInput {
   controls?: OrbitControlsImpl | null;
 }
 
-const saveCameraState = (camera: Camera, controls?: OrbitControlsImpl | null): cameraSnapshotType => ({
-  position: camera.position.clone(),
-  quaternion: camera.quaternion.clone(),
-  target: controls ? controls.target.clone() : new Vector3(),
-  hadControls: !!controls,
-});
+let previewRenderTarget: WebGLRenderTarget | null = null;
+let previewReadBuffer: Uint8Array | null = null;
 
-const restoreCameraState = (camera: Camera, controls: OrbitControlsImpl | null | undefined, snapshot: cameraSnapshotType) => {
-  camera.position.copy(snapshot.position);
-  camera.quaternion.copy(snapshot.quaternion);
-
-  if (controls && snapshot.hadControls) {
-    controls.target.copy(snapshot.target);
-    controls.update();
+const getPreviewRenderTarget = (outputColorSpace: ColorSpace) => {
+  if (!previewRenderTarget) {
+    previewRenderTarget = new WebGLRenderTarget(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, {
+      format: RGBAFormat,
+      minFilter: LinearFilter,
+      magFilter: LinearFilter,
+      depthBuffer: true,
+      stencilBuffer: false,
+    });
   }
+
+  previewRenderTarget.texture.colorSpace = outputColorSpace;
+
+  return previewRenderTarget;
 };
 
-const applyThumbnailCamera = (scene: Scene, camera: Camera, controls?: OrbitControlsImpl | null) => {
+const applyThumbnailCamera = (scene: Scene, camera: Camera) => {
   const center = new Vector3();
   if (!resolveGarmentCenter(scene, center)) return false;
 
   camera.position.copy(center).add(PREVIEW_CAMERA_OFFSET);
   camera.lookAt(center);
 
-  if (controls) {
-    controls.target.copy(center);
-    controls.update();
-  }
-
-  if ('updateProjectionMatrix' in camera && typeof camera.updateProjectionMatrix === 'function') {
+  if (camera instanceof PerspectiveCamera) {
+    camera.aspect = THUMBNAIL_WIDTH / THUMBNAIL_HEIGHT;
     camera.updateProjectionMatrix();
   }
 
   return true;
 };
 
-const canvasToThumbnailDataUrl = (source: HTMLCanvasElement, width: number, height: number) => {
+const pixelsToDataUrl = (pixels: Uint8Array, width: number, height: number) => {
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
@@ -66,44 +57,45 @@ const canvasToThumbnailDataUrl = (source: HTMLCanvasElement, width: number, heig
   const context = canvas.getContext('2d');
   if (!context) return null;
 
-  const targetAspect = width / height;
-  const sourceAspect = source.width / source.height;
+  const imageData = context.createImageData(width, height);
+  const data = imageData.data;
 
-  let cropWidth = source.width;
-  let cropHeight = source.height;
-  let sourceX = 0;
-  let sourceY = 0;
-
-  if (sourceAspect > targetAspect) {
-    cropWidth = source.height * targetAspect;
-    sourceX = (source.width - cropWidth) / 2;
-  } else {
-    cropHeight = source.width / targetAspect;
-    sourceY = (source.height - cropHeight) / 2;
+  for (let y = 0; y < height; y += 1) {
+    const srcRowStart = (height - 1 - y) * width * 4;
+    const dstRowStart = y * width * 4;
+    data.set(pixels.subarray(srcRowStart, srcRowStart + width * 4), dstRowStart);
   }
 
-  context.drawImage(source, sourceX, sourceY, cropWidth, cropHeight, 0, 0, width, height);
+  context.putImageData(imageData, 0, 0);
 
-  return canvas.toDataURL('image/webp', 0.85);
+  return canvas.toDataURL('image/webp', 0.92);
 };
 
-const captureConfiguratorPreview = ({ gl, scene, camera, controls }: captureConfiguratorPreviewInput) => {
-  const snapshot = saveCameraState(camera, controls);
-
+const captureConfiguratorPreview = ({ gl, scene, camera }: captureConfiguratorPreviewInput) => {
   scene.updateMatrixWorld(true);
 
-  if (!applyThumbnailCamera(scene, camera, controls)) {
-    restoreCameraState(camera, controls, snapshot);
-    return null;
+  const previewCamera = camera.clone();
+  if (!applyThumbnailCamera(scene, previewCamera)) return null;
+
+  const renderTarget = getPreviewRenderTarget(SRGBColorSpace);
+  const previousTarget = gl.getRenderTarget();
+  const previousAutoClear = gl.autoClear;
+  const pixelCount = THUMBNAIL_WIDTH * THUMBNAIL_HEIGHT * 4;
+
+  if (!previewReadBuffer || previewReadBuffer.length !== pixelCount) {
+    previewReadBuffer = new Uint8Array(pixelCount);
   }
 
-  gl.render(scene, camera);
-  const dataUrl = canvasToThumbnailDataUrl(gl.domElement, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
+  gl.autoClear = true;
+  gl.setRenderTarget(renderTarget);
+  gl.clear();
+  gl.render(scene, previewCamera);
+  gl.readRenderTargetPixels(renderTarget, 0, 0, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, previewReadBuffer);
 
-  restoreCameraState(camera, controls, snapshot);
-  gl.render(scene, camera);
+  gl.setRenderTarget(previousTarget);
+  gl.autoClear = previousAutoClear;
 
-  return dataUrl;
+  return pixelsToDataUrl(previewReadBuffer, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
 };
 
 export { captureConfiguratorPreview };

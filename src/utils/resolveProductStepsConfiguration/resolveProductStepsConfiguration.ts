@@ -1,4 +1,4 @@
-import { STEPS_CONFIGURATION } from '@constants';
+import { STEPS_CONFIGURATION } from '../../constants/STEPS_CONFIGURATION';
 import type { configuratorStepValueType, garmentConfigType, headerConfigItemType } from '@types';
 
 const isConfiguratorStepAvailable = (product: garmentConfigType, stepValue: string): boolean =>

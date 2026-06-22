@@ -3,7 +3,7 @@
 import { create } from 'zustand';
 
 import { useConfiguratorProduct } from '../useConfiguratorProduct';
-import { resolveAvailableConfiguratorStepNumbers } from '@utils';
+import { resolveAvailableConfiguratorStepNumbers } from '../../utils/resolveProductStepsConfiguration';
 
 interface ConfigurationControlState {
   activeStep: number;

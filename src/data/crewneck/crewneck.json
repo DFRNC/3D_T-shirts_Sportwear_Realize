@@ -2,7 +2,7 @@
   "id": "crewneck",
   "products": [
     {
-      "name": "Maglia Federer",
+      "name": "Federer Calcio",
       "type": "shirt",
       "previewImage": "designs/thumbs/crewneck_design_7.webp",
       "price": 100,
@@ -100,7 +100,7 @@
           "parts": [
             {
               "path_name": "crewneck_design_1.webp",
-              "id": 0
+              "id": 1
             }
           ]
         },

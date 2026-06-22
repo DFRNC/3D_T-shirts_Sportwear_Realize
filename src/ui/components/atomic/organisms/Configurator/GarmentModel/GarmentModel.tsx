@@ -3,7 +3,9 @@
 import { useLayoutEffect } from 'react';
 
 import { GarmentMaterialRegistryProvider } from '@providers';
-import { preloadGarmentProductAssets, resolveModelUrl, resolvePbrTexturePaths } from '@utils';
+import { preloadGarmentProductAssets } from '../../../../../../utils/preloadGarmentProduct';
+import { resolveModelUrl } from '../../../../../../utils/resolveModelUrl';
+import { resolvePbrTexturePaths } from '../../../../../../utils/resolvePbrTexturePaths';
 import { useConfiguratorProduct } from '@store';
 
 import { GarmentMeshes } from '../GarmentMeshes';

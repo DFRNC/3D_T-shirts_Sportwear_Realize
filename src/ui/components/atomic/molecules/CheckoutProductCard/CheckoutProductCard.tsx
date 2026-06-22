@@ -19,7 +19,6 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
 
   const garment = getProduct(product.styleId, product.productIndex);
   const cartItem = useConfigurationCart((state) => state.items.find((item) => item.id === product.cartItemId));
-  const configuration = useConfigurationCart((state) => state.configurations[product.cartItemId]);
   const capturedPreview = useConfigurationCart((state) => state.previews[product.cartItemId]);
   const previewSrc = cartItem ? resolveCartItemDisplayPreview(cartItem, capturedPreview) : '';
 
@@ -28,7 +27,7 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
     if (!garment?.testoDefaults) return undefined;
     return resolveTestoLimits(garment).maxLength;
   }, [garment]);
-  const printAvailability = useMemo(() => resolveCheckoutPrintAvailability(garment, configuration), [configuration, garment]);
+  const printAvailability = useMemo(() => resolveCheckoutPrintAvailability(garment), [garment]);
 
   if (!garment) return null;
 

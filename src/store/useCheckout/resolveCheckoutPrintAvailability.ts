@@ -1,7 +1,7 @@
-import type { cartItemConfigurationType, checkoutPrintAvailabilityType, garmentConfigType } from '@types';
-import { isConfiguratorStepAvailable } from '@utils';
+import type { checkoutPrintAvailabilityType, garmentConfigType } from '@types';
+import { isConfiguratorStepAvailable } from '../../utils/resolveProductStepsConfiguration';
 
-const resolveCheckoutPrintAvailability = (product?: garmentConfigType, _configuration?: cartItemConfigurationType): checkoutPrintAvailabilityType => {
+const resolveCheckoutPrintAvailability = (product?: garmentConfigType): checkoutPrintAvailabilityType => {
   if (!product) {
     return {
       hasName: true,

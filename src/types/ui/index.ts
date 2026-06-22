@@ -1,10 +1,10 @@
-export type { slidingIndicatorReturnType } from './indicatorStyleType';
-export type { headerConfigItemType } from './headerConfigItemType';
-export type { accordionAtomItemType } from './accordionItem';
-export type { childrenType } from './childrenType';
-export type { logoUploadPropsType } from './logoUploadProps';
-export type { atomSkeletonPropsType } from './atomSkeletonProps';
-export type { patternLayerColorControlPropsType } from './patternLayerColorControlProps';
+export type { slidingIndicatorReturnType } from "./indicatorStyleType";
+export type { headerConfigItemType } from "./headerConfigItemType";
+export type { accordionAtomItemType } from "./accordionItem";
+export type { childrenType } from "./childrenType";
+export type { logoUploadPropsType } from "./logoUploadProps";
+export type { atomSkeletonPropsType } from "./atomSkeletonProps";
+export type { patternLayerColorControlPropsType } from "./patternLayerColorControlProps";
 export type {
   atomImageVariantType,
   atomListVariantType,
@@ -17,8 +17,14 @@ export type {
   slidingIndicatorTrackVariantType,
   slidingIndicatorVariantType,
   textVariantType,
-} from './variants';
-export type { boxPropsType, containerPropsType, flexPropsType, gridPropsType, textPropsType } from './layoutProps';
+} from "./variants";
+export type {
+  boxPropsType,
+  containerPropsType,
+  flexPropsType,
+  gridPropsType,
+  textPropsType,
+} from "./layoutProps";
 export type {
   atomTabsContentPropsType,
   atomTabsListPropsType,
@@ -26,8 +32,8 @@ export type {
   atomTabsTriggerPropsType,
   configuratorTabItemPropsType,
   configuratorTabsListPropsType,
-} from './atomTabsProps';
-export type { atomTabsSlidingListPropsType } from './atomTabsSlidingListProps';
+} from "./atomTabsProps";
+export type { atomTabsSlidingListPropsType } from "./atomTabsSlidingListProps";
 export type {
   atomTableBodyPropsType,
   atomTableCaptionPropsType,
@@ -37,9 +43,17 @@ export type {
   atomTablePropsType,
   atomTableRowPropsType,
   atomTableSectionPropsType,
-} from './atomTableProps';
-export type { atomRichTextPropsType, atomRichTextTextPropsType } from './atomRichTextProps';
-export type { modalInfoSectionPartsPropsType, modalInfoTabConfigType, modalInfoTabContentPropsType, modalInfoTablePropsType } from './modalInfoProps';
+} from "./atomTableProps";
+export type {
+  atomRichTextPropsType,
+  atomRichTextTextPropsType,
+} from "./atomRichTextProps";
+export type {
+  modalInfoSectionPartsPropsType,
+  modalInfoTabConfigType,
+  modalInfoTabContentPropsType,
+  modalInfoTablePropsType,
+} from "./modalInfoProps";
 export type {
   atomImagePropsType,
   atomListPropsType,
@@ -48,8 +62,13 @@ export type {
   slidingIndicatorTrackPropsType,
   svgIconNameType,
   svgIconPropsType,
-} from './atomsDisplayProps';
-export type { accordionAtomPropsType, atomInputHexPropsType, colorPickerPropsType, searchInputPropsType } from './atomsControlsProps';
+} from "./atomsDisplayProps";
+export type {
+  accordionAtomPropsType,
+  atomInputHexPropsType,
+  colorPickerPropsType,
+  searchInputPropsType,
+} from "./atomsControlsProps";
 export type {
   colorControlPropsType,
   colorTabType,
@@ -66,7 +85,7 @@ export type {
   rangeControlPropsType,
   shadingControlPropsType,
   toggleControlPropsType,
-} from './configurationToolsProps';
+} from "./configurationToolsProps";
 export type {
   filePickContextType,
   namePartFormPropsType,
@@ -75,7 +94,7 @@ export type {
   partColorControlPropsType,
   configurationPositionPickerInstanceType,
   configurationPositionPickerPositionType,
-} from './configurationStepsProps';
+} from "./configurationStepsProps";
 export type {
   productCatalogOptionPropsType,
   productCatalogPopoverPropsType,
@@ -85,15 +104,15 @@ export type {
   productSessionRowPropsType,
   videoPlayerPropsType,
   videoPlayerVariantType,
-} from './moleculesProps';
+} from "./moleculesProps";
 export type {
   garmentPartMeshPropsType,
   pbrMapsLoaderPropsType,
   preserveGltfMeshPropsType,
   printGizmoInstancePropsType,
   staticGltfMeshPropsType,
-} from './organismsConfiguratorProps';
-export type { configurationStepSkeletonPropsType } from './skeletonsProps';
+} from "./organismsConfiguratorProps";
+export type { configurationStepSkeletonPropsType } from "./skeletonsProps";
 export type {
   checkoutConfigurationTableCellContextType,
   checkoutConfigurationTableColumnHandlersType,
@@ -105,4 +124,5 @@ export type {
   checkoutTableEditableCellPropsType,
   checkoutTablePlaceholderPropsType,
   checkoutTestoEditableCellPropsType,
-} from './checkoutProps';
+} from "./checkoutProps";
+export type { homePageCollectionType, homePageProductType, homePagePropsType } from "./homePageProps";

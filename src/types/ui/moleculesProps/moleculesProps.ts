@@ -40,6 +40,8 @@ interface productFlipCardPropsType {
   collection: string;
   slug: string;
   alt: string;
+  previewSrc?: string | null;
+  activePreviewSrc?: string | null;
   className?: string;
 }
 
@@ -49,6 +51,8 @@ interface productGalleryBlockPropsType {
     collection: string;
     slug: string;
     alt: string;
+    previewSrc?: string | null;
+    activePreviewSrc?: string | null;
   }>;
   className?: string;
 }

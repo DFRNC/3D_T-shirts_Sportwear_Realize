@@ -1,6 +1,6 @@
 'use client';
 
-import { useConfiguratorProduct } from '@store';
+import { useConfiguratorProduct } from '../../store/useConfiguratorProduct/useConfiguratorProduct';
 
 import { preloadGarmentProductAssets } from '../preloadGarmentProduct/preloadGarmentProduct';
 

@@ -1,8 +1,7 @@
 'use client';
 
-import Image from 'next/image';
-
 import { cva } from 'class-variance-authority';
+import type { CSSProperties, ImgHTMLAttributes } from 'react';
 
 import { cn } from '@utils';
 import type { atomImagePropsType } from '@types';
@@ -29,7 +28,6 @@ const AtomImage = ({
   className,
   width,
   height,
-  unoptimized = true,
   'data-active': dataActive,
   style,
   ...props
@@ -38,18 +36,21 @@ const AtomImage = ({
   const useFill = !hasDimensions;
   const resolvedLoading = loading ?? (priority ? 'eager' : 'lazy');
 
+  const imageStyle: CSSProperties = useFill
+    ? { ...style, position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain' }
+    : (style ?? {});
+
   const imageElement = (
-    <Image
+    <img
       src={src || ''}
       alt={alt || 'image'}
-      priority={priority}
-      sizes={useFill ? '100%' : undefined}
+      width={hasDimensions ? width : undefined}
+      height={hasDimensions ? height : undefined}
       loading={resolvedLoading}
-      {...(hasDimensions ? { width, height } : { fill: true })}
+      fetchPriority={priority ? 'high' : undefined}
       className={cn(useFill && 'object-contain', !useFill && className)}
-      style={style}
-      unoptimized={unoptimized}
-      {...props}
+      style={imageStyle}
+      {...(props as ImgHTMLAttributes<HTMLImageElement>)}
     />
   );
 

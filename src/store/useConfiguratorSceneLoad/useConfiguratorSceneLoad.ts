@@ -96,14 +96,14 @@ const useConfiguratorSceneLoad = create<ConfiguratorSceneLoadState>((set, get) =
     set(patch);
   },
   markInitialSceneLoaded: () => {
-    const { isInitialSceneLoading, loaderSession, loaderVisibleUntil } = get();
-    if (!isInitialSceneLoading) return;
+    const state = get();
+    if (!state.isInitialSceneLoading) return;
 
     scheduleLoaderHide(
       'initial',
-      loaderSession,
-      loaderVisibleUntil,
-      (state) => state.isInitialSceneLoading,
+      state.loaderSession,
+      state.loaderVisibleUntil,
+      (currentState) => currentState.isInitialSceneLoading,
       () => set({ isInitialSceneLoading: false }),
       get,
     );

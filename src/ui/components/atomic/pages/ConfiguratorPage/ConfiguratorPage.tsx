@@ -1,6 +1,6 @@
 'use client';
 
-import { ConfiguratorView } from '@organisms';
+import { ConfiguratorView } from '../../organisms/ConfiguratorView';
 import { ModalInfo, ModalTutorial } from '@molecules';
 
 const ConfiguratorPage = () => {

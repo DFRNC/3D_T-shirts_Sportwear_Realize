@@ -8,7 +8,6 @@ type patternMaskPairType = [Texture, Texture];
 interface garmentPrintStateType {
   defaultLogos: Texture;
   patternMasks: patternMaskPairType;
-  patternMask: Texture;
   patternColors: patternColorPairType;
   patternOpacity: number;
 }

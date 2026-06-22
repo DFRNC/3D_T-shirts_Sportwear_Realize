@@ -1,27 +1,25 @@
 'use client';
 
-import { anton, bebasNeue, blackOpsOne, oswald, russoOne } from '../sportFonts';
-
 const FONTS_CONFIGURATION = [
   {
     name: 'Oswald',
-    fontFamily: oswald.style.fontFamily,
+    fontFamily: '"Oswald", sans-serif',
   },
   {
     name: 'Bebas Neue',
-    fontFamily: bebasNeue.style.fontFamily,
+    fontFamily: '"Bebas Neue", sans-serif',
   },
   {
     name: 'Anton',
-    fontFamily: anton.style.fontFamily,
+    fontFamily: '"Anton", sans-serif',
   },
   {
     name: 'Russo One',
-    fontFamily: russoOne.style.fontFamily,
+    fontFamily: '"Russo One", sans-serif',
   },
   {
     name: 'Black Ops One',
-    fontFamily: blackOpsOne.style.fontFamily,
+    fontFamily: '"Black Ops One", sans-serif',
   },
 ];
 

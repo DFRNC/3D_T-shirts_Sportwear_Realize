@@ -2,7 +2,7 @@
 
 import { Center } from '@react-three/drei';
 
-import { resolveModelUrl } from '@utils';
+import { resolveModelUrl } from '../../../../../../utils/resolveModelUrl';
 import { useConfiguratorProduct } from '@store';
 
 import { GarmentModel } from '../GarmentModel';

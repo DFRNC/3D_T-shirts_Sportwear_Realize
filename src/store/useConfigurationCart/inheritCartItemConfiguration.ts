@@ -1,5 +1,5 @@
 import type { cartItemConfigurationType, garmentColorSnapshotType, garmentConfigType } from '@types';
-import { PALETTE_COLORS } from '@constants';
+import { PALETTE_COLORS } from '../../constants/PALETTE_COLORS/PALETTE_COLORS';
 import { createDefaultCartItemConfiguration, createDefaultColorSnapshot } from './cartItemConfiguration';
 
 const DEFAULT_COLOR = PALETTE_COLORS[0];

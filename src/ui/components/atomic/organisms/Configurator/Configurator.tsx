@@ -6,8 +6,12 @@ import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import * as THREE from 'three';
 
+import { suppressThreeClockDeprecation } from '@utils';
+
 import { CanvasControl } from './CanvasControl';
 import { Model } from './Model';
+
+suppressThreeClockDeprecation();
 
 const Configurator = () => {
   return (

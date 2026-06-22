@@ -95,7 +95,7 @@ const useCheckout = create<CheckoutState>((set, get) => ({
     const cartState = useConfigurationCart.getState();
     const cartItem = cartState.items.find((item) => item.id === cartItemId);
     const product = cartItem ? getProduct(cartItem.styleId, cartItem.productIndex) : undefined;
-    const printAvailability = resolveCheckoutPrintAvailability(product, cartState.getConfiguration(cartItemId));
+    const printAvailability = resolveCheckoutPrintAvailability(product);
 
     if (isTestoTextPatch) {
       if (!printAvailability.hasTesto) return;

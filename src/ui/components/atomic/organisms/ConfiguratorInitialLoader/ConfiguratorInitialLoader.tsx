@@ -1,22 +1,12 @@
 'use client';
 
-import { useLayoutEffect } from 'react';
-
 import { motion } from 'motion/react';
 
 import { MainLoader, MainLoaderBackground } from '@molecules';
 import { useConfiguratorSceneLoad } from '@store';
 
-import { preloadConfiguratorScene } from '../Configurator/preloadConfiguratorScene';
-
 const ConfiguratorInitialLoader = () => {
   const isInitialSceneLoading = useConfiguratorSceneLoad((state) => state.isInitialSceneLoading);
-  const beginInitialSceneLoad = useConfiguratorSceneLoad((state) => state.beginInitialSceneLoad);
-
-  useLayoutEffect(() => {
-    beginInitialSceneLoad();
-    preloadConfiguratorScene();
-  }, [beginInitialSceneLoad]);
 
   return (
     <motion.div

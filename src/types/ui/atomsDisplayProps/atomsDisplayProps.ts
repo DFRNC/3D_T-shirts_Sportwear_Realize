@@ -1,5 +1,4 @@
-import type { ImageProps } from 'next/image';
-import type { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps, CSSProperties, ImgHTMLAttributes, ReactNode } from 'react';
 
 import type { atomImageVariantType, atomListVariantType, childrenType, slidingIndicatorTrackVariantType, slidingIndicatorVariantType } from '@types';
 
@@ -27,7 +26,7 @@ interface svgIconPropsType {
 }
 
 type atomImagePropsType = childrenType &
-  ImageProps & {
+  ImgHTMLAttributes<HTMLImageElement> & {
     src: string;
     alt: string;
     variant?: atomImageVariantType;
@@ -36,6 +35,7 @@ type atomImagePropsType = childrenType &
     width?: number;
     height?: number;
     'data-active'?: boolean;
+    style?: CSSProperties;
   };
 
 interface atomListPropsType {

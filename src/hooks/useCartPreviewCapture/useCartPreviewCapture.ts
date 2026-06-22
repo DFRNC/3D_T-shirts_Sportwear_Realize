@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 
 import { useThree } from '@react-three/fiber';
-import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 import { captureConfiguratorPreview, registerConfiguratorPreviewCapture, unregisterConfiguratorPreviewCapture } from '@utils';
 import {
@@ -24,7 +23,7 @@ const useCartPreviewCapture = () => {
   const gl = useThree((state) => state.gl);
   const scene = useThree((state) => state.scene);
   const camera = useThree((state) => state.camera);
-  const controls = useThree((state) => state.controls as OrbitControlsImpl | undefined);
+  const invalidate = useThree((state) => state.invalidate);
   const activeItemId = useConfigurationCart((state) => state.activeItemId);
   const savePreview = useConfigurationCart((state) => state.savePreview);
   const isInitialSceneLoading = useConfiguratorSceneLoad((state) => state.isInitialSceneLoading);
@@ -36,14 +35,14 @@ const useCartPreviewCapture = () => {
       gl,
       scene,
       camera,
-      controls,
     });
-  }, [camera, controls, gl, scene]);
+  }, [camera, gl, scene]);
 
   const persistActivePreview = useCallback(() => {
     const preview = capture();
     if (preview) savePreview(activeItemId, preview);
-  }, [activeItemId, capture, savePreview]);
+    invalidate();
+  }, [activeItemId, capture, invalidate, savePreview]);
 
   useEffect(() => {
     registerConfiguratorPreviewCapture(capture);

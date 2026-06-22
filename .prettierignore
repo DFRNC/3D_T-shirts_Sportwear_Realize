@@ -1,9 +1,7 @@
-.next
-out
-build
+package.json
+.shadowenv.d
+.vscode
 node_modules
-pnpm-lock.yaml
-package-lock.json
-*.min.js
-public/models/**
-*.gltf
+prisma
+public
+.shopify

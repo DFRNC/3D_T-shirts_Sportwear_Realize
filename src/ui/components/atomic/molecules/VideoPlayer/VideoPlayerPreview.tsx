@@ -16,7 +16,7 @@ const VideoPlayerPreview = () => (
     <MainLoaderBackground />
     <Flex className="absolute flex-col inset-0 z-10 items-center justify-center w-full gap-2">
       <Flex className="items-center justify-center gap-7">
-        <AtomImage src="./svg/logo.svg" alt="Logo" variant="logo" priority />
+        <AtomImage src="/svg/logo.svg" alt="Logo" variant="logo" priority />
         <LogoYOU />
       </Flex>
       <Text className="text-center text-[20px] font-medium italic text-[#2B2B2B]">Tutorial</Text>

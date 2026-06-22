@@ -31,6 +31,8 @@ const AtomInputHex = ({ value, onChange }: atomInputHexPropsType) => {
       variant="color_picker"
       size="color_picker"
       type="text"
+      aria-label="Codice colore esadecimale"
+      autoComplete="off"
       value={displayValue}
       onChange={handleChange}
       onBlur={handleBlur}

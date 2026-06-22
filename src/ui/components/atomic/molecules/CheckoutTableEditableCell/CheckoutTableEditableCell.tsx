@@ -76,7 +76,10 @@ const CheckoutTableEditableCell = ({
 
   return (
     <AtomInput
+      // Inline table edit: focus the cell input when entering edit mode.
+      // eslint-disable-next-line jsx-a11y/no-autofocus
       autoFocus
+      aria-label={placeholder}
       variant="checkout"
       className={cn('w-full', isSpreadLayout ? 'text-left placeholder:text-left' : 'text-center placeholder:text-center')}
       value={value}

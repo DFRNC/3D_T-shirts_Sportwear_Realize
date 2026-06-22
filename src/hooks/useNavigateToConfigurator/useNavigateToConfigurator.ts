@@ -1,14 +1,15 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 
+import { useAppNavigate } from '../useAppNavigate';
+
 const useNavigateToConfigurator = () => {
-  const router = useRouter();
+  const { navigateToAppPath } = useAppNavigate();
 
   const navigateToConfigurator = useCallback(() => {
-    router.push('/configurator');
-  }, [router]);
+    navigateToAppPath('/app/configurator');
+  }, [navigateToAppPath]);
 
   return { navigateToConfigurator };
 };

@@ -1,3 +1,4 @@
+export { getProduct, getStyle, resolveProductPreviewSrc, STYLES } from './garmentCatalog';
 export { cn } from './cn';
 export { composePartAlbedo } from './composePartAlbedo/composePartAlbedo';
 export {
@@ -71,7 +72,7 @@ export { packPatternMaskChannels } from './garmentPrint/packPatternMaskChannels'
 export { packStackedTextMaskCanvas, packStackedTextMaskTexture } from './garmentPrint/packStackedTextMask';
 export { canvasToMaskTexture } from './garmentPrint/canvasToMaskTexture';
 export { canvasToTexture } from './garmentPrint/canvasToTexture';
-export { clearImageTextureCache, imageToTexture } from './garmentPrint/imageToTexture';
+export { clearImageTextureCache, configureImageTextureSampling, configureMaskTextureSampling, imageToMaskTexture, imageToTexture } from './garmentPrint/imageToTexture';
 export { resolveRasterDesignSrc } from './garmentPrint/resolveRasterDesignSrc';
 export { loadCachedImage } from './loadCachedImage/loadCachedImage';
 export { loadImage } from './loadImage/loadImage';
@@ -87,7 +88,6 @@ export {
   resolvePrintAtlasSize,
   resolveProductGizmoRotation,
 } from './resolveProductRenderConfig/resolveProductRenderConfig';
-export { isConfiguratorStepAvailable, resolveAvailableConfiguratorStepNumbers, resolveProductStepsConfiguration } from './resolveProductStepsConfiguration';
 export { resolveDesignThumbSrc } from './resolveDesignThumbSrc/resolveDesignThumbSrc';
 export { resolveProductFlipCardSrc } from './resolveProductFlipCardSrc/resolveProductFlipCardSrc';
 export type { productFlipCardSideType } from './resolveProductFlipCardSrc/resolveProductFlipCardSrc';
@@ -101,13 +101,13 @@ export {
   resolveCartItemPreviewSrc,
   toCatalogProductRef,
 } from './productCatalog';
-export { getProduct, getStyle, resolveProductPreviewSrc, STYLES } from './garmentCatalog';
 export { getCheckoutDeliveryTimeline } from './checkoutDeliveryDates';
 export { CHECKOUT_SUMMARY_ICON_MAP } from './checkoutSummaryIcons';
 export { priceFormat } from './priceFormat';
 export { resolveModelUrl } from './resolveModelUrl';
 export { resolvePbrTexturePaths } from './resolvePbrTexturePaths';
 export { preloadConfiguratorScene } from './preloadConfiguratorScene';
+export { suppressThreeClockDeprecation } from './suppressThreeClockDeprecation';
 export { preloadGarmentProduct, preloadGarmentProductAssets } from './preloadGarmentProduct';
 export { isAcceptedLogoFile, LogoFileError, logoFileToDisplayUrl, preloadLogoDisplayUrl, warmupGhostscriptWorker, yieldToMain } from './logoFile';
 export { withListPunctuation } from './modalInfo';

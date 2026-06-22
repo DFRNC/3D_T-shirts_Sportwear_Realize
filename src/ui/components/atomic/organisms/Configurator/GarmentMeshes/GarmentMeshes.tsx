@@ -2,7 +2,7 @@
 
 import { useGLTF } from '@react-three/drei';
 
-import { resolveModelUrl } from '@utils';
+import { resolveModelUrl } from '../../../../../../utils/resolveModelUrl';
 import { useConfiguratorProduct } from '@store';
 
 import { GarmentLogoTextureLayer } from '../GarmentLogoTextureLayer';

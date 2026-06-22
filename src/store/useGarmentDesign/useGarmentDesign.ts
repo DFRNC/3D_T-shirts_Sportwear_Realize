@@ -4,7 +4,7 @@ import type { designPatternItemType, garmentConfigType, garmentDesignSnapshotTyp
 
 import { create } from 'zustand';
 
-import { PALETTE_COLORS } from '@constants';
+import { PALETTE_COLORS } from '../../constants/PALETTE_COLORS/PALETTE_COLORS';
 
 import { resolveDesignThumbSrc } from '@utils';
 

@@ -16,7 +16,7 @@ const ModalInfo = () => {
 
   return (
     <AtomDialog open={isOpen} onOpenChange={setIsOpen}>
-      <AtomDialogContent aria-describedby={undefined}>
+      <AtomDialogContent aria-describedby={undefined} aria-label="Informazioni">
         <AtomDialogTitle visuallyHidden>Info Dialog</AtomDialogTitle>
         <AtomTabs variant="modal" value={activeTab} onValueChange={(value) => value && setActiveTab(value)}>
           <AtomTabsSlidingList activeValue={activeTab} preset="modal" className="shrink-0">

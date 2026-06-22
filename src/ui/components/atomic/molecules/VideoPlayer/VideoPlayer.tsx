@@ -1,8 +1,6 @@
 'use client';
 
-import { type KeyboardEvent, type ReactElement, type SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
-
-import dynamic from 'next/dynamic';
+import { lazy, type KeyboardEvent, type ReactElement, type SyntheticEvent, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { cva } from 'class-variance-authority';
 
@@ -10,7 +8,7 @@ import { VIDEO_PLAYER_DEFAULT_VOLUME, VIDEO_PLAYER_YOUTUBE_CONFIG } from '@const
 import type { videoPlayerPropsType } from '@types';
 import { cn } from '@utils';
 
-const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
+const ReactPlayerLazy = lazy(() => import('react-player'));
 
 const variantVideoPlayer = cva('flex w-full flex-col overflow-hidden', {
   variants: {
@@ -122,7 +120,8 @@ const VideoPlayer = ({
       <div className="relative z-0 aspect-video w-full overflow-hidden bg-black [&_.react-player__preview]:relative [&_.react-player__preview]:z-0 [&_.react-player__preview]:h-full">
         {hasStarted ? (
           <div className={playerSurfaceClassName}>
-            <ReactPlayer
+            <Suspense fallback={null}>
+              <ReactPlayerLazy
               {...props}
               src={normalizedSrc}
               config={playerConfig}
@@ -140,7 +139,8 @@ const VideoPlayer = ({
               onReady={handlePlayerReady}
               onClickPreview={handlePreviewClick}
               playIcon={customPoster && !hasStarted ? <></> : undefined}
-            />
+              />
+            </Suspense>
           </div>
         ) : null}
 

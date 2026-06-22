@@ -1,1 +1,1 @@
-export { preloadConfiguratorScene } from '@utils';
+export { preloadConfiguratorScene } from '../../../../../utils/preloadConfiguratorScene';
