@@ -1,4 +1,3 @@
-'use client';
 
 import { Fragment, useMemo } from 'react';
 

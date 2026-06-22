@@ -6,3 +6,5 @@ export { AsideConfiguration } from './AsideConfiguration';
 export { Footer } from './Footer';
 export { Header } from './Header';
 export { CheckoutView } from './CheckoutView';
+export { ConfiguratorInitialLoader } from './ConfiguratorInitialLoader';
+export { ConfiguratorView } from './ConfiguratorView';

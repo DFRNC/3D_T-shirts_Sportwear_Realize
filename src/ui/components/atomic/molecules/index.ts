@@ -1,4 +1,6 @@
 export { ProductFlipCard } from './ProductFlipCard';
+export { AtomTabsSlidingList, atomTabsSlidingListVariants } from './AtomTabsSlidingList';
+export { ConfiguratorStepTabs } from './ConfiguratorStepTabs';
 export { ProductGalleryBlock } from './ProductGalleryBlock';
 export { ConfiguratorProduct } from './ConfiguratorProduct';
 export { ConfiguratorProductDescription } from './ConfiguratorProductDescription';

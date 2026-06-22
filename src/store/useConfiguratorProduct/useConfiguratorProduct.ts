@@ -1,4 +1,3 @@
-"use client";
 
 import type { garmentConfigType, styleIdType } from "@types";
 import { getProduct } from "@utils";

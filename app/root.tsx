@@ -1,7 +1,7 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 
 import { anton, bebasNeue, blackOpsOne, inter, oswald, russoOne } from "@fonts";
-import { cn } from "../src/utils/cn";
+import { cn } from "@utils";
 
 import "../src/ui/styles/globals.css";
 

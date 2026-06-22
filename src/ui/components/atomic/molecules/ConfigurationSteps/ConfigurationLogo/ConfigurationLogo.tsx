@@ -1,4 +1,3 @@
-'use client';
 
 import { type ChangeEvent, useCallback, useMemo, useRef, useState } from 'react';
 

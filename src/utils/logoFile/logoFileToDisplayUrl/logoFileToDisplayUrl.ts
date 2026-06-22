@@ -1,4 +1,3 @@
-'use client';
 
 import { LOGO_MAX_FILE_SIZE } from '@constants';
 import { convertEpsPsToDisplayUrl } from '../converters/ghostscript';

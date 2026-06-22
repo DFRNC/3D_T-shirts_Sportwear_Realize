@@ -1,8 +1,8 @@
-'use client';
 
 import { useState } from 'react';
 
-import { AtomDialog, AtomDialogContent, AtomDialogTitle, AtomTabs, AtomTabsSlidingList, AtomTabsTrigger, ScrollArea } from '@atoms';
+import { AtomDialog, AtomDialogContent, AtomDialogTitle, AtomTabs, AtomTabsTrigger, ScrollArea } from '@atoms';
+import { AtomTabsSlidingList } from '../../AtomTabsSlidingList';
 
 import { ModalInfoTabContent } from './Content';
 import { MODAL_INFO_TABS } from './modalInfoTabs';

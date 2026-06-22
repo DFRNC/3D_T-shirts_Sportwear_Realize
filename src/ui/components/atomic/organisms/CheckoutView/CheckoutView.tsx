@@ -1,4 +1,3 @@
-'use client';
 
 import { Button, Flex, Grid, SvgIcon } from '@atoms';
 

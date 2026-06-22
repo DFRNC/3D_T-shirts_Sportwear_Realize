@@ -1,4 +1,3 @@
-'use client';
 
 import { FiMinusCircle, FiPlusCircle } from 'react-icons/fi';
 

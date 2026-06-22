@@ -1,4 +1,3 @@
-'use client';
 
 import { AtomImage, Button, Text } from '@atoms';
 import type { productCatalogOptionPropsType } from '@types';

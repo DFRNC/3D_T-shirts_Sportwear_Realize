@@ -1,4 +1,3 @@
-'use client';
 
 import { AtomImage, Flex, Text } from '@atoms';
 

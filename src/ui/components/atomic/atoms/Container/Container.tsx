@@ -1,4 +1,3 @@
-﻿'use client';
 
 import { cn } from '@utils';
 import type { containerPropsType } from '@types';

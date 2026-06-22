@@ -1,4 +1,3 @@
-'use client';
 
 import type { designPatternItemType, garmentConfigType, garmentDesignSnapshotType } from '@types';
 

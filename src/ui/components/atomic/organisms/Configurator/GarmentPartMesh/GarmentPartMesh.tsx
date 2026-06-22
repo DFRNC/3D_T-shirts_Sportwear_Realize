@@ -1,4 +1,3 @@
-'use client';
 
 import { memo, useEffect, useLayoutEffect, useMemo } from 'react';
 import type { Mesh, MeshStandardMaterial } from 'three';

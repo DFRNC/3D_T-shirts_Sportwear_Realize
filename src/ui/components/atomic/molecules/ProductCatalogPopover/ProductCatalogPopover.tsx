@@ -1,4 +1,3 @@
-'use client';
 
 import type { catalogProductRefType, productCatalogPopoverPropsType, productCollectionIdType } from '@types';
 import { listCatalogProductsByCollection } from '@utils';

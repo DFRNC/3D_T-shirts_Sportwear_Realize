@@ -1,4 +1,3 @@
-'use client';
 
 import { Grid, Text } from '@atoms';
 import type { productGalleryBlockPropsType } from '@types';

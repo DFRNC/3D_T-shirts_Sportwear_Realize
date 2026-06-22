@@ -1,11 +1,11 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from 'react';
 
-interface ClientOnlyProps {
+type clientOnlyPropsType = {
   children: ReactNode;
   fallback?: ReactNode;
-}
+};
 
-export function ClientOnly({ children, fallback = null }: ClientOnlyProps) {
+const ClientOnly = ({ children, fallback = null }: clientOnlyPropsType) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -17,4 +17,6 @@ export function ClientOnly({ children, fallback = null }: ClientOnlyProps) {
   }
 
   return <>{children}</>;
-}
+};
+
+export { ClientOnly };

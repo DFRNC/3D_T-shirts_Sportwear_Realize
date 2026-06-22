@@ -1,4 +1,3 @@
-'use client';
 
 const priceFormat = (value: number) =>
   `${new Intl.NumberFormat('it-IT', {

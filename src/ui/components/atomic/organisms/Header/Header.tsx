@@ -1,4 +1,3 @@
-'use client';
 
 import { LangSwitcher, Search, UserBar } from '@molecules';
 import { Box, Container, Flex, Grid, Logo } from '@atoms';

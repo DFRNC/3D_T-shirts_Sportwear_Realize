@@ -1,4 +1,3 @@
-'use client';
 
 import { AtomImage, Button, Flex, Grid, SvgIcon, Text } from '@atoms';
 import { RangeControl } from '../RangeControl';

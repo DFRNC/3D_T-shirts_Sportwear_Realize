@@ -1,4 +1,3 @@
-'use client';
 
 import { Button, Flex } from '@atoms';
 

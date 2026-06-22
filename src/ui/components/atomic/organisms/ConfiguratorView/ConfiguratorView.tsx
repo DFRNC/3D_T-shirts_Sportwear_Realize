@@ -1,4 +1,3 @@
-'use client';
 
 import { Configurator } from '../Configurator';
 import { ConfiguratorCanvasLoader } from '../ConfiguratorCanvasLoader';

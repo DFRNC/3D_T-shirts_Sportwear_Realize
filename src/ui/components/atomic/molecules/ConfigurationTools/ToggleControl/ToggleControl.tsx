@@ -1,4 +1,3 @@
-'use client';
 
 import { Box, Button, Flex, Text } from '@atoms';
 import type { toggleControlPropsType } from '@types';

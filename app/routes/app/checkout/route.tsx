@@ -4,6 +4,8 @@ import { boundary } from "@shopify/shopify-app-react-router/server";
 
 import { authenticate } from "../../../shopify.server";
 
+export const handle = { noFooter: true };
+
 export { default } from "./page";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

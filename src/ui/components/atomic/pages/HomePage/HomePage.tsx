@@ -1,4 +1,3 @@
-'use client';
 
 import { Container } from '@atoms';
 import { ProductGalleryBlock } from '@molecules';

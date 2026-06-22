@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "build": "react-router build",
-    "dev": "shopify app dev --config shopify.app.local.toml --use-localhost",
-    "dev:tunnel": "shopify app dev",
+    "dev": "node scripts/run-with-clean-npm-env.mjs shopify app dev --config shopify.app.local.toml --use-localhost",
+    "dev:tunnel": "node scripts/run-with-clean-npm-env.mjs shopify app dev",
     "config:link": "shopify app config link",
     "generate": "shopify app generate",
     "deploy": "shopify app deploy",
@@ -13,7 +13,7 @@
     "start": "react-router-serve ./build/server/index.js",
     "docker-start": "npm run setup && npm run start",
     "setup": "prisma generate && prisma migrate deploy",
-    "postinstall": "prisma generate && node scripts/copy-logo-assets.mjs",
+    "postinstall": "node scripts/run-with-clean-npm-env.mjs node scripts/postinstall.mjs",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "shopify": "shopify",
     "prisma": "prisma",
@@ -26,6 +26,12 @@
   "type": "module",
   "engines": {
     "node": ">=20.19 <22 || >=22.12"
+  },
+  "packageManager": "pnpm@10.12.4",
+  "pnpm": {
+    "shamefullyHoist": true,
+    "autoInstallPeers": true,
+    "dedupePeerDependents": true
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

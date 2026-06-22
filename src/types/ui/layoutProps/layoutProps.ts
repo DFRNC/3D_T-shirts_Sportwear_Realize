@@ -35,4 +35,12 @@ type textPropsType = childrenType & {
   asChild?: boolean;
 };
 
-export type { boxPropsType, containerPropsType, flexPropsType, gridPropsType, textPropsType };
+type defaultPagesTemplatePropsType = childrenType & {
+  noFooter?: boolean;
+};
+
+type shopRouteHandleType = {
+  noFooter?: boolean;
+};
+
+export type { boxPropsType, containerPropsType, defaultPagesTemplatePropsType, flexPropsType, gridPropsType, shopRouteHandleType, textPropsType };

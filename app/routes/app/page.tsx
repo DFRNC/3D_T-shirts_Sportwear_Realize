@@ -1,7 +1,6 @@
 import type { LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
 
-import { Footer } from "@organisms";
 import { HomePage } from "@pages";
 
 import { fetchConfiguratorCollections } from "../../shopify/fetchConfiguratorCollections.server";
@@ -17,12 +16,5 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function AppHomePage() {
   const { collections } = useLoaderData<typeof loader>();
 
-  return (
-    <>
-      <div className="flex-1">
-        <HomePage collections={collections} />
-      </div>
-      <Footer />
-    </>
-  );
+  return <HomePage collections={collections} />;
 }

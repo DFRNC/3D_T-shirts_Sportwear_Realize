@@ -1,4 +1,3 @@
-'use client';
 
 import { Center } from '@react-three/drei';
 

@@ -1,27 +1,11 @@
-'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback } from 'react';
 
 import { motion } from 'motion/react';
 
 import { CanvasLoaderBackground, MainLoader } from '@molecules';
+import { useSceneTransitionTrigger } from '@hooks';
 import { useConfiguratorProduct, useConfiguratorSceneLoad, useGarmentDesign } from '@store';
-
-const useSceneTransitionTrigger = (value: string | null, beginSceneTransitionLoad: () => void, isInitialSceneLoading: boolean) => {
-  const previousValueRef = useRef(value);
-
-  useEffect(() => {
-    if (isInitialSceneLoading) {
-      previousValueRef.current = value;
-      return;
-    }
-
-    if (previousValueRef.current === value) return;
-
-    previousValueRef.current = value;
-    beginSceneTransitionLoad();
-  }, [beginSceneTransitionLoad, isInitialSceneLoading, value]);
-};
 
 const ConfiguratorCanvasLoader = () => {
   const isInitialSceneLoading = useConfiguratorSceneLoad((state) => state.isInitialSceneLoading);

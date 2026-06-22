@@ -1,4 +1,3 @@
-'use client';
 
 import { Flex, Text } from '@atoms';
 import type { partColorSwitchPropsType } from '@types';

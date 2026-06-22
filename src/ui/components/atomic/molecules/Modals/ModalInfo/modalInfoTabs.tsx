@@ -1,4 +1,3 @@
-'use client';
 
 import { BsPercent } from 'react-icons/bs';
 import { PiChatCenteredDotsLight, PiStarLight, PiTruckLight } from 'react-icons/pi';

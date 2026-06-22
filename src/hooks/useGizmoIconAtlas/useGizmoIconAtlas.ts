@@ -1,4 +1,3 @@
-'use client';
 
 import { createElement, useEffect, useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';

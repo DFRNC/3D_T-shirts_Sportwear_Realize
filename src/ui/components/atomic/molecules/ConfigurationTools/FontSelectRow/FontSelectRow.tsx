@@ -1,4 +1,3 @@
-'use client';
 
 import { AtomSelect, Flex, Text } from '@atoms';
 import type { fontSelectRowPropsType } from '@types';

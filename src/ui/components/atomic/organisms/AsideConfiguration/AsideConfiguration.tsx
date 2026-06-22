@@ -1,4 +1,3 @@
-'use client';
 
 import { Flex, Grid, ScrollArea } from '@atoms';
 import { CardAddProduct, ConfiguratorProduct, ConfiguratorProductDescription } from '@molecules';

@@ -1,4 +1,3 @@
-'use client';
 
 import { lazy, type KeyboardEvent, type ReactElement, type SyntheticEvent, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 

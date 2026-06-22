@@ -1,4 +1,3 @@
-'use client';
 
 import type { garmentConfigType, garmentLogoSnapshotType, logoInstanceType, logoPositionType, logoPreviewType } from '@types';
 

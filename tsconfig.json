@@ -24,7 +24,6 @@
       "@atoms": ["./src/ui/components/atomic/atoms"],
       "@molecules": ["./src/ui/components/atomic/molecules"],
       "@organisms": ["./src/ui/components/atomic/organisms"],
-      "@configurator": ["./src/ui/components/atomic/configurator"],
       "@templates": ["./src/ui/components/atomic/templates"],
       "@pages": ["./src/ui/components/atomic/pages"],
       "@shared": ["./src/ui/components/shared"],

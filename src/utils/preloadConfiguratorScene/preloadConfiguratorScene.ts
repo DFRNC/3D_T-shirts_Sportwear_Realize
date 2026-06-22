@@ -1,4 +1,3 @@
-'use client';
 
 import { useConfiguratorProduct } from '../../store/useConfiguratorProduct/useConfiguratorProduct';
 

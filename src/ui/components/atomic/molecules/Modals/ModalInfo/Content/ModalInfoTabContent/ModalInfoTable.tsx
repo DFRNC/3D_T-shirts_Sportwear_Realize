@@ -1,4 +1,3 @@
-'use client';
 
 import { MdDoubleArrow } from 'react-icons/md';
 

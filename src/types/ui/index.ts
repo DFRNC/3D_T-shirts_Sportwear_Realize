@@ -21,8 +21,10 @@ export type {
 export type {
   boxPropsType,
   containerPropsType,
+  defaultPagesTemplatePropsType,
   flexPropsType,
   gridPropsType,
+  shopRouteHandleType,
   textPropsType,
 } from "./layoutProps";
 export type {

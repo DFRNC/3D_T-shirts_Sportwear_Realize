@@ -1,4 +1,3 @@
-'use client';
 
 import { cn } from '@utils';
 import type { svgIconNameType, svgIconPropsType } from '@types';

@@ -1,4 +1,6 @@
 export { useAppNavigate, buildAppPath } from './useAppNavigate';
+export { useConfiguratorInitialSceneLoad } from './useConfiguratorInitialSceneLoad';
+export { useSceneTransitionTrigger } from './useSceneTransitionTrigger';
 export { useCheckoutConfigurationTable } from './useCheckoutConfigurationTable';
 export { useCheckoutInit } from './useCheckoutInit';
 export { useCheckoutSummary } from './useCheckoutSummary';

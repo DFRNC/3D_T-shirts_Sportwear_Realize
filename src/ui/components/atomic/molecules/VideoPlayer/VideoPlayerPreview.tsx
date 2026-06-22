@@ -1,4 +1,3 @@
-'use client';
 
 import { FaPlay } from 'react-icons/fa';
 

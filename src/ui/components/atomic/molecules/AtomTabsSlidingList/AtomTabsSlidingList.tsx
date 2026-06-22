@@ -1,15 +1,12 @@
-'use client';
 
 import { Children, cloneElement, isValidElement, type ReactElement, type RefAttributes, useMemo } from 'react';
 
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { SlidingIndicator, SlidingIndicatorTrack, slidingIndicatorTrackVariants, slidingIndicatorVariants } from '@atoms';
+import { AtomTabsList, SlidingIndicator, SlidingIndicatorTrack, slidingIndicatorTrackVariants, slidingIndicatorVariants } from '@atoms';
 import { useSlidingIndicator } from '@hooks';
 import type { atomTabsSlidingListPropsType } from '@types';
 import { cn } from '@utils';
-
-import { AtomTabsList } from './AtomTabs';
 
 const atomTabsSlidingListVariants = cva('relative', {
   variants: {

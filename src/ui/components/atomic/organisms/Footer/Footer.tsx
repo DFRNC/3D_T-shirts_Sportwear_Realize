@@ -1,4 +1,3 @@
-'use client';
 
 import { Notification } from '@molecules';
 import { Box, Container, Flex, Grid } from '@atoms';

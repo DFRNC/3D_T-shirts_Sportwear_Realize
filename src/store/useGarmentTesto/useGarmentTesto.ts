@@ -1,4 +1,3 @@
-'use client';
 
 import type { garmentConfigType, garmentTestoSnapshotType, testoInstanceType, testoPositionType, testoPreviewType } from '@types';
 

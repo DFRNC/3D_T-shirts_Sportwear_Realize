@@ -1,4 +1,3 @@
-﻿'use client';
 
 import { AtomImage, Box, Button, Text } from '@atoms';
 
