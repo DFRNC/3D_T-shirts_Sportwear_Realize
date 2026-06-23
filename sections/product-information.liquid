@@ -167,7 +167,7 @@
   </sticky-add-to-cart>
 {% endif %}
 
-{% # R3F Configurator Section (якщо продукт має custom.model метаполе) %}
+{% # R3F Configurator Section (if product has custom.id metafield) %}
 {% if closest.product.metafields.custom.id %}
   {%
     render 'r3f-configurator',

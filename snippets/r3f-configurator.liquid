@@ -1,13 +1,13 @@
 {% doc %}
   R3F Configurator
 
-  렌더링 R3F 3D configurator контейнера для Shopify Storefront.
+  Renders R3F 3D configurator container for Shopify Storefront.
 
   @param {product} product - Shopify product object
   @param {string} section_id - Unique section ID
 
-  Очекує JSON дані:
-  - product.metafields.custom.id: model ID (наприклад, 'federer_calcio')
+  Expects JSON data:
+  - product.metafields.custom.id: model ID (e.g., 'federer_calcio')
   - product.selected_or_first_available_variant.id: variant ID
 {% enddoc %}
 
@@ -34,11 +34,11 @@
     data-variant-json="{{ variant | json | escape }}"
   >
     <div class="r3f-loader">
-      <p>{{ 'products.product.loading_3d' | t: default: 'Завантаження 3D Конфігуратора...' }}</p>
+      <p>{{ 'products.product.loading_3d' | t: default: 'Loading 3D Configurator...' }}</p>
     </div>
   </div>
 
-  {% # Підключення стилів та скрипту R3F бандла %}
+  {% # Load R3F bundle styles and script %}
   <link rel="stylesheet" href="{{ 'r3f-configurator.css' | asset_url }}">
 
   <script type="module">
@@ -48,7 +48,7 @@
     if (container) {
       initR3FConfigurator(container).catch((error) => {
         console.error('R3F Configurator initialization error:', error);
-        container.innerHTML = '<p class="r3f-error">Не вдалося завантажити 3D Конфігуратор. Будь ласка, оновіть сторінку.</p>';
+        container.innerHTML = '<p class="r3f-error">Failed to load 3D Configurator. Please refresh the page.</p>';
       });
     }
   </script>
