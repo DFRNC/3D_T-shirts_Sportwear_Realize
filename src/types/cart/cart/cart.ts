@@ -1,11 +1,13 @@
-import type { logoInstanceType, nameInstanceType, numberInstanceType, partGradientType, productCollectionIdType, styleIdType, testoInstanceType } from '@types';
+import type { garmentBusinessType, logoInstanceType, modelIdType, nameInstanceType, numberInstanceType, partGradientType, productCollectionIdType, testoInstanceType } from '@types';
 
 interface cartItemType {
   id: string;
   collection: productCollectionIdType;
   slug: string;
-  styleId: styleIdType;
-  productIndex: number;
+  /** Local geometry model id (== Shopify `custom.id`). */
+  modelId: modelIdType;
+  /** Snapshot of Shopify business data (price/bonus/name) at the time the item was added. */
+  business: garmentBusinessType;
 }
 
 interface garmentColorSnapshotType {

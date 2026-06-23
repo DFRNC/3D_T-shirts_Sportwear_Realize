@@ -1,4 +1,4 @@
-export { getProduct, getStyle, resolveProductPreviewSrc, STYLES } from './garmentCatalog';
+export { DEFAULT_CURRENCY_CODE, DEFAULT_MODEL_ID, deriveLocalBusiness, getModel, hasModel, MODELS, resolveProductPreviewSrc } from './garmentCatalog';
 export { cn } from './cn';
 export { composePartAlbedo } from './composePartAlbedo/composePartAlbedo';
 export {

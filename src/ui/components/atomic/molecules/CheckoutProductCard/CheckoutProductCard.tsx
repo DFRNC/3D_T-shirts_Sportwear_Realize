@@ -7,7 +7,7 @@ import { CHECKOUT_SHIPPING_DAYS_LABEL } from '@constants';
 import { useNavigateToConfigurator } from '@hooks';
 import { resolveCheckoutPrintAvailability, resolveTestoLimits, useCheckout, useConfigurationCart } from '@store';
 import type { checkoutProductCardPropsType } from '@types';
-import { getProduct, priceFormat, resolveCartItemDisplayPreview } from '@utils';
+import { getModel, priceFormat, resolveCartItemDisplayPreview } from '@utils';
 
 import { CheckoutConfigurationTable } from '../CheckoutConfigurationTable';
 
@@ -16,12 +16,12 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
   const quantity = useCheckout((state) => state.getProductQuantity(product.cartItemId));
   const subtotal = useCheckout((state) => state.getProductSubtotal(product.cartItemId));
 
-  const garment = getProduct(product.styleId, product.productIndex);
+  const garment = getModel(product.modelId);
   const cartItem = useConfigurationCart((state) => state.items.find((item) => item.id === product.cartItemId));
   const capturedPreview = useConfigurationCart((state) => state.previews[product.cartItemId]);
   const previewSrc = cartItem ? resolveCartItemDisplayPreview(cartItem, capturedPreview) : '';
 
-  const productName = useMemo(() => garment?.name ?? 'Prodotto', [garment?.name]);
+  const productName = useMemo(() => product.business.name || 'Prodotto', [product.business.name]);
   const testoMaxLength = useMemo(() => {
     if (!garment?.testoDefaults) return undefined;
     return resolveTestoLimits(garment).maxLength;
@@ -42,7 +42,7 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
             <Button variant="primary" size="xs">
               Elenco giocatori
             </Button>
-            <Button size="xs" className="font-normal" onClick={navigateToConfigurator}>
+            <Button size="xs" className="font-normal" onClick={() => cartItem && navigateToConfigurator(cartItem.slug)} disabled={!cartItem}>
               Modifica Bozza
             </Button>
           </Flex>

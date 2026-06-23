@@ -1,4 +1,4 @@
-import type { garmentConfigType, styleIdType } from '@types';
+import type { garmentConfigType, modelIdType } from '@types';
 
 type productCollectionIdType = 'first' | 'second' | 'third' | 'fourd';
 
@@ -6,8 +6,7 @@ interface catalogProductEntryType {
   collection: productCollectionIdType;
   slug: string;
   name: string;
-  styleId?: styleIdType;
-  productIndex?: number;
+  modelId?: modelIdType;
   configurable: boolean;
   /** Use 3D garment thumb instead of `/png/products/{collection}/{slug}/{slug}.png`. */
   useGarmentPreview?: boolean;
@@ -24,8 +23,7 @@ interface catalogProductRefType {
   collection: productCollectionIdType;
   slug: string;
   name: string;
-  styleId: styleIdType;
-  productIndex: number;
+  modelId: modelIdType;
   configurable: boolean;
   previewSrc: string;
   product: garmentConfigType;

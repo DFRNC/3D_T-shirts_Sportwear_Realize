@@ -1,9 +1,9 @@
 
 import { useGLTF } from '@react-three/drei';
 
-import type { garmentConfigType, styleIdType } from '@types';
+import type { garmentConfigType, modelIdType } from '@types';
 
-import { getProduct } from '../garmentCatalog/garmentCatalog';
+import { getModel } from '../garmentCatalog/garmentCatalog';
 import { resolveModelUrl } from '../resolveModelUrl/resolveModelUrl';
 import { resolvePbrTexturePaths } from '../resolvePbrTexturePaths/resolvePbrTexturePaths';
 
@@ -36,8 +36,8 @@ const preloadGarmentProductAssets = (product: garmentConfigType) => {
   }
 };
 
-const preloadGarmentProduct = (styleId: styleIdType, productIndex: number) => {
-  const product = getProduct(styleId, productIndex);
+const preloadGarmentProduct = (modelId: modelIdType) => {
+  const product = getModel(modelId);
   if (!product) return;
 
   preloadGarmentProductAssets(product);

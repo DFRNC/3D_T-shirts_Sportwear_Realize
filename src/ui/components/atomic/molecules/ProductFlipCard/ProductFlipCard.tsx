@@ -14,7 +14,7 @@ const ProductFlipCard = ({ collection, slug, alt, previewSrc, activePreviewSrc, 
 
   return (
     <Link
-      to={buildAppPath('/app/configurator', searchParams)}
+      to={buildAppPath(`/app/configurator/${slug}`, searchParams)}
       tabIndex={0}
       className={cn(
         'group/card aspect-3/4 w-full cursor-pointer outline-none perspective-[1000px]',

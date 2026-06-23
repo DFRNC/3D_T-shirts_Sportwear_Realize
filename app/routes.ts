@@ -27,7 +27,7 @@ export default [
       index("routes/app/page.tsx"),
       route("checkout", "routes/app/checkout/route.tsx"),
     ]),
-    route("configurator", "routes/app/configurator/route.tsx", [
+    route("configurator/:slug", "routes/app/configurator/route.tsx", [
       index("routes/app/configurator/page.tsx"),
     ]),
   ]),

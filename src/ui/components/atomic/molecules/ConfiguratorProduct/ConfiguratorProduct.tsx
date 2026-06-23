@@ -9,7 +9,7 @@ import { priceFormat } from '@utils';
 import { useConfigurationControl, useConfiguratorProduct } from '@store';
 
 const ConfiguratorProduct = memo(() => {
-  const { price, name, bonus_count, minimum_count, bonus_discount } = useConfiguratorProduct((state) => state.product);
+  const { price, name, bonusCount, minimumCount, bonusDiscount } = useConfiguratorProduct((state) => state.business);
   const numberProduct = useConfigurationControl((state) => state.numberProduct);
   const showSkeleton = useShowConfigurationSkeleton();
 
@@ -25,12 +25,12 @@ const ConfiguratorProduct = memo(() => {
         </Text>
         <Flex className="flex-col items-start px-3 py-2 rounded-[4px] bg-primary hover:bg-primary/90 transition-colors">
           <Text className="font-semibold">Prodotto {numberProduct}</Text>
-          <Text className="text-[14px] text-gray">Minimo {minimum_count ?? 0} pz</Text>
+          <Text className="text-[14px] text-gray">Minimo {minimumCount ?? 0} pz</Text>
         </Flex>
       </Grid>
       <Grid variant="configurator_price">
         <Text variant="product_price">{priceFormat(price)}</Text>
-        <Text className="text-[#6B7280] font-medium">{`>${bonus_count} pezzi +${bonus_discount}% di sconto`}</Text>
+        <Text className="text-[#6B7280] font-medium">{`>${bonusCount} pezzi +${bonusDiscount}% di sconto`}</Text>
       </Grid>
     </Flex>
   );

@@ -20,7 +20,7 @@ interface productCatalogOptionPropsType {
 
 interface productCatalogPopoverPropsType {
   activeCollection: productCollectionIdType;
-  onSelect: (product: Pick<catalogProductRefType, 'collection' | 'slug' | 'styleId' | 'productIndex'>) => void;
+  onSelect: (product: Pick<catalogProductRefType, 'collection' | 'slug' | 'modelId'>) => void;
   children: ReactNode;
   contentSide?: 'top' | 'right' | 'bottom' | 'left';
   contentAlign?: 'start' | 'center' | 'end';

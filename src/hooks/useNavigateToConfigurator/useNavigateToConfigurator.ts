@@ -6,9 +6,12 @@ import { useAppNavigate } from '../useAppNavigate';
 const useNavigateToConfigurator = () => {
   const { navigateToAppPath } = useAppNavigate();
 
-  const navigateToConfigurator = useCallback(() => {
-    navigateToAppPath('/app/configurator');
-  }, [navigateToAppPath]);
+  const navigateToConfigurator = useCallback(
+    (slug: string) => {
+      navigateToAppPath(`/app/configurator/${slug}`);
+    },
+    [navigateToAppPath],
+  );
 
   return { navigateToConfigurator };
 };

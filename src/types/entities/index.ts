@@ -11,14 +11,15 @@ export type {
   modalInfoTextPartType,
 } from './modalInfo';
 export type {
+  garmentBusinessType,
   garmentConfigType,
   garmentPartConfigType,
   logoPositionConfigType,
+  modelIdType,
   partGradientConfigType,
   patternConfigType,
   printAtlasConfigType,
   styleConfigType,
-  styleIdType,
   textDefaultsConfigType,
   textPositionConfigType,
   uvBoundsType,

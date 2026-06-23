@@ -1,4 +1,4 @@
-import type { styleIdType } from '@types';
+import type { garmentBusinessType, modelIdType } from '@types';
 
 interface checkoutLineRowType {
   id: string;
@@ -18,8 +18,8 @@ interface checkoutRowPresetType {
 
 interface checkoutProductType {
   cartItemId: string;
-  styleId: styleIdType;
-  productIndex: number;
+  modelId: modelIdType;
+  business: garmentBusinessType;
   rowPreset: checkoutRowPresetType;
   rows: checkoutLineRowType[];
 }

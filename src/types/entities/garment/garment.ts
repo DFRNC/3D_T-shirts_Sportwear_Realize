@@ -40,7 +40,6 @@ interface garmentPartConfigType {
 
 interface patternPartConfigType {
   path_name: string;
-  id: number;
 }
 
 interface patternConfigType {
@@ -85,7 +84,7 @@ interface namePositionConfigType extends textPositionConfigType {
 }
 
 interface numberPositionConfigType extends textPositionConfigType {
-  zone: string;
+  partId: string;
 }
 
 interface logoPositionConfigType {
@@ -114,12 +113,16 @@ interface garmentStaticMeshConfigType {
 }
 
 interface garmentConfigType {
-  name: string;
-  type: string;
+  /** Geometry id — matches the data folder name and the Shopify `custom.id` metafield. */
+  id?: string;
+  /** @deprecated Business data (name/price/bonus) now comes from Shopify via `garmentBusinessType`. */
+  name?: string;
+  type?: string;
   previewImage?: string;
-  price: number;
-  bonus_count: number;
-  bonus_discount: number;
+  /** @deprecated Use the Shopify-sourced `garmentBusinessType.price`. Optional for geometry-only JSON. */
+  price?: number;
+  bonus_count?: number;
+  bonus_discount?: number;
   minimum_count?: number;
   path: string;
   modelFile?: string;
@@ -147,18 +150,34 @@ interface styleConfigType {
   products: garmentConfigType[];
 }
 
-type styleIdType = 'crewneck';
+/** Identifier of a local geometry model — equals the data folder name / JSON `id`. */
+type modelIdType = string;
+
+/** Business data sourced from the Shopify product (price, bonuses, name). */
+interface garmentBusinessType {
+  /** Shopify product GID. */
+  shopifyProductId: string;
+  /** Shopify product handle (== URL slug). */
+  handle: string;
+  name: string;
+  price: number;
+  currencyCode: string;
+  bonusCount: number;
+  bonusDiscount: number;
+  minimumCount: number;
+}
 
 export type {
+  garmentBusinessType,
   garmentConfigType,
   garmentPbrTexturesConfigType,
   garmentPartConfigType,
   logoPositionConfigType,
+  modelIdType,
   partGradientConfigType,
   patternConfigType,
   printAtlasConfigType,
   styleConfigType,
-  styleIdType,
   textDefaultsConfigType,
   textPositionConfigType,
   uvBoundsType,

@@ -5,26 +5,19 @@ import { resolvePartUvBounds } from '@utils';
 const NUMBER_MAX_LENGTH = 2;
 const NUMBER_DEFAULT_LINE_HEIGHT = 1.5;
 
-const resolveZonePartId = (product: garmentConfigType, zone: string): string => {
-  const normalized = zone.toLowerCase();
-  const part = product.parts.find((item) => item.id.toLowerCase().includes(normalized));
-
-  if (!part) {
-    throw new Error(`Product "${product.path}" has no part for zone "${zone}".`);
-  }
-
-  return part.id;
-};
-
-// numberPositions UV is 0..1 inside the zone part; shader expects print-atlas coordinates.
-const resolveZoneLocalUvToAtlas = (product: garmentConfigType, zone: string, localUv: uvPointType): uvPointType => {
-  const partId = resolveZonePartId(product, zone);
+const resolveNumberPart = (product: garmentConfigType, partId: string) => {
   const part = product.parts.find((item) => item.id === partId);
 
   if (!part) {
-    throw new Error(`Product "${product.path}" has no part for zone "${zone}".`);
+    throw new Error(`Product "${product.path}" has no part "${partId}" for a number position.`);
   }
 
+  return part;
+};
+
+// numberPositions UV is 0..1 inside the part; shader expects print-atlas coordinates.
+const resolveNumberLocalUvToAtlas = (product: garmentConfigType, partId: string, localUv: uvPointType): uvPointType => {
+  const part = resolveNumberPart(product, partId);
   const bounds = resolvePartUvBounds(part);
 
   return {
@@ -60,8 +53,8 @@ const mapProductNumberPositions = (product: garmentConfigType): numberPositionTy
   (product.numberPositions ?? []).map((position, index) => ({
     key: `number-pos-${index}`,
     label: position.label,
-    partId: resolveZonePartId(product, position.zone),
-    uv: resolveZoneLocalUvToAtlas(product, position.zone, position.uv),
+    partId: resolveNumberPart(product, position.partId).id,
+    uv: resolveNumberLocalUvToAtlas(product, position.partId, position.uv),
     rotation: position.rotation,
     fontSize: position.fontSize,
     lineHeight: position.line_height,
@@ -101,7 +94,7 @@ export {
   resolveNumberDefaults,
   resolveNumberLimits,
   resolveNumberLineHeightShow,
-  resolveZoneLocalUvToAtlas,
+  resolveNumberLocalUvToAtlas,
   sanitizeNumberText,
   NUMBER_DEFAULT_LINE_HEIGHT,
   NUMBER_MAX_LENGTH,

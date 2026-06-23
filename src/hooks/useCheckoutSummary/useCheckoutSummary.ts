@@ -1,7 +1,6 @@
 
 import { useMemo } from 'react';
 
-import { getProduct } from '@utils';
 import { useCheckout } from '@store';
 
 const useCheckoutSummary = () => {
@@ -12,11 +11,9 @@ const useCheckoutSummary = () => {
 
     return {
       lineItems: products.map((product) => {
-        const garment = getProduct(product.styleId, product.productIndex);
-
         return {
           id: product.cartItemId,
-          name: garment?.name ?? 'Prodotto',
+          name: product.business.name || 'Prodotto',
           quantity: store.getProductQuantity(product.cartItemId),
           amount: store.getProductSubtotal(product.cartItemId),
         };

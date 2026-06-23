@@ -2,6 +2,13 @@
   "id": "federer_calcio",
   "path": "/models/federer_calcio/",
   "printAtlas": { "width": 4096, "height": 2149 },
+  "preserveGltfMeshes": ["model_inside", "model_label", "model_sweatband"],
+  "pbrTextures": {
+    "bakeNormal": "bake_normal.jpg",
+    "bakeAoRoughness": "bake_ao_roughness.jpg",
+    "fabricNormal": "fabric_normal.jpg",
+    "fabricRoughness": "fabric_roughness.jpg"
+  },
   "parts": [
     {
       "name": "Davanti",
@@ -101,8 +108,7 @@
       "name": "Design 1",
       "parts": [
         {
-          "path_name": "design_1.webp",
-          "id": 1
+          "path_name": "design_1.webp"
         }
       ]
     },
@@ -110,12 +116,10 @@
       "name": "Design 2",
       "parts": [
         {
-          "path_name": "design_2_color_1.webp",
-          "id": 2
+          "path_name": "design_2_color_1.webp"
         },
         {
-          "path_name": "design_2_color_2.webp",
-          "id": 3
+          "path_name": "design_2_color_2.webp"
         }
       ]
     },
@@ -123,12 +127,10 @@
       "name": "Design 3",
       "parts": [
         {
-          "path_name": "design_3_color_1.webp",
-          "id": 4
+          "path_name": "design_3_color_1.webp"
         },
         {
-          "path_name": "design_3_color_2.webp",
-          "id": 5
+          "path_name": "design_3_color_2.webp"
         }
       ]
     },
@@ -136,12 +138,10 @@
       "name": "Design 4",
       "parts": [
         {
-          "path_name": "design_4_color_1.webp",
-          "id": 6
+          "path_name": "design_4_color_1.webp"
         },
         {
-          "path_name": "design_4_color_2.webp",
-          "id": 7
+          "path_name": "design_4_color_2.webp"
         }
       ]
     },
@@ -149,12 +149,10 @@
       "name": "Design 5",
       "parts": [
         {
-          "path_name": "design_5_color_1.webp",
-          "id": 6
+          "path_name": "design_5_color_1.webp"
         },
         {
-          "path_name": "design_5_color_2.webp",
-          "id": 7
+          "path_name": "design_5_color_2.webp"
         }
       ]
     },
@@ -162,12 +160,10 @@
       "name": "Design 6",
       "parts": [
         {
-          "path_name": "design_6_color_1.webp",
-          "id": 8
+          "path_name": "design_6_color_1.webp"
         },
         {
-          "path_name": "design_6_color_2.webp",
-          "id": 9
+          "path_name": "design_6_color_2.webp"
         }
       ]
     },
@@ -175,8 +171,7 @@
       "name": "Design 7",
       "parts": [
         {
-          "path_name": "design_7.webp",
-          "id": 10
+          "path_name": "design_7.webp"
         }
       ]
     },
@@ -184,12 +179,10 @@
       "name": "Design 8",
       "parts": [
         {
-          "path_name": "design_8_color_1.webp",
-          "id": 11
+          "path_name": "design_8_color_1.webp"
         },
         {
-          "path_name": "design_8_color_2.webp",
-          "id": 12
+          "path_name": "design_8_color_2.webp"
         }
       ]
     },
@@ -197,12 +190,10 @@
       "name": "Design 9",
       "parts": [
         {
-          "path_name": "design_9_color_1.webp",
-          "id": 13
+          "path_name": "design_9_color_1.webp"
         },
         {
-          "path_name": "design_9_color_2.webp",
-          "id": 14
+          "path_name": "design_9_color_2.webp"
         }
       ]
     },
@@ -210,12 +201,10 @@
       "name": "Design 10",
       "parts": [
         {
-          "path_name": "design_10_color_1.webp",
-          "id": 15
+          "path_name": "design_10_color_1.webp"
         },
         {
-          "path_name": "design_10_color_2.webp",
-          "id": 16
+          "path_name": "design_10_color_2.webp"
         }
       ]
     }
@@ -225,8 +214,7 @@
       "name": "Logos",
       "parts": [
         {
-          "path_name": "logos.webp",
-          "id": 0
+          "path_name": "logos.webp"
         }
       ]
     }

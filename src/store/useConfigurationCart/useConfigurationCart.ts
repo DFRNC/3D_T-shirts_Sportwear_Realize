@@ -3,8 +3,10 @@ import type {
   cartItemConfigurationType,
   cartItemType,
   catalogProductRefType,
+  garmentBusinessType,
+  modelIdType,
 } from "@types";
-import { getProduct, preloadGarmentProduct } from "@utils";
+import { getModel, preloadGarmentProduct } from "@utils";
 
 import { create } from "zustand";
 
@@ -17,6 +19,7 @@ import {
 import { inheritCartItemConfiguration } from "./inheritCartItemConfiguration";
 import { createCartItem, createDefaultCartItem } from "./mapCartItems";
 import { persistCartItemSnapshot } from "./persistCartItemSnapshot";
+import { useConfiguratorProduct } from "../useConfiguratorProduct";
 
 interface ConfigurationCartState {
   items: cartItemType[];
@@ -24,11 +27,14 @@ interface ConfigurationCartState {
   configurations: Record<string, cartItemConfigurationType>;
   previews: Record<string, string>;
   addItem: (
-    product: Pick<
-      catalogProductRefType,
-      "collection" | "slug" | "styleId" | "productIndex"
-    >,
+    product: Pick<catalogProductRefType, "collection" | "slug" | "modelId">,
   ) => void;
+  /** Stamp a Shopify product (from the slug route loader) onto the active cart item. */
+  setActiveItemProduct: (product: {
+    slug: string;
+    modelId: modelIdType;
+    business: garmentBusinessType;
+  }) => void;
   duplicateActiveItem: () => void;
   selectItem: (id: string) => void;
   removeItem: (id: string) => void;
@@ -54,10 +60,10 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
   addItem: (productRef) => {
     const { items, activeItemId, configurations } = get();
     const item = createCartItem(productRef);
-    const newProduct = getProduct(productRef.styleId, productRef.productIndex);
+    const newProduct = getModel(productRef.modelId);
     if (!newProduct) return;
 
-    preloadGarmentProduct(productRef.styleId, productRef.productIndex);
+    preloadGarmentProduct(productRef.modelId);
 
     persistCartItemSnapshot(get, activeItemId);
 
@@ -68,7 +74,7 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     };
 
     const firstItem = items[0];
-    const firstProduct = getProduct(firstItem.styleId, firstItem.productIndex);
+    const firstProduct = getModel(firstItem.modelId);
     const referenceConfiguration =
       nextConfigurations[firstItem.id] ??
       (firstProduct
@@ -96,6 +102,35 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     activateCartItem(get, item.id);
   },
 
+  setActiveItemProduct: ({ slug, modelId, business }) => {
+    const { items, activeItemId, configurations } = get();
+    const activeItem = items.find((item) => item.id === activeItemId);
+    if (!activeItem) return;
+    if (!getModel(modelId)) return;
+
+    const isSameProduct = activeItem.modelId === modelId && activeItem.slug === slug;
+    if (isSameProduct) {
+      // Same model: keep the in-progress configuration, just refresh business data.
+      set({
+        items: items.map((item) => (item.id === activeItemId ? { ...item, business } : item)),
+      });
+      useConfiguratorProduct.getState().initFromLoader(modelId, business);
+      return;
+    }
+
+    // Different model: reset this item's configuration so it rebuilds from the new model defaults.
+    const nextConfigurations = Object.fromEntries(
+      Object.entries(configurations).filter(([itemId]) => itemId !== activeItemId),
+    );
+
+    set({
+      items: items.map((item) => (item.id === activeItemId ? { ...item, slug, modelId, business } : item)),
+      configurations: nextConfigurations,
+    });
+
+    activateCartItem(get, activeItemId);
+  },
+
   duplicateActiveItem: () => {
     const { items, activeItemId, configurations } = get();
     const activeItem = items.find((item) => item.id === activeItemId);
@@ -110,8 +145,8 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     const duplicatedItem = createCartItem({
       collection: activeItem.collection,
       slug: activeItem.slug,
-      styleId: activeItem.styleId,
-      productIndex: activeItem.productIndex,
+      modelId: activeItem.modelId,
+      business: activeItem.business,
     });
 
     set({

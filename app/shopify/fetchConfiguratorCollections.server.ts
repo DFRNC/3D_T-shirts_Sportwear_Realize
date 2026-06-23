@@ -40,6 +40,15 @@ const COLLECTION_PRODUCTS_QUERY = `#graphql
           title
           handle
           status
+          priceRangeV2 {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          modelMetafield: metafield(namespace: "custom", key: "id") {
+            value
+          }
           featuredImage {
             url
           }
@@ -67,6 +76,10 @@ type shopifyProductNodeType = {
   title: string;
   handle: string;
   status: string;
+  priceRangeV2?: {
+    minVariantPrice?: { amount?: string | null; currencyCode?: string | null } | null;
+  } | null;
+  modelMetafield?: { value: string } | null;
   featuredImage: { url: string } | null;
   viewImage: productMetafieldReferenceType | null;
   activeViewImage: productMetafieldReferenceType | null;
@@ -91,11 +104,16 @@ const mapShopifyProduct = (product: shopifyProductNodeType) => {
   const activeViewImageSrc = resolveMetafieldFileUrl(product.activeViewImage);
   const featuredImageSrc = product.featuredImage?.url ?? null;
 
+  const priceAmount = product.priceRangeV2?.minVariantPrice?.amount;
+
   return {
     id: product.id,
     title: product.title,
     handle: product.handle,
     status: product.status,
+    modelId: product.modelMetafield?.value?.trim() || null,
+    price: priceAmount != null ? Number(priceAmount) : null,
+    currencyCode: product.priceRangeV2?.minVariantPrice?.currencyCode ?? null,
     previewSrc: viewImageSrc ?? featuredImageSrc,
     activePreviewSrc: activeViewImageSrc ?? viewImageSrc ?? featuredImageSrc,
   };

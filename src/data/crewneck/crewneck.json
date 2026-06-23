@@ -278,7 +278,7 @@
       "numberPositions": [
         {
           "label": "Front Center",
-          "zone": "front",
+          "partId": "front_crewneck",
           "uv": { "x": 0.3, "y": 0.5 },
           "rotation": 0,
           "fontSize": 180,
@@ -287,7 +287,7 @@
         },
         {
           "label": "Front Right",
-          "zone": "front",
+          "partId": "front_crewneck",
           "uv": { "x": 0.26, "y": 0.29 },
           "rotation": 0,
           "fontSize": 180,
@@ -296,7 +296,7 @@
         },
         {
           "label": "Back",
-          "zone": "back",
+          "partId": "back_crewneck",
           "uv": { "x": 0.573, "y": 0.5 },
           "rotation": 0,
           "fontSize": 580,
@@ -434,7 +434,7 @@
       "numberPositions": [
         {
           "label": "Right Bottom",
-          "zone": "right",
+          "partId": "right_shorts",
           "uv": { "x": 0.767, "y": 0.73 },
           "rotation": -90,
           "fontSize": 220,
@@ -443,7 +443,7 @@
         },
         {
           "label": "Right Top",
-          "zone": "right",
+          "partId": "right_shorts",
           "uv": { "x": 0.767, "y": 0.57 },
           "rotation": -90,
           "fontSize": 220,
@@ -452,7 +452,7 @@
         },
         {
           "label": "Right Center",
-          "zone": "right",
+          "partId": "right_shorts",
           "uv": { "x": 0.647, "y": 0.659 },
           "rotation": -90,
           "fontSize": 220,
@@ -461,7 +461,7 @@
         },
         {
           "label": "Left Center",
-          "zone": "left",
+          "partId": "left_shorts",
           "uv": { "x": 0.339, "y": 0.596 },
           "rotation": -90,
           "fontSize": 220,

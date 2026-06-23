@@ -2,7 +2,7 @@
 import type { checkoutLineRowPatchType, checkoutProductType } from '@types';
 
 import { clampCheckoutRowQuantity } from '@constants';
-import { getProduct } from '@utils';
+import { getModel } from '@utils';
 import { create } from 'zustand';
 
 import { captureGarmentConfiguration, useConfigurationCart } from '../useConfigurationCart';
@@ -44,8 +44,8 @@ const useCheckout = create<CheckoutState>((set, get) => ({
 
       return {
         cartItemId: item.id,
-        styleId: item.styleId,
-        productIndex: item.productIndex,
+        modelId: item.modelId,
+        business: item.business,
         rowPreset,
         rows: buildCheckoutRows(configurations[item.id]),
       };
@@ -93,7 +93,7 @@ const useCheckout = create<CheckoutState>((set, get) => ({
     const isTestoTextPatch = patch.testoTextIndex !== undefined && patch.testoText !== undefined;
     const cartState = useConfigurationCart.getState();
     const cartItem = cartState.items.find((item) => item.id === cartItemId);
-    const product = cartItem ? getProduct(cartItem.styleId, cartItem.productIndex) : undefined;
+    const product = cartItem ? getModel(cartItem.modelId) : undefined;
     const printAvailability = resolveCheckoutPrintAvailability(product);
 
     if (isTestoTextPatch) {

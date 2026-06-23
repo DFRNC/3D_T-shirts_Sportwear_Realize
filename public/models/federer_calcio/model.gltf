@@ -307,22 +307,22 @@
 		{
 			"mimeType":"image/jpeg",
 			"name":"bake_ao-bake_roughness",
-			"uri":"bake_ao-bake_roughness.jpg"
+			"uri":"bake_ao_roughness.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
 			"name":"cotton_jersey_nor_gl",
-			"uri":"cotton_jersey_nor_gl.jpg"
+			"uri":"fabric_normal.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
 			"name":"inside_ao",
-			"uri":"inside_ao.jpg"
+			"uri":"inside_ao_roughness.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
 			"name":"cotton_jersey_rough",
-			"uri":"cotton_jersey_rough.jpg"
+			"uri":"fabric_roughness.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",

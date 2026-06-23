@@ -1,5 +1,4 @@
 import type { checkoutProductType } from '@types';
-import { getProduct } from '@utils';
 
 const getProductRowQuantity = (product: checkoutProductType) => product.rows.reduce((sum, row) => sum + row.quantity, 0);
 
@@ -11,10 +10,7 @@ const getCheckoutDiscountPercent = (totalQuantity: number): number => {
   return 0;
 };
 
-const getProductUnitPrice = (product: checkoutProductType) => {
-  const garment = getProduct(product.styleId, product.productIndex);
-  return garment?.price ?? 0;
-};
+const getProductUnitPrice = (product: checkoutProductType) => product.business.price;
 
 const getProductsSubtotal = (products: checkoutProductType[]) =>
   products.reduce((sum, product) => {

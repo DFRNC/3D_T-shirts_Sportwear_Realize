@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 import { Flex, ScrollArea } from '@atoms';
 
-import { getCatalogProductEntry, getProduct, preloadGarmentProduct, resolveCartItemDisplayPreview } from '@utils';
+import { getCatalogProductEntry, getModel, preloadGarmentProduct, resolveCartItemDisplayPreview } from '@utils';
 import { useConfigurationCart } from '@store';
 
 import { ProductCatalogPopover } from '../ProductCatalogPopover';
@@ -22,7 +22,7 @@ const CardAddProduct = () => {
 
   useEffect(() => {
     for (const item of items) {
-      preloadGarmentProduct(item.styleId, item.productIndex);
+      preloadGarmentProduct(item.modelId);
     }
   }, [items]);
 
@@ -31,11 +31,11 @@ const CardAddProduct = () => {
       <ScrollArea className="min-h-0 w-full flex-1 pr-0">
         <Flex className="flex-col gap-0">
           {items.map((item) => {
-            const product = getProduct(item.styleId, item.productIndex);
+            const product = getModel(item.modelId);
             if (!product) return null;
 
             const catalogEntry = getCatalogProductEntry(item.collection, item.slug);
-            const displayName = catalogEntry?.name ?? product.name;
+            const displayName = catalogEntry?.name ?? item.business.name ?? product.name;
 
             return (
               <ProductSessionRow

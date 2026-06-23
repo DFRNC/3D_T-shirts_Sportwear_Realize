@@ -37,8 +37,7 @@ const ProductCatalogPopover = ({ activeCollection, onSelect, children, contentSi
     onSelect({
       collection: product.collection,
       slug: product.slug,
-      styleId: product.styleId,
-      productIndex: product.productIndex,
+      modelId: product.modelId,
     });
     handleOpenChange(false);
   };

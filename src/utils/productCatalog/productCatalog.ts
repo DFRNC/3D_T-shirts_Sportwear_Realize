@@ -1,16 +1,16 @@
 import type { catalogProductEntryType, catalogProductRefType, productCollectionIdType } from '@types';
 import { CATALOG_PRODUCT_ENTRIES, PRODUCT_COLLECTIONS } from '@constants';
 
-import { getProduct, resolveProductPreviewSrc } from '../garmentCatalog/garmentCatalog';
+import { DEFAULT_MODEL_ID, getModel, resolveProductPreviewSrc } from '../garmentCatalog/garmentCatalog';
 import { resolveProductCatalogPreviewSrc } from '../resolveProductCatalogPreviewSrc/resolveProductCatalogPreviewSrc';
 
 const getCatalogProductEntry = (collection: productCollectionIdType, slug: string): catalogProductEntryType | undefined =>
   CATALOG_PRODUCT_ENTRIES.find((entry) => entry.collection === collection && entry.slug === slug);
 
 const toCatalogProductRef = (entry: catalogProductEntryType): catalogProductRefType | undefined => {
-  if (!entry.styleId || entry.productIndex === undefined) return undefined;
+  if (!entry.modelId) return undefined;
 
-  const product = getProduct(entry.styleId, entry.productIndex);
+  const product = getModel(entry.modelId);
   if (!product) return undefined;
 
   const garmentPreviewSrc = resolveProductPreviewSrc(product);
@@ -19,8 +19,7 @@ const toCatalogProductRef = (entry: catalogProductEntryType): catalogProductRefT
     collection: entry.collection,
     slug: entry.slug,
     name: entry.name,
-    styleId: entry.styleId,
-    productIndex: entry.productIndex,
+    modelId: entry.modelId,
     configurable: entry.configurable,
     previewSrc: resolveProductCatalogPreviewSrc(entry, garmentPreviewSrc),
     product,
@@ -31,11 +30,10 @@ const createCatalogProductRefPlaceholder = (entry: catalogProductEntryType): cat
   collection: entry.collection,
   slug: entry.slug,
   name: entry.name,
-  styleId: 'crewneck',
-  productIndex: 1,
+  modelId: DEFAULT_MODEL_ID,
   configurable: entry.configurable,
   previewSrc: resolveProductCatalogPreviewSrc(entry),
-  product: getProduct('crewneck', 1)!,
+  product: getModel(DEFAULT_MODEL_ID)!,
 });
 
 const listCatalogProductsByCollection = (collection: productCollectionIdType): catalogProductRefType[] =>

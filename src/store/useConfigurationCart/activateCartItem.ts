@@ -1,5 +1,5 @@
-import type { cartItemConfigurationType, styleIdType } from "@types";
-import { preloadGarmentProduct, getProduct } from "@utils";
+import type { cartItemConfigurationType, garmentBusinessType, modelIdType } from "@types";
+import { preloadGarmentProduct, getModel } from "@utils";
 
 import { useConfigurationControl } from "../useConfigurationControl";
 import { useConfiguratorProduct } from "../useConfiguratorProduct";
@@ -10,7 +10,7 @@ import {
 import { persistCartItemSnapshot } from "./persistCartItemSnapshot";
 
 interface ActivateCartItemGetState {
-  items: Array<{ id: string; styleId: styleIdType; productIndex: number }>;
+  items: Array<{ id: string; modelId: modelIdType; business: garmentBusinessType }>;
   saveConfiguration: (
     itemId: string,
     configuration: cartItemConfigurationType,
@@ -38,13 +38,13 @@ const activateCartItem = (
     persistCartItemSnapshot(get, savePreviousId);
   }
 
-  const product = getProduct(activeItem.styleId, activeItem.productIndex);
+  const product = getModel(activeItem.modelId);
   if (!product) return;
 
-  preloadGarmentProduct(activeItem.styleId, activeItem.productIndex);
+  preloadGarmentProduct(activeItem.modelId);
   useConfiguratorProduct
     .getState()
-    .setProduct(activeItem.styleId, activeItem.productIndex);
+    .setProduct(activeItem.modelId, activeItem.business);
   useConfigurationControl.getState().setNumberProduct(activeIndex + 1);
 
   const configuration = getConfiguration(itemId);
