@@ -1,0 +1,72 @@
+name: Deploy Theme to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      theme_id:
+        description: 'Production Theme ID (override default)'
+        required: false
+        default: ''
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli@latest
+
+      - name: Prepare Shopify credentials
+        env:
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_THEME_ACCESS_PASSWORD }}
+        run: |
+          mkdir -p ~/.shopify
+          cat > ~/.shopify/shopify.yml << EOF
+          analytics_disabled: false
+          auth:
+            accounts:
+              production:
+                store: ${SHOPIFY_STORE_DOMAIN}
+                password: ${SHOPIFY_ACCESS_TOKEN}
+          EOF
+
+      - name: Deploy to Production
+        working-directory: ./realize-test
+        env:
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_THEME_ID: ${{ inputs.theme_id || secrets.SHOPIFY_PRODUCTION_THEME_ID }}
+        run: |
+          echo "🚀 Deploying to production theme: $SHOPIFY_THEME_ID"
+          shopify theme push \
+            --path . \
+            --store $SHOPIFY_STORE_DOMAIN \
+            --theme $SHOPIFY_THEME_ID \
+            --force
+
+      - name: Success notification
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log('✅ Production deployment successful');
+            console.log('Theme ID:', '${{ env.SHOPIFY_THEME_ID }}');
+            console.log('Store:', '${{ secrets.SHOPIFY_STORE_DOMAIN }}');
+
+      - name: Failure notification
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.error('❌ Production deployment failed');
+            console.error('Check the logs for details');

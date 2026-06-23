@@ -1,0 +1,111 @@
+name: Build & Deploy Theme to Staging
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'pupupu/src/storefront-entry.tsx'
+      - 'pupupu/src/styles/storefront-entry.css'
+      - 'pupupu/vite.storefront.config.ts'
+      - 'pupupu/package.json'
+      - 'realize-test/**'
+      - '.github/workflows/theme-deploy-staging.yml'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: 'pupupu/package-lock.json'
+
+      - name: Install dependencies (pupupu)
+        working-directory: ./pupupu
+        run: npm ci
+
+      - name: Build storefront bundle
+        working-directory: ./pupupu
+        run: npm run build:theme
+
+      - name: Verify bundle output
+        run: |
+          ls -lh realize-test/assets/r3f-configurator.* || echo "❌ Bundle not found!"
+          file realize-test/assets/r3f-configurator.js || echo "❌ JS file missing!"
+          file realize-test/assets/r3f-configurator.css || echo "❌ CSS file missing!"
+
+      - name: Setup Shopify CLI
+        run: npm install -g @shopify/cli@latest
+
+      - name: Authenticate with Shopify
+        env:
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_THEME_ACCESS_PASSWORD: ${{ secrets.SHOPIFY_THEME_ACCESS_PASSWORD }}
+        run: |
+          mkdir -p ~/.shopify
+          cat > ~/.shopify/shopify.yml << EOF
+          analytics_disabled: false
+          auth:
+            accounts:
+              staging:
+                store: ${SHOPIFY_STORE_DOMAIN}
+                password: ${SHOPIFY_THEME_ACCESS_PASSWORD}
+          EOF
+
+      - name: Deploy to Staging Theme
+        working-directory: ./realize-test
+        env:
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_STAGING_THEME_ID }}
+          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_THEME_ACCESS_PASSWORD }}
+        run: |
+          shopify theme push \
+            --path . \
+            --store $SHOPIFY_STORE_DOMAIN \
+            --theme $SHOPIFY_THEME_ID \
+            --force \
+            --unpublished
+
+      - name: Post Deployment Comment
+        if: github.event_name == 'push'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const commit = context.payload.head_commit || context.payload.pull_request?.head.sha || context.sha;
+            const message = `✅ Theme deployed to staging
+
+            - Commit: ${commit.substring(0, 7)}
+            - R3F Bundle: Built successfully
+            - Theme ID: ${{ secrets.SHOPIFY_STAGING_THEME_ID }}
+            - Preview: https://${{ secrets.SHOPIFY_STORE_DOMAIN }}/admin/themes/${{ secrets.SHOPIFY_STAGING_THEME_ID }}/editor
+            `;
+
+            if (context.eventName === 'pull_request') {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: message,
+              });
+            } else {
+              console.log(message);
+            }
+
+      - name: Notify on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.error('❌ Build or deployment failed');
+            console.error('Check the logs above for details');
