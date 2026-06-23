@@ -1,1 +1,0 @@
-export { getCheckoutDeliveryTimeline } from './checkoutDeliveryDates';

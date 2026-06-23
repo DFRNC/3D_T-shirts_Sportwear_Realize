@@ -1,1 +1,0 @@
-export { CheckoutTablePlaceholder } from './CheckoutTablePlaceholder';

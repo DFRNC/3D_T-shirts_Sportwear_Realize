@@ -1,1 +1,0 @@
-export { ConfiguratorCanvasLoader } from './ConfiguratorCanvasLoader';

@@ -1,1 +1,0 @@
-export { buildTestoGizmoElements } from './buildTestoGizmoElements';

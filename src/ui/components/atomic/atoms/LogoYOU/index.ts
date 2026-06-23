@@ -1,1 +1,0 @@
-export { LogoYOU } from './LogoYOU';

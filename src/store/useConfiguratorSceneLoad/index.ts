@@ -1,1 +1,0 @@
-export { useConfiguratorSceneLoad } from './useConfiguratorSceneLoad';

@@ -1,1 +1,0 @@
-export { buildTestoStyleUniforms } from './buildTestoStyleUniforms';

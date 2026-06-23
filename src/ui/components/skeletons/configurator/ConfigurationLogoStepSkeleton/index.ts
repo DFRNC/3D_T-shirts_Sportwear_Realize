@@ -1,1 +1,0 @@
-export { ConfigurationLogoStepSkeleton } from './ConfigurationLogoStepSkeleton';

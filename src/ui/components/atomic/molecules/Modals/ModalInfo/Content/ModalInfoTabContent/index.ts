@@ -1,1 +1,0 @@
-export { ModalInfoTabContent } from './ModalInfoTabContent';

@@ -1,1 +1,0 @@
-export { useShowConfigurationSkeleton } from './useShowConfigurationSkeleton';

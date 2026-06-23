@@ -1,1 +1,0 @@
-export { LogoEditPanel } from './LogoEditPanel';

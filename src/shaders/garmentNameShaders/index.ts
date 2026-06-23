@@ -1,1 +1,0 @@
-export { garmentNameMapFragment } from './garmentNameShaders';

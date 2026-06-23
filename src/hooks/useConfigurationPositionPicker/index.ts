@@ -1,1 +1,0 @@
-export { useConfigurationPositionPicker } from './useConfigurationPositionPicker';

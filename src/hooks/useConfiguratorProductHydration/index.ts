@@ -1,1 +1,0 @@
-export { useConfiguratorProductHydration } from './useConfiguratorProductHydration';

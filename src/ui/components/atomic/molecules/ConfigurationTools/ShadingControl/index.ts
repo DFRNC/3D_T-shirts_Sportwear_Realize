@@ -1,1 +1,0 @@
-export { ShadingControl } from './ShadingControl';

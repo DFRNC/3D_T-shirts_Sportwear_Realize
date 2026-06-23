@@ -1,1 +1,0 @@
-export { ConfigurationDesign } from './ConfigurationDesign';

@@ -1,1 +1,0 @@
-export { ConfiguratorPage } from './ConfiguratorPage';

@@ -1,1 +1,0 @@
-export { DefaultPagesTemplate } from './DefaultPagesTemplate';

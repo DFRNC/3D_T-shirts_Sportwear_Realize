@@ -1,1 +1,0 @@
-export { getStrictContext } from './getStrictContext';

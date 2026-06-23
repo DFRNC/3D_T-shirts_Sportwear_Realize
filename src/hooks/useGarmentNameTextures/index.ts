@@ -1,1 +1,0 @@
-export { useGarmentNameTextures } from './useGarmentNameTextures';

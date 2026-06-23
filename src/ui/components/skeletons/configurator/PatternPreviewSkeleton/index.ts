@@ -1,1 +1,0 @@
-export { PatternPreviewSkeleton } from './PatternPreviewSkeleton';

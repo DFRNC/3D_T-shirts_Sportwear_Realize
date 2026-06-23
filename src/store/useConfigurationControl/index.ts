@@ -1,1 +1,0 @@
-export { useConfigurationControl } from './useConfigurationControl';

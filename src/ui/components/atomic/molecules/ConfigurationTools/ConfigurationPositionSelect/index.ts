@@ -1,1 +1,0 @@
-export { ConfigurationPositionSelect } from './ConfigurationPositionSelect';

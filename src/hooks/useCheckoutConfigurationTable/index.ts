@@ -1,1 +1,0 @@
-export { useCheckoutConfigurationTable } from './useCheckoutConfigurationTable';

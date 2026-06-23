@@ -1,1 +1,0 @@
-export { priceFormat } from './priceFormat';

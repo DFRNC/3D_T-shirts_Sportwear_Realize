@@ -1,1 +1,0 @@
-export { withListPunctuation } from './withListPunctuation';

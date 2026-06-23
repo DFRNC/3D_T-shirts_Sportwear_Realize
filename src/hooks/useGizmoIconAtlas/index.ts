@@ -1,1 +1,0 @@
-export { useGizmoIconAtlas } from './useGizmoIconAtlas';

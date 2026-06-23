@@ -1,1 +1,0 @@
-export { ConfigurationLogo } from './ConfigurationLogo';

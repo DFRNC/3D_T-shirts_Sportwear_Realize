@@ -1,1 +1,0 @@
-export { useConfiguratorInitialSceneLoad } from './useConfiguratorInitialSceneLoad';

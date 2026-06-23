@@ -1,1 +1,0 @@
-export { ProductCatalogOption } from './ProductCatalogOption';

@@ -1,1 +1,0 @@
-export { ConfigurationAccordionStepSkeleton } from './ConfigurationAccordionStepSkeleton';

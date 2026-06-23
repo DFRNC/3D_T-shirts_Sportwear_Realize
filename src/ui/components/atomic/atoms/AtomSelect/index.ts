@@ -1,1 +1,0 @@
-export { AtomSelect } from './AtomSelect';

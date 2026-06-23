@@ -1,1 +1,0 @@
-export { garmentGradientMapFragment } from './garmentGradientShaders';

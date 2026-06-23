@@ -167,22 +167,10 @@
   </sticky-add-to-cart>
 {% endif %}
 
-{% # R3F Configurator Section (if product has custom.id metafield) %}
 {% if closest.product.metafields.custom.id %}
-  {%
-    render 'r3f-configurator',
-    product: closest.product,
-    section_id: section.id
-  %}
+  {% render 'r3f-configurator', product: closest.product, section_id: section.id %}
 {% else %}
-  {% render 'product-information-content',
-    product: closest.product,
-    section_id: section.id,
-    settings: section.settings,
-    media_gallery: media_gallery,
-    product_details: product_details,
-    additional_blocks: additional_blocks
-  %}
+  {% render 'product-information-content', product: closest.product, section_id: section.id, settings: section.settings, media_gallery: media_gallery, product_details: product_details, additional_blocks: additional_blocks %}
 {% endif %}
 
 {% stylesheet %}

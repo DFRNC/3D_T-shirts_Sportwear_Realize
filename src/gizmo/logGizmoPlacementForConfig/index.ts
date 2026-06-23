@@ -1,1 +1,0 @@
-export { logGizmoPlacementForConfig } from './logGizmoPlacementForConfig';

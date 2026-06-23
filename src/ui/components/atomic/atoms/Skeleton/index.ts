@@ -1,1 +1,0 @@
-export { AtomSkeleton } from './AtomSkeleton';

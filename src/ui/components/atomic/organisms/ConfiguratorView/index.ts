@@ -1,1 +1,0 @@
-export { ConfiguratorView } from './ConfiguratorView';

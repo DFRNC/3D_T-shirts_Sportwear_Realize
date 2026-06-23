@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//d/work/configurators/pupupu/app/**)",
+      "Read(//d/work/configurators/pupupu/src/ui/components/atomic/pages/ConfiguratorPage/**)",
+      "Read(//d/work/configurators/pupupu/src/hooks/useConfiguratorProductHydration/**)",
+      "Bash(find \"D:/work/configurators/pupupu\" -path \"*store*\" -name \"*.ts*\" | grep -i config)",
+      "Read(//d/work/configurators/pupupu/**)",
+      "Bash(npm ls *)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'fix: remove non-ASCII characters from Liquid templates *)",
+      "Bash(find \"d:\\\\work\\\\configurators\" -name \"r3f-configurator.js\" -o -name \"r3f-configurator.css\" 2>/dev/null)",
+      "Read(//d/work/configurators/**)"
+    ],
+    "additionalDirectories": [
+      "D:\\work\\configurators\\pupupu\\src",
+      "D:\\work\\configurators\\pupupu"
+    ]
+  }
+}

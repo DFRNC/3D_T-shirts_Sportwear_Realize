@@ -1,1 +1,0 @@
-export { CheckoutSummaryPanel } from './CheckoutSummaryPanel';

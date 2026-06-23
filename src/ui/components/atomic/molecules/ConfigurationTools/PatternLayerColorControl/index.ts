@@ -1,1 +1,0 @@
-export { PatternLayerColorControl } from './PatternLayerColorControl';
