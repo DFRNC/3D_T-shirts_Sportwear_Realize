@@ -108,11 +108,13 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     if (!activeItem) return;
     if (!getModel(modelId)) return;
 
-    const isSameProduct = activeItem.modelId === modelId && activeItem.slug === slug;
-    if (isSameProduct) {
-      // Same model: keep the in-progress configuration, just refresh business data.
+    // The geometry (modelId) is what drives the heavy 3D rebuild. The default cart item
+    // is already initialised with the default model, so when the loaded product maps to the
+    // SAME model we must NOT reset/reactivate — that would rebuild the whole scene a second
+    // time on every open. Only the slug + business need refreshing in that case.
+    if (activeItem.modelId === modelId) {
       set({
-        items: items.map((item) => (item.id === activeItemId ? { ...item, business } : item)),
+        items: items.map((item) => (item.id === activeItemId ? { ...item, slug, business } : item)),
       });
       useConfiguratorProduct.getState().initFromLoader(modelId, business);
       return;

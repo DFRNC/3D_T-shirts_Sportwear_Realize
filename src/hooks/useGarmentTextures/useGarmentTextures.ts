@@ -37,13 +37,17 @@ import {
 
 const DEFAULT_PATTERN_COLOR = '#000000';
 
-const buildPatternColors = (pattern: designPatternItemType | null, patternColors: Record<string, string>): patternColorPairType => {
-  const colors: [string, string] = [DEFAULT_PATTERN_COLOR, DEFAULT_PATTERN_COLOR];
+const buildPatternColors = (
+  pattern: designPatternItemType | null,
+  patternColors: Record<string, string>,
+  designLayerColors: Record<number, string>,
+): patternColorPairType => {
+  const colors: [string, string] = [designLayerColors[0] ?? DEFAULT_PATTERN_COLOR, designLayerColors[1] ?? DEFAULT_PATTERN_COLOR];
 
   if (!pattern) return colors;
 
   for (let index = 0; index < Math.min(pattern.parts.length, PATTERN_LAYER_COUNT); index += 1) {
-    colors[index] = patternColors[pattern.parts[index].key] ?? DEFAULT_PATTERN_COLOR;
+    colors[index] = patternColors[pattern.parts[index].key] ?? designLayerColors[index] ?? DEFAULT_PATTERN_COLOR;
   }
 
   return colors;
@@ -57,6 +61,7 @@ const useGarmentTextures = () => {
   const productPath = useGarmentDesign((state) => state.productPath);
   const activePattern = useGarmentDesign((state) => state.activePattern);
   const patternColors = useGarmentDesign((state) => state.patternColors);
+  const designLayerColors = useGarmentDesign((state) => state.designLayerColors);
   const activeOpacity = useGarmentDesign((state) => state.activeOpacity);
   const defaultPattern = useGarmentDesign((state) => state.defaultPattern);
   const activeItemId = useConfigurationCart((state) => state.activeItemId);
@@ -105,20 +110,20 @@ const useGarmentTextures = () => {
     return {
       defaultLogos: logosTextureRef.current ?? emptyMaskPair()[0],
       patternMasks: maskTexturesRef.current,
-      patternColors: buildPatternColors(activePattern, patternColors),
+      patternColors: buildPatternColors(activePattern, patternColors, designLayerColors),
       patternOpacity: activeOpacity,
     };
-  }, [activeOpacity, activePattern, patternColors]);
+  }, [activeOpacity, activePattern, designLayerColors, patternColors]);
 
   const buildEmptyPrintState = useCallback((): garmentPrintStateType => {
     const emptyMasks = emptyMaskPair();
     return {
       defaultLogos: emptyMasks[0],
       patternMasks: emptyMasks,
-      patternColors: buildPatternColors(null, {}),
+      patternColors: buildPatternColors(null, {}, designLayerColors),
       patternOpacity: 0,
     };
-  }, []);
+  }, [designLayerColors]);
 
   const applyPrintState = useCallback(
     (state: garmentPrintStateType) => {
@@ -156,7 +161,7 @@ const useGarmentTextures = () => {
   }, [byPart, getMaterials, gradientsByPart, invalidate, product.parts]);
 
   const applyPatternTints = useCallback(() => {
-    const colors = buildPatternColors(activePattern, patternColors);
+    const colors = buildPatternColors(activePattern, patternColors, designLayerColors);
 
     for (const part of product.parts) {
       if (isColorOnlyGarmentPart(part)) continue;
@@ -167,7 +172,7 @@ const useGarmentTextures = () => {
     }
 
     invalidate();
-  }, [activeOpacity, activePattern, getMaterials, invalidate, patternColors, product.parts]);
+  }, [activeOpacity, activePattern, designLayerColors, getMaterials, invalidate, patternColors, product.parts]);
 
   const activePatternKey = activePattern?.key ?? null;
 
