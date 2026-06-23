@@ -4,3 +4,4 @@ public/build
 public/ghostscript
 */*.yml
 .shopify
+.claude
