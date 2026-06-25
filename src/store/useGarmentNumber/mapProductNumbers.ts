@@ -2,7 +2,7 @@
 
 import type { garmentConfigType, numberInstanceType, numberLimitsType, numberPositionType, textDefaultsConfigType, uvPointType } from '@types';
 
-import { resolvePrintLocalUvToAtlas } from '@utils';
+import { resolvePrintLocalUvToAtlas } from '@configurator/utils';
 
 const NUMBER_MAX_LENGTH = 2;
 const NUMBER_DEFAULT_LINE_HEIGHT = 1.5;

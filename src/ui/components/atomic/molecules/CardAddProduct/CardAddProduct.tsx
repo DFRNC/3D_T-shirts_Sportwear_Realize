@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 
 import { Flex, ScrollArea } from '@atoms';
 
+import { useGarmentCatalogPreloadEffect } from '@hooks';
 import { getCatalogProductEntry, getModel, resolveCartItemDisplayPreview } from '@utils';
-import { preloadGarmentProduct } from '@configurator/utils';
 import { useConfigurationCart } from '@store';
 
 import { ProductCatalogPopover } from '../ProductCatalogPopover';
@@ -21,12 +21,9 @@ const CardAddProduct = () => {
   const removeItem = useConfigurationCart((state) => state.removeItem);
 
   const activeItem = items.find((item) => item.id === activeItemId) ?? items[0];
+  const modelIds = useMemo(() => items.map((item) => item.modelId), [items]);
 
-  useEffect(() => {
-    for (const item of items) {
-      preloadGarmentProduct(item.modelId);
-    }
-  }, [items]);
+  useGarmentCatalogPreloadEffect(modelIds);
 
   return (
     <Flex className="absolute left-0 top-4 z-30 flex max-h-[calc(100%-1rem)] w-[92px] flex-col gap-0 overflow-visible">

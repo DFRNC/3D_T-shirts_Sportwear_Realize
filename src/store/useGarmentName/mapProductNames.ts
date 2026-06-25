@@ -2,7 +2,7 @@
 
 import type { garmentConfigType, nameInstanceType, nameLimitsType, namePositionType, textDefaultsConfigType } from '@types';
 
-import { resolvePrintLocalUvToAtlas } from '@utils';
+import { resolvePrintLocalUvToAtlas } from '@configurator/utils';
 
 const resolveNamePart = (product: garmentConfigType, partId: string) => {
   const part = product.parts.find((item) => item.id === partId);

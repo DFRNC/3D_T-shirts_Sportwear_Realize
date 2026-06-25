@@ -3,26 +3,22 @@
 import Link from 'next/link';
 import { useCallback, useRef } from 'react';
 
-import { preloadGarmentScene } from '@configurator/scene';
-import { preloadGarmentAppearance, preloadGarmentProduct } from '@configurator/utils';
 import { AtomImage } from '@atoms';
-import type { modelIdType, productFlipCardPropsType } from '@types';
+import { useGarmentCatalogPreload } from '@hooks';
+import type { productFlipCardPropsType } from '@types';
 import { cn, hasModel, resolveProductFlipCardSrc } from '@utils';
 
 const ProductFlipCard = ({ collection, slug, alt, previewSrc, activePreviewSrc, className }: productFlipCardPropsType) => {
   const isWarmedRef = useRef(false);
+  const { warmBySlug } = useGarmentCatalogPreload();
   const hasRemoteImages = previewSrc != null || activePreviewSrc != null;
   const frontSrc = previewSrc ?? (hasRemoteImages ? '' : resolveProductFlipCardSrc(collection, slug, 'front'));
   const backSrc = activePreviewSrc ?? previewSrc ?? (hasRemoteImages ? '' : resolveProductFlipCardSrc(collection, slug, 'back'));
   const warmProductAssets = useCallback(() => {
     if (isWarmedRef.current || !hasModel(slug)) return;
     isWarmedRef.current = true;
-
-    const modelId = slug as modelIdType;
-    preloadGarmentProduct(modelId);
-    preloadGarmentAppearance(modelId);
-    preloadGarmentScene(modelId);
-  }, [slug]);
+    warmBySlug(slug);
+  }, [slug, warmBySlug]);
 
   return (
     <Link

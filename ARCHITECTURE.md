@@ -215,7 +215,7 @@ All UI lives under `src/ui/` and follows Atomic Design tiers.
 | **Atoms**     | `src/ui/components/atomic/atoms/`     | `@atoms`     | Smallest blocks: `Button`, `AtomInput`, `ColorPicker`, `AtomSkeleton`       |
 | **Molecules** | `src/ui/components/atomic/molecules/` | `@molecules` | Step panels: `ConfigurationDesign`, `LogoUpload`, `ConfiguratorStepTabs`    |
 | **Organisms** | `src/ui/components/atomic/organisms/` | `@organisms` | `AsideConfiguration`, `ConfiguratorView`, `Configurator` (thin 3D mount)      |
-| **Templates** | `src/ui/components/atomic/templates/` | `@templates` | Page layouts without data coupling                                          |
+| **Templates** | `src/ui/components/atomic/templates/` | `@templates` | Page layouts without data coupling (`ConfiguratorLayoutTemplate`) |
 | **Pages**     | `src/ui/components/atomic/pages/`     | `@pages`     | `ConfiguratorPage`, `HomePage`, `CheckoutPage`                              |
 | **Shared**    | `src/ui/components/shared/`           | `@shared`    | shadcn/Radix primitives (`Dialog`, `Accordion`, …)                          |
 | **Skeletons** | `src/ui/components/skeletons/`        | `@skeletons` | Loading skeletons mirroring configurator/checkout layouts                   |
@@ -255,7 +255,7 @@ App-level React hooks (navigation, checkout, cart sync, skeletons, logo upload).
 
 | Category        | Examples                                                                 |
 | --------------- | ------------------------------------------------------------------------ |
-| Configurator UX | `useConfiguratorProductHydration`, `useConfiguratorInitialSceneLoad`     |
+| Configurator UX | `useConfiguratorProductHydration`, `useConfiguratorInitialSceneLoad`, `useGarmentCatalogPreload` |
 | Store wrappers  | `useConfigurationCartSync`, `useProductStepsConfiguration`               |
 | UI state        | `useSlidingIndicator`, `useShowConfigurationSkeleton`                    |
 | Checkout        | `useCheckoutInit`, `useNavigateToCheckout`                                 |
@@ -355,7 +355,7 @@ app/
 | ----------- | ------------------ | ------------------------------------------ |
 | `/`         | `HomePage`         | Product gallery                            |
 | `/checkout` | `CheckoutPage`     | Static route; wins over `[slug]`           |
-| `/:slug`    | `ConfiguratorPage` | Hydrates product, mounts configurator view |
+| `/:slug`    | `ConfiguratorPage` | `ConfiguratorLayoutTemplate` + Shopify hydrate |
 
 Routes stay **thin**: import from `@pages` only.
 

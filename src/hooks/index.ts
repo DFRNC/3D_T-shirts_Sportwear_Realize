@@ -1,6 +1,7 @@
 'use client';
 
 export { useAppNavigate, buildAppPath } from './useAppNavigate';
+export { useGarmentCatalogPreload, useGarmentCatalogPreloadEffect, warmGarmentCatalogAssets } from './useGarmentCatalogPreload';
 export { useConfiguratorInitialSceneLoad } from './useConfiguratorInitialSceneLoad';
 export { useConfiguratorProductHydration } from './useConfiguratorProductHydration';
 export { useSceneTransitionTrigger } from './useSceneTransitionTrigger';
