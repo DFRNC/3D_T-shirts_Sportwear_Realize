@@ -200,9 +200,7 @@ Types that belong to the 3D module — **not** general UI or catalog entities:
 | `PrintPlacementInstance`        | UV placement for name/number/logo/testo      |
 | `*PropsType` (scene components) | R3F component props (part mesh, gizmo, …)   |
 
-Shared domain types (`garmentConfigType`, cart, checkout) remain in `@types/entities` and `@types/garment`. Shader pipeline types (`pbrMapsType`, `garmentPrintStateType`) remain in `@types/utils` for now.
-
-`@types` re-exports configurator types as **deprecated** shims for backward compatibility.
+Shared domain types (`garmentConfigType`, cart, checkout) remain in `@types/entities` and `@types/garment`. Shader pipeline types (`pbrMapsType`, `garmentPrintStateType`, `stampPixelSizeType`, atlas inputs, …) live in `@configurator/types`. `@types/utils` re-exports shader types as a **deprecated** shim.
 
 ---
 
@@ -250,8 +248,8 @@ export { ConfiguratorCanvas as Configurator } from '@configurator';
 
 ### `src/hooks/` (`@hooks`)
 
-App-level React hooks (navigation, checkout, cart sync, skeletons, logo upload).  
-3D hooks moved to `@configurator/hooks`; `@hooks` keeps **deprecated re-exports** for migration.
+App-level React hooks (navigation, checkout, cart sync, skeletons, logo upload, catalog preload).  
+3D hooks live in `@configurator/hooks` only.
 
 | Category        | Examples                                                                 |
 | --------------- | ------------------------------------------------------------------------ |
@@ -299,7 +297,7 @@ Configurator types: prefer `@configurator/types` (also exported from `@configura
 ### `src/utils/` (`@utils`)
 
 App-wide pure utilities: catalog, logo file conversion, checkout dates, design SVG tinting.  
-3D/print utilities moved to `@configurator/utils`; `@utils` keeps **deprecated re-exports**.
+3D/print utilities live in `@configurator/utils` only.
 
 ### `src/gizmo/` (`@gizmo`)
 
@@ -461,10 +459,4 @@ Applies to: UI components, configurator components, hooks, gizmo modules, utils.
 
 ### Deprecation policy
 
-Legacy paths still work during migration:
-
-- `@hooks` → re-exports 3D hooks from `@configurator/hooks`
-- `@utils` → re-exports 3D utils from `@configurator/utils`
-- `@types` → re-exports configurator types from `@configurator/types`
-
-New code should import directly from `@configurator/*`.
+Legacy `@types/utils` shader types re-export from `@configurator/types`. Import 3D code only from `@configurator/*`.

@@ -15,14 +15,33 @@ export {
   enrichGltfScene,
 } from './scene';
 export type {
+  composeLogoStampAtlasInputType,
+  composeNameMaskAtlasInputType,
   configuratorProductHydrationType,
   configuratorStepValueType,
+  drawNameMaskGeometryInputType,
+  drawNameStrokeMaskGeometryInputType,
   garmentGltfSceneType,
+  garmentLogoStampStateType,
+  garmentNameMaskStateType,
   garmentPartMeshPropsType,
+  garmentPrintStateType,
+  gizmoFrameStateType,
+  imageTextureOptionsType,
+  logoStampAtlasType,
+  logoStyleUniformsType,
+  nameMaskAtlasType,
+  nameStyleUniformsType,
+  patternColorPairType,
+  patternMaskPairType,
+  pbrMapsType,
   preserveGltfMeshPropsType,
   printGizmoInstancePropsType,
   PrintPlacementInstance,
+  productAppearanceTexturesType,
+  stampPixelSizeType,
   staticGltfMeshPropsType,
+  textCanvasDrawOptionsType,
 } from './types';
 export { preloadGarmentScene as preloadConfiguratorScene } from './scene';
 export {

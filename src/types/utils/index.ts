@@ -1,17 +1,21 @@
-export type { composeLogoStampAtlasInputType, logoStampAtlasType } from './composeLogoStampAtlas';
-export type { composeNameMaskAtlasInputType, nameMaskAtlasType } from './composeNameMaskAtlas';
-export type { drawNameMaskGeometryInputType, drawNameStrokeMaskGeometryInputType, textCanvasDrawOptionsType } from './drawNameOnAtlas';
-export type { productAppearanceTexturesType } from './garmentAppearance';
+/** @deprecated Import shader/pipeline types from `@configurator/types` instead. */
 export type {
+  composeLogoStampAtlasInputType,
+  composeNameMaskAtlasInputType,
+  drawNameMaskGeometryInputType,
+  drawNameStrokeMaskGeometryInputType,
   garmentLogoStampStateType,
   garmentNameMaskStateType,
   garmentPrintStateType,
   gizmoFrameStateType,
+  imageTextureOptionsType,
   logoSlotBounds4Type,
   logoSlotFloat4Type,
   logoSlotUniformsType,
   logoSlotVec2Type,
+  logoStampAtlasType,
   logoStyleUniformsType,
+  nameMaskAtlasType,
   nameSlotBounds4Type,
   nameSlotColor4Type,
   nameSlotFloat4Type,
@@ -19,7 +23,8 @@ export type {
   nameStyleUniformsType,
   patternColorPairType,
   patternMaskPairType,
-} from './garmentPrint';
-export type { imageTextureOptionsType } from './imageToTexture';
-export type { pbrMapsType } from './pbrMaps';
-export type { stampPixelSizeType } from './stampPixelSize';
+  pbrMapsType,
+  productAppearanceTexturesType,
+  stampPixelSizeType,
+  textCanvasDrawOptionsType,
+} from '@configurator/types';

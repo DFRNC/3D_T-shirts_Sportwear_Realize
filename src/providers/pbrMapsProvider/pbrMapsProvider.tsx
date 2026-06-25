@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useMemo } from 'react';
 
-import type { pbrMapsType } from '@types';
+import type { pbrMapsType } from '@configurator/types';
 
 const PbrMapsContext = createContext<pbrMapsType | null>(null);
 
