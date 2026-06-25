@@ -12,7 +12,7 @@ import {
   subscribeGizmoButtonHover,
   subscribeGizmoButtonReveal,
 } from '@configurator/gizmo';
-import { useGizmoIconAtlas } from '@configurator/hooks/useGizmoIconAtlas';
+import { useGizmoIconAtlas } from '../useGizmoIconAtlas';
 import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@configurator/providers';
 import { resolveLogoInstancesForRender, useConfigurationControl, useConfiguratorProduct, useGarmentLogo } from '@store';
 import { LOGO_SLOT_COUNT } from '@constants';

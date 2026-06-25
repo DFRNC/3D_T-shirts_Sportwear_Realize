@@ -1,4 +1,4 @@
-import { CONFIGURATOR_STEP_META } from '../../constants/configuratorStepMeta';
+import { CONFIGURATOR_STEP_META } from '@constants';
 import type { garmentConfigType } from '@types';
 
 import { isConfiguratorStepAvailable } from './isConfiguratorStepAvailable';

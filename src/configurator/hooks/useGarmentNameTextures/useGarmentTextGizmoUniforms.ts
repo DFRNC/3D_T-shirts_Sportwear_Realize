@@ -11,7 +11,7 @@ import {
   subscribeGizmoButtonHover,
   subscribeGizmoButtonReveal,
 } from '@configurator/gizmo';
-import { useGizmoIconAtlas } from '@configurator/hooks/useGizmoIconAtlas';
+import { useGizmoIconAtlas } from '../useGizmoIconAtlas';
 import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@configurator/providers';
 import {
   resolveInstancesForRender,

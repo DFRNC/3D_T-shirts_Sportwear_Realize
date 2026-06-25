@@ -325,7 +325,8 @@ Shopify Storefront GraphQL, product/collection resolution, `configuratorProductH
 
 ### `src/constants/` (`@constants`)
 
-Wizard steps meta, color palette, print-atlas dimensions, checkout limits, configurator copy.
+Single barrel file `index.ts` — catalog, UI copy, checkout labels, palette, and 3D print pipeline values (atlas size, slot counts, gizmo chrome).  
+Wizard step metadata: `CONFIGURATOR_STEP_META`. React step wiring: `STEPS_CONFIGURATION` (exported from `@molecules`).
 
 ### `src/providers/` (`@providers`)
 
@@ -435,9 +436,7 @@ Defined in `tsconfig.json`:
 | **`@configurator/scene`**  | `src/configurator/scene`            |
 | **`@configurator/runtime`**| `src/configurator/runtime`          |
 | **`@configurator/hooks`**  | `src/configurator/hooks`            |
-| **`@configurator/hooks/*`**| subpath (avoid circular barrel)     |
 | **`@configurator/utils`**  | `src/configurator/utils`            |
-| **`@configurator/utils/*`**| subpath                             |
 | **`@configurator/types`**  | `src/configurator/types`            |
 
 ---
@@ -459,9 +458,11 @@ Defined in `tsconfig.json`:
 | Product catalog (`getModel`) | `@utils` (shared, not configurator-specific)    |
 | User configuration           | `@store`                                        |
 
-Cross-hook imports inside `@configurator/hooks` may use `@configurator/hooks/useGizmoPointerContext` subpaths to avoid circular dependencies through the barrel.
+**No subpath imports:** tsconfig defines barrel aliases only (e.g. `@molecules`, `@configurator/hooks`) — never `@alias/*` wildcards and never `@alias/FeatureName/...`. UI: `@atoms`, `@molecules`, `@organisms`, …; configurator: `@configurator` or layer barrels. Sibling files inside one module use relative imports.
 
-Within the same module (`canvas/`, `scene/`, `utils/`), relative imports between siblings are allowed.
+Cross-hook imports inside `@configurator/hooks` use relative paths between sibling folders (never `@alias/*` subpaths).
+
+Within the same module (`canvas/`, `scene/`, `utils/`, `hooks/`), relative imports between siblings are allowed.
 
 ### Module folder pattern
 

@@ -11,7 +11,7 @@ import type {
   testoInstanceType,
   uvPointType,
 } from '@types';
-import { PALETTE_COLORS } from '../../constants/PALETTE_COLORS/PALETTE_COLORS';
+import { PALETTE_COLORS } from '@constants';
 
 import { buildDefaultGradients, useGarmentColor } from '../useGarmentColor';
 import { useGarmentDesign } from '../useGarmentDesign';

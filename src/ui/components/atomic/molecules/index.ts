@@ -32,4 +32,5 @@ export {
   ConfigurationNumbers,
   ConfigurationShading,
   ConfigurationTesto,
+  STEPS_CONFIGURATION,
 } from './ConfigurationSteps';

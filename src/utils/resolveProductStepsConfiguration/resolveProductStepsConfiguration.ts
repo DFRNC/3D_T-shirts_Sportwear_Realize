@@ -1,4 +1,4 @@
-import { STEPS_CONFIGURATION } from '../../constants/STEPS_CONFIGURATION';
+import { STEPS_CONFIGURATION } from '@molecules';
 import type { garmentConfigType, headerConfigItemType } from '@types';
 
 import { isConfiguratorStepAvailable } from './isConfiguratorStepAvailable';

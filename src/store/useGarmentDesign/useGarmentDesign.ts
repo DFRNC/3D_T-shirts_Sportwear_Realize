@@ -5,7 +5,7 @@ import type { designPatternItemType, garmentConfigType, garmentDesignSnapshotTyp
 import { create } from 'zustand';
 
 import { mapDefaultPattern, mapProductDesigns } from '@configurator/mappers';
-import { PALETTE_COLORS } from '../../constants/PALETTE_COLORS/PALETTE_COLORS';
+import { PALETTE_COLORS } from '@constants';
 
 const DEFAULT_COLOR = PALETTE_COLORS[1];
 const DEFAULT_OPACITY = 1;

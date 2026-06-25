@@ -14,7 +14,7 @@ import {
 import type { gizmoButtonHitType, printablePartMeshesType, printDragMoveStateType, printGizmoElementType } from '@configurator/types';
 import type { uvPointType } from '@types';
 import { useConfiguratorProduct, useGarmentLogo, useGarmentName, useGarmentNumber, useGarmentTesto } from '@store';
-import { useGizmoPointerContext } from '@configurator/hooks/useGizmoPointerContext';
+import { useGizmoPointerContext } from '../useGizmoPointerContext';
 
 type DragMode = 'move' | 'rotate' | 'scale';
 
