@@ -173,15 +173,21 @@ const useGarmentAppearanceSceneLoad = ({
 
     pendingInitialPaintRef.current = false;
     initialLoadCompletedRef.current = true;
-    finishSceneLoad(() => {
-      markInitialSceneLoaded();
+    const completeInitialLoad = () => {
+      finishSceneLoad(() => {
+        markInitialSceneLoaded();
 
-      const sceneLoad = useConfiguratorSceneLoad.getState();
-      if (sceneLoad.isSceneTransitionLoading) {
-        sceneLoad.markSceneTransitionLoaded();
-      }
-    });
-    runShaderUpgrade();
+        const sceneLoad = useConfiguratorSceneLoad.getState();
+        if (sceneLoad.isSceneTransitionLoading) {
+          sceneLoad.markSceneTransitionLoaded();
+        }
+      });
+    };
+
+    // Keep the initial loader visible until shader upgrades finish.
+    if (!runShaderUpgrade(completeInitialLoad)) {
+      completeInitialLoad();
+    }
   }, [finishSceneLoad, initialLoadCompletedRef, isInitialSceneLoading, markInitialSceneLoaded, runShaderUpgrade]);
 
   const completeSceneLoadersIfReady = useCallback(() => {
