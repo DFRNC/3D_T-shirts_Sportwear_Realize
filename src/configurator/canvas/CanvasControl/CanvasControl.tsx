@@ -2,7 +2,7 @@
 
 import { useCartPreviewCapture } from '@configurator/hooks';
 
-import { ViewControls } from './ViewControls';
+import { ViewControls } from '../ViewControls';
 
 const CanvasControl = () => {
   useCartPreviewCapture();

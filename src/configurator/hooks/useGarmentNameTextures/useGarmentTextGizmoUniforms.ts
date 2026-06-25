@@ -11,7 +11,7 @@ import {
   subscribeGizmoButtonHover,
   subscribeGizmoButtonReveal,
 } from '@gizmo';
-import { useGizmoIconAtlas } from '../useGizmoIconAtlas';
+import { useGizmoIconAtlas } from '@configurator/hooks/useGizmoIconAtlas';
 import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@providers';
 import {
   resolveInstancesForRender,
@@ -37,7 +37,7 @@ import {
   buildGizmoFrameUniforms,
   repairPrintInstancePlacement,
   resolveProductGizmoRotation,
-} from '@utils';
+} from '@configurator/utils';
 
 import { buildStyleSignature } from './garmentTextPrintTextureUtils';
 

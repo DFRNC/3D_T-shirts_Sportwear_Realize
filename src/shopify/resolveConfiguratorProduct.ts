@@ -1,4 +1,4 @@
-import type { configuratorProductHydrationType } from '@types';
+import type { configuratorProductHydrationType } from '@configurator/types';
 import { resolveConfiguratorProductBySlug } from '@utils';
 
 import { isShopifyEnabled } from './config';

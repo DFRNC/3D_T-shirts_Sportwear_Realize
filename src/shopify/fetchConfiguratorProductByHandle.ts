@@ -1,4 +1,4 @@
-import type { configuratorProductHydrationType } from '@types';
+import type { configuratorProductHydrationType } from '@configurator/types';
 
 import { getShopifyApiMode } from './config';
 import { shopifyAdminGraphql } from './adminClient';

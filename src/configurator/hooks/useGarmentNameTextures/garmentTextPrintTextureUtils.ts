@@ -1,7 +1,7 @@
 import type { Texture } from 'three';
 
 import type { garmentTextRenderInstanceType, stampPixelSizeType } from '@types';
-import { packStackedTextMaskTexture } from '@utils';
+import { packStackedTextMaskTexture } from '@configurator/utils';
 
 const DEFAULT_STAMP_SIZE: stampPixelSizeType = { width: 1, height: 1 };
 

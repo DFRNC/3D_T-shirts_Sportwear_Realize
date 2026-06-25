@@ -12,7 +12,7 @@ import {
   subscribeGizmoButtonHover,
   subscribeGizmoButtonReveal,
 } from '@gizmo';
-import { useGizmoIconAtlas } from '../useGizmoIconAtlas';
+import { useGizmoIconAtlas } from '@configurator/hooks/useGizmoIconAtlas';
 import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@providers';
 import { resolveLogoInstancesForRender, useConfigurationControl, useConfiguratorProduct, useGarmentLogo } from '@store';
 import { LOGO_SLOT_COUNT } from '@constants';
@@ -34,7 +34,7 @@ import {
   repairPrintInstancePlacement,
   resolvePrintAtlasSize,
   resolveProductGizmoRotation,
-} from '@utils';
+} from '@configurator/utils';
 
 const NAME_STEP = 4;
 const LOGO_STEP = 7;

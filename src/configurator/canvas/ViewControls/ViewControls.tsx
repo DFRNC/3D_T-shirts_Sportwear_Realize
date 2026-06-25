@@ -14,7 +14,7 @@ import {
   recenterOrbitTargetByZoom,
   resolveCursorFocusPoint,
   resolveGarmentCenter,
-} from '@utils';
+} from '@configurator/utils';
 import { useConfiguratorProduct } from '@store';
 
 const ORBIT_MIN_DISTANCE = 0.05;

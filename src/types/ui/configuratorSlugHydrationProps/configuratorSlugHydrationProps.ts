@@ -1,4 +1,4 @@
-import type { configuratorProductHydrationType } from '@types';
+import type { configuratorProductHydrationType } from '@configurator/types';
 
 type configuratorSlugHydrationPropsType = {
   slug: string;

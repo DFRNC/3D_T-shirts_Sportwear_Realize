@@ -32,24 +32,23 @@
       "@fonts": ["./src/fonts"],
       "@hooks": ["./src/hooks"],
       "@skeletons": ["./src/ui/components/skeletons"],
-      "@gizmo": ["./src/gizmo"],
       "@providers": ["./src/providers"],
       "@shaders": ["./src/shaders"],
       "@constants": ["./src/constants"],
       "@data": ["./src/data"],
       "@configurator": ["./src/configurator"],
-      "@configurator/*": ["./src/configurator/*"],
+      "@configurator/hooks": ["./src/configurator/hooks"],
+      "@configurator/hooks/*": ["./src/configurator/hooks/*"],
+      "@configurator/utils": ["./src/configurator/utils"],
+      "@configurator/utils/*": ["./src/configurator/utils/*"],
+      "@configurator/scene": ["./src/configurator/scene"],
+      "@configurator/runtime": ["./src/configurator/runtime"],
+      "@configurator/canvas": ["./src/configurator/canvas"],
+      "@configurator/types": ["./src/configurator/types"],
+      "@gizmo": ["./src/gizmo"],
       "@shopify": ["./src/shopify"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.d.ts",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "**/*.mts"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.d.ts", ".next/types/**/*.ts", ".next/dev/types/**/*.ts", "**/*.mts"],
   "exclude": ["node_modules"]
 }

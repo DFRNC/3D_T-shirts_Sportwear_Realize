@@ -4,7 +4,8 @@ import { useEffect } from 'react';
 
 import { Flex, ScrollArea } from '@atoms';
 
-import { getCatalogProductEntry, getModel, preloadGarmentProduct, resolveCartItemDisplayPreview } from '@utils';
+import { getCatalogProductEntry, getModel, resolveCartItemDisplayPreview } from '@utils';
+import { preloadGarmentProduct } from '@configurator/utils';
 import { useConfigurationCart } from '@store';
 
 import { ProductCatalogPopover } from '../ProductCatalogPopover';

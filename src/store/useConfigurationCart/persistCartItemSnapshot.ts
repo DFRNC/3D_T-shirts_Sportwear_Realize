@@ -1,7 +1,7 @@
 'use client';
 
 import type { cartItemConfigurationType } from '@types';
-import { captureConfiguratorPreviewSnapshot } from '@utils';
+import { captureConfiguratorPreviewSnapshot } from '@configurator/utils';
 
 import { captureGarmentConfiguration } from './cartItemConfiguration';
 

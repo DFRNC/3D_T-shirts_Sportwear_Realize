@@ -12,7 +12,7 @@ import {
   setGizmoButtonHover,
   toLocalPx,
 } from '@gizmo';
-import { useGizmoPointerContext } from '../useGizmoPointerContext';
+import { useGizmoPointerContext } from '@configurator/hooks/useGizmoPointerContext';
 
 interface UseGizmoButtonHoverOptions {
   elements: printGizmoElementType[];

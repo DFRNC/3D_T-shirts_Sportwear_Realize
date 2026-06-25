@@ -9,7 +9,7 @@ import {
   applyGarmentPrint,
   isColorOnlyGarmentPart,
   resolvePartUvBounds,
-} from '@utils';
+} from '@configurator/utils';
 
 type applyGarmentAppearanceContextType = {
   product: garmentConfigType;

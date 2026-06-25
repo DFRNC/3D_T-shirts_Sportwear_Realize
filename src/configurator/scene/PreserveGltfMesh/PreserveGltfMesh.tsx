@@ -2,9 +2,9 @@
 
 import { memo, useEffect, useMemo } from 'react';
 
-import type { preserveGltfMeshPropsType } from '@types';
+import type { preserveGltfMeshPropsType } from '@configurator/types';
 
-import { biasInsideShellDepth, disposeMeshResources, tagGarmentMeshes } from './gltfMeshHelpers';
+import { biasInsideShellDepth, disposeMeshResources, tagGarmentMeshes } from '../gltfMeshHelpers';
 
 const PreserveGltfMesh = memo(({ meshName, node, renderOrder = 0 }: preserveGltfMeshPropsType) => {
   const instance = useMemo(() => {

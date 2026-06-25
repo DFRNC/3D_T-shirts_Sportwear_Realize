@@ -3,9 +3,9 @@
 import { memo, useEffect, useMemo } from 'react';
 
 import { DEFAULT_COLOR } from '@store';
-import type { staticGltfMeshPropsType } from '@types';
+import type { staticGltfMeshPropsType } from '@configurator/types';
 
-import { applyStaticColor, disposeMeshResources, tagGarmentMeshes } from './gltfMeshHelpers';
+import { applyStaticColor, disposeMeshResources, tagGarmentMeshes } from '../gltfMeshHelpers';
 
 const StaticGltfMesh = memo(({ meshName, node, renderOrder = 0 }: staticGltfMeshPropsType) => {
   const instance = useMemo(() => {

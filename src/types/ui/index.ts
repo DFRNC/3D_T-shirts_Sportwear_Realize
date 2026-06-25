@@ -112,7 +112,7 @@ export type {
   preserveGltfMeshPropsType,
   printGizmoInstancePropsType,
   staticGltfMeshPropsType,
-} from "./organismsConfiguratorProps";
+} from '@configurator/types';
 export type { configurationStepSkeletonPropsType } from "./skeletonsProps";
 export type { embeddedContextType, embeddedProviderPropsType } from "./embeddedContext";
 export type { configuratorSlugHydrationPropsType } from "./configuratorSlugHydrationProps";

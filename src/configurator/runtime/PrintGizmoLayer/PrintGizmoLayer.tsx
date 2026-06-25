@@ -3,7 +3,8 @@
 import { memo, useCallback, useEffect, useMemo } from 'react';
 
 import { buildLogoGizmoElements, buildNameGizmoElements, buildNumberGizmoElements, buildPrintablePartMeshes, buildTestoGizmoElements } from '@gizmo';
-import { useGizmoButtonHover, useGizmoSelection, usePrintGizmoDrag, usePrintPlacementMigration, type PrintPlacementInstance } from '@configurator/hooks';
+import { useGizmoButtonHover, useGizmoSelection, usePrintPlacementMigration } from '@configurator/hooks';
+import type { PrintPlacementInstance } from '@configurator/types';
 import {
   resolveNameLimits,
   resolveNumberLimits,
@@ -15,7 +16,7 @@ import {
   useGarmentNumber,
   useGarmentTesto,
 } from '@store';
-import { repairPrintInstancePlacement, resolvePrintAtlasSize } from '@utils';
+import { repairPrintInstancePlacement, resolvePrintAtlasSize } from '@configurator/utils';
 
 import { PrintGizmoInstance } from './PrintGizmoInstance';
 

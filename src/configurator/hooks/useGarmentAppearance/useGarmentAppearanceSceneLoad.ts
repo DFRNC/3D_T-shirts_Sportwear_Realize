@@ -6,7 +6,7 @@ import type { MeshStandardMaterial, Texture } from 'three';
 
 import type { designPatternItemType, garmentConfigType, patternMaskPairType, pbrMapsType } from '@types';
 import { useConfiguratorSceneLoad } from '@store';
-import { GARMENT_SHADER_VERSION, hasPrintableGarmentParts, resolveRasterDesignSrc, scheduleGarmentShaderUpgrade } from '@utils';
+import { GARMENT_SHADER_VERSION, hasPrintableGarmentParts, resolveRasterDesignSrc, scheduleGarmentShaderUpgrade } from '@configurator/utils';
 
 type garmentAppearanceSceneLoadRefsType = {
   logosTextureRef: RefObject<Texture | null>;

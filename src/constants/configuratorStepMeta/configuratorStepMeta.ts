@@ -1,4 +1,4 @@
-import type { configuratorStepValueType } from '@types';
+import type { configuratorStepValueType } from '@configurator/types';
 
 type configuratorStepMetaItemType = {
   value: configuratorStepValueType;

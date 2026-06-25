@@ -7,7 +7,7 @@ import {
   resolveProductGizmoRotation,
   resolveTextGizmoHalf,
   resolveTextGizmoMeasureOptions,
-} from '@utils';
+} from '@configurator/utils';
 
 const measureCanvas = typeof document !== 'undefined' ? document.createElement('canvas') : null;
 const measureCtx = measureCanvas?.getContext('2d') ?? null;

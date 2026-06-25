@@ -12,7 +12,7 @@ import type {
 import type { Object3D } from 'three';
 import { Vector2 } from 'three';
 
-import { resolvePartPrintRotation, resolvePartUvBounds } from '@utils';
+import { resolvePartPrintRotation, resolvePartUvBounds } from '@configurator/utils';
 
 import { getGizmoButtonReveal } from '../gizmoButtonReveal/gizmoButtonReveal';
 import { hitTestGizmoButton, hitTestGizmoFrame } from '../hitTestGizmoButton/hitTestGizmoButton';

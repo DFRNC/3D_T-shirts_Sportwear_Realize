@@ -2,7 +2,7 @@
 
 import { createContext, type ReactNode, useContext } from 'react';
 
-import type { garmentGltfSceneType } from './garmentGltfSceneType';
+import type { garmentGltfSceneType } from '@configurator/types';
 
 const GltfSceneContext = createContext<garmentGltfSceneType | null>(null);
 

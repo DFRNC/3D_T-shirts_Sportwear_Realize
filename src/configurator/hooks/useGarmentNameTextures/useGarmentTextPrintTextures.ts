@@ -19,7 +19,7 @@ import {
   buildNameStyleUniforms,
   buildNumberStyleUniforms,
   buildTestoStyleUniforms,
-} from '@utils';
+} from '@configurator/utils';
 
 import { useTextPrintMaskPipeline } from './useTextPrintMaskPipeline';
 

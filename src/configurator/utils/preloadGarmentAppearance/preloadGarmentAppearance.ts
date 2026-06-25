@@ -1,6 +1,6 @@
 import type { modelIdType } from '@types';
 
-import { getModel } from '../garmentCatalog/garmentCatalog';
+import { getModel } from '@utils';
 import { imageToTexture } from '../garmentPrint/imageToTexture';
 import { resolveRasterDesignSrc } from '../garmentPrint/resolveRasterDesignSrc';
 

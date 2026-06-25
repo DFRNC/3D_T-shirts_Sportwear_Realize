@@ -1,5 +1,5 @@
 import type { printablePartMeshesType, printDragMoveResultType, printDragMoveStateType, printUvHitType } from '@types';
-import { clampUvToPartBounds } from '@utils';
+import { clampUvToPartBounds } from '@configurator/utils';
 
 const resolvePrintablePart = (printableParts: printablePartMeshesType[], partId: string) => printableParts.find((part) => part.partId === partId) ?? null;
 

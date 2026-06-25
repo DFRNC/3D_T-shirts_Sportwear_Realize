@@ -8,7 +8,7 @@ import {
   useGarmentNameTextures,
 } from '@configurator/hooks';
 
-import { PrintGizmoLayer } from './PrintGizmoLayer/PrintGizmoLayer';
+import { PrintGizmoLayer } from '../PrintGizmoLayer';
 
 /** R3F side-effect runtime: appearance, text/logo textures, print gizmo interaction. */
 const GarmentRuntime = memo(() => {

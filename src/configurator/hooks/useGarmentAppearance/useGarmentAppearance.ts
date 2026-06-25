@@ -14,7 +14,7 @@ import {
   useGarmentColor,
   useGarmentDesign,
 } from '@store';
-import { emptyMaskPair, readProductAppearanceTextures, syncProductAppearanceTextures } from '@utils';
+import { emptyMaskPair, readProductAppearanceTextures, syncProductAppearanceTextures } from '@configurator/utils';
 
 import { applyPartColors, applyPatternTints, applyPrintState } from './applyGarmentAppearance';
 import { buildPatternColors } from './buildPatternColors';

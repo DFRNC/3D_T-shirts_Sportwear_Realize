@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 
 import { clearGizmoButtonHover, resolveGizmoPointerTarget } from '@gizmo';
 import type { printGizmoElementType } from '@types';
-import { useGizmoPointerContext } from '../useGizmoPointerContext';
+import { useGizmoPointerContext } from '@configurator/hooks/useGizmoPointerContext';
 
 interface GizmoSelectionStore {
   selectedInstanceId: string | null;

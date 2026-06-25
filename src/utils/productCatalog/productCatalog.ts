@@ -1,4 +1,5 @@
-import type { catalogProductEntryType, catalogProductRefType, configuratorProductHydrationType, productCollectionIdType } from '@types';
+import type { configuratorProductHydrationType } from '@configurator/types';
+import type { catalogProductEntryType, catalogProductRefType, productCollectionIdType } from '@types';
 import { CATALOG_PRODUCT_ENTRIES, PRODUCT_COLLECTIONS } from '@constants';
 
 import { DEFAULT_MODEL_ID, deriveLocalBusiness, getModel, hasModel, resolveProductPreviewSrc } from '../garmentCatalog/garmentCatalog';

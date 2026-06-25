@@ -1,6 +1,6 @@
 import type { garmentConfigType, modelIdType } from '@types';
 
-import { getModel } from '../garmentCatalog/garmentCatalog';
+import { getModel } from '@utils';
 import { resolveModelUrl } from '../resolveModelUrl/resolveModelUrl';
 
 const preloadedAssetUrls = new Set<string>();

@@ -1,5 +1,5 @@
 import type { garmentConfigType, printGizmoElementKindType, uvPointType } from '@types';
-import { resolvePartUvBounds, resolveProductGizmoRotation } from '@utils';
+import { resolvePartUvBounds, resolveProductGizmoRotation } from '@configurator/utils';
 
 const round = (value: number, digits = 3) => Number(value.toFixed(digits));
 

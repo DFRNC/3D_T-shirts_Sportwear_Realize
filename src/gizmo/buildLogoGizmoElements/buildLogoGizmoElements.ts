@@ -9,7 +9,7 @@ import {
   resolvePartPrintRotation,
   resolvePrintAtlasSize,
   resolveProductGizmoRotation,
-} from '@utils';
+} from '@configurator/utils';
 
 const buildLogoGizmoElements = ({ product, instances }: buildLogoGizmoElementsInputType): printGizmoElementType[] => {
   const partsById = Object.fromEntries(product.parts.map((part) => [part.id, part]));

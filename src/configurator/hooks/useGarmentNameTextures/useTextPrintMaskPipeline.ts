@@ -17,7 +17,7 @@ import {
   repairPrintInstancePlacement,
   resolveNameStampSize,
   resolvePrintAtlasSize,
-} from '@utils';
+} from '@configurator/utils';
 
 import {
   DEFAULT_STAMP_SIZE,

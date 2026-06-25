@@ -1,4 +1,4 @@
-import type { configuratorStepValueType } from '../../configurator';
+import type { configuratorStepValueType } from '@configurator/types';
 
 interface uvPointType {
   x: number;

@@ -3,15 +3,8 @@
 import { useEffect } from 'react';
 
 import type { garmentPartConfigType } from '@types';
-import { repairPrintInstancePlacement } from '@utils';
-
-interface PrintPlacementInstance {
-  id: string;
-  partId: string;
-  uv: { x: number; y: number };
-  rotation: number;
-  placementRotation?: number;
-}
+import type { PrintPlacementInstance } from '@configurator/types';
+import { repairPrintInstancePlacement } from '@configurator/utils';
 
 interface UsePrintPlacementMigrationOptions {
   activeStep: number;
@@ -52,4 +45,3 @@ const usePrintPlacementMigration = ({
 };
 
 export { usePrintPlacementMigration };
-export type { PrintPlacementInstance };

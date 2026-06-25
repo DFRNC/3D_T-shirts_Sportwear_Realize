@@ -1,6 +1,15 @@
 export type * from './cart';
 export type * from './checkout';
-export type * from './configurator';
+/** @deprecated Import from `@configurator/types` instead. */
+export type {
+  configuratorProductHydrationType,
+  configuratorStepValueType,
+  garmentGltfSceneType,
+  garmentPartMeshPropsType,
+  preserveGltfMeshPropsType,
+  printGizmoInstancePropsType,
+  staticGltfMeshPropsType,
+} from '@configurator/types';
 export type * from './constants';
 export type * from './entities';
 export type * from './garment';

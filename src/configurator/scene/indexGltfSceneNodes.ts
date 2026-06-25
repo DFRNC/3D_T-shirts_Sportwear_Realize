@@ -1,7 +1,7 @@
 import type { Mesh, Object3D } from 'three';
 import type { GLTF } from 'three-stdlib';
 
-import type { garmentGltfSceneType } from './garmentGltfSceneType';
+import type { garmentGltfSceneType } from '@configurator/types';
 
 const gltfSceneIndexCache = new WeakMap<GLTF, Pick<garmentGltfSceneType, 'nodes' | 'meshes'>>();
 

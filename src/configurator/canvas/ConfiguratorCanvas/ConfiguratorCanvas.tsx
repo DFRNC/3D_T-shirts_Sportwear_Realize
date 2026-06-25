@@ -6,10 +6,10 @@ import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import * as THREE from 'three';
 
-import { suppressThreeClockDeprecation } from '@utils';
+import { suppressThreeClockDeprecation } from '@configurator/utils';
 
-import { CanvasControl } from './CanvasControl';
-import { SceneModel } from './SceneModel';
+import { CanvasControl } from '../CanvasControl';
+import { SceneModel } from '../SceneModel';
 
 suppressThreeClockDeprecation();
 

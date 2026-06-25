@@ -1,7 +1,8 @@
 'use client';
 
 import type { cartItemConfigurationType, garmentBusinessType, modelIdType } from "@types";
-import { preloadGarmentProduct, getModel } from "@utils";
+import { getModel } from "@utils";
+import { preloadGarmentProduct } from '@configurator/utils';
 
 import { useConfigurationControl } from "../useConfigurationControl";
 import { useConfiguratorProduct } from "../useConfiguratorProduct";

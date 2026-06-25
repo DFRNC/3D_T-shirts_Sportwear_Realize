@@ -3,8 +3,8 @@
 import type { ReactNode } from 'react';
 import { useLayoutEffect, useRef } from 'react';
 
-import type { configuratorProductHydrationType } from '@types';
-import { applyConfiguratorRouteProduct } from '../../../../../utils/configuratorRoute/applyConfiguratorRouteProduct';
+import type { configuratorProductHydrationType } from '@configurator/types';
+import { applyConfiguratorRouteProduct } from '@configurator';
 
 type configuratorRouteShellPropsType = {
   slug: string;

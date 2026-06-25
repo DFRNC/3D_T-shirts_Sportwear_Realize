@@ -2,11 +2,11 @@
 
 import { useConfiguratorProduct } from '@store';
 
-import { GarmentPartMesh } from './GarmentPartMesh';
-import { useGltfScene } from './GltfSceneProvider';
-import { PreserveGltfMesh } from './PreserveGltfMesh';
-import { resolvePreserveMeshes } from './resolvePreserveMeshes';
-import { StaticGltfMesh } from './StaticGltfMesh';
+import { GarmentPartMesh } from '../GarmentPartMesh';
+import { useGltfScene } from '../GltfSceneProvider';
+import { PreserveGltfMesh } from '../PreserveGltfMesh';
+import { resolvePreserveMeshes } from '../resolvePreserveMeshes';
+import { StaticGltfMesh } from '../StaticGltfMesh';
 
 const GarmentMeshes = () => {
   const product = useConfiguratorProduct((state) => state.product);

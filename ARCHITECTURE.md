@@ -2,11 +2,14 @@
 
 A browser-based **3D garment configurator** built with **Next.js 16** (App Router), **React Three Fiber** for real-time 3D rendering, and **Zustand** for global state.
 
-The codebase separates concerns into three axes:
+The codebase separates concerns into four axes:
 
-- **UI** — Atomic Design (`src/ui/`)
-- **Domain & state** — Zustand stores, hooks, types (`src/store/`, `src/hooks/`, `src/types/`)
-- **3D & assets** — shaders, gizmo logic, print pipelines (`src/shaders/`, `src/gizmo/`, `src/utils/`)
+- **UI** — Atomic Design (`src/ui/`) — HTML panels, layout, checkout, home
+- **Domain & state** — Zustand stores, app hooks, shared types (`src/store/`, `src/hooks/`, `src/types/`)
+- **3D configurator** — R3F canvas, scene, shaders pipeline, runtime (`src/configurator/`)
+- **Gizmo & shaders** — framework-agnostic 3D interaction and GLSL (`src/gizmo/`, `src/shaders/`)
+
+> **Rule of thumb:** R3F components, garment print utils, and configurator hooks **do not** live in Atomic organisms. The organism `Configurator` is a thin mount point that re-exports `@configurator/canvas`.
 
 ---
 
@@ -14,37 +17,194 @@ The codebase separates concerns into three axes:
 
 1. [Repository layout](#repository-layout)
 2. [High-level data flow](#high-level-data-flow)
-3. [UI layer (Atomic Design)](#ui-layer-atomic-design)
-4. [Non-UI layers](#non-ui-layers)
-5. [Next.js routing](#nextjs-routing)
-6. [Technology stack](#technology-stack)
-7. [Scripts & tooling](#scripts--tooling)
-8. [Path aliases](#path-aliases)
+3. [3D configurator module](#3d-configurator-module)
+4. [UI layer (Atomic Design)](#ui-layer-atomic-design)
+5. [Non-UI layers](#non-ui-layers)
+6. [Next.js routing](#nextjs-routing)
+7. [Technology stack](#technology-stack)
+8. [Scripts & tooling](#scripts--tooling)
+9. [Path aliases](#path-aliases)
+10. [Conventions](#conventions)
 
 ---
 
 ## Repository layout
 
 ```
-configurator_clothes3/
+3D_T-shirts_Sportwear_Realize/
 ├── app/                    # Next.js App Router — thin route files, no business logic
 ├── public/                 # Static assets: GLTF models, textures, WASM, logos
-├── scripts/                # Node asset-pipeline scripts (see Scripts & tooling)
-├── src/                    # Application source
+├── scripts/                # Node asset-pipeline scripts
+├── src/
+│   ├── configurator/       # ★ 3D configurator module (R3F, scene, runtime, types)
 │   ├── constants/          # Immutable configuration values
 │   ├── data/               # Product JSON catalogs and accessors
 │   ├── fonts/              # UI and garment-print fonts
-│   ├── gizmo/              # 3D gizmo: hit-test, drag, mesh construction
-│   ├── hooks/              # React custom hooks (single source of truth)
-│   ├── providers/          # React Context providers
+│   ├── gizmo/              # 3D gizmo: hit-test, drag, element construction
+│   ├── hooks/              # App-level React hooks (non-3D + deprecated re-exports)
+│   ├── providers/          # React Context providers (PBR maps, material registry)
 │   ├── shaders/            # GLSL shaders for Three.js
+│   ├── shopify/            # Shopify Storefront / Admin API integration
 │   ├── store/              # Zustand stores (global state)
-│   ├── types/              # Centralized TypeScript types
+│   ├── types/              # Shared TypeScript types (entities, UI, cart, …)
 │   ├── ui/                 # UI components (Atomic Design)
-│   └── utils/              # Pure functions: atlases, uniforms, file converters
-├── playwright/             # End-to-end tests (Playwright)
+│   └── utils/              # App utilities + deprecated configurator re-exports
+├── playwright/             # End-to-end tests
 └── ARCHITECTURE.md         # This document
 ```
+
+---
+
+## High-level data flow
+
+```mermaid
+flowchart TB
+  subgraph routes [App Router]
+    Slug["/[slug]"]
+    Checkout["/checkout"]
+  end
+
+  subgraph ui [UI — Atomic]
+    Page["ConfiguratorPage"]
+    Aside["AsideConfiguration"]
+    Organism["Configurator organism\n(thin re-export)"]
+  end
+
+  subgraph cfg ["@configurator"]
+    Bootstrap["bootstrap/\napplyConfiguratorRouteProduct"]
+    Canvas["canvas/\nConfiguratorCanvas"]
+    Scene["scene/\nGarmentModel + meshes"]
+    Runtime["runtime/\nGarmentRuntime + PrintGizmoLayer"]
+    Hooks["hooks/\nappearance, textures, gizmo"]
+    Utils["utils/\nprint atlases, materials, orbit"]
+  end
+
+  subgraph state [Zustand @store]
+    Product["useConfiguratorProduct"]
+    Control["useConfigurationControl"]
+    Garment["useGarmentName / Logo / …"]
+  end
+
+  subgraph gizmo ["@gizmo"]
+    HitTest["hitTest, drag, elements"]
+  end
+
+  Slug --> Page
+  Page --> Aside
+  Page --> Organism
+  Organism --> Canvas
+  Bootstrap --> Product
+  Canvas --> Scene
+  Scene --> Runtime
+  Runtime --> Hooks
+  Hooks --> Utils
+  Hooks --> state
+  Runtime --> gizmo
+  Aside --> state
+```
+
+1. **Route** resolves product (`ConfiguratorRouteShell` / Shopify) and calls `applyConfiguratorRouteProduct`.
+2. **Store** holds user configuration (colors, design, names, logos, cart).
+3. **`GarmentRuntime`** subscribes to stores via hooks and drives shader uniforms + gizmo interaction.
+4. **UI panels** (molecules) read/write the same stores; they never import R3F scene internals directly.
+
+---
+
+## 3D configurator module
+
+All real-time 3D logic lives in `src/configurator/`. Import via `@configurator` or subpath aliases (see [Path aliases](#path-aliases)).
+
+### Structure
+
+```
+src/configurator/
+├── index.ts              # Public API (canvas, scene, runtime, bootstrap, utils, types)
+├── bootstrap/            # Route → product hydration, preload on navigation
+├── canvas/               # R3F <Canvas>, controls, scene mount
+│   ├── ConfiguratorCanvas/
+│   ├── CanvasControl/
+│   ├── SceneModel/
+│   └── ViewControls/
+├── scene/                # GLTF loading, mesh cloning, PBR extraction
+│   ├── GarmentModel/
+│   ├── GarmentMeshes/
+│   ├── GarmentPartMesh/
+│   ├── GltfSceneProvider/
+│   ├── PreserveGltfMesh/
+│   ├── StaticGltfMesh/
+│   └── *.ts              # gltfMeshHelpers, preloadGarmentScene, …
+├── runtime/              # Side-effect layers inside <Canvas>
+│   ├── GarmentRuntime/   # appearance + texture hooks + PrintGizmoLayer
+│   └── PrintGizmoLayer/
+│       ├── PrintGizmoLayer.tsx
+│       └── PrintGizmoInstance/
+├── hooks/                # R3F-facing React hooks
+│   ├── useGarmentAppearance/
+│   ├── useGarmentLogoTextures/
+│   ├── useGarmentNameTextures/
+│   ├── useGizmoPointerContext/
+│   ├── useGizmoSelection/
+│   ├── usePrintGizmoDrag/
+│   ├── usePrintPlacementMigration/
+│   └── …
+├── utils/                # Pure 3D/print helpers (no React)
+│   ├── createGarmentMaterial/
+│   ├── garmentPrint/
+│   ├── composeLogoAtlas/
+│   ├── orbitCamera/
+│   ├── configuratorPreviewCapture/
+│   └── …
+└── types/                # Configurator-owned TypeScript types
+    ├── configuratorStep/
+    ├── configuratorProductHydration/
+    ├── garmentGltfSceneType/
+    ├── printPlacementInstance/
+    ├── sceneComponentProps/
+    └── index.ts
+```
+
+### Layer responsibilities
+
+| Layer       | Alias                   | Responsibility                                              |
+| ----------- | ----------------------- | ----------------------------------------------------------- |
+| `bootstrap` | `@configurator`         | Apply route product, preload GLB + appearance textures      |
+| `canvas`    | `@configurator/canvas`  | WebGL canvas, orbit controls, preview capture wiring        |
+| `scene`     | `@configurator/scene`   | Load GLTF, clone meshes, register garment materials         |
+| `runtime`   | `@configurator/runtime` | In-canvas side effects: textures, gizmo selection/drag      |
+| `hooks`     | `@configurator/hooks`   | React hooks that bridge `@store` ↔ shader uniforms          |
+| `utils`     | `@configurator/utils`   | Atlases, uniform builders, material factory, orbit math     |
+| `types`     | `@configurator/types`   | Configurator-specific types (steps, scene props, GLTF type) |
+
+### R3F component tree (simplified)
+
+```
+ConfiguratorCanvas
+└── CanvasControl          ← useCartPreviewCapture, ViewControls
+└── SceneModel
+    └── GarmentModel       ← GLTF + PbrMapsProvider + GltfSceneProvider
+        ├── GarmentMeshes  ← GarmentPartMesh | StaticGltfMesh | PreserveGltfMesh
+        └── GarmentRuntime ← useGarmentAppearance, useGarment*Textures
+            └── PrintGizmoLayer ← gizmo hit-test / drag (renders null; shader-drawn UI)
+                └── PrintGizmoInstance × N
+```
+
+### Configurator types (`@configurator/types`)
+
+Types that belong to the 3D module — **not** general UI or catalog entities:
+
+| Type                            | Purpose                                      |
+| ------------------------------- | -------------------------------------------- |
+| `configuratorStepValueType`     | Wizard step identifiers                      |
+| `configuratorProductHydrationType` | Product payload from route / Shopify      |
+| `garmentGltfSceneType`          | Typed GLTF nodes/meshes index                |
+| `PrintPlacementInstance`        | UV placement for name/number/logo/testo      |
+| `*PropsType` (scene components) | R3F component props (part mesh, gizmo, …)   |
+
+Shared domain types (`garmentConfigType`, cart, checkout) remain in `@types/entities` and `@types/garment`. Shader pipeline types (`pbrMapsType`, `garmentPrintStateType`) remain in `@types/utils` for now.
+
+`@types` re-exports configurator types as **deprecated** shims for backward compatibility.
+
+---
 
 ## UI layer (Atomic Design)
 
@@ -53,21 +213,36 @@ All UI lives under `src/ui/` and follows Atomic Design tiers.
 | Layer         | Path                                  | Alias        | Responsibility                                                              |
 | ------------- | ------------------------------------- | ------------ | --------------------------------------------------------------------------- |
 | **Atoms**     | `src/ui/components/atomic/atoms/`     | `@atoms`     | Smallest blocks: `Button`, `AtomInput`, `ColorPicker`, `AtomSkeleton`       |
-| **Molecules** | `src/ui/components/atomic/molecules/` | `@molecules` | Atom compositions: configurator steps, `LogoUpload`, `Search`               |
-| **Organisms** | `src/ui/components/atomic/organisms/` | `@organisms` | Large sections: `Header`, `AsideConfiguration`, `Configurator` (3D canvas)  |
+| **Molecules** | `src/ui/components/atomic/molecules/` | `@molecules` | Step panels: `ConfigurationDesign`, `LogoUpload`, `ConfiguratorStepTabs`    |
+| **Organisms** | `src/ui/components/atomic/organisms/` | `@organisms` | `AsideConfiguration`, `ConfiguratorView`, `Configurator` (thin 3D mount)      |
 | **Templates** | `src/ui/components/atomic/templates/` | `@templates` | Page layouts without data coupling                                          |
-| **Pages**     | `src/ui/components/atomic/pages/`     | `@pages`     | Page compositions: `ConfiguratorPage`, `HomePage`                           |
-| **Shared**    | `src/ui/components/shared/`           | `@shared`    | shadcn/Radix primitives shared by atoms (`Dialog`, `Accordion`, `Skeleton`) |
-| **Skeletons** | `src/ui/components/skeletons/`        | `@skeletons` | Loading skeletons mirroring real component layouts                          |
+| **Pages**     | `src/ui/components/atomic/pages/`     | `@pages`     | `ConfiguratorPage`, `HomePage`, `CheckoutPage`                              |
+| **Shared**    | `src/ui/components/shared/`           | `@shared`    | shadcn/Radix primitives (`Dialog`, `Accordion`, …)                          |
+| **Skeletons** | `src/ui/components/skeletons/`        | `@skeletons` | Loading skeletons mirroring configurator/checkout layouts                   |
+
+### Configurator UI vs 3D module
+
+| Concern              | Location                                      |
+| -------------------- | --------------------------------------------- |
+| HTML sidebar / steps | `@molecules` / `@organisms` (`AsideConfiguration`, …) |
+| 3D canvas mount      | `@organisms/Configurator` → `@configurator`   |
+| Page layout          | `ConfiguratorView`, `ConfiguratorPage`        |
+| Route hydration      | `ConfiguratorRouteShell`, `ConfiguratorSlugHydration` |
+
+```tsx
+// organisms/Configurator/Configurator.tsx — intentional thin shell
+export { ConfiguratorCanvas as Configurator } from '@configurator';
+```
 
 ### UI conventions
 
-1. **`app/` routes** only import a component from `@pages` — no business logic in route files.
+1. **`app/` routes** only import from `@pages` — no business logic in route files.
 2. **Atoms** are presentational: props only; no store, API, or 3D dependencies.
 3. **Molecules** may read stores and use hooks from `@hooks`.
-4. **Organisms** compose molecules/atoms into cohesive blocks (sidebar, canvas, footer).
-5. **Skeletons** match the dimensions of their target molecules/organisms; visibility is controlled via `useShowConfigurationSkeleton`.
-6. **Component prop types** live in `src/types/ui/`, not inline in `.tsx` files.
+4. **Organisms** compose molecules/atoms; the 3D organism does **not** embed scene code.
+5. **Skeletons** match target layouts; visibility via `useShowConfigurationSkeleton`.
+6. **HTML component prop types** live in `src/types/ui/`.
+7. **Every component** uses folder + `index.ts` barrel: `ComponentName/ComponentName.tsx` + `index.ts`.
 
 ---
 
@@ -75,18 +250,17 @@ All UI lives under `src/ui/` and follows Atomic Design tiers.
 
 ### `src/hooks/` (`@hooks`)
 
-The **only** place for React custom hooks:
+App-level React hooks (navigation, checkout, cart sync, skeletons, logo upload).  
+3D hooks moved to `@configurator/hooks`; `@hooks` keeps **deprecated re-exports** for migration.
 
-| Category       | Examples                                                                                                                       |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Store wrappers | `useConfigurationCartSync`                                                                                                     |
-| 3D / textures  | `useGarmentTextures`, `useGarmentPbrMaps`                                                                                      |
-| Gizmo          | `useGizmoSelection`, `usePrintGizmoDrag`, `useGizmoIconAtlas`                                                                  |
-| UI state       | `useSlidingIndicator`, `useControlledState`, `useShowConfigurationSkeleton`, `useConfigurationPositionPicker`                  |
-| Domain actions | `useLogoFileHandler`, `useStepLogo`, `useNavigateToCheckout`                                                                   |
-| Checkout       | `useCheckoutInit`, `useCheckoutSummary`, `useCheckoutConfigurationTable`, `useNavigateToCheckout`, `useNavigateToConfigurator` |
+| Category        | Examples                                                                 |
+| --------------- | ------------------------------------------------------------------------ |
+| Configurator UX | `useConfiguratorProductHydration`, `useConfiguratorInitialSceneLoad`     |
+| Store wrappers  | `useConfigurationCartSync`, `useProductStepsConfiguration`               |
+| UI state        | `useSlidingIndicator`, `useShowConfigurationSkeleton`                    |
+| Checkout        | `useCheckoutInit`, `useNavigateToCheckout`                                 |
 
-> Zustand stores in `src/store/` are named `use*` but are **not** React hooks — they are global state containers. Hooks that combine multiple stores or use `useMemo` / `useCallback` belong in `src/hooks/`.
+> Zustand stores in `src/store/` are named `use*` but are **not** React hooks.
 
 ### `src/store/` (`@store`)
 
@@ -97,85 +271,66 @@ Domain-scoped Zustand stores:
 | `useConfiguratorProduct`                                 | Active catalog product      |
 | `useConfigurationControl`                                | Wizard steps and navigation |
 | `useConfigurationCart`                                   | Session configuration cart  |
-| `useGarmentColor`                                        | Part colors and gradients   |
-| `useGarmentDesign`                                       | Design patterns             |
-| `useGarmentName` / `useGarmentNumber` / `useGarmentLogo` | Garment text and logos      |
+| `useGarmentColor` / `Design` / `Name` / `Number` / `Logo` / `Testo` | Garment configuration |
 | `useConfiguratorSceneLoad`                               | 3D scene loading state      |
-| `useInfoDialog`                                          | Info / FAQ modal state      |
 | `useCheckout`                                            | Checkout rows and pricing   |
 
-Each store is a folder with `use*.ts` (state + actions) and helper `map*.ts` files (mapping from entity data).
+Each store is a folder: `use*.ts` + `map*.ts` helpers.
 
 ### `src/types/` (`@types`)
 
-All project types are centralized here:
+Shared types not owned by the configurator module:
 
 ```
 src/types/
-├── cart/           # Cart item types, configuration snapshots
+├── cart/           # Cart items, configuration snapshots
+├── checkout/       # Checkout table, summary
 ├── entities/       # Types derived from JSON catalogs (source of truth)
 ├── garment/        # Runtime garment types composed from entities
-├── gizmo/          # Gizmo and drag-state types
-├── ui/             # Component props, variant unions, UI helpers
-├── utils/          # PbrMaps, GarmentPrintState, PatternMaskPair, etc.
-└── index.ts        # Barrel export
+├── gizmo/          # Gizmo element and drag types (@gizmo consumers)
+├── providers/      # Context provider types
+├── ui/             # HTML component props, variant unions
+├── utils/          # pbrMaps, garmentPrintState, atlas inputs
+└── index.ts
 ```
 
-### `src/data/` (`@data`)
-
-JSON product catalogs (e.g. `crewneck/crewneck.json`), modal info content (`modalInfo/*.json`), and accessors: `getProduct`, `getStyle`, `listCatalogProducts`, `faqContent`, `measureContent`, etc. No UI logic.
-
-Modal info follows the same pattern as garment catalogs:
-
-- **JSON** in `src/data/modalInfo/` — one file per tab (`faqContent.json`, `measureContent.json`, …)
-- **Types** in `src/types/entities/modalInfo/` — `modalInfoTabType`, `modalInfoPartType`, …
-- **Tab registry** in `ModalInfo/modalInfoTabs.tsx` — maps tab `value`, label, icon, and content
-- **Renderer** in `ModalInfo/Content/ModalInfoTabContent/` — shared `text`, `list`, `image`, `table` parts
+Configurator types: prefer `@configurator/types` (also exported from `@configurator`).
 
 ### `src/utils/` (`@utils`)
 
-Pure, React-free utilities:
-
-- Print atlas composition (`composePrintAtlas`, `composeNameAtlas`)
-- Uniform builders and print application (`garmentPrint/`)
-- Logo file conversion (`logoFile/`)
-- PBR material creation (`createGarmentMaterial/`)
-
-Does **not** re-export `@constants` — consumers import `LOGO_SLOT_COUNT`, `FULL_UV_BOUNDS`, etc. directly from `@constants`.
-
-Module-local helper types that are not domain entities may live next to their module; domain types belong in `src/types/`.
-
-### `src/shaders/` (`@shaders`)
-
-GLSL vertex and fragment shaders:
-
-| Module                   | Purpose                                                            |
-| ------------------------ | ------------------------------------------------------------------ |
-| `garmentShaders`         | UV, normal, roughness, gizmo lights (MeshStandardMaterial patches) |
-| `garmentPrintShaders`    | Print layer shaders                                                |
-| `garmentLogoShaders`     | Logo layer shaders                                                 |
-| `garmentNameShaders`     | Name text shaders                                                  |
-| `garmentNumberShaders`   | Number text shaders                                                |
-| `garmentGradientShaders` | Part gradient shaders                                              |
-| `printAtlasTintShaders`  | FBO atlas tinting                                                  |
-
-Structure: `moduleName/moduleName.ts` + `index.ts`; barrel export at `src/shaders/index.ts`.
+App-wide pure utilities: catalog, logo file conversion, checkout dates, design SVG tinting.  
+3D/print utilities moved to `@configurator/utils`; `@utils` keeps **deprecated re-exports**.
 
 ### `src/gizmo/` (`@gizmo`)
 
-Framework-agnostic 3D gizmo logic: hit-testing, drag handling, mesh element construction. React-facing gizmo hooks live in `@hooks`.
+Framework-agnostic gizmo logic: hit-testing, drag resolution, printable mesh construction, button hover/reveal state.  
+Used by `@configurator/runtime` and `@configurator/hooks`. Imports math from `@configurator/utils`.
+
+Structure: `featureName/featureName.ts` + `index.ts`; barrel at `src/gizmo/index.ts`.
+
+### `src/shaders/` (`@shaders`)
+
+GLSL patches for `MeshStandardMaterial`: print layers, logos, names, numbers, testo, gradients, atlas tinting.
+
+### `src/shopify/` (`@shopify`)
+
+Shopify Storefront GraphQL, product/collection resolution, `configuratorProductHydrationType` mapping.
 
 ### `src/constants/` (`@constants`)
 
-Configuration constants: wizard steps, color palette, print-atlas dimensions, fonts, checkout limits (`CHECKOUT/`), table column sizing (`CHECKOUT_CONFIGURATION_TABLE/`), configurator copy and labels (`CONFIGURATOR/`).
+Wizard steps meta, color palette, print-atlas dimensions, checkout limits, configurator copy.
 
 ### `src/providers/` (`@providers`)
 
-React Context providers: `GarmentMaterialRegistry`, `PbrMapsProvider`.
+`GarmentMaterialRegistryProvider`, `PbrMapsProvider` — bridge scene materials to hook-driven uniform updates.
+
+### `src/data/` (`@data`)
+
+JSON product catalogs, modal info content, catalog accessors (`getModel`, `listCatalogProducts`, …).
 
 ### `src/fonts/` (`@fonts`)
 
-Font loading for UI (`inter`) and sport fonts used for garment printing.
+UI fonts (`inter`) and sport fonts for garment text rendering.
 
 ---
 
@@ -186,25 +341,23 @@ app/
 ├── layout.tsx                          # Root layout (<html>, fonts, global styles)
 ├── (shop)/                             # Scrollable shop shell — URL: /, /checkout
 │   ├── layout.tsx                      # <body> + Header + main
-│   ├── (default)/                      # Home with footer
+│   ├── (default)/
 │   │   ├── layout.tsx                  # Footer wrapper
-│   │   └── page.tsx                    # / → HomePage from @pages
+│   │   └── page.tsx                    # / → HomePage
 │   └── checkout/
-│       └── page.tsx                    # /checkout → CheckoutPage from @pages
+│       └── page.tsx                    # /checkout → CheckoutPage
 └── [slug]/                             # Product configurator — URL: /:slug
     ├── layout.tsx                      # h-dvh viewport-locked configurator shell
-    └── page.tsx                        # → ConfiguratorSlugHydration + ConfiguratorPage
+    └── page.tsx                        # ConfiguratorSlugHydration + ConfiguratorPage
 ```
 
-| URL          | Route file                    | Page component   |
-| ------------ | ----------------------------- | ---------------- |
-| `/`          | `(shop)/(default)/page.tsx`   | `HomePage`       |
-| `/checkout`  | `(shop)/checkout/page.tsx`    | `CheckoutPage`   |
-| `/:slug`     | `[slug]/page.tsx`             | `ConfiguratorPage` (hydrated by slug) |
+| URL         | Page component     | Notes                                      |
+| ----------- | ------------------ | ------------------------------------------ |
+| `/`         | `HomePage`         | Product gallery                            |
+| `/checkout` | `CheckoutPage`     | Static route; wins over `[slug]`           |
+| `/:slug`    | `ConfiguratorPage` | Hydrates product, mounts configurator view |
 
-Route groups `(shop)` and `(default)` do not appear in the URL. Static `/checkout` takes precedence over the dynamic `[slug]` segment.
-
-Routes remain **thin**: they import page components from `@pages` and contain no domain logic. The configurator route passes `slug` from the URL into `ConfiguratorSlugHydration`, which resolves the product from local catalog data (Shopify API integration replaces this layer later).
+Routes stay **thin**: import from `@pages` only.
 
 ---
 
@@ -221,9 +374,7 @@ Routes remain **thin**: they import page components from `@pages` and contain no
 | **Three.js**                                                      | Rendering, textures, custom shaders    |
 | **Radix UI / Base UI**                                            | Accessible primitives (shadcn)         |
 | **Motion**                                                        | UI animations                          |
-| **@uiw/react-color**                                              | Color picker                           |
-| **pdfjs-dist, @okathira/ghostpdl-wasm, @imagemagick/magick-wasm** | In-browser PDF/EPS logo conversion     |
-| **sharp** (dev)                                                   | Image processing in Node asset scripts |
+| **pdfjs-dist, ghostpdl-wasm, imagemagick-wasm**                   | In-browser PDF/EPS logo conversion     |
 | **Playwright** (dev)                                              | End-to-end tests                       |
 | **ESLint + Prettier + Husky**                                     | Linting, formatting, pre-commit hooks  |
 
@@ -231,32 +382,17 @@ Routes remain **thin**: they import page components from `@pages` and contain no
 
 ## Scripts & tooling
 
-### `package.json` scripts
+| Script                 | Description                                      |
+| ---------------------- | ------------------------------------------------ |
+| `dev` / `build` / `start` | Next.js development and production            |
+| `lint` / `lint:fix`    | ESLint over `src/` and `scripts/`                |
+| `format` / `format:check` | Prettier                                      |
+| `validate`             | format + lint + `verify:design-assets`           |
+| `verify:design-assets` | Design files and thumbnails per catalog JSON     |
+| `convert:design-assets` | SVG designs → WebP runtime assets             |
+| `test:e2e`             | Playwright                                       |
 
-| Script                            | Description                                                             |
-| --------------------------------- | ----------------------------------------------------------------------- |
-| `dev`                             | Local Next.js dev server                                                |
-| `build`                           | Production build                                                        |
-| `start`                           | Run production server                                                   |
-| `lint` / `lint:fix`               | ESLint over `src/` and `scripts/`                                       |
-| `format` / `format:check`         | Prettier                                                                |
-| `validate`                        | `format:check` + `lint` + `verify:design-assets` — CI / pre-commit gate |
-| `verify:design-assets`            | Ensures design files and thumbnails exist per `crewneck.json`           |
-| `convert:design-assets`           | Converts heavy SVG designs (base64 PNG) to 4096px WebP for runtime      |
-| `generate:design-thumbnails`      | Generates ~100px WebP previews for pattern picker UI                    |
-| `copy:logo-assets`                | Copies WASM, pdf.worker, Ghostscript, and logos into `public/`          |
-| `postinstall`                     | Runs `copy:logo-assets` after `pnpm install`                            |
-| `prepare`                         | Initializes Husky git hooks                                             |
-| `test:e2e` / `test:e2e:skeletons` | Playwright E2E tests                                                    |
-
-### Node scripts (`scripts/`)
-
-| File                             | Description                                                                     |
-| -------------------------------- | ------------------------------------------------------------------------------- |
-| `copy-logo-assets.mjs`           | Copies `magick.wasm`, `pdf.worker`, `gs.js/wasm`, and PNG logos to `public/`    |
-| `verify-design-assets.mjs`       | Validates every `path_name` in JSON has a design file and thumbnail             |
-| `convert-design-assets.mjs`      | Rasterizes design SVG → WebP (4096px) via sharp; preserves originals for export |
-| `generate-design-thumbnails.mjs` | Creates `designs/thumbs/*.webp` from full-size WebP assets                      |
+Node scripts in `scripts/`: logo WASM copy, design verification/conversion, thumbnail generation.
 
 ---
 
@@ -264,23 +400,71 @@ Routes remain **thin**: they import page components from `@pages` and contain no
 
 Defined in `tsconfig.json`:
 
-| Alias        | Path                                 |
-| ------------ | ------------------------------------ |
-| `@styles`    | `src/ui/styles/globals.css`          |
-| `@atoms`     | `src/ui/components/atomic/atoms`     |
-| `@molecules` | `src/ui/components/atomic/molecules` |
-| `@organisms` | `src/ui/components/atomic/organisms` |
-| `@templates` | `src/ui/components/atomic/templates` |
-| `@pages`     | `src/ui/components/atomic/pages`     |
-| `@shared`    | `src/ui/components/shared`           |
-| `@skeletons` | `src/ui/components/skeletons`        |
-| `@hooks`     | `src/hooks`                          |
-| `@store`     | `src/store`                          |
-| `@types`     | `src/types`                          |
-| `@utils`     | `src/utils`                          |
-| `@data`      | `src/data`                           |
-| `@constants` | `src/constants`                      |
-| `@gizmo`     | `src/gizmo`                          |
-| `@providers` | `src/providers`                      |
-| `@fonts`     | `src/fonts`                          |
-| `@shaders`   | `src/shaders`                        |
+| Alias                      | Path                              |
+| -------------------------- | --------------------------------- |
+| `@atoms` … `@pages`        | `src/ui/components/atomic/*`      |
+| `@shared`                  | `src/ui/components/shared`        |
+| `@skeletons`               | `src/ui/components/skeletons`       |
+| `@styles`                  | `src/ui/styles/globals.css`       |
+| `@hooks`                   | `src/hooks`                       |
+| `@store`                   | `src/store`                       |
+| `@types`                   | `src/types`                       |
+| `@utils`                   | `src/utils`                       |
+| `@data`                    | `src/data`                        |
+| `@constants`               | `src/constants`                   |
+| `@providers`               | `src/providers`                   |
+| `@fonts`                   | `src/fonts`                       |
+| `@shaders`                 | `src/shaders`                     |
+| `@gizmo`                   | `src/gizmo`                       |
+| `@shopify`                 | `src/shopify`                     |
+| **`@configurator`**        | `src/configurator`                |
+| **`@configurator/canvas`**   | `src/configurator/canvas`           |
+| **`@configurator/scene`**  | `src/configurator/scene`            |
+| **`@configurator/runtime`**| `src/configurator/runtime`          |
+| **`@configurator/hooks`**  | `src/configurator/hooks`            |
+| **`@configurator/hooks/*`**| subpath (avoid circular barrel)     |
+| **`@configurator/utils`**  | `src/configurator/utils`            |
+| **`@configurator/utils/*`**| subpath                             |
+| **`@configurator/types`**  | `src/configurator/types`            |
+
+---
+
+## Conventions
+
+### Import rules (configurator)
+
+| From                         | Import via                                      |
+| ---------------------------- | ----------------------------------------------- |
+| R3F components / runtime     | `@configurator`, `@configurator/scene`, …       |
+| 3D hooks                     | `@configurator/hooks`                           |
+| Print / material utils       | `@configurator/utils`                           |
+| Configurator types           | `@configurator/types`                           |
+| Gizmo math                   | `@gizmo` + `@configurator/utils` where needed   |
+| Product catalog (`getModel`) | `@utils` (shared, not configurator-specific)    |
+| User configuration           | `@store`                                        |
+
+Cross-hook imports inside `@configurator/hooks` may use `@configurator/hooks/useGizmoPointerContext` subpaths to avoid circular dependencies through the barrel.
+
+Within the same module (`canvas/`, `scene/`, `utils/`), relative imports between siblings are allowed.
+
+### Module folder pattern
+
+Every exportable unit follows Atomic-style folders:
+
+```
+FeatureName/
+├── FeatureName.ts(x)
+└── index.ts          # export { FeatureName } from './FeatureName'
+```
+
+Applies to: UI components, configurator components, hooks, gizmo modules, utils.
+
+### Deprecation policy
+
+Legacy paths still work during migration:
+
+- `@hooks` → re-exports 3D hooks from `@configurator/hooks`
+- `@utils` → re-exports 3D utils from `@configurator/utils`
+- `@types` → re-exports configurator types from `@configurator/types`
+
+New code should import directly from `@configurator/*`.

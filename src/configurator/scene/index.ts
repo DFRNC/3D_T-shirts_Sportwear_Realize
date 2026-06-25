@@ -2,7 +2,7 @@
 
 import { GarmentMeshes } from './GarmentMeshes';
 import { GarmentModel } from './GarmentModel';
-import { GltfSceneProvider } from './GltfSceneProvider';
+import { GltfSceneProvider, useGltfScene } from './GltfSceneProvider';
 import { GarmentPartMesh } from './GarmentPartMesh';
 import { PreserveGltfMesh } from './PreserveGltfMesh';
 import { StaticGltfMesh } from './StaticGltfMesh';
@@ -12,7 +12,6 @@ import { extractGltfPbrMaps } from './extractGltfPbrMaps';
 import { resolvePreserveMeshes } from './resolvePreserveMeshes';
 
 export { enrichGltfScene } from './indexGltfSceneNodes';
-export type { garmentGltfSceneType } from './garmentGltfSceneType';
 export {
   extractGltfPbrMaps,
   GarmentMeshes,
@@ -24,4 +23,5 @@ export {
   resolveGltfPbrMaps,
   resolvePreserveMeshes,
   StaticGltfMesh,
+  useGltfScene,
 };

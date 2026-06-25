@@ -6,12 +6,12 @@ import { useGLTF } from '@react-three/drei';
 
 import { GarmentMaterialRegistryProvider, PbrMapsProvider } from '@providers';
 import { useConfiguratorProduct } from '@store';
-import { resolveModelUrl } from '@utils';
+import { resolveModelUrl } from '@configurator/utils';
 
-import { GarmentMeshes } from './GarmentMeshes';
-import { GltfSceneProvider } from './GltfSceneProvider';
-import { enrichGltfScene } from './indexGltfSceneNodes';
-import { resolveGltfPbrMaps } from './resolveGltfPbrMaps';
+import { GarmentMeshes } from '../GarmentMeshes';
+import { GltfSceneProvider } from '../GltfSceneProvider';
+import { enrichGltfScene } from '../indexGltfSceneNodes';
+import { resolveGltfPbrMaps } from '../resolveGltfPbrMaps';
 
 const GarmentModel = ({ children }: { children?: ReactNode }) => {
   const product = useConfiguratorProduct((state) => state.product);

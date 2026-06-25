@@ -1,10 +1,9 @@
-import type { configuratorProductHydrationType } from '@types';
+import type { configuratorProductHydrationType } from '@configurator/types';
 import { useConfigurationCart, useConfiguratorSceneLoad } from '@store';
 
-import { DEFAULT_MODEL_ID, deriveLocalBusiness, hasModel } from '../garmentCatalog/garmentCatalog';
-import { preloadGarmentAppearance } from '../preloadGarmentAppearance/preloadGarmentAppearance';
-import { preloadGarmentProduct } from '../preloadGarmentProduct/preloadGarmentProduct';
+import { DEFAULT_MODEL_ID, deriveLocalBusiness, hasModel } from '@utils';
 import { preloadGarmentScene } from '@configurator/scene';
+import { preloadGarmentAppearance, preloadGarmentProduct } from '@configurator/utils';
 
 const resolveRouteModel = (slug: string, product: configuratorProductHydrationType | null) => {
   const slugModelId = hasModel(slug) ? slug : null;

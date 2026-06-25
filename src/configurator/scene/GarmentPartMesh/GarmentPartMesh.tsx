@@ -5,8 +5,8 @@ import type { Mesh, MeshStandardMaterial } from 'three';
 
 import { useGarmentMaterialRegistry, usePbrMaps } from '@providers';
 import { useConfiguratorProduct } from '@store';
-import type { garmentPartMeshPropsType } from '@types';
-import { createGarmentMaterial } from '@utils';
+import type { garmentPartMeshPropsType } from '@configurator/types';
+import { createGarmentMaterial } from '@configurator/utils';
 
 const GarmentPartMesh = memo(({ registryKey, meshName, node, renderOrder = 0 }: garmentPartMeshPropsType) => {
   const pbrMaps = usePbrMaps();

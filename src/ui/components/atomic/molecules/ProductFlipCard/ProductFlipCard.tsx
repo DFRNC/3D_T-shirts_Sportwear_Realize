@@ -4,9 +4,10 @@ import Link from 'next/link';
 import { useCallback, useRef } from 'react';
 
 import { preloadGarmentScene } from '@configurator/scene';
+import { preloadGarmentAppearance, preloadGarmentProduct } from '@configurator/utils';
 import { AtomImage } from '@atoms';
 import type { modelIdType, productFlipCardPropsType } from '@types';
-import { cn, hasModel, preloadGarmentAppearance, preloadGarmentProduct, resolveProductFlipCardSrc } from '@utils';
+import { cn, hasModel, resolveProductFlipCardSrc } from '@utils';
 
 const ProductFlipCard = ({ collection, slug, alt, previewSrc, activePreviewSrc, className }: productFlipCardPropsType) => {
   const isWarmedRef = useRef(false);
