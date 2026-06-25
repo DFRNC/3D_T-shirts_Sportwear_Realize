@@ -1,6 +1,7 @@
 export { ConfiguratorCanvas } from './canvas';
 export { applyConfiguratorRouteProduct, resolveRouteModel } from './bootstrap';
 export * from './mappers';
+export { GarmentMaterialRegistryProvider, PbrMapsProvider, useGarmentMaterialRegistry, useMaterialRegistryRevision, usePbrMaps } from './providers';
 export { GarmentRuntime, PrintGizmoLayer } from './runtime';
 export * from './gizmo';
 export {

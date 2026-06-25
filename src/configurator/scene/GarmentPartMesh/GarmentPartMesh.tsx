@@ -3,7 +3,7 @@
 import { memo, useEffect, useLayoutEffect, useMemo } from 'react';
 import type { Mesh, MeshStandardMaterial } from 'three';
 
-import { useGarmentMaterialRegistry, usePbrMaps } from '@providers';
+import { useGarmentMaterialRegistry, usePbrMaps } from '@configurator/providers';
 import { useConfiguratorProduct } from '@store';
 import type { garmentPartMeshPropsType } from '@configurator/types';
 import { createGarmentMaterial } from '@configurator/utils';

@@ -29,6 +29,7 @@ export {
   resolveLogoDefaults,
   resolvePartIdForAtlasUv,
 } from './mapProductLogos';
+export { mapDefaultPattern, mapProductDesigns } from './mapProductDesigns';
 export {
   DEFAULT_GRADIENT_COLOR2,
   DEFAULT_PART_GRADIENT,

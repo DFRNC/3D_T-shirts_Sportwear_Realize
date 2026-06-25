@@ -12,7 +12,7 @@ import {
   subscribeGizmoButtonReveal,
 } from '@configurator/gizmo';
 import { useGizmoIconAtlas } from '@configurator/hooks/useGizmoIconAtlas';
-import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@providers';
+import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@configurator/providers';
 import {
   resolveInstancesForRender,
   resolveNumberInstancesForRender,

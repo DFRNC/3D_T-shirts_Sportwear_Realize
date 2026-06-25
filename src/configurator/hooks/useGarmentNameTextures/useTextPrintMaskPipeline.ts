@@ -6,7 +6,7 @@ import { useThree } from '@react-three/fiber';
 import type { MeshStandardMaterial, Texture } from 'three';
 
 import { setGizmoButtonsRevealTarget } from '@configurator/gizmo';
-import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@providers';
+import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@configurator/providers';
 import { useConfigurationControl, useConfiguratorProduct } from '@store';
 import type { stampPixelSizeType } from '@configurator/types';
 import type { garmentPartConfigType, garmentTextRenderInstanceType } from '@types';

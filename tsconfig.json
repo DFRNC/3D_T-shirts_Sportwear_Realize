@@ -47,6 +47,7 @@
       "@configurator/gizmo": ["./src/configurator/gizmo"],
       "@configurator/shaders": ["./src/configurator/shaders"],
       "@configurator/mappers": ["./src/configurator/mappers"],
+      "@configurator/providers": ["./src/configurator/providers"],
       "@shopify": ["./src/shopify"]
     }
   },

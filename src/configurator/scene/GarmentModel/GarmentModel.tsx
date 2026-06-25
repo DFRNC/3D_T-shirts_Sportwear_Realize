@@ -4,7 +4,7 @@ import { useMemo, type ReactNode } from 'react';
 
 import { useGLTF } from '@react-three/drei';
 
-import { GarmentMaterialRegistryProvider, PbrMapsProvider } from '@providers';
+import { GarmentMaterialRegistryProvider, PbrMapsProvider } from '@configurator/providers';
 import { useConfiguratorProduct } from '@store';
 import { resolveModelUrl } from '@configurator/utils';
 

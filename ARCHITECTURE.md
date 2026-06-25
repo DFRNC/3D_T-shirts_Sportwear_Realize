@@ -115,6 +115,7 @@ src/configurator/
 ├── index.ts              # Public API (canvas, scene, runtime, gizmo, bootstrap, utils, types)
 ├── gizmo/                # Hit-test, drag, printable mesh construction, button hover/reveal
 ├── mappers/              # Product catalog → runtime print/gradient state (used by @store)
+│   ├── mapProductDesigns/
 │   ├── mapProductNames/
 │   ├── mapProductNumbers/
 │   ├── mapProductLogos/
@@ -139,9 +140,9 @@ src/configurator/
 │       ├── PrintGizmoLayer.tsx
 │       └── PrintGizmoInstance/
 ├── shaders/              # GLSL patches for MeshStandardMaterial (print, gizmo UI)
-│   ├── garmentShaders/
-│   ├── garmentPrintShaders/
-│   └── …
+├── providers/            # PbrMaps + garment material registry (in-canvas React context)
+│   ├── pbrMapsProvider/
+│   └── garmentMaterialRegistry/
 ├── hooks/                # R3F-facing React hooks
 │   ├── useGarmentAppearance/
 │   ├── useGarmentLogoTextures/
@@ -181,6 +182,7 @@ src/configurator/
 | `utils`     | `@configurator/utils`   | Atlases, uniform builders, material factory, orbit math     |
 | `gizmo`     | `@configurator/gizmo`   | Hit-testing, drag resolution, gizmo element builders          |
 | `shaders`   | `@configurator/shaders` | GLSL fragments/vertex patches for garment print material      |
+| `providers` | `@configurator/providers`| Bridge scene materials ↔ hook-driven uniform updates     |
 | `types`     | `@configurator/types`   | Configurator, shader, and gizmo types                         |
 
 ### R3F component tree (simplified)
@@ -327,7 +329,11 @@ Wizard steps meta, color palette, print-atlas dimensions, checkout limits, confi
 
 ### `src/providers/` (`@providers`)
 
-`GarmentMaterialRegistryProvider`, `PbrMapsProvider` — bridge scene materials to hook-driven uniform updates.
+App-level React context: embedded mode, shared `getStrictContext` helper for UI primitives.
+
+### `src/configurator/providers/` (`@configurator/providers`)
+
+3D-only providers used inside `<Canvas>` / garment scene: `PbrMapsProvider`, `GarmentMaterialRegistryProvider`.
 
 ### `src/data/` (`@data`)
 
@@ -424,6 +430,7 @@ Defined in `tsconfig.json`:
 | **`@configurator/gizmo`**  | `src/configurator/gizmo`          |
 | **`@configurator/shaders`**| `src/configurator/shaders`        |
 | **`@configurator/mappers`**| `src/configurator/mappers`        |
+| **`@configurator/providers`**| `src/configurator/providers`      |
 | **`@configurator/canvas`**   | `src/configurator/canvas`           |
 | **`@configurator/scene`**  | `src/configurator/scene`            |
 | **`@configurator/runtime`**| `src/configurator/runtime`          |
@@ -448,6 +455,7 @@ Defined in `tsconfig.json`:
 | Gizmo math                   | `@configurator/gizmo`                           |
 | GLSL shader patches          | `@configurator/shaders`                         |
 | Product → print state maps   | `@configurator/mappers` (re-exported via `@store`) |
+| In-canvas React context      | `@configurator/providers`                       |
 | Product catalog (`getModel`) | `@utils` (shared, not configurator-specific)    |
 | User configuration           | `@store`                                        |
 
