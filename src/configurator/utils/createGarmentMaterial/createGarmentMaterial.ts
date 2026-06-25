@@ -21,7 +21,7 @@ import {
   garmentRoughnessFragment,
   garmentVertexUv,
   garmentVertexUvPars,
-} from '@shaders';
+} from '@configurator/shaders';
 import { hydrateGarmentLogoUniforms } from '../garmentPrint/applyGarmentLogos';
 import { hydrateGarmentNameUniforms, hydrateGarmentNumberUniforms } from '../garmentPrint/applyGarmentNames';
 import { hydrateGarmentTestoUniforms } from '../garmentPrint/applyGarmentTesto';

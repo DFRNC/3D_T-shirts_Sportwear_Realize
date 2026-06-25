@@ -33,7 +33,6 @@
       "@hooks": ["./src/hooks"],
       "@skeletons": ["./src/ui/components/skeletons"],
       "@providers": ["./src/providers"],
-      "@shaders": ["./src/shaders"],
       "@constants": ["./src/constants"],
       "@data": ["./src/data"],
       "@configurator": ["./src/configurator"],
@@ -46,7 +45,7 @@
       "@configurator/canvas": ["./src/configurator/canvas"],
       "@configurator/types": ["./src/configurator/types"],
       "@configurator/gizmo": ["./src/configurator/gizmo"],
-      "@gizmo": ["./src/gizmo"],
+      "@configurator/shaders": ["./src/configurator/shaders"],
       "@shopify": ["./src/shopify"]
     }
   },

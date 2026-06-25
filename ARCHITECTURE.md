@@ -6,8 +6,7 @@ The codebase separates concerns into four axes:
 
 - **UI** — Atomic Design (`src/ui/`) — HTML panels, layout, checkout, home
 - **Domain & state** — Zustand stores, app hooks, shared types (`src/store/`, `src/hooks/`, `src/types/`)
-- **3D configurator** — R3F canvas, scene, shaders pipeline, runtime (`src/configurator/`)
-- **Shaders** — GLSL for garment print pipeline (`src/shaders/`)
+- **3D configurator** — R3F canvas, scene, GLSL shaders, gizmo, runtime (`src/configurator/`)
 
 > **Rule of thumb:** R3F components, garment print utils, and configurator hooks **do not** live in Atomic organisms. The organism `Configurator` is a thin mount point that re-exports `@configurator/canvas`.
 
@@ -40,15 +39,13 @@ The codebase separates concerns into four axes:
 │   ├── constants/          # Immutable configuration values
 │   ├── data/               # Product JSON catalogs and accessors
 │   ├── fonts/              # UI and garment-print fonts
-│   ├── gizmo/              # Deprecated shim → @configurator/gizmo
 │   ├── hooks/              # App-level React hooks (non-3D)
 │   ├── providers/          # React Context providers (PBR maps, material registry)
-│   ├── shaders/            # GLSL shaders for Three.js
 │   ├── shopify/            # Shopify Storefront / Admin API integration
 │   ├── store/              # Zustand stores (global state)
 │   ├── types/              # Shared TypeScript types (entities, UI, cart, …)
 │   ├── ui/                 # UI components (Atomic Design)
-│   └── utils/              # App utilities + deprecated configurator re-exports
+│   └── utils/              # App utilities (catalog, logo, checkout, design)
 ├── playwright/             # End-to-end tests
 └── ARCHITECTURE.md         # This document
 ```
@@ -136,6 +133,10 @@ src/configurator/
 │   └── PrintGizmoLayer/
 │       ├── PrintGizmoLayer.tsx
 │       └── PrintGizmoInstance/
+├── shaders/              # GLSL patches for MeshStandardMaterial (print, gizmo UI)
+│   ├── garmentShaders/
+│   ├── garmentPrintShaders/
+│   └── …
 ├── hooks/                # R3F-facing React hooks
 │   ├── useGarmentAppearance/
 │   ├── useGarmentLogoTextures/
@@ -173,6 +174,7 @@ src/configurator/
 | `hooks`     | `@configurator/hooks`   | React hooks that bridge `@store` ↔ shader uniforms          |
 | `utils`     | `@configurator/utils`   | Atlases, uniform builders, material factory, orbit math     |
 | `gizmo`     | `@configurator/gizmo`   | Hit-testing, drag resolution, gizmo element builders          |
+| `shaders`   | `@configurator/shaders` | GLSL fragments/vertex patches for garment print material      |
 | `types`     | `@configurator/types`   | Configurator, shader, and gizmo types                         |
 
 ### R3F component tree (simplified)
@@ -200,7 +202,7 @@ Types that belong to the 3D module — **not** general UI or catalog entities:
 | `PrintPlacementInstance`        | UV placement for name/number/logo/testo      |
 | `*PropsType` (scene components) | R3F component props (part mesh, gizmo, …)   |
 
-Shared domain types (`garmentConfigType`, cart, checkout) remain in `@types/entities` and `@types/garment`. Shader pipeline types (`pbrMapsType`, `garmentPrintStateType`, `stampPixelSizeType`, atlas inputs, …) live in `@configurator/types`. `@types/utils` re-exports shader types as a **deprecated** shim.
+Shared domain types (`garmentConfigType`, cart, checkout) remain in `@types/entities` and `@types/garment`. Shader pipeline and gizmo types (`pbrMapsType`, `garmentPrintStateType`, `printGizmoElementType`, …) live in `@configurator/types`.
 
 ---
 
@@ -285,10 +287,8 @@ src/types/
 ├── checkout/       # Checkout table, summary
 ├── entities/       # Types derived from JSON catalogs (source of truth)
 ├── garment/        # Runtime garment types composed from entities
-├── gizmo/          # Deprecated shim → @configurator/types
 ├── providers/      # Context provider types
 ├── ui/             # HTML component props, variant unions
-├── utils/          # Deprecated shim → @configurator/types (shader types)
 └── index.ts
 ```
 
@@ -304,12 +304,12 @@ App-wide pure utilities: catalog, logo file conversion, checkout dates, design S
 Framework-agnostic gizmo logic: hit-testing, drag resolution, printable mesh construction, button hover/reveal state.  
 Used by `@configurator/runtime` and `@configurator/hooks`. Imports math from `@configurator/utils`.
 
-Structure: `featureName/featureName.ts` + `index.ts`; barrel at `src/configurator/gizmo/index.ts`.  
-Legacy `@gizmo` re-exports from `@configurator/gizmo`.
+Structure: `featureName/featureName.ts` + `index.ts`; barrel at `src/configurator/gizmo/index.ts`.
 
-### `src/shaders/` (`@shaders`)
+### `src/configurator/shaders/` (`@configurator/shaders`)
 
-GLSL patches for `MeshStandardMaterial`: print layers, logos, names, numbers, testo, gradients, atlas tinting.
+GLSL patches for `MeshStandardMaterial`: print layers, logos, names, numbers, testo, gradients, atlas tinting.  
+Consumed by `@configurator/utils/createGarmentMaterial`.
 
 ### `src/shopify/` (`@shopify`)
 
@@ -413,11 +413,10 @@ Defined in `tsconfig.json`:
 | `@constants`               | `src/constants`                   |
 | `@providers`               | `src/providers`                   |
 | `@fonts`                   | `src/fonts`                       |
-| `@shaders`                 | `src/shaders`                     |
-| `@gizmo`                   | `src/gizmo` (deprecated → `@configurator/gizmo`) |
 | `@shopify`                 | `src/shopify`                     |
 | **`@configurator`**        | `src/configurator`                |
 | **`@configurator/gizmo`**  | `src/configurator/gizmo`          |
+| **`@configurator/shaders`**| `src/configurator/shaders`        |
 | **`@configurator/canvas`**   | `src/configurator/canvas`           |
 | **`@configurator/scene`**  | `src/configurator/scene`            |
 | **`@configurator/runtime`**| `src/configurator/runtime`          |
@@ -440,6 +439,7 @@ Defined in `tsconfig.json`:
 | Print / material utils       | `@configurator/utils`                           |
 | Configurator types           | `@configurator/types`                           |
 | Gizmo math                   | `@configurator/gizmo`                           |
+| GLSL shader patches          | `@configurator/shaders`                         |
 | Product catalog (`getModel`) | `@utils` (shared, not configurator-specific)    |
 | User configuration           | `@store`                                        |
 
@@ -461,4 +461,4 @@ Applies to: UI components, configurator components, hooks, gizmo modules, utils.
 
 ### Deprecation policy
 
-Legacy `@types/utils` shader types and `@types/gizmo` re-export from `@configurator/types`. Legacy `@gizmo` re-exports from `@configurator/gizmo`. Import 3D code only from `@configurator/*`.
+Import 3D code only from `@configurator/*`. Configurator, shader, and gizmo types from `@configurator/types`.
