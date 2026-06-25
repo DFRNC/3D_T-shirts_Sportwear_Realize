@@ -5,4 +5,4 @@ export {
   mapProductLogoPositions,
   resolveLogoDefaults,
   resolvePartIdForAtlasUv,
-} from '@configurator/mappers';
+} from './mapProductLogos';

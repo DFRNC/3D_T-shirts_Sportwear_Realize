@@ -6,8 +6,7 @@ import { create } from 'zustand';
 
 import { PALETTE_COLORS } from '../../constants/PALETTE_COLORS/PALETTE_COLORS';
 
-import { buildDefaultGradients } from './mapPartGradientDefaults';
-import { DISABLED_PART_GRADIENT } from './partGradientTypes';
+import { buildDefaultGradients, DISABLED_PART_GRADIENT } from '@configurator/mappers';
 
 const DEFAULT_COLOR = PALETTE_COLORS[0];
 

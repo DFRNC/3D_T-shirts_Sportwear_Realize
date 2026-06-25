@@ -1,5 +1,6 @@
 export { ConfiguratorCanvas } from './canvas';
 export { applyConfiguratorRouteProduct, resolveRouteModel } from './bootstrap';
+export * from './mappers';
 export { GarmentRuntime, PrintGizmoLayer } from './runtime';
 export * from './gizmo';
 export {

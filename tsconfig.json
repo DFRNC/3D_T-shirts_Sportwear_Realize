@@ -46,6 +46,7 @@
       "@configurator/types": ["./src/configurator/types"],
       "@configurator/gizmo": ["./src/configurator/gizmo"],
       "@configurator/shaders": ["./src/configurator/shaders"],
+      "@configurator/mappers": ["./src/configurator/mappers"],
       "@shopify": ["./src/shopify"]
     }
   },

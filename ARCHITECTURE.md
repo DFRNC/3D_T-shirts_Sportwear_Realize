@@ -114,6 +114,11 @@ All real-time 3D logic lives in `src/configurator/`. Import via `@configurator` 
 src/configurator/
 ├── index.ts              # Public API (canvas, scene, runtime, gizmo, bootstrap, utils, types)
 ├── gizmo/                # Hit-test, drag, printable mesh construction, button hover/reveal
+├── mappers/              # Product catalog → runtime print/gradient state (used by @store)
+│   ├── mapProductNames/
+│   ├── mapProductNumbers/
+│   ├── mapProductLogos/
+│   └── partGradient/
 ├── bootstrap/            # Route → product hydration, preload on navigation
 ├── canvas/               # R3F <Canvas>, controls, scene mount
 │   ├── ConfiguratorCanvas/
@@ -168,6 +173,7 @@ src/configurator/
 | Layer       | Alias                   | Responsibility                                              |
 | ----------- | ----------------------- | ----------------------------------------------------------- |
 | `bootstrap` | `@configurator`         | Apply route product, preload GLB + appearance textures      |
+| `mappers`   | `@configurator/mappers` | Map product JSON → print positions, instances, gradients    |
 | `canvas`    | `@configurator/canvas`  | WebGL canvas, orbit controls, preview capture wiring        |
 | `scene`     | `@configurator/scene`   | Load GLTF, clone meshes, register garment materials         |
 | `runtime`   | `@configurator/runtime` | In-canvas side effects: textures, gizmo selection/drag      |
@@ -275,7 +281,7 @@ Domain-scoped Zustand stores:
 | `useConfiguratorSceneLoad`                               | 3D scene loading state      |
 | `useCheckout`                                            | Checkout rows and pricing   |
 
-Each store is a folder: `use*.ts` + `map*.ts` helpers.
+Each store is a folder: `use*.ts` + thin `map*.ts` re-exports (print/gradient mappers live in `@configurator/mappers`).
 
 ### `src/types/` (`@types`)
 
@@ -417,6 +423,7 @@ Defined in `tsconfig.json`:
 | **`@configurator`**        | `src/configurator`                |
 | **`@configurator/gizmo`**  | `src/configurator/gizmo`          |
 | **`@configurator/shaders`**| `src/configurator/shaders`        |
+| **`@configurator/mappers`**| `src/configurator/mappers`        |
 | **`@configurator/canvas`**   | `src/configurator/canvas`           |
 | **`@configurator/scene`**  | `src/configurator/scene`            |
 | **`@configurator/runtime`**| `src/configurator/runtime`          |
@@ -440,6 +447,7 @@ Defined in `tsconfig.json`:
 | Configurator types           | `@configurator/types`                           |
 | Gizmo math                   | `@configurator/gizmo`                           |
 | GLSL shader patches          | `@configurator/shaders`                         |
+| Product → print state maps   | `@configurator/mappers` (re-exported via `@store`) |
 | Product catalog (`getModel`) | `@utils` (shared, not configurator-specific)    |
 | User configuration           | `@store`                                        |
 
