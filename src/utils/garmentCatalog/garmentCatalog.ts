@@ -22,7 +22,7 @@ const DEFAULT_MODEL_ID: modelIdType = 'federer_calcio';
 
 const getModel = (modelId: modelIdType): garmentConfigType | undefined => MODELS[modelId];
 
-const hasModel = (modelId: modelIdType): boolean => modelId in MODELS;
+const hasModel = (modelId: string): modelId is modelIdType => modelId in MODELS;
 
 const resolveProductPreviewSrc = (product: garmentConfigType) => (product.previewImage ? `${product.path}${product.previewImage}` : '');
 

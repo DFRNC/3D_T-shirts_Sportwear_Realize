@@ -1,20 +1,35 @@
 'use client';
 
 import Link from 'next/link';
+import { useCallback, useRef } from 'react';
 
+import { preloadGarmentScene } from '@features/garment-scene';
 import { AtomImage } from '@atoms';
-import type { productFlipCardPropsType } from '@types';
-import { cn, resolveProductFlipCardSrc } from '@utils';
+import type { modelIdType, productFlipCardPropsType } from '@types';
+import { cn, hasModel, preloadGarmentAppearance, preloadGarmentProduct, resolveProductFlipCardSrc } from '@utils';
 
 const ProductFlipCard = ({ collection, slug, alt, previewSrc, activePreviewSrc, className }: productFlipCardPropsType) => {
+  const isWarmedRef = useRef(false);
   const hasRemoteImages = previewSrc != null || activePreviewSrc != null;
   const frontSrc = previewSrc ?? (hasRemoteImages ? '' : resolveProductFlipCardSrc(collection, slug, 'front'));
   const backSrc = activePreviewSrc ?? previewSrc ?? (hasRemoteImages ? '' : resolveProductFlipCardSrc(collection, slug, 'back'));
+  const warmProductAssets = useCallback(() => {
+    if (isWarmedRef.current || !hasModel(slug)) return;
+    isWarmedRef.current = true;
+
+    const modelId = slug as modelIdType;
+    preloadGarmentProduct(modelId);
+    preloadGarmentAppearance(modelId);
+    preloadGarmentScene(modelId);
+  }, [slug]);
 
   return (
     <Link
       href={`/${slug}`}
       tabIndex={0}
+      onPointerEnter={warmProductAssets}
+      onFocus={warmProductAssets}
+      onTouchStart={warmProductAssets}
       className={cn(
         'group/card aspect-3/4 w-full cursor-pointer outline-none perspective-[1000px]',
         'focus-visible:ring-2 focus-visible:ring-default focus-visible:ring-offset-2',
