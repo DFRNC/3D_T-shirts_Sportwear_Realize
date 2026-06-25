@@ -10,19 +10,27 @@ export { useCheckoutSummary } from './useCheckoutSummary';
 export { useNavigateToCheckout } from './useNavigateToCheckout';
 export { useNavigateToConfigurator } from './useNavigateToConfigurator';
 export { useConfigurationCartSync } from './useConfigurationCartSync';
-export { useCartPreviewCapture } from './useCartPreviewCapture';
 export { useConfigurationPositionPicker } from './useConfigurationPositionPicker';
 export { useControlledState } from './useControlledState';
 export { useSlidingIndicator } from './useSlidingIndicator';
-export { useGarmentLogoTextures } from './useGarmentLogoTextures';
-export { useGarmentNameTextures } from './useGarmentNameTextures';
-export { useGarmentAppearance, useGarmentTextures } from './useGarmentAppearance';
 export { useShowConfigurationSkeleton } from './useShowConfigurationSkeleton';
-export { useGizmoButtonHover } from './useGizmoButtonHover';
-export { useGizmoSelection } from './useGizmoSelection';
-export { usePrintGizmoDrag } from './usePrintGizmoDrag';
-export { useGizmoIconAtlas } from './useGizmoIconAtlas';
 export { useLogoFileHandler } from './useLogoFileHandler';
 export { useProductStepsConfiguration } from './useProductStepsConfiguration';
 export { useStepLogo } from './useStepLogo';
 export { useTintedDesignSvgSrc } from './useTintedDesignSvgSrc';
+
+/** @deprecated Import from `@configurator/hooks` instead. */
+export {
+  useCartPreviewCapture,
+  useGarmentAppearance,
+  useGarmentLogoTextures,
+  useGarmentNameTextures,
+  useGarmentTextures,
+  useGizmoButtonHover,
+  useGizmoIconAtlas,
+  useGizmoPointerContext,
+  useGizmoSelection,
+  usePrintGizmoDrag,
+  usePrintPlacementMigration,
+} from '@configurator/hooks';
+export type { GizmoSelectionStore, PrintPlacementInstance } from '@configurator/hooks';

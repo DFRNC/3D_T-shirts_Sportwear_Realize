@@ -4,7 +4,7 @@ import { useConfigurationCart, useConfiguratorSceneLoad } from '@store';
 import { DEFAULT_MODEL_ID, deriveLocalBusiness, hasModel } from '../garmentCatalog/garmentCatalog';
 import { preloadGarmentAppearance } from '../preloadGarmentAppearance/preloadGarmentAppearance';
 import { preloadGarmentProduct } from '../preloadGarmentProduct/preloadGarmentProduct';
-import { preloadGarmentScene } from '@features/garment-scene';
+import { preloadGarmentScene } from '@configurator/scene';
 
 const resolveRouteModel = (slug: string, product: configuratorProductHydrationType | null) => {
   const slugModelId = hasModel(slug) ? slug : null;

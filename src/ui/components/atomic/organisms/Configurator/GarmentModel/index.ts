@@ -1,1 +1,0 @@
-export { GarmentModel } from './GarmentModel';

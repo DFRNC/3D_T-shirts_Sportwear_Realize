@@ -1,1 +1,0 @@
-export { GarmentPartMesh } from './GarmentPartMesh';

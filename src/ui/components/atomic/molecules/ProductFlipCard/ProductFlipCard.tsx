@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useCallback, useRef } from 'react';
 
-import { preloadGarmentScene } from '@features/garment-scene';
+import { preloadGarmentScene } from '@configurator/scene';
 import { AtomImage } from '@atoms';
 import type { modelIdType, productFlipCardPropsType } from '@types';
 import { cn, hasModel, preloadGarmentAppearance, preloadGarmentProduct, resolveProductFlipCardSrc } from '@utils';

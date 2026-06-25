@@ -1,1 +1,0 @@
-export { PreserveGltfMesh } from './PreserveGltfMesh';

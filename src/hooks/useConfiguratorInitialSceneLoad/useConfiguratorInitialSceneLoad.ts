@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 
 import { useConfiguratorSceneLoad } from '@store';
-import { preloadGarmentScene } from '@features/garment-scene';
+import { preloadGarmentScene } from '@configurator/scene';
 
 const useConfiguratorInitialSceneLoad = () => {
   useEffect(() => {
