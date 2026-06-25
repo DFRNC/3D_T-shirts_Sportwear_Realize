@@ -1,4 +1,4 @@
-import type { buildTestoGizmoElementsInputType, printGizmoElementType } from '@types';
+import type { buildTestoGizmoElementsInputType, printGizmoElementType } from '@configurator/types';
 
 import { buildLineHeightTextGizmoElements } from '../buildLineHeightTextGizmoElements';
 

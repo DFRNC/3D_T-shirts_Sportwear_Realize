@@ -10,8 +10,9 @@ import {
   resolvePrintDragMove,
   setGizmoButtonDragActive,
   toPrintLocalPx,
-} from '@gizmo';
-import type { gizmoButtonHitType, printablePartMeshesType, printDragMoveStateType, printGizmoElementType, uvPointType } from '@types';
+} from '@configurator/gizmo';
+import type { gizmoButtonHitType, printablePartMeshesType, printDragMoveStateType, printGizmoElementType } from '@configurator/types';
+import type { uvPointType } from '@types';
 import { useConfiguratorProduct, useGarmentLogo, useGarmentName, useGarmentNumber, useGarmentTesto } from '@store';
 import { useGizmoPointerContext } from '@configurator/hooks/useGizmoPointerContext';
 

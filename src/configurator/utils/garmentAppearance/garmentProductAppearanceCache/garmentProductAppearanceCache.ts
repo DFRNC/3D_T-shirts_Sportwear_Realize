@@ -1,4 +1,4 @@
-import type { productAppearanceTexturesType } from '@types';
+import type { productAppearanceTexturesType } from '@configurator/types';
 import { emptyMaskPair } from '../../garmentPrint/applyGarmentPrint';
 
 const appearanceByProductPath = new Map<string, productAppearanceTexturesType>();

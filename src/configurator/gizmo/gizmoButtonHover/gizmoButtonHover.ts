@@ -1,4 +1,4 @@
-import type { gizmoButtonHoverTargetType } from '@types';
+import type { gizmoButtonHoverTargetType } from '@configurator/types';
 
 const HOVER_SCALE_TARGET = 1.1;
 const HOVER_SCALE_DEFAULT = 1;

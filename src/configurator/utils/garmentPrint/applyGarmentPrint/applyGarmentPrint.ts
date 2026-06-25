@@ -1,6 +1,6 @@
 import { Color, type MeshStandardMaterial, type Texture } from 'three';
 
-import type { garmentPrintStateType, patternColorPairType, patternMaskPairType } from '@types';
+import type { garmentPrintStateType, patternColorPairType, patternMaskPairType } from '@configurator/types';
 
 import { getEmptyPrintTexture } from '../emptyPrintTexture';
 

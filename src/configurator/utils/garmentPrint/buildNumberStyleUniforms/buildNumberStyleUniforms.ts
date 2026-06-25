@@ -1,4 +1,5 @@
-import type { garmentPartConfigType, nameStyleUniformsType, numberInstanceType, stampPixelSizeType } from '@types';
+import type { nameStyleUniformsType, stampPixelSizeType } from '@configurator/types';
+import type { garmentPartConfigType, numberInstanceType } from '@types';
 
 import { buildLineHeightStyleUniforms } from '../buildLineHeightStyleUniforms';
 

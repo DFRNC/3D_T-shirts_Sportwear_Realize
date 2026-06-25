@@ -1,6 +1,7 @@
 import type { MeshStandardMaterial } from 'three';
 
-import type { garmentConfigType, garmentPrintStateType, partGradientType, patternColorPairType } from '@types';
+import type { garmentPrintStateType, patternColorPairType } from '@configurator/types';
+import type { garmentConfigType, partGradientType } from '@types';
 import { DEFAULT_COLOR, DISABLED_PART_GRADIENT, resolveGradientColors } from '@store';
 import {
   applyGarmentGradient,

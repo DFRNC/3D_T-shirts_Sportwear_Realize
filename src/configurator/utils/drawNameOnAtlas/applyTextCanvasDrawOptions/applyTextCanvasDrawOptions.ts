@@ -1,4 +1,4 @@
-import type { textCanvasDrawOptionsType } from '@types';
+import type { textCanvasDrawOptionsType } from '@configurator/types';
 
 const applyTextCanvasDrawOptions = (ctx: CanvasRenderingContext2D, options?: textCanvasDrawOptionsType) => {
   (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = options?.letterSpacing !== undefined ? `${options.letterSpacing}px` : '0px';

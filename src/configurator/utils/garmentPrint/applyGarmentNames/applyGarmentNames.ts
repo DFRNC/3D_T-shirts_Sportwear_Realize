@@ -1,6 +1,6 @@
 import { Color, LinearFilter, LinearMipmapLinearFilter, type MeshStandardMaterial, type Texture, Vector2, Vector4 } from 'three';
 
-import type { garmentNameMaskStateType, gizmoFrameStateType, nameStyleUniformsType } from '@types';
+import type { garmentNameMaskStateType, gizmoFrameStateType, nameStyleUniformsType } from '@configurator/types';
 
 let pendingNameMasks: garmentNameMaskStateType | null = null;
 let pendingNameStyle: nameStyleUniformsType | null = null;

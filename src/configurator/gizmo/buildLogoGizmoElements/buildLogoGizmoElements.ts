@@ -1,4 +1,4 @@
-import type { buildLogoGizmoElementsInputType, printGizmoElementType } from '@types';
+import type { buildLogoGizmoElementsInputType, printGizmoElementType } from '@configurator/types';
 
 import { LOGO_SCALE_MAX, LOGO_SCALE_MIN, LOGO_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@constants';
 import {

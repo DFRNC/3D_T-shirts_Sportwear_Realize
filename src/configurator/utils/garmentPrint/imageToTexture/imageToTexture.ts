@@ -1,6 +1,6 @@
 import { ClampToEdgeWrapping, LinearFilter, LinearMipmapLinearFilter, NoColorSpace, SRGBColorSpace, Texture } from 'three';
 
-import type { imageTextureOptionsType } from '@types';
+import type { imageTextureOptionsType } from '@configurator/types';
 import { loadCachedImage } from '../../loadCachedImage/loadCachedImage';
 
 const textureCache = new Map<string, Texture>();

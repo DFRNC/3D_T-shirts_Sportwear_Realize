@@ -5,10 +5,11 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { useThree } from '@react-three/fiber';
 import type { MeshStandardMaterial, Texture } from 'three';
 
-import { setGizmoButtonsRevealTarget } from '@gizmo';
+import { setGizmoButtonsRevealTarget } from '@configurator/gizmo';
 import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@providers';
 import { useConfigurationControl, useConfiguratorProduct } from '@store';
-import type { garmentPartConfigType, garmentTextRenderInstanceType, stampPixelSizeType } from '@types';
+import type { stampPixelSizeType } from '@configurator/types';
+import type { garmentPartConfigType, garmentTextRenderInstanceType } from '@types';
 import {
   applyGarmentPrintAtlasSize,
   composeNameMaskAtlas,

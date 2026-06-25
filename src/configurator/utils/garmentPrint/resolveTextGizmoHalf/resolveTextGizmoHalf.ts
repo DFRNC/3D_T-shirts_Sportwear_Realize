@@ -1,4 +1,5 @@
-import type { garmentTextRenderInstanceType, textCanvasDrawOptionsType } from '@types';
+import type { textCanvasDrawOptionsType } from '@configurator/types';
+import type { garmentTextRenderInstanceType } from '@types';
 
 import { resolveRotatedGizmoHalf } from '../../composeLogoAtlas/composeLogoPrintAtlas';
 import { PRINT_UPLOAD_ROTATION_DEG } from '@constants';

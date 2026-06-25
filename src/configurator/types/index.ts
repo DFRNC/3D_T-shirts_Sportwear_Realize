@@ -33,3 +33,21 @@ export type {
 export type { imageTextureOptionsType } from './imageToTexture';
 export type { pbrMapsType } from './pbrMaps';
 export type { stampPixelSizeType } from './stampPixelSize';
+export type {
+  buildLogoGizmoElementsInputType,
+  buildNameGizmoElementsInputType,
+  buildNumberGizmoElementsInputType,
+  buildTestoGizmoElementsInputType,
+  gizmoButtonHitType,
+  gizmoButtonHoverTargetType,
+  gizmoHandleKindType,
+  gizmoPointerTargetType,
+  printablePartMeshesType,
+  printDragMoveResultType,
+  printDragMoveStateType,
+  printGizmoElementKindType,
+  printGizmoElementType,
+  printUvHitType,
+  resolveGizmoPointerTargetContextType,
+  resolveGizmoPointerTargetOptionsType,
+} from './gizmo';

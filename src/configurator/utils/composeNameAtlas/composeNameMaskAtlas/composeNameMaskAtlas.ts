@@ -1,5 +1,6 @@
 import { NAME_SLOT_COUNT } from '@constants';
-import type { composeNameMaskAtlasInputType, garmentTextRenderInstanceType, nameMaskAtlasType, stampPixelSizeType } from '@types';
+import type { composeNameMaskAtlasInputType, nameMaskAtlasType, stampPixelSizeType } from '@configurator/types';
+import type { garmentTextRenderInstanceType } from '@types';
 import { drawNameMaskGeometry } from '../../drawNameOnAtlas/drawNameMaskGeometry';
 import { drawNameStrokeMaskGeometry } from '../../drawNameOnAtlas/drawNameStrokeMaskGeometry';
 import { measureNameStampPixelSize, unionStampPixelSize } from '../../drawNameOnAtlas/measureNameStampBounds';

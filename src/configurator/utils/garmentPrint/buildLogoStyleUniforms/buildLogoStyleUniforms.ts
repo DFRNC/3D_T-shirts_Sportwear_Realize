@@ -1,4 +1,5 @@
-import type { garmentPartConfigType, logoInstanceType, logoSlotBounds4Type, logoSlotFloat4Type, logoSlotVec2Type, logoStyleUniformsType } from '@types';
+import type { logoSlotBounds4Type, logoSlotFloat4Type, logoSlotVec2Type, logoStyleUniformsType } from '@configurator/types';
+import type { garmentPartConfigType, logoInstanceType } from '@types';
 import { FULL_UV_BOUNDS, LOGO_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@constants';
 import { resolveLogoDisplayScale } from '../../composeLogoAtlas/composeLogoPrintAtlas';
 import { resolvePartPrintRotation, resolvePartUvBounds } from '../../resolveProductRenderConfig/resolveProductRenderConfig';

@@ -1,5 +1,5 @@
 import { FONT_FAMILY_BY_NAME, NAME_REFERENCE_FONT_SIZE } from '@constants';
-import type { drawNameMaskGeometryInputType } from '@types';
+import type { drawNameMaskGeometryInputType } from '@configurator/types';
 
 import { applyTextCanvasDrawOptions } from '../applyTextCanvasDrawOptions';
 

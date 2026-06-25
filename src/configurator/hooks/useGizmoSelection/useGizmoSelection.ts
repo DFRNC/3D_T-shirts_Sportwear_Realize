@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 
-import { clearGizmoButtonHover, resolveGizmoPointerTarget } from '@gizmo';
-import type { printGizmoElementType } from '@types';
+import { clearGizmoButtonHover, resolveGizmoPointerTarget } from '@configurator/gizmo';
+import type { printGizmoElementType } from '@configurator/types';
 import { useGizmoPointerContext } from '@configurator/hooks/useGizmoPointerContext';
 
 interface GizmoSelectionStore {

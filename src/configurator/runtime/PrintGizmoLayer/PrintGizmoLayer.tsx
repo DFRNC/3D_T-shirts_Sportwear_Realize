@@ -2,7 +2,7 @@
 
 import { memo, useCallback, useEffect, useMemo } from 'react';
 
-import { buildLogoGizmoElements, buildNameGizmoElements, buildNumberGizmoElements, buildPrintablePartMeshes, buildTestoGizmoElements } from '@gizmo';
+import { buildLogoGizmoElements, buildNameGizmoElements, buildNumberGizmoElements, buildPrintablePartMeshes, buildTestoGizmoElements } from '@configurator/gizmo';
 import { useGizmoButtonHover, useGizmoSelection, usePrintPlacementMigration } from '@configurator/hooks';
 import type { PrintPlacementInstance } from '@configurator/types';
 import {

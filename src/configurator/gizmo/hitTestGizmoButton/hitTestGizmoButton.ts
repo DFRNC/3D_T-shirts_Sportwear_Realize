@@ -1,6 +1,6 @@
 import { NAME_GIZMO_BTN_HALF_ATLAS, NAME_GIZMO_BTN_OUTSET_ATLAS } from '@constants';
 
-import type { gizmoButtonHitType, gizmoHandleKindType, printGizmoElementType } from '@types';
+import type { gizmoButtonHitType, gizmoHandleKindType, printGizmoElementType } from '@configurator/types';
 
 const GIZMO_CORNERS: ReadonlyArray<{ kind: gizmoHandleKindType; cornerIndex: number; sx: number; sy: number }> = [
   { kind: 'duplicate', cornerIndex: 0, sx: -1, sy: 1 },

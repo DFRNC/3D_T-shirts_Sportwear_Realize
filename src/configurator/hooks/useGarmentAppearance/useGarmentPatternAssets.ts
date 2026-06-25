@@ -4,7 +4,8 @@ import { type RefObject, useEffect } from 'react';
 
 import type { Texture } from 'three';
 
-import type { designPatternItemType, patternMaskPairType } from '@types';
+import type { patternMaskPairType } from '@configurator/types';
+import type { designPatternItemType } from '@types';
 import { PATTERN_LAYER_COUNT } from '@constants';
 import { emptyMaskPair, imageToMaskTexture, imageToTexture, resolveRasterDesignSrc } from '@configurator/utils';
 

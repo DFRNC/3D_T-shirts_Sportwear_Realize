@@ -1,4 +1,4 @@
-import type { buildNameGizmoElementsInputType, printGizmoElementType } from '@types';
+import type { buildNameGizmoElementsInputType, printGizmoElementType } from '@configurator/types';
 import { NAME_REFERENCE_FONT_SIZE, NAME_SLOT_COUNT } from '@constants';
 import { measureNameGizmoHalf, resolveGizmoElementRotationDeg, resolvePartPrintRotation, resolveProductGizmoRotation, resolveTextGizmoHalf } from '@configurator/utils';
 

@@ -1,6 +1,7 @@
 import type { GLTF } from 'three-stdlib';
 
-import type { garmentPbrUvChannelType, pbrMapsType } from '@types';
+import type { pbrMapsType } from '@configurator/types';
+import type { garmentPbrUvChannelType } from '@types';
 
 import { createFallbackPbrMaps } from './createFallbackPbrMaps';
 import { extractGltfPbrMaps } from './extractGltfPbrMaps';

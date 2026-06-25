@@ -1,4 +1,5 @@
-import type { gizmoFrameStateType, logoInstanceType } from '@types';
+import type { gizmoFrameStateType } from '@configurator/types';
+import type { logoInstanceType } from '@types';
 import { LOGO_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@constants';
 import { resolveLogoGizmoHalf, resolveLogoReferenceDrawSize } from '../../composeLogoAtlas/composeLogoPrintAtlas';
 

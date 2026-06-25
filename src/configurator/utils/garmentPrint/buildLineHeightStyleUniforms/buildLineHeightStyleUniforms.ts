@@ -1,4 +1,5 @@
-import type { garmentPartConfigType, garmentTextRenderInstanceType, nameSlotFloat4Type, nameStyleUniformsType, stampPixelSizeType } from '@types';
+import type { nameSlotFloat4Type, nameStyleUniformsType, stampPixelSizeType } from '@configurator/types';
+import type { garmentPartConfigType, garmentTextRenderInstanceType } from '@types';
 import { NAME_SLOT_COUNT } from '@constants';
 
 import { buildNameStyleUniforms } from '../buildNameStyleUniforms';

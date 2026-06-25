@@ -6,7 +6,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import type { Texture } from 'three';
 
 import { useGarmentMaterialRegistry, useMaterialRegistryRevision, usePbrMaps } from '@providers';
-import type { garmentPrintStateType, patternMaskPairType } from '@types';
+import type { garmentPrintStateType, patternMaskPairType } from '@configurator/types';
 import {
   useConfigurationCart,
   useConfiguratorProduct,

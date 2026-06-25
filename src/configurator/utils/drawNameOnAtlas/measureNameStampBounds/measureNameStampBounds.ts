@@ -1,5 +1,5 @@
 import { FONT_FAMILY_BY_NAME, NAME_REFERENCE_FONT_SIZE, NAME_STAMP_FONT_SIZE_MIN, NAME_STAMP_STROKE_WIDTH_MAX } from '@constants';
-import type { stampPixelSizeType, textCanvasDrawOptionsType } from '@types';
+import type { stampPixelSizeType, textCanvasDrawOptionsType } from '@configurator/types';
 
 import { applyTextCanvasDrawOptions } from '../applyTextCanvasDrawOptions';
 

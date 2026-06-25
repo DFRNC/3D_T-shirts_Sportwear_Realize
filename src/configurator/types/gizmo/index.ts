@@ -1,19 +1,18 @@
-/** @deprecated Import gizmo types from `@configurator/types` instead. */
 export type {
   buildLogoGizmoElementsInputType,
   buildNameGizmoElementsInputType,
   buildNumberGizmoElementsInputType,
   buildTestoGizmoElementsInputType,
+} from './buildGizmoElements';
+export type { gizmoHandleKindType, printGizmoElementKindType, printGizmoElementType } from './gizmo';
+export type {
   gizmoButtonHitType,
   gizmoButtonHoverTargetType,
-  gizmoHandleKindType,
   gizmoPointerTargetType,
   printablePartMeshesType,
   printDragMoveResultType,
   printDragMoveStateType,
-  printGizmoElementKindType,
-  printGizmoElementType,
   printUvHitType,
   resolveGizmoPointerTargetContextType,
   resolveGizmoPointerTargetOptionsType,
-} from '@configurator/types';
+} from './runtime';

@@ -1,13 +1,5 @@
-import type {
-  garmentPartConfigType,
-  gizmoButtonHitType,
-  gizmoPointerTargetType,
-  printablePartMeshesType,
-  printGizmoElementType,
-  printUvHitType,
-  resolveGizmoPointerTargetContextType,
-  resolveGizmoPointerTargetOptionsType,
-} from '@types';
+import type { gizmoButtonHitType, gizmoPointerTargetType, printablePartMeshesType, printGizmoElementType, printUvHitType, resolveGizmoPointerTargetContextType, resolveGizmoPointerTargetOptionsType } from '@configurator/types';
+import type { garmentPartConfigType } from '@types';
 
 import type { Object3D } from 'three';
 import { Vector2 } from 'three';

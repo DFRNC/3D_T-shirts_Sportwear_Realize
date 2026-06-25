@@ -1,6 +1,6 @@
 import { Color, type MeshStandardMaterial, type Texture, Vector2, Vector4 } from 'three';
 
-import type { garmentNameMaskStateType, gizmoFrameStateType, nameStyleUniformsType } from '@types';
+import type { garmentNameMaskStateType, gizmoFrameStateType, nameStyleUniformsType } from '@configurator/types';
 
 let pendingTestoMasks: garmentNameMaskStateType | null = null;
 let pendingTestoStyle: nameStyleUniformsType | null = null;

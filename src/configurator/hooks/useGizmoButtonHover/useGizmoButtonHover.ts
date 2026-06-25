@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-import type { printGizmoElementType } from '@types';
+import type { printGizmoElementType } from '@configurator/types';
 import {
   clearGizmoButtonHover,
   getGizmoButtonReveal,
@@ -11,7 +11,7 @@ import {
   resolveGizmoPointerTarget,
   setGizmoButtonHover,
   toLocalPx,
-} from '@gizmo';
+} from '@configurator/gizmo';
 import { useGizmoPointerContext } from '@configurator/hooks/useGizmoPointerContext';
 
 interface UseGizmoButtonHoverOptions {

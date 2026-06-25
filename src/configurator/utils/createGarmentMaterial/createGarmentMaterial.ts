@@ -10,7 +10,7 @@ import {
   PRINT_ATLAS_WIDTH,
 } from '@constants';
 
-import type { garmentPrintStateType, pbrMapsType } from '@types';
+import type { garmentPrintStateType, pbrMapsType } from '@configurator/types';
 import {
   garmentFragmentUvPars,
   garmentGizmoLightsFragment,

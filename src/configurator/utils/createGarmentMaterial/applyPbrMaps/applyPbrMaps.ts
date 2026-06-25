@@ -12,7 +12,7 @@ import {
   Vector2,
 } from 'three';
 
-import type { pbrMapsType } from '@types';
+import type { pbrMapsType } from '@configurator/types';
 
 const FABRIC_REPEAT = 10;
 

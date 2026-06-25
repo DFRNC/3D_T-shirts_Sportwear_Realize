@@ -4,7 +4,8 @@ import { type RefObject, useCallback, useEffect, useRef } from 'react';
 
 import type { MeshStandardMaterial, Texture } from 'three';
 
-import type { designPatternItemType, garmentConfigType, patternMaskPairType, pbrMapsType } from '@types';
+import type { patternMaskPairType, pbrMapsType } from '@configurator/types';
+import type { designPatternItemType, garmentConfigType } from '@types';
 import { useConfiguratorSceneLoad } from '@store';
 import { GARMENT_SHADER_VERSION, hasPrintableGarmentParts, resolveRasterDesignSrc, scheduleGarmentShaderUpgrade } from '@configurator/utils';
 

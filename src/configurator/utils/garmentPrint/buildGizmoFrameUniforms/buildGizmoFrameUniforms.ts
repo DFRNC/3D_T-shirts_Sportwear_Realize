@@ -1,4 +1,5 @@
-import type { garmentTextRenderInstanceType, gizmoFrameStateType } from '@types';
+import type { gizmoFrameStateType } from '@configurator/types';
+import type { garmentTextRenderInstanceType } from '@types';
 import { NAME_SLOT_COUNT } from '@constants';
 import { measureNameGizmoHalf } from '../../drawNameOnAtlas/measureNameStampBounds';
 import { resolveTextGizmoHalf, resolveTextGizmoMeasureOptions } from '../resolveTextGizmoHalf';

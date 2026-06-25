@@ -1,6 +1,6 @@
 import { type MeshStandardMaterial, type Texture, Vector2, Vector4 } from 'three';
 
-import type { garmentLogoStampStateType, gizmoFrameStateType, logoStyleUniformsType } from '@types';
+import type { garmentLogoStampStateType, gizmoFrameStateType, logoStyleUniformsType } from '@configurator/types';
 
 let pendingLogoStamp: garmentLogoStampStateType | null = null;
 let pendingLogoStyle: logoStyleUniformsType | null = null;

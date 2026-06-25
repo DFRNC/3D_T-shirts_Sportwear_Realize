@@ -1,6 +1,7 @@
 import { DataTexture, NoColorSpace, RGBAFormat, type Texture } from 'three';
 
-import type { garmentPbrUvChannelType, pbrMapsType } from '@types';
+import type { pbrMapsType } from '@configurator/types';
+import type { garmentPbrUvChannelType } from '@types';
 
 const configurePbrTexture = (texture: Texture, channel: garmentPbrUvChannelType) => {
   texture.channel = channel;
