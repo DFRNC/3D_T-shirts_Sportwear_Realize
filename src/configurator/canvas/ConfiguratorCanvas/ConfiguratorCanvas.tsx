@@ -45,7 +45,7 @@ const ConfiguratorCanvas = () => {
       }}
     >
       <CanvasControl />
-      <Environment preset="sunset" environmentIntensity={0.1} />
+      <Environment preset="sunset" environmentIntensity={0.2} />
       <Suspense fallback={null}>
         <SceneModel />
       </Suspense>
