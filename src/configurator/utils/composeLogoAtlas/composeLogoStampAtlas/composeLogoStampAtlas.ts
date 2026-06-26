@@ -1,6 +1,6 @@
 import type { composeLogoStampAtlasInputType, logoStampAtlasType } from '@configurator/types';
 import type { logoInstanceType } from '@types';
-import { LOGO_SLOT_COUNT } from '@constants';
+import { LOGO_SLOT_COUNT } from '@configurator/constants';
 import { loadCachedImage } from '../../loadCachedImage/loadCachedImage';
 import { resolveLogoReferenceDrawSize } from '../composeLogoPrintAtlas';
 

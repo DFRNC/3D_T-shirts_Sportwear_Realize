@@ -21,11 +21,11 @@ import {
 } from '@configurator/utils';
 
 import {
-  DEFAULT_STAMP_SIZE,
   buildFillSignature,
   buildStrokeSignature,
   buildStyleSignature,
   clearMaskRuntime,
+  DEFAULT_STAMP_SIZE,
   ensureMaskResources,
   type MaskResourceRefs,
 } from './garmentTextPrintTextureUtils';

@@ -40,7 +40,7 @@ The codebase separates concerns into four axes:
 │   ├── data/               # Product JSON catalogs and accessors
 │   ├── fonts/              # UI and garment-print fonts
 │   ├── hooks/              # App-level React hooks (non-3D)
-│   ├── providers/          # React Context providers (PBR maps, material registry)
+│   ├── providers/          # App-level React context (embedded mode, getStrictContext)
 │   ├── shopify/            # Shopify Storefront / Admin API integration
 │   ├── store/              # Zustand stores (global state)
 │   ├── types/              # Shared TypeScript types (entities, UI, cart, …)
@@ -75,6 +75,10 @@ flowchart TB
     Hooks["hooks/\nappearance, textures, gizmo"]
     Utils["utils/\nprint atlases, materials, orbit"]
     Gizmo["gizmo/\nhit-test, drag, elements"]
+    Mappers["mappers/\nproduct → print state"]
+    Shaders["shaders/\nGLSL print patches"]
+    Providers["providers/\nPBR + material registry"]
+    CfgConstants["constants/\natlas, slots, gizmo chrome"]
   end
 
   subgraph state [Zustand @store]
@@ -92,7 +96,12 @@ flowchart TB
   Scene --> Runtime
   Runtime --> Hooks
   Hooks --> Utils
-  Hooks --> state
+  Hooks --> Shaders
+  Hooks --> CfgConstants
+  Utils --> Shaders
+  Scene --> Providers
+  Bootstrap --> Mappers
+  Mappers --> state
   Runtime --> Gizmo
   Aside --> state
 ```
@@ -113,6 +122,7 @@ All real-time 3D logic lives in `src/configurator/`. Import via `@configurator` 
 ```
 src/configurator/
 ├── index.ts              # Public API (canvas, scene, runtime, gizmo, bootstrap, utils, types)
+├── constants/            # 3D pipeline constants (atlas size, slot counts, gizmo chrome, fonts)
 ├── gizmo/                # Hit-test, drag, printable mesh construction, button hover/reveal
 ├── mappers/              # Product catalog → runtime print/gradient state (used by @store)
 │   ├── mapProductDesigns/
@@ -183,6 +193,7 @@ src/configurator/
 | `gizmo`     | `@configurator/gizmo`   | Hit-testing, drag resolution, gizmo element builders          |
 | `shaders`   | `@configurator/shaders` | GLSL fragments/vertex patches for garment print material      |
 | `providers` | `@configurator/providers`| Bridge scene materials ↔ hook-driven uniform updates     |
+| `constants` | `@configurator/constants`| Atlas dimensions, UV bounds, slot counts, gizmo chrome   |
 | `types`     | `@configurator/types`   | Configurator, shader, and gizmo types                         |
 
 ### R3F component tree (simplified)
@@ -263,7 +274,7 @@ App-level React hooks (navigation, checkout, cart sync, skeletons, logo upload, 
 
 | Category        | Examples                                                                 |
 | --------------- | ------------------------------------------------------------------------ |
-| Configurator UX | `useConfiguratorProductHydration`, `useConfiguratorInitialSceneLoad`, `useGarmentCatalogPreload` |
+| Configurator UX | `useConfiguratorProductHydration`, `useConfiguratorInitialSceneLoad`, `useGarmentCatalogPreload`, `resolveProductStepsConfiguration` |
 | Store wrappers  | `useConfigurationCartSync`, `useProductStepsConfiguration`               |
 | UI state        | `useSlidingIndicator`, `useShowConfigurationSkeleton`                    |
 | Checkout        | `useCheckoutInit`, `useNavigateToCheckout`                                 |
@@ -325,12 +336,18 @@ Shopify Storefront GraphQL, product/collection resolution, `configuratorProductH
 
 ### `src/constants/` (`@constants`)
 
-Single barrel file `index.ts` — catalog, UI copy, checkout labels, palette, and 3D print pipeline values (atlas size, slot counts, gizmo chrome).  
+Single barrel file `index.ts` — catalog, UI copy, checkout labels, palette, logo-upload UI.  
+3D print pipeline values (atlas size, slot counts, gizmo chrome, garment fonts) live in `@configurator/constants`.  
 Wizard step metadata: `CONFIGURATOR_STEP_META`. React step wiring: `STEPS_CONFIGURATION` (exported from `@molecules`).
 
 ### `src/providers/` (`@providers`)
 
 App-level React context: embedded mode, shared `getStrictContext` helper for UI primitives.
+
+### `src/configurator/constants/` (`@configurator/constants`)
+
+Immutable values for the 3D print pipeline: `PRINT_ATLAS_*`, `FULL_UV_BOUNDS`, name/logo slot counts, gizmo chrome, `FONT_FAMILY_BY_NAME`, reference font sizes.  
+Imported only from `@configurator/**` and `@store` mappers — never from `@constants`.
 
 ### `src/configurator/providers/` (`@configurator/providers`)
 
@@ -338,7 +355,7 @@ App-level React context: embedded mode, shared `getStrictContext` helper for UI 
 
 ### `src/data/` (`@data`)
 
-JSON product catalogs, modal info content, catalog accessors (`getModel`, `listCatalogProducts`, …).
+JSON product catalogs and modal info content. Catalog accessors (`getModel`, `MODELS`, …) live in `@utils/garmentCatalog`.
 
 ### `src/fonts/` (`@fonts`)
 
@@ -355,19 +372,19 @@ app/
 │   ├── layout.tsx                      # <body> + Header + main
 │   ├── (default)/
 │   │   ├── layout.tsx                  # Footer wrapper
-│   │   └── page.tsx                    # / → HomePage
+│   │   └── page.tsx                    # / → HomePageLoader (async RSC)
 │   └── checkout/
 │       └── page.tsx                    # /checkout → CheckoutPage
 └── [slug]/                             # Product configurator — URL: /:slug
-    ├── layout.tsx                      # h-dvh viewport-locked configurator shell
-    └── page.tsx                        # ConfiguratorSlugHydration + ConfiguratorPage
+    ├── layout.tsx                      # ConfiguratorLayoutTemplate + Shopify product resolve
+    └── page.tsx                        # ConfiguratorPage
 ```
 
 | URL         | Page component     | Notes                                      |
 | ----------- | ------------------ | ------------------------------------------ |
-| `/`         | `HomePage`         | Product gallery                            |
+| `/`         | `HomePageLoader` → `HomePage` | Product gallery (async catalog load)       |
 | `/checkout` | `CheckoutPage`     | Static route; wins over `[slug]`           |
-| `/:slug`    | `ConfiguratorPage` | `ConfiguratorLayoutTemplate` + Shopify hydrate |
+| `/:slug`    | `ConfiguratorPage` | Layout resolves product; page mounts UI + 3D |
 
 Routes stay **thin**: import from `@pages` only.
 
@@ -399,7 +416,8 @@ Routes stay **thin**: import from `@pages` only.
 | `dev` / `build` / `start` | Next.js development and production            |
 | `lint` / `lint:fix`    | ESLint over `src/` and `scripts/`                |
 | `format` / `format:check` | Prettier                                      |
-| `validate`             | format + lint + `verify:design-assets`           |
+| `validate`             | format + lint + `verify:architecture` + `verify:design-assets` |
+| `verify:architecture`  | Fails if legacy/dead paths reappear (`scripts/verify-architecture.mjs`) |
 | `verify:design-assets` | Design files and thumbnails per catalog JSON     |
 | `convert:design-assets` | SVG designs → WebP runtime assets             |
 | `test:e2e`             | Playwright                                       |
@@ -438,6 +456,7 @@ Defined in `tsconfig.json`:
 | **`@configurator/hooks`**  | `src/configurator/hooks`            |
 | **`@configurator/utils`**  | `src/configurator/utils`            |
 | **`@configurator/types`**  | `src/configurator/types`            |
+| **`@configurator/constants`**| `src/configurator/constants`        |
 
 ---
 
@@ -455,10 +474,15 @@ Defined in `tsconfig.json`:
 | GLSL shader patches          | `@configurator/shaders`                         |
 | Product → print state maps   | `@configurator/mappers` (re-exported via `@store`) |
 | In-canvas React context      | `@configurator/providers`                       |
-| Product catalog (`getModel`) | `@utils` (shared, not configurator-specific)    |
+| 3D pipeline constants        | `@configurator/constants`                       |
+| Product catalog (`getModel`) | `@utils` (`garmentCatalog`)                     |
 | User configuration           | `@store`                                        |
 
 **No subpath imports:** tsconfig defines barrel aliases only (e.g. `@molecules`, `@configurator/hooks`) — never `@alias/*` wildcards and never `@alias/FeatureName/...`. UI: `@atoms`, `@molecules`, `@organisms`, …; configurator: `@configurator` or layer barrels. Sibling files inside one module use relative imports.
+
+ESLint `no-restricted-imports` enforces the same rules for `@hooks/*`, `@utils/*`, `@configurator/hooks/*`, and `@configurator/utils/*`.
+
+**Store → configurator:** `@store` may import `@configurator/mappers` and `@configurator/constants` for hydration; it must not import scene/runtime/canvas layers.
 
 Cross-hook imports inside `@configurator/hooks` use relative paths between sibling folders (never `@alias/*` subpaths).
 

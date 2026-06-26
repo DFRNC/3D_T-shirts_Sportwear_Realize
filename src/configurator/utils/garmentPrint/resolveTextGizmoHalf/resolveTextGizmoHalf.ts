@@ -2,7 +2,7 @@ import type { textCanvasDrawOptionsType } from '@configurator/types';
 import type { garmentTextRenderInstanceType } from '@types';
 
 import { resolveRotatedGizmoHalf } from '../../composeLogoAtlas/composeLogoPrintAtlas';
-import { PRINT_UPLOAD_ROTATION_DEG } from '@constants';
+import { PRINT_UPLOAD_ROTATION_DEG } from '@configurator/constants';
 
 const resolveTextContentRotationDeg = (instance: garmentTextRenderInstanceType) => {
   const userRotationDeg = instance.placementRotation !== undefined ? instance.rotation + instance.placementRotation : instance.rotation;

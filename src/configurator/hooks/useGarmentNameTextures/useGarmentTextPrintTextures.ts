@@ -8,7 +8,7 @@ import {
   useGarmentNumber,
   useGarmentTesto,
 } from '@store';
-import { NAME_SLOT_COUNT } from '@constants';
+import { NAME_SLOT_COUNT } from '@configurator/constants';
 import {
   applyGarmentNameMasks,
   applyGarmentNameStyle,

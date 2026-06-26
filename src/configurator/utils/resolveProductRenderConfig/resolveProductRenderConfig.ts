@@ -1,6 +1,6 @@
 import type { garmentConfigType, garmentPartConfigType, printAtlasConfigType, uvBoundsType, uvPointType } from '@types';
 
-import { DEFAULT_PART_TEXTURE_SIZE, FULL_UV_BOUNDS, PRINT_ATLAS_HEIGHT, PRINT_ATLAS_WIDTH } from '@constants';
+import { DEFAULT_PART_TEXTURE_SIZE, FULL_UV_BOUNDS, PRINT_ATLAS_HEIGHT, PRINT_ATLAS_WIDTH } from '@configurator/constants';
 
 const DEFAULT_PRINT_ATLAS: printAtlasConfigType = {
   width: PRINT_ATLAS_WIDTH,

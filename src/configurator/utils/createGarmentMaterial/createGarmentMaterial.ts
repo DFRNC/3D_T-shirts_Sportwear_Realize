@@ -8,7 +8,7 @@ import {
   NAME_SLOT_COUNT,
   PRINT_ATLAS_HEIGHT,
   PRINT_ATLAS_WIDTH,
-} from '@constants';
+} from '@configurator/constants';
 
 import type { garmentPrintStateType, pbrMapsType } from '@configurator/types';
 import {

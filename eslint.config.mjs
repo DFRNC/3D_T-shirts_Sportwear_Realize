@@ -22,6 +22,22 @@ const eslintConfig = defineConfig([
 
       'import/no-duplicates': ['error', { 'prefer-inline': false }],
 
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@atoms/*', '@molecules/*', '@organisms/*', '@templates/*', '@pages/*', '@hooks/*', '@utils/*', '@store/*'],
+              message: 'Import via barrel alias only (e.g. @molecules), not subpaths.',
+            },
+            {
+              group: ['@configurator/hooks/*', '@configurator/utils/*'],
+              message: 'Import via @configurator/hooks or @configurator/utils barrels, or use relative paths inside the module.',
+            },
+          ],
+        },
+      ],
+
       'sort-imports': [
         'error',
         {

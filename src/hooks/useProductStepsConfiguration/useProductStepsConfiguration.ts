@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from 'react';
 
 import { useConfigurationControl, useConfiguratorProduct } from '@store';
-import { resolveProductStepsConfiguration } from '../../utils/resolveProductStepsConfiguration';
+import { resolveProductStepsConfiguration } from '../resolveProductStepsConfiguration';
 
 const useProductStepsConfiguration = () => {
   const product = useConfiguratorProduct((state) => state.product);

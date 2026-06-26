@@ -1,6 +1,6 @@
 import type { gizmoFrameStateType } from '@configurator/types';
 import type { logoInstanceType } from '@types';
-import { LOGO_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@constants';
+import { LOGO_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@configurator/constants';
 import { resolveLogoGizmoHalf, resolveLogoReferenceDrawSize } from '../../composeLogoAtlas/composeLogoPrintAtlas';
 
 const buildLogoGizmoFrameUniforms = (instances: logoInstanceType[], meshPartId: string, enabled: boolean, gizmoRotationDeg = 0): gizmoFrameStateType => {

@@ -46,6 +46,8 @@ const AtomImage = ({
     : (style ?? {});
 
   const imageElement = (
+    // Native img: data/blob URLs, arbitrary external src, and fill layout without next/image loader.
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src || EMPTY_IMAGE_SRC}
       alt={alt || 'image'}

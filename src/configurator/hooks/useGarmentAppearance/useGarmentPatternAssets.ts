@@ -6,7 +6,7 @@ import type { Texture } from 'three';
 
 import type { patternMaskPairType } from '@configurator/types';
 import type { designPatternItemType } from '@types';
-import { PATTERN_LAYER_COUNT } from '@constants';
+import { PATTERN_LAYER_COUNT } from '@configurator/constants';
 import { emptyMaskPair, imageToMaskTexture, imageToTexture, resolveRasterDesignSrc } from '@configurator/utils';
 
 type garmentPatternAssetsRefsType = {

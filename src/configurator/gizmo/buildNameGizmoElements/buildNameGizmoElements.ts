@@ -1,5 +1,5 @@
 import type { buildNameGizmoElementsInputType, printGizmoElementType } from '@configurator/types';
-import { NAME_REFERENCE_FONT_SIZE, NAME_SLOT_COUNT } from '@constants';
+import { NAME_REFERENCE_FONT_SIZE, NAME_SLOT_COUNT } from '@configurator/constants';
 import { measureNameGizmoHalf, resolveGizmoElementRotationDeg, resolvePartPrintRotation, resolveProductGizmoRotation, resolveTextGizmoHalf } from '@configurator/utils';
 
 const measureCanvas = typeof document !== 'undefined' ? document.createElement('canvas') : null;

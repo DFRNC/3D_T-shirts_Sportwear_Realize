@@ -1,6 +1,6 @@
 'use client';
 
-import { lazy, type KeyboardEvent, type ReactElement, type SyntheticEvent, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { type KeyboardEvent, lazy, type ReactElement, Suspense, type SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { cva } from 'class-variance-authority';
 

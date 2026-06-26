@@ -1,6 +1,6 @@
 import type { logoSlotBounds4Type, logoSlotFloat4Type, logoSlotVec2Type, logoStyleUniformsType } from '@configurator/types';
 import type { garmentPartConfigType, logoInstanceType } from '@types';
-import { FULL_UV_BOUNDS, LOGO_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@constants';
+import { FULL_UV_BOUNDS, LOGO_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@configurator/constants';
 import { resolveLogoDisplayScale } from '../../composeLogoAtlas/composeLogoPrintAtlas';
 import { resolvePartPrintRotation, resolvePartUvBounds } from '../../resolveProductRenderConfig/resolveProductRenderConfig';
 
@@ -12,7 +12,6 @@ const buildLogoStyleUniforms = (
   meshPartId: string,
   stampCellSize: { width: number; height: number },
   atlasWidth: number,
-  atlasHeight: number,
 ): logoStyleUniformsType => {
   const partsById = Object.fromEntries(parts.map((part) => [part.id, part]));
   const anchorUv: logoSlotVec2Type = [
@@ -41,7 +40,7 @@ const buildLogoStyleUniforms = (
     rotation[index] = (instance.rotation * Math.PI) / 180;
     uploadRotation[index] = (((instance.uploadRotation ?? LOGO_UPLOAD_ROTATION_DEG) * Math.PI) / 180);
     partRotation[index] = part ? (resolvePartPrintRotation(part) * Math.PI) / 180 : 0;
-    scale[index] = resolveLogoDisplayScale(instance, naturalWidth, naturalHeight, atlasWidth, atlasHeight);
+    scale[index] = resolveLogoDisplayScale(instance, naturalWidth, naturalHeight, atlasWidth);
     partBounds[index] = bounds;
   });
 

@@ -1,6 +1,6 @@
 import type { patternColorPairType } from '@configurator/types';
 import type { designPatternItemType } from '@types';
-import { PATTERN_LAYER_COUNT } from '@constants';
+import { PATTERN_LAYER_COUNT } from '@configurator/constants';
 
 const DEFAULT_PATTERN_COLOR = '#000000';
 

@@ -1,6 +1,6 @@
 import type { printGizmoElementKindType, printGizmoElementType } from '@configurator/types';
 import type { garmentConfigType, numberInstanceType, testoInstanceType } from '@types';
-import { NAME_REFERENCE_FONT_SIZE, NAME_SLOT_COUNT } from '@constants';
+import { NAME_REFERENCE_FONT_SIZE, NAME_SLOT_COUNT } from '@configurator/constants';
 import {
   measureNameGizmoHalf,
   resolveGizmoElementRotationDeg,

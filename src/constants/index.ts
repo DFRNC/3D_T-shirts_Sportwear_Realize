@@ -1,4 +1,4 @@
-import type { catalogProductEntryType, homeProductGalleryBlockType, productCollectionType, uvBoundsType } from '@types';
+import type { catalogProductEntryType, homeProductGalleryBlockType, productCollectionType } from '@types';
 import type { configuratorStepValueType } from '@configurator/types';
 
 // --- Product catalog ---
@@ -133,7 +133,7 @@ const CHECKOUT_SUMMARY_TIMELINE_STEPS = [
   { icon: 'home', label: 'Consegnato', dateKey: 'delivered' },
 ] as const;
 
-// --- UI palette & fonts ---
+// --- UI palette ---
 
 const PALETTE_COLORS = [
   '#FFFFFF',
@@ -158,46 +158,7 @@ const PALETTE_COLORS = [
   '#8D0FB4',
 ] as const;
 
-const FONT_FAMILY_BY_NAME: Record<string, string> = {
-  Oswald: 'Oswald, sans-serif',
-  'Bebas Neue': '"Bebas Neue", sans-serif',
-  Anton: 'Anton, sans-serif',
-  'Russo One': '"Russo One", sans-serif',
-  'Black Ops One': '"Black Ops One", sans-serif',
-};
-
-// --- 3D print pipeline ---
-
-const FULL_UV_BOUNDS: uvBoundsType = { minX: 0, maxX: 1, minY: 0, maxY: 1 };
-const DEFAULT_PART_TEXTURE_SIZE = 4096;
-const PRINT_ATLAS_WIDTH = 4096;
-const PRINT_ATLAS_HEIGHT = Math.round((4900 / 9331) * PRINT_ATLAS_WIDTH);
-const PATTERN_LAYER_COUNT = 2;
-const NAME_SLOT_COUNT = 4;
-const LOGO_SLOT_COUNT = 4;
-
-/** Corrects text/number orientation relative to the print UV space on the garment. */
-const PRINT_UPLOAD_ROTATION_DEG = 90;
-
-const NAME_REFERENCE_FONT_SIZE = 400;
-const NAME_STAMP_STROKE_WIDTH_MAX = 20;
-const NAME_STAMP_FONT_SIZE_MIN = 50;
-
-const NAME_GIZMO_BTN_FILL_COLOR = '#ffffff';
-const NAME_GIZMO_BTN_ACTIVE_COLOR = '#dc2c6f';
-const NAME_GIZMO_ICON_COLOR = '#1a1a1a';
-const NAME_GIZMO_UI_ATLAS_SCALE = 80 / NAME_REFERENCE_FONT_SIZE;
-const NAME_GIZMO_BTN_HALF_ATLAS = 120 * NAME_GIZMO_UI_ATLAS_SCALE;
-const NAME_GIZMO_BTN_OUTSET_ATLAS = 80 * NAME_GIZMO_UI_ATLAS_SCALE;
-
-const LOGO_UPLOAD_ROTATION_DEG = PRINT_UPLOAD_ROTATION_DEG;
-const LOGO_SCALE_MIN = 0.25;
-const LOGO_SCALE_MAX = 3;
-const LOGO_MARK_REF_WIDTH = 283 * 3;
-const LOGO_ATLAS_REF_WIDTH = 9331;
-const LOGO_ATLAS_REF_HEIGHT = 4900;
-
-// --- Logo upload ---
+// --- Logo upload (UI constraints) ---
 
 const LOGO_MAX_FILE_SIZE = 10 * 1024 * 1024;
 const LOGO_ACCEPTED_INPUT = '.eps,.ps,.pdf,.ai,.svg,.png,.jpg,.jpeg,.bmp,.tiff,.tif,.webp';
@@ -263,36 +224,13 @@ export {
   CONFIGURATOR_TESTO_POSITION_SELECT_LABEL,
   CONFIGURATOR_UPLOADED_FILES_LABEL,
   DEFAULT_CATALOG_PRODUCT,
-  DEFAULT_PART_TEXTURE_SIZE,
-  FONT_FAMILY_BY_NAME,
-  FULL_UV_BOUNDS,
   HOME_PRODUCT_GALLERY_BLOCKS,
   LOGO_ACCEPTED_EXTENSIONS,
   LOGO_ACCEPTED_INPUT,
   LOGO_ACCEPTED_MIMES,
-  LOGO_ATLAS_REF_HEIGHT,
-  LOGO_ATLAS_REF_WIDTH,
-  LOGO_MARK_REF_WIDTH,
   LOGO_MAX_FILE_SIZE,
-  LOGO_SCALE_MAX,
-  LOGO_SCALE_MIN,
-  LOGO_SLOT_COUNT,
   LOGO_SUPPORTED_LABEL,
-  LOGO_UPLOAD_ROTATION_DEG,
-  NAME_GIZMO_BTN_ACTIVE_COLOR,
-  NAME_GIZMO_BTN_FILL_COLOR,
-  NAME_GIZMO_BTN_HALF_ATLAS,
-  NAME_GIZMO_BTN_OUTSET_ATLAS,
-  NAME_GIZMO_ICON_COLOR,
-  NAME_REFERENCE_FONT_SIZE,
-  NAME_SLOT_COUNT,
-  NAME_STAMP_FONT_SIZE_MIN,
-  NAME_STAMP_STROKE_WIDTH_MAX,
   PALETTE_COLORS,
-  PATTERN_LAYER_COUNT,
-  PRINT_ATLAS_HEIGHT,
-  PRINT_ATLAS_WIDTH,
-  PRINT_UPLOAD_ROTATION_DEG,
   PRODUCT_COLLECTIONS,
   TUTORIAL_VIDEO_URL,
   VIDEO_PLAYER_DEFAULT_VOLUME,

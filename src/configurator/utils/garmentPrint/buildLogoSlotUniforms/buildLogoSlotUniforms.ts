@@ -1,6 +1,6 @@
 import type { logoSlotBounds4Type, logoSlotFloat4Type, logoSlotUniformsType, logoSlotVec2Type } from '@configurator/types';
 import type { garmentPartConfigType, logoInstanceType } from '@types';
-import { FULL_UV_BOUNDS, LOGO_SLOT_COUNT } from '@constants';
+import { FULL_UV_BOUNDS, LOGO_SLOT_COUNT } from '@configurator/constants';
 import { resolvePartUvBounds } from '../../resolveProductRenderConfig/resolveProductRenderConfig';
 
 const DEFAULT_PART_BOUNDS = FULL_UV_BOUNDS;

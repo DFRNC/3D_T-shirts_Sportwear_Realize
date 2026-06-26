@@ -15,7 +15,7 @@ import {
 import { useGizmoIconAtlas } from '../useGizmoIconAtlas';
 import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@configurator/providers';
 import { resolveLogoInstancesForRender, useConfigurationControl, useConfiguratorProduct, useGarmentLogo } from '@store';
-import { LOGO_SLOT_COUNT } from '@constants';
+import { LOGO_SLOT_COUNT } from '@configurator/constants';
 import {
   applyGarmentGizmoHover,
   applyGarmentGizmoIcons,
@@ -137,7 +137,7 @@ const useGarmentLogoTextures = () => {
     const gizmoRotation = resolveProductGizmoRotation(product);
 
     for (const part of product.parts) {
-      const style = buildLogoStyleUniforms(instancesForRender, product.parts, part.id, cellSize, atlasSize.width, atlasSize.height);
+      const style = buildLogoStyleUniforms(instancesForRender, product.parts, part.id, cellSize, atlasSize.width);
       const frame = buildLogoGizmoFrameUniforms(instancesForRender, part.id, activeStep === LOGO_STEP, gizmoRotation);
 
       for (const material of getMaterials(part.id)) {

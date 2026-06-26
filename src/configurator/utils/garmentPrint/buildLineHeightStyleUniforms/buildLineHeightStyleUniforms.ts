@@ -1,6 +1,6 @@
 import type { nameSlotFloat4Type, nameStyleUniformsType, stampPixelSizeType } from '@configurator/types';
 import type { garmentPartConfigType, garmentTextRenderInstanceType } from '@types';
-import { NAME_SLOT_COUNT } from '@constants';
+import { NAME_SLOT_COUNT } from '@configurator/constants';
 
 import { buildNameStyleUniforms } from '../buildNameStyleUniforms';
 

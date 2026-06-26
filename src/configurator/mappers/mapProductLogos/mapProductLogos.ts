@@ -1,6 +1,6 @@
 import type { garmentConfigType, logoInstanceType, logoPositionConfigType, logoPositionType, uvPointType } from '@types';
 
-import { LOGO_UPLOAD_ROTATION_DEG } from '@constants';
+import { LOGO_UPLOAD_ROTATION_DEG } from '@configurator/constants';
 import { resolvePartUvBounds } from '@configurator/utils';
 
 const resolvePartIdForAtlasUv = (product: garmentConfigType, uv: uvPointType): string => {

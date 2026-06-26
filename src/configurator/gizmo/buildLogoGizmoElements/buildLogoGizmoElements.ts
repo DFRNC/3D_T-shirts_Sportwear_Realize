@@ -1,6 +1,6 @@
 import type { buildLogoGizmoElementsInputType, printGizmoElementType } from '@configurator/types';
 
-import { LOGO_SCALE_MAX, LOGO_SCALE_MIN, LOGO_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@constants';
+import { LOGO_SCALE_MAX, LOGO_SCALE_MIN, LOGO_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@configurator/constants';
 import {
   resolveGizmoElementRotationDeg,
   resolveLogoDisplayScale,
@@ -42,7 +42,7 @@ const buildLogoGizmoElements = ({ product, instances }: buildLogoGizmoElementsIn
         rotation: resolveGizmoElementRotationDeg(product, instance.rotation),
         gizmoRotation,
         partRotation: resolvePartPrintRotation(part),
-        scale: resolveLogoDisplayScale(instance, naturalWidth, naturalHeight, atlasSize.width, atlasSize.height),
+        scale: resolveLogoDisplayScale(instance, naturalWidth, naturalHeight, atlasSize.width),
         half,
         scaleMin: LOGO_SCALE_MIN,
         scaleMax: LOGO_SCALE_MAX,

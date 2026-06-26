@@ -1,4 +1,4 @@
-import { NAME_GIZMO_BTN_HALF_ATLAS, NAME_GIZMO_BTN_OUTSET_ATLAS } from '@constants';
+import { NAME_GIZMO_BTN_HALF_ATLAS, NAME_GIZMO_BTN_OUTSET_ATLAS } from '@configurator/constants';
 
 import type { gizmoButtonHitType, gizmoHandleKindType, printGizmoElementType } from '@configurator/types';
 

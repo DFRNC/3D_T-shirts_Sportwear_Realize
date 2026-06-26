@@ -1,4 +1,4 @@
-import { NAME_SLOT_COUNT } from '@constants';
+import { NAME_SLOT_COUNT } from '@configurator/constants';
 
 const REVEAL_LERP = 0.42;
 const REVEAL_EPSILON = 0.001;
