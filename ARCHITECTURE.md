@@ -221,7 +221,7 @@ Types that belong to the 3D module — **not** general UI or catalog entities:
 | `PrintPlacementInstance`        | UV placement for name/number/logo/testo      |
 | `*PropsType` (scene components) | R3F component props (part mesh, gizmo, …)   |
 
-Shared domain types (`garmentConfigType`, cart, checkout) remain in `@types/entities` and `@types/garment`. Shader pipeline and gizmo types (`pbrMapsType`, `garmentPrintStateType`, `printGizmoElementType`, …) live in `@configurator/types`.
+Shared domain types (`garmentConfigType`, cart, checkout) remain in `@types/entities` and `@types/garment`. Shader pipeline, gizmo, and in-canvas provider types (`pbrMapsType`, `garmentPrintStateType`, `garmentMaterialRegistryValueType`, `printGizmoElementType`, …) live in `@configurator/types`.
 
 ---
 
@@ -246,7 +246,7 @@ All UI lives under `src/ui/` and follows Atomic Design tiers.
 | HTML sidebar / steps | `@molecules` / `@organisms` (`AsideConfiguration`, …) |
 | 3D canvas mount      | `@organisms/Configurator` → `@configurator`   |
 | Page layout          | `ConfiguratorView`, `ConfiguratorPage`        |
-| Route hydration      | `ConfiguratorRouteShell`, `ConfiguratorSlugHydration` |
+| Route hydration      | `ConfiguratorRouteShell` in `ConfiguratorLayoutTemplate` |
 
 ```tsx
 // organisms/Configurator/Configurator.tsx — intentional thin shell
@@ -306,7 +306,6 @@ src/types/
 ├── checkout/       # Checkout table, summary
 ├── entities/       # Types derived from JSON catalogs (source of truth)
 ├── garment/        # Runtime garment types composed from entities
-├── providers/      # Context provider types
 ├── ui/             # HTML component props, variant unions
 └── index.ts
 ```
@@ -417,7 +416,7 @@ Routes stay **thin**: import from `@pages` only.
 | `lint` / `lint:fix`    | ESLint over `src/` and `scripts/`                |
 | `format` / `format:check` | Prettier                                      |
 | `validate`             | format + lint + `verify:architecture` + `verify:design-assets` |
-| `verify:architecture`  | Fails if legacy/dead paths reappear (`scripts/verify-architecture.mjs`) |
+| `verify:architecture`  | Legacy paths + import boundaries + 3D constants outside configurator (`scripts/verify-architecture.mjs`) |
 | `verify:design-assets` | Design files and thumbnails per catalog JSON     |
 | `convert:design-assets` | SVG designs → WebP runtime assets             |
 | `test:e2e`             | Playwright                                       |

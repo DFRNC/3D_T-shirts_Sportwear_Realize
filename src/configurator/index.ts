@@ -32,6 +32,7 @@ export type {
   drawNameStrokeMaskGeometryInputType,
   garmentGltfSceneType,
   garmentLogoStampStateType,
+  garmentMaterialRegistryValueType,
   garmentNameMaskStateType,
   garmentPartMeshPropsType,
   garmentPrintStateType,

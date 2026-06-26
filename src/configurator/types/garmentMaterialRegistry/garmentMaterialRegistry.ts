@@ -1,5 +1,3 @@
-'use client';
-
 import type { MeshStandardMaterial } from 'three';
 
 interface garmentMaterialRegistryValueType {

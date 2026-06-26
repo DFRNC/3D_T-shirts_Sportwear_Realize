@@ -48,6 +48,41 @@ const eslintConfig = defineConfig([
     },
   },
   eslintConfigPrettier,
+  {
+    files: ['src/store/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@configurator/utils', '@configurator/utils/*', '@configurator/scene', '@configurator/scene/*', '@configurator/runtime', '@configurator/runtime/*', '@configurator/canvas', '@configurator/canvas/*', '@configurator/hooks', '@configurator/hooks/*', '@configurator/gizmo', '@configurator/gizmo/*', '@configurator/shaders', '@configurator/shaders/*', '@configurator/providers', '@configurator/providers/*'],
+              message: 'Use @configurator bootstrap facade, @configurator/mappers, or @configurator/constants from store code.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/ui/components/atomic/atoms/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            { name: '@store', message: 'Atoms are presentational — pass data via props from organisms/molecules.' },
+          ],
+          patterns: [
+            {
+              group: ['@configurator', '@configurator/*'],
+              message: 'Atoms must not import the 3D configurator module.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 ]);
 
 export default eslintConfig;

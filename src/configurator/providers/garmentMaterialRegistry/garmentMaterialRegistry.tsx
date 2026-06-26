@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useMemo, useRef, useSyncExternalStore } from 'react';
 
-import type { garmentMaterialRegistryValueType } from '@types';
+import type { garmentMaterialRegistryValueType } from '@configurator/types';
 import type { MeshStandardMaterial } from 'three';
 
 const GarmentMaterialRegistryContext = createContext<garmentMaterialRegistryValueType | null>(null);

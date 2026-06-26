@@ -116,7 +116,6 @@ export type {
 } from '@configurator/types';
 export type { configurationStepSkeletonPropsType } from "./skeletonsProps";
 export type { embeddedContextType, embeddedProviderPropsType } from "./embeddedContext";
-export type { configuratorSlugHydrationPropsType } from "./configuratorSlugHydrationProps";
 export type {
   checkoutConfigurationTableCellContextType,
   checkoutConfigurationTableColumnHandlersType,
