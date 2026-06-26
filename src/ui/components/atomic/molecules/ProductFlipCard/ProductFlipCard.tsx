@@ -1,32 +1,62 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { AtomImage } from '@atoms';
 import { useGarmentCatalogPreload } from '@hooks';
 import type { productFlipCardPropsType } from '@types';
-import { cn, hasModel, resolveProductFlipCardSrc } from '@utils';
+import { cn, resolveProductFlipCardSrc } from '@utils';
 
 const ProductFlipCard = ({ collection, slug, alt, previewSrc, activePreviewSrc, className }: productFlipCardPropsType) => {
+  const cardRef = useRef<HTMLAnchorElement>(null);
   const isWarmedRef = useRef(false);
-  const { warmBySlug } = useGarmentCatalogPreload();
+  const isEagerWarmRef = useRef(false);
+  const { warmBySlug, warmBySlugEager } = useGarmentCatalogPreload();
   const hasRemoteImages = previewSrc != null || activePreviewSrc != null;
   const frontSrc = previewSrc ?? (hasRemoteImages ? '' : resolveProductFlipCardSrc(collection, slug, 'front'));
   const backSrc = activePreviewSrc ?? previewSrc ?? (hasRemoteImages ? '' : resolveProductFlipCardSrc(collection, slug, 'back'));
+
   const warmProductAssets = useCallback(() => {
-    if (isWarmedRef.current || !hasModel(slug)) return;
+    if (isWarmedRef.current) return;
     isWarmedRef.current = true;
     warmBySlug(slug);
   }, [slug, warmBySlug]);
 
+  const warmProductAssetsEager = useCallback(() => {
+    if (isEagerWarmRef.current) return;
+    isEagerWarmRef.current = true;
+    void warmBySlugEager(slug);
+  }, [slug, warmBySlugEager]);
+
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        warmProductAssets();
+        warmProductAssetsEager();
+        observer.disconnect();
+      },
+      { rootMargin: '240px' },
+    );
+
+    observer.observe(card);
+
+    return () => observer.disconnect();
+  }, [warmProductAssets, warmProductAssetsEager]);
+
   return (
     <Link
+      ref={cardRef}
       href={`/${slug}`}
       tabIndex={0}
       onPointerEnter={warmProductAssets}
       onFocus={warmProductAssets}
       onTouchStart={warmProductAssets}
+      onPointerDown={warmProductAssetsEager}
       className={cn(
         'group/card aspect-3/4 w-full cursor-pointer outline-none perspective-[1000px]',
         'focus-visible:ring-2 focus-visible:ring-default focus-visible:ring-offset-2',

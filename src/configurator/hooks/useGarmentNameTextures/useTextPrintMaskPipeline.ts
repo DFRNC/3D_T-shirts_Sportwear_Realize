@@ -7,7 +7,7 @@ import type { MeshStandardMaterial, Texture } from 'three';
 
 import { setGizmoButtonsRevealTarget } from '@configurator/gizmo';
 import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@configurator/providers';
-import { useConfigurationControl, useConfiguratorProduct } from '@store';
+import { useConfigurationControl, useConfiguratorProduct, useConfiguratorSceneLoad } from '@store';
 import type { stampPixelSizeType } from '@configurator/types';
 import type { garmentPartConfigType, garmentTextRenderInstanceType } from '@types';
 import {
@@ -54,6 +54,7 @@ const useTextPrintMaskPipeline = <TInstance extends garmentTextRenderInstanceTyp
   buildStyleUniforms,
 }: TextPrintMaskPipelineConfig<TInstance, TPreview, TStyle>) => {
   const product = useConfiguratorProduct((state) => state.product);
+  const isInitialSceneLoading = useConfiguratorSceneLoad((state) => state.isInitialSceneLoading);
   const partIds = useMemo(() => product.parts.map((part) => part.id), [product.parts]);
   const activeStep = useConfigurationControl((state) => state.activeStep);
   const { getMaterials, hasMaterialsForParts } = useGarmentMaterialRegistry();
@@ -97,7 +98,7 @@ const useTextPrintMaskPipeline = <TInstance extends garmentTextRenderInstanceTyp
   const atlasSize = useMemo(() => resolvePrintAtlasSize(product), [product]);
 
   const isSynced = productPath === product.path;
-  const isReady = isSynced && hasMaterialsForParts(partIds);
+  const isReady = isSynced && hasMaterialsForParts(partIds) && !isInitialSceneLoading;
 
   const clearRuntime = useCallback(() => {
     clearMaskRuntime(maskRefs, prevFillSignatureRef);

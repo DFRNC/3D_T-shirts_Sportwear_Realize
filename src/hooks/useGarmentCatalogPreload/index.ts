@@ -1,1 +1,1 @@
-export { useGarmentCatalogPreload, useGarmentCatalogPreloadEffect, warmGarmentCatalogAssets } from './useGarmentCatalogPreload';
+export { useGarmentCatalogPreload, useGarmentCatalogPreloadEffect, warmGarmentCatalogAssets, warmGarmentCatalogAssetsEager } from './useGarmentCatalogPreload';

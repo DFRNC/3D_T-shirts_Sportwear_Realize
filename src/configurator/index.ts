@@ -5,11 +5,15 @@ export { GarmentMaterialRegistryProvider, PbrMapsProvider, useGarmentMaterialReg
 export { GarmentRuntime, PrintGizmoLayer } from './runtime';
 export * from './gizmo';
 export {
+  ensureGarmentGltfParsed,
+  ensureGarmentProductGltfParsed,
   extractGltfPbrMaps,
   GarmentMeshes,
   GarmentModel,
   GarmentPartMesh,
   GltfSceneProvider,
+  isGarmentGltfParsed,
+  preloadGarmentGltf,
   preloadGarmentScene,
   PreserveGltfMesh,
   resolveGltfPbrMaps,
@@ -17,6 +21,7 @@ export {
   StaticGltfMesh,
   enrichGltfScene,
 } from './scene';
+export { resolveModelUrl } from './utils/resolveModelUrl';
 export type {
   composeLogoStampAtlasInputType,
   composeNameMaskAtlasInputType,

@@ -7,6 +7,7 @@ import { Environment } from '@react-three/drei';
 import * as THREE from 'three';
 
 import { suppressThreeClockDeprecation } from '@configurator/utils';
+import { useConfiguratorSceneLoad } from '@store';
 
 import { CanvasControl } from '../CanvasControl';
 import { SceneModel } from '../SceneModel';
@@ -37,6 +38,7 @@ const ConfiguratorCanvas = () => {
 
         canvas.addEventListener('webglcontextlost', (event) => {
           event.preventDefault();
+          useConfiguratorSceneLoad.getState().beginInitialSceneLoad();
         });
 
         canvas.addEventListener('webglcontextrestored', () => {

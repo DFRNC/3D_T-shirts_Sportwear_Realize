@@ -7,7 +7,7 @@ import type { MeshStandardMaterial, Texture } from 'three';
 import type { patternMaskPairType, pbrMapsType } from '@configurator/types';
 import type { designPatternItemType, garmentConfigType } from '@types';
 import { useConfiguratorSceneLoad } from '@store';
-import { GARMENT_SHADER_VERSION, hasPrintableGarmentParts, resolveRasterDesignSrc, scheduleGarmentShaderUpgrade } from '@configurator/utils';
+import { hasPrintableGarmentParts, resolveRasterDesignSrc, scheduleGarmentShaderUpgrade } from '@configurator/utils';
 
 type garmentAppearanceSceneLoadRefsType = {
   logosTextureRef: RefObject<Texture | null>;
@@ -118,22 +118,9 @@ const useGarmentAppearanceSceneLoad = ({
     [invalidate],
   );
 
-  const materialsNeedShaderUpgrade = useCallback(() => {
-    return product.parts.some((part) =>
-      getMaterials(part.id).some(
-        (material) => material.userData.garmentShaderMode !== 'full' || material.userData.garmentShaderVersion !== GARMENT_SHADER_VERSION,
-      ),
-    );
-  }, [getMaterials, product.parts]);
-
   const runShaderUpgrade = useCallback(
     (onLoaded?: () => void): boolean => {
       if (shaderUpgradePendingRef.current) return false;
-
-      if (!materialsNeedShaderUpgrade()) {
-        onLoaded?.();
-        return true;
-      }
 
       shaderUpgradePendingRef.current = true;
       cancelShaderUpgradeRef.current?.();
@@ -159,7 +146,6 @@ const useGarmentAppearanceSceneLoad = ({
       finishSceneLoad,
       getMaterials,
       invalidate,
-      materialsNeedShaderUpgrade,
       product.parts,
       reapplyAppearanceCore,
       shaderUpgradePendingRef,
@@ -169,7 +155,7 @@ const useGarmentAppearanceSceneLoad = ({
   const pendingInitialPaintRef = useRef(false);
 
   const completeInitialLoadAfterPaint = useCallback(() => {
-    if (!pendingInitialPaintRef.current || initialLoadCompletedRef.current || !isInitialSceneLoading) return;
+    if (!pendingInitialPaintRef.current || initialLoadCompletedRef.current) return;
 
     pendingInitialPaintRef.current = false;
     initialLoadCompletedRef.current = true;
@@ -184,44 +170,32 @@ const useGarmentAppearanceSceneLoad = ({
       });
     };
 
-    // Keep the initial loader visible until shader upgrades finish.
-    if (!runShaderUpgrade(completeInitialLoad)) {
-      completeInitialLoad();
-    }
-  }, [finishSceneLoad, initialLoadCompletedRef, isInitialSceneLoading, markInitialSceneLoaded, runShaderUpgrade]);
+    // Keep the initial loader visible until shader compilation finishes.
+    runShaderUpgrade(completeInitialLoad);
+  }, [finishSceneLoad, initialLoadCompletedRef, markInitialSceneLoaded, runShaderUpgrade]);
 
   const completeSceneLoadersIfReady = useCallback(() => {
-    if (isInitialSceneLoading && !initialLoadCompletedRef.current && isCoreSceneReady()) {
+    if (!initialLoadCompletedRef.current && isCoreSceneReady()) {
       pendingInitialPaintRef.current = true;
-      invalidate();
-      return;
     }
+
+    if (initialLoadCompletedRef.current) return;
 
     if (!isTransitionAppearanceReady()) return;
 
-    if (materialsNeedShaderUpgrade()) {
-      if (isSceneTransitionLoading && !transitionLoadCompletedRef.current) {
-        if (runShaderUpgrade(markSceneTransitionLoaded)) {
-          transitionLoadCompletedRef.current = true;
-        }
-      }
-      return;
-    }
-
     if (isSceneTransitionLoading && !transitionLoadCompletedRef.current) {
       transitionLoadCompletedRef.current = true;
-      finishSceneLoad(markSceneTransitionLoaded);
+      if (!runShaderUpgrade(markSceneTransitionLoaded)) {
+        finishSceneLoad(markSceneTransitionLoaded);
+      }
     }
   }, [
     finishSceneLoad,
     initialLoadCompletedRef,
-    invalidate,
     isCoreSceneReady,
-    isInitialSceneLoading,
     isSceneTransitionLoading,
     isTransitionAppearanceReady,
     markSceneTransitionLoaded,
-    materialsNeedShaderUpgrade,
     runShaderUpgrade,
     transitionLoadCompletedRef,
   ]);

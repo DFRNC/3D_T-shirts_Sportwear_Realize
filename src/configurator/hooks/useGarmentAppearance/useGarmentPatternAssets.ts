@@ -7,7 +7,8 @@ import type { Texture } from 'three';
 import type { patternMaskPairType } from '@configurator/types';
 import type { designPatternItemType } from '@types';
 import { PATTERN_LAYER_COUNT } from '@configurator/constants';
-import { emptyMaskPair, imageToMaskTexture, imageToTexture, resolveRasterDesignSrc } from '@configurator/utils';
+import { emptyMaskPair, imageToMaskTexture, imageToTexture, resolveRasterDesignSrc, yieldToMain } from '@configurator/utils';
+import { useConfiguratorSceneLoad } from '@store';
 
 type garmentPatternAssetsRefsType = {
   logosTextureRef: RefObject<Texture | null>;
@@ -43,8 +44,10 @@ const useGarmentPatternAssets = ({
   isLoadSessionActive,
   reapplyAppearance,
 }: useGarmentPatternAssetsOptionsType) => {
+  const isInitialSceneLoading = useConfiguratorSceneLoad((state) => state.isInitialSceneLoading);
+
   useEffect(() => {
-    if (productPath !== productPathKey) return;
+    if (productPath !== productPathKey || isInitialSceneLoading) return;
 
     const logosSrc = defaultPattern?.parts[0]?.src ? resolveRasterDesignSrc(defaultPattern.parts[0].src) : null;
     if (!logosSrc || logosTextureRef.current) return;
@@ -73,6 +76,7 @@ const useGarmentPatternAssets = ({
     };
   }, [
     defaultPattern,
+    isInitialSceneLoading,
     isLoadSessionActive,
     productPath,
     productPathKey,
@@ -85,7 +89,7 @@ const useGarmentPatternAssets = ({
   ]);
 
   useEffect(() => {
-    if (productPath !== productPathKey) return;
+    if (productPath !== productPathKey || isInitialSceneLoading) return;
 
     if (!activePatternKey) {
       maskTexturesRef.current = emptyMaskPair();
@@ -104,12 +108,13 @@ const useGarmentPatternAssets = ({
     const loadMasks = async () => {
       try {
         const masks = emptyMaskPair();
+        const patternParts = activePattern!.parts.slice(0, PATTERN_LAYER_COUNT);
 
-        await Promise.all(
-          activePattern!.parts.slice(0, PATTERN_LAYER_COUNT).map(async (part, index) => {
-            masks[index] = await imageToMaskTexture(resolveRasterDesignSrc(part.src), { anisotropy: textureAnisotropy });
-          }),
-        );
+        for (let index = 0; index < patternParts.length; index += 1) {
+          masks[index] = await imageToMaskTexture(resolveRasterDesignSrc(patternParts[index].src), { anisotropy: textureAnisotropy });
+          await yieldToMain();
+          if (cancelled || !isLoadSessionActive(session, targetPath)) return;
+        }
 
         if (cancelled || !isLoadSessionActive(session, targetPath)) return;
 
@@ -136,6 +141,7 @@ const useGarmentPatternAssets = ({
   }, [
     activePattern,
     activePatternKey,
+    isInitialSceneLoading,
     isLoadSessionActive,
     productPath,
     productPathKey,

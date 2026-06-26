@@ -5,13 +5,14 @@ import { useGLTF } from '@react-three/drei';
 import { useConfiguratorProduct } from '@store';
 import type { garmentConfigType } from '@types';
 
-import { resolveModelUrl } from '../utils/resolveModelUrl/resolveModelUrl';
+import { GLTF_USE_DRACO, GLTF_USE_MESHOPT, preloadGarmentGltf } from './ensureGarmentGltfParsed';
+import { resolveModelUrl } from '../utils/resolveModelUrl';
 
 const preloadGarmentScene = (product?: garmentConfigType) => {
   const resolved = product ?? useConfiguratorProduct.getState().product;
   if (!resolved) return;
 
-  useGLTF.preload(resolveModelUrl(resolved));
+  preloadGarmentGltf(resolveModelUrl(resolved));
 };
 
-export { preloadGarmentScene };
+export { GLTF_USE_DRACO, GLTF_USE_MESHOPT, preloadGarmentScene };

@@ -2,9 +2,16 @@
 
 import { useCallback, useEffect } from 'react';
 
-import { preloadGarmentAppearance, preloadGarmentProduct, preloadGarmentScene } from '@configurator';
+import { ensureGarmentProductGltfParsed, preloadGarmentAppearance, preloadGarmentProduct, preloadGarmentGltf, resolveModelUrl } from '@configurator';
 import type { modelIdType } from '@types';
-import { getModel, hasModel } from '@utils';
+import { getCatalogProductEntryBySlug, getModel, hasModel } from '@utils';
+
+const resolveCatalogModelId = (slug: string): modelIdType | null => {
+  const entry = getCatalogProductEntryBySlug(slug);
+  const modelId = entry?.modelId ?? (hasModel(slug) ? slug : null);
+  if (!modelId || !hasModel(modelId)) return null;
+  return modelId;
+};
 
 const warmGarmentCatalogAssets = (modelId: modelIdType) => {
   const product = getModel(modelId);
@@ -12,29 +19,47 @@ const warmGarmentCatalogAssets = (modelId: modelIdType) => {
 
   preloadGarmentProduct(product);
   preloadGarmentAppearance(product);
-  preloadGarmentScene(product);
+  preloadGarmentGltf(resolveModelUrl(product));
+};
+
+const warmGarmentCatalogAssetsEager = async (modelId: modelIdType) => {
+  const product = getModel(modelId);
+  if (!product) return;
+
+  warmGarmentCatalogAssets(modelId);
+  await ensureGarmentProductGltfParsed(product);
 };
 
 const useGarmentCatalogPreload = () => {
-  const warmBySlug = useCallback((slug: string) => {
-    if (!hasModel(slug)) return;
-    warmGarmentCatalogAssets(slug as modelIdType);
-  }, []);
-
   const warmByModelId = useCallback((modelId: modelIdType) => {
     warmGarmentCatalogAssets(modelId);
   }, []);
 
-  return { warmBySlug, warmByModelId };
+  const warmByModelIdEager = useCallback(async (modelId: modelIdType) => {
+    await warmGarmentCatalogAssetsEager(modelId);
+  }, []);
+
+  const warmBySlug = useCallback((slug: string) => {
+    const modelId = resolveCatalogModelId(slug);
+    if (!modelId) return;
+    warmGarmentCatalogAssets(modelId);
+  }, []);
+
+  const warmBySlugEager = useCallback(async (slug: string) => {
+    const modelId = resolveCatalogModelId(slug);
+    if (!modelId) return;
+    await warmGarmentCatalogAssetsEager(modelId);
+  }, []);
+
+  return { warmByModelId, warmByModelIdEager, warmBySlug, warmBySlugEager };
 };
 
 const useGarmentCatalogPreloadEffect = (modelIds: modelIdType[]) => {
   useEffect(() => {
     for (const modelId of modelIds) {
-      const product = getModel(modelId);
-      if (product) preloadGarmentProduct(product);
+      warmGarmentCatalogAssets(modelId);
     }
   }, [modelIds]);
 };
 
-export { useGarmentCatalogPreload, useGarmentCatalogPreloadEffect, warmGarmentCatalogAssets };
+export { useGarmentCatalogPreload, useGarmentCatalogPreloadEffect, warmGarmentCatalogAssets, warmGarmentCatalogAssetsEager };

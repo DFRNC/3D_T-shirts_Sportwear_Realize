@@ -11,6 +11,7 @@ export { composeNameMaskAtlas, resolveNameStampSize } from './composeNameAtlas/c
 export { measureNameGizmoHalf, measureNameStampPixelSize, unionStampPixelSize } from './drawNameOnAtlas/measureNameStampBounds';
 export { GARMENT_SHADER_VERSION, createGarmentMaterial, upgradeGarmentMaterialShader } from './createGarmentMaterial';
 export { scheduleGarmentShaderUpgrade } from './scheduleGarmentShaderUpgrade/scheduleGarmentShaderUpgrade';
+export { yieldToMain } from './yieldToMain/yieldToMain';
 export { getProductAppearanceTextures, readProductAppearanceTextures, syncProductAppearanceTextures } from './garmentAppearance/garmentProductAppearanceCache';
 export { applyGarmentGradient, applyGarmentPartUvBounds } from './garmentGradient/applyGarmentGradient';
 export { buildLineHeightStyleUniforms, DEFAULT_LINE_HEIGHT } from './garmentPrint/buildLineHeightStyleUniforms';

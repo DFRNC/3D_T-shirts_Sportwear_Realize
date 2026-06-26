@@ -18,6 +18,16 @@ import {
 } from '@store';
 
 const PREVIEW_CAPTURE_DEBOUNCE_MS = 400;
+const PREVIEW_CAPTURE_IDLE_TIMEOUT_MS = 3000;
+
+const scheduleIdleWork = (work: () => void) => {
+  if (typeof requestIdleCallback !== 'undefined') {
+    requestIdleCallback(work, { timeout: PREVIEW_CAPTURE_IDLE_TIMEOUT_MS });
+    return;
+  }
+
+  setTimeout(work, 0);
+};
 
 const useCartPreviewCapture = () => {
   const gl = useThree((state) => state.gl);
@@ -56,7 +66,9 @@ const useCartPreviewCapture = () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
 
       debounceRef.current = setTimeout(() => {
-        persistActivePreview();
+        scheduleIdleWork(() => {
+          persistActivePreview();
+        });
         debounceRef.current = null;
       }, PREVIEW_CAPTURE_DEBOUNCE_MS);
     };

@@ -36,9 +36,8 @@ const useGarmentAppearance = () => {
   const { bumpRevision, getMaterials, hasMaterialsForParts } = useGarmentMaterialRegistry();
   const materialRevision = useMaterialRegistryRevision();
   const pbrMaps = usePbrMaps();
-  const gl = useThree((state) => state.gl);
   const invalidate = useThree((state) => state.invalidate);
-  const textureAnisotropy = gl.capabilities.getMaxAnisotropy();
+  const textureAnisotropy = useThree((state) => state.gl.capabilities.getMaxAnisotropy());
 
   const logosTextureRef = useRef<Texture | null>(null);
   const maskTexturesRef = useRef<patternMaskPairType>(emptyMaskPair());
@@ -223,6 +222,7 @@ const useGarmentAppearance = () => {
   }, [activeItemId, activeOpacity, activePatternKey, byPart, gradientsByPart, materialRevision, patternColors, reapplyAppearance]);
 
   useFrame(() => {
+    completeSceneLoadersIfReady();
     completeInitialLoadAfterPaint();
 
     if (!pendingFrameReapplyRef.current) return;

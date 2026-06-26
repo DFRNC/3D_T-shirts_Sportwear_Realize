@@ -3,8 +3,6 @@ import type { MeshStandardMaterial } from 'three';
 
 import { upgradeGarmentMaterialShader } from '../createGarmentMaterial/createGarmentMaterial';
 
-const SHADER_UPGRADE_FRAME_BUDGET_MS = 6;
-
 type ScheduleGarmentShaderUpgradeOptions = {
   parts: garmentConfigType['parts'];
   getMaterials: (registryKey: string) => readonly MeshStandardMaterial[];
@@ -24,33 +22,26 @@ const scheduleGarmentShaderUpgrade = ({ parts, getMaterials, invalidate, onCompl
   let queueIndex = 0;
   let frameId = 0;
 
-  const now = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
+  const finish = () => {
+    if (cancelled) return;
+    invalidate();
+    onComplete();
+  };
 
-  const runBatch = () => {
+  const configureNext = () => {
     if (cancelled) return;
 
-    const frameStart = now();
-
-    while (queueIndex < materialQueue.length) {
-      upgradeGarmentMaterialShader(materialQueue[queueIndex]);
-      queueIndex += 1;
-
-      if (now() - frameStart >= SHADER_UPGRADE_FRAME_BUDGET_MS) {
-        break;
-      }
-    }
-
-    invalidate();
-
     if (queueIndex >= materialQueue.length) {
-      onComplete();
+      finish();
       return;
     }
 
-    frameId = requestAnimationFrame(runBatch);
+    upgradeGarmentMaterialShader(materialQueue[queueIndex]);
+    queueIndex += 1;
+    frameId = requestAnimationFrame(configureNext);
   };
 
-  frameId = requestAnimationFrame(runBatch);
+  frameId = requestAnimationFrame(configureNext);
 
   return () => {
     cancelled = true;

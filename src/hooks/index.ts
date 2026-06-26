@@ -2,7 +2,7 @@
 
 export { useAppNavigate, buildAppPath } from './useAppNavigate';
 export { isConfiguratorStepAvailable, resolveAvailableConfiguratorStepNumbers, resolveProductStepsConfiguration } from './resolveProductStepsConfiguration';
-export { useGarmentCatalogPreload, useGarmentCatalogPreloadEffect, warmGarmentCatalogAssets } from './useGarmentCatalogPreload';
+export { useGarmentCatalogPreload, useGarmentCatalogPreloadEffect, warmGarmentCatalogAssets, warmGarmentCatalogAssetsEager } from './useGarmentCatalogPreload';
 export { useConfiguratorInitialSceneLoad } from './useConfiguratorInitialSceneLoad';
 export { useSceneTransitionTrigger } from './useSceneTransitionTrigger';
 export { useCheckoutConfigurationTable } from './useCheckoutConfigurationTable';

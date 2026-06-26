@@ -13,6 +13,12 @@ import { resolvePreserveMeshes } from './resolvePreserveMeshes';
 
 export { enrichGltfScene } from './indexGltfSceneNodes';
 export {
+  ensureGarmentGltfParsed,
+  ensureGarmentProductGltfParsed,
+  isGarmentGltfParsed,
+  preloadGarmentGltf,
+} from './ensureGarmentGltfParsed';
+export {
   extractGltfPbrMaps,
   GarmentMeshes,
   GarmentModel,

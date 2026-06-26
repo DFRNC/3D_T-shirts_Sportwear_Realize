@@ -45,6 +45,8 @@ const GarmentPartMesh = memo(({ registryKey, meshName, node, renderOrder = 0 }: 
 
     return () => {
       for (const material of materials) {
+        material.aoMap = null;
+        material.normalMap = null;
         material.dispose();
       }
     };

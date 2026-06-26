@@ -14,7 +14,7 @@ import {
 } from '@configurator/gizmo';
 import { useGizmoIconAtlas } from '../useGizmoIconAtlas';
 import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@configurator/providers';
-import { resolveLogoInstancesForRender, useConfigurationControl, useConfiguratorProduct, useGarmentLogo } from '@store';
+import { resolveLogoInstancesForRender, useConfigurationControl, useConfiguratorProduct, useConfiguratorSceneLoad, useGarmentLogo } from '@store';
 import { LOGO_SLOT_COUNT } from '@configurator/constants';
 import {
   applyGarmentGizmoHover,
@@ -67,6 +67,7 @@ const buildLogoStyleSignature = (instances: ReturnType<typeof resolveLogoInstanc
 
 const useGarmentLogoTextures = () => {
   const product = useConfiguratorProduct((state) => state.product);
+  const isInitialSceneLoading = useConfiguratorSceneLoad((state) => state.isInitialSceneLoading);
   const partIds = useMemo(() => product.parts.map((part) => part.id), [product.parts]);
   const activeStep = useConfigurationControl((state) => state.activeStep);
   const logoProductPath = useGarmentLogo((state) => state.productPath);
@@ -78,6 +79,7 @@ const useGarmentLogoTextures = () => {
   const materialRevision = useMaterialRegistryRevision();
   const invalidate = useThree((state) => state.invalidate);
   const isLogoSynced = logoProductPath === product.path;
+  const isSceneReady = isLogoSynced && hasMaterialsForParts(partIds) && !isInitialSceneLoading;
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const textureRef = useRef<Texture | null>(null);
@@ -219,23 +221,23 @@ const useGarmentLogoTextures = () => {
       return;
     }
 
-    if (!hasMaterialsForParts(partIds)) return;
+    if (!hasMaterialsForParts(partIds) || !isSceneReady) return;
 
     if (prevStampSignatureRef.current === stampSignature) return;
     prevStampSignatureRef.current = stampSignature;
 
     void updateLogoStamp();
-  }, [clearRuntime, hasMaterialsForParts, isLogoSynced, partIds, stampSignature, updateLogoStamp]);
+  }, [clearRuntime, hasMaterialsForParts, isLogoSynced, isSceneReady, partIds, stampSignature, updateLogoStamp]);
 
   useLayoutEffect(() => {
-    if (!isLogoSynced || !hasMaterialsForParts(partIds)) return;
+    if (!isSceneReady) return;
 
     applyLogoStyleAndFrame();
 
     if (textureRef.current) {
       applyStampToMaterials(textureRef.current, stampCellSizeRef.current);
     }
-  }, [applyLogoStyleAndFrame, applyStampToMaterials, hasMaterialsForParts, isLogoSynced, materialRevision, partIds, styleSignature]);
+  }, [applyLogoStyleAndFrame, applyStampToMaterials, isSceneReady, materialRevision, partIds, styleSignature]);
 
   useEffect(() => {
     if (activeStep !== LOGO_STEP) return;

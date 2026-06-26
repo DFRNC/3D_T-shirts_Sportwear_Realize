@@ -33,7 +33,6 @@ const applyPartColors = ({ product, byPart, gradientsByPart, getMaterials, inval
       material.map = null;
       applyGarmentPartUvBounds(material, uvBounds);
       applyGarmentGradient(material, { ...gradient, color2: gradientColor2 });
-      material.needsUpdate = true;
     }
   }
 

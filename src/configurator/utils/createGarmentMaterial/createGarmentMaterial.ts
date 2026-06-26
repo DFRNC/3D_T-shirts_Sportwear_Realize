@@ -326,7 +326,6 @@ const createGarmentMaterial = (pbrMaps: pbrMapsType | null, source: MeshStandard
   }
 
   material.userData.garmentShaderMode = 'bootstrap';
-  material.needsUpdate = true;
 
   return material;
 };
