@@ -40,11 +40,7 @@ const applyPartColors = ({ product, byPart, gradientsByPart, getMaterials, inval
   invalidate();
 };
 
-const applyPatternTints = (
-  { product, getMaterials, invalidate }: applyGarmentAppearanceContextType,
-  colors: patternColorPairType,
-  activeOpacity: number,
-) => {
+const applyPatternTints = ({ product, getMaterials, invalidate }: applyGarmentAppearanceContextType, colors: patternColorPairType, activeOpacity: number) => {
   for (const part of product.parts) {
     if (isColorOnlyGarmentPart(part)) continue;
 

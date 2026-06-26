@@ -1,7 +1,2 @@
 export { preloadGarmentScene } from '../scene';
-export {
-  captureConfiguratorPreviewSnapshot,
-  loadCachedImage,
-  preloadGarmentAppearance,
-  preloadGarmentProduct,
-} from '../utils';
+export { captureConfiguratorPreviewSnapshot, loadCachedImage, preloadGarmentAppearance, preloadGarmentProduct } from '../utils';

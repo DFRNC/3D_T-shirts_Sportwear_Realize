@@ -7,13 +7,7 @@ import type { Texture } from 'three';
 
 import { useGarmentMaterialRegistry, useMaterialRegistryRevision, usePbrMaps } from '@configurator/providers';
 import type { garmentPrintStateType, patternMaskPairType } from '@configurator/types';
-import {
-  useConfigurationCart,
-  useConfiguratorProduct,
-  useConfiguratorSceneLoad,
-  useGarmentColor,
-  useGarmentDesign,
-} from '@store';
+import { useConfigurationCart, useConfiguratorProduct, useConfiguratorSceneLoad, useGarmentColor, useGarmentDesign } from '@store';
 import { emptyMaskPair, readProductAppearanceTextures, syncProductAppearanceTextures } from '@configurator/utils';
 
 import { applyPartColors, applyPatternTints, applyPrintState } from './applyGarmentAppearance';

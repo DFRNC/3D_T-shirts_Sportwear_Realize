@@ -8,12 +8,7 @@ const DEFAULT_MODEL: modelIdType = DEFAULT_CATALOG_PRODUCT.modelId ?? DEFAULT_MO
 const DEFAULT_COLLECTION: productCollectionIdType = DEFAULT_CATALOG_PRODUCT.collection;
 const DEFAULT_SLUG = DEFAULT_CATALOG_PRODUCT.slug;
 
-const createCartItem = (params: {
-  collection: productCollectionIdType;
-  slug: string;
-  modelId: modelIdType;
-  business?: garmentBusinessType;
-}): cartItemType => ({
+const createCartItem = (params: { collection: productCollectionIdType; slug: string; modelId: modelIdType; business?: garmentBusinessType }): cartItemType => ({
   id: `cart-${params.collection}-${params.slug}-${crypto.randomUUID()}`,
   collection: params.collection,
   slug: params.slug,

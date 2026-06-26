@@ -1,12 +1,7 @@
 export { DEFAULT_CURRENCY_CODE, DEFAULT_MODEL_ID, deriveLocalBusiness, getModel, hasModel, MODELS, resolveProductPreviewSrc } from './garmentCatalog';
 export { cn } from './cn';
 export { canvasToPngBlobUrl } from './logoFile/canvasToBlobUrl';
-export {
-  normalizeDesignId,
-  parseDesignIdFromPatternName,
-  resolveDesignCardPreviewSrc,
-  resolvePatternDesignId,
-} from './resolveDesignCardPreviewSrc';
+export { applyConfiguratorRouteProduct, resolveRouteModel } from './configuratorRoute';
 export { applyDesignSvgLayerColors, designSvgTextToDataUrl } from './applyDesignSvgLayerColors';
 export { loadDesignSvgText } from './loadDesignSvgText';
 export { resolveProductFlipCardSrc } from './resolveProductFlipCardSrc/resolveProductFlipCardSrc';

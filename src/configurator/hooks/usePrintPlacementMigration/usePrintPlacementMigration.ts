@@ -29,10 +29,8 @@ const usePrintPlacementMigration = ({
 
     instances.forEach((instance) => {
       const repaired = repairPrintInstancePlacement(instance, parts);
-      const needsPlacementMigration =
-        migratePlacementRotation && instance.placementRotation === undefined && instance.rotation !== 0;
-      const needsUvRepair =
-        repaired.partId !== instance.partId || repaired.uv.x !== instance.uv.x || repaired.uv.y !== instance.uv.y;
+      const needsPlacementMigration = migratePlacementRotation && instance.placementRotation === undefined && instance.rotation !== 0;
+      const needsUvRepair = repaired.partId !== instance.partId || repaired.uv.x !== instance.uv.x || repaired.uv.y !== instance.uv.y;
 
       if (!needsPlacementMigration && !needsUvRepair) return;
 

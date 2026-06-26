@@ -3,12 +3,7 @@ import type { configuratorProductHydrationType } from '@configurator/types';
 import { getShopifyApiMode } from './config';
 import { shopifyAdminGraphql } from './adminClient';
 import { shopifyGraphql } from './graphqlClient';
-import {
-  mapShopifyProductBusiness,
-  PRODUCT_BUSINESS_FIELDS,
-  resolveProductModelId,
-  type shopifyProductBusinessNodeType,
-} from './mapShopifyProductBusiness';
+import { mapShopifyProductBusiness, PRODUCT_BUSINESS_FIELDS, resolveProductModelId, type shopifyProductBusinessNodeType } from './mapShopifyProductBusiness';
 
 const ADMIN_PRODUCT_BY_HANDLE_QUERY = `#graphql
   query ConfiguratorProductByHandle($handle: String!) {
@@ -149,9 +144,7 @@ const findAdminProductByModelId = async (modelId: string): Promise<shopifyProduc
   const data = await shopifyAdminGraphql<adminProductsLookupResponseType>(ADMIN_PRODUCTS_LOOKUP_QUERY);
   const normalizedModelId = modelId.trim();
 
-  return (
-    data.products?.nodes?.find((product) => product.modelMetafield?.value?.trim() === normalizedModelId) ?? null
-  );
+  return data.products?.nodes?.find((product) => product.modelMetafield?.value?.trim() === normalizedModelId) ?? null;
 };
 
 const findStorefrontProductByModelId = async (modelId: string): Promise<shopifyProductBusinessNodeType | null> => {

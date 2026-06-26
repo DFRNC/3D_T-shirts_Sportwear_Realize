@@ -3,15 +3,15 @@
 import { useGLTF } from '@react-three/drei';
 
 import { useConfiguratorProduct } from '@store';
-import type { modelIdType } from '@types';
-import { getModel } from '@utils';
-import { resolveModelUrl } from '@configurator/utils';
+import type { garmentConfigType } from '@types';
 
-const preloadGarmentScene = (modelId?: modelIdType) => {
-  const product = modelId ? getModel(modelId) : useConfiguratorProduct.getState().product;
-  if (!product) return;
+import { resolveModelUrl } from '../utils/resolveModelUrl/resolveModelUrl';
 
-  useGLTF.preload(resolveModelUrl(product));
+const preloadGarmentScene = (product?: garmentConfigType) => {
+  const resolved = product ?? useConfiguratorProduct.getState().product;
+  if (!resolved) return;
+
+  useGLTF.preload(resolveModelUrl(resolved));
 };
 
 export { preloadGarmentScene };

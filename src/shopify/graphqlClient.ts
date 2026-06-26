@@ -9,9 +9,7 @@ const shopifyGraphql = async <TData>(query: string, variables?: Record<string, u
   const { storeDomain, apiVersion, mode, accessToken } = assertShopifyConfigured();
 
   const endpoint =
-    mode === 'storefront'
-      ? `https://${storeDomain}/api/${apiVersion}/graphql.json`
-      : `https://${storeDomain}/admin/api/${apiVersion}/graphql.json`;
+    mode === 'storefront' ? `https://${storeDomain}/api/${apiVersion}/graphql.json` : `https://${storeDomain}/admin/api/${apiVersion}/graphql.json`;
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',

@@ -1,6 +1,5 @@
-import type { garmentConfigType, modelIdType } from '@types';
+import type { garmentConfigType } from '@types';
 
-import { getModel } from '@utils';
 import { resolveModelUrl } from '../resolveModelUrl/resolveModelUrl';
 
 const preloadedAssetUrls = new Set<string>();
@@ -19,10 +18,7 @@ const preloadGarmentProductAssets = (product: garmentConfigType) => {
   preloadAssetUrl(resolveModelUrl(product));
 };
 
-const preloadGarmentProduct = (modelId: modelIdType) => {
-  const product = getModel(modelId);
-  if (!product) return;
-
+const preloadGarmentProduct = (product: garmentConfigType) => {
   preloadGarmentProductAssets(product);
 };
 

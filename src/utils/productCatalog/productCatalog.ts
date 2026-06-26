@@ -8,8 +8,7 @@ import { resolveProductCatalogPreviewSrc } from '../resolveProductCatalogPreview
 const getCatalogProductEntry = (collection: productCollectionIdType, slug: string): catalogProductEntryType | undefined =>
   CATALOG_PRODUCT_ENTRIES.find((entry) => entry.collection === collection && entry.slug === slug);
 
-const getCatalogProductEntryBySlug = (slug: string): catalogProductEntryType | undefined =>
-  CATALOG_PRODUCT_ENTRIES.find((entry) => entry.slug === slug);
+const getCatalogProductEntryBySlug = (slug: string): catalogProductEntryType | undefined => CATALOG_PRODUCT_ENTRIES.find((entry) => entry.slug === slug);
 
 const getCatalogProductEntryByModelId = (modelId: string): catalogProductEntryType | undefined =>
   CATALOG_PRODUCT_ENTRIES.find((entry) => entry.modelId === modelId);

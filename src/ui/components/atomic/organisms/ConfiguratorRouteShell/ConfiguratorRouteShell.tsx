@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { useLayoutEffect, useRef } from 'react';
 
 import type { configuratorProductHydrationType } from '@configurator/types';
-import { applyConfiguratorRouteProduct } from '@configurator';
+import { applyConfiguratorRouteProduct } from '@utils';
 
 type configuratorRouteShellPropsType = {
   slug: string;

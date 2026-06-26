@@ -315,11 +315,7 @@ const configureGarmentShader = (material: MeshStandardMaterial) => {
   material.customProgramCacheKey = () => GARMENT_SHADER_VERSION;
 };
 
-const createGarmentMaterial = (
-  pbrMaps: pbrMapsType | null,
-  source: MeshStandardMaterial | null | undefined,
-  pbrUvChannel: 0 | 1 = 1,
-): MeshStandardMaterial => {
+const createGarmentMaterial = (pbrMaps: pbrMapsType | null, source: MeshStandardMaterial | null | undefined, pbrUvChannel: 0 | 1 = 1): MeshStandardMaterial => {
   const material = source ? source.clone() : new MeshStandardMaterial({ color: 0xffffff });
 
   if (pbrMaps) {

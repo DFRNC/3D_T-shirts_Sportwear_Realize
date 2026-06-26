@@ -2,11 +2,7 @@
 
 import { memo } from 'react';
 
-import {
-  useGarmentAppearance,
-  useGarmentLogoTextures,
-  useGarmentNameTextures,
-} from '@configurator/hooks';
+import { useGarmentAppearance, useGarmentLogoTextures, useGarmentNameTextures } from '@configurator/hooks';
 
 import { PrintGizmoLayer } from '../PrintGizmoLayer';
 

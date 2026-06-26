@@ -19,10 +19,7 @@ const GarmentModel = ({ children }: { children?: ReactNode }) => {
   const loadedGltf = useGLTF(modelUrl);
   const gltf = useMemo(() => enrichGltfScene(loadedGltf), [loadedGltf]);
 
-  const pbrMaps = useMemo(
-    () => resolveGltfPbrMaps(gltf, product.pbrUvChannel ?? 1, modelUrl),
-    [gltf, modelUrl, product.pbrUvChannel],
-  );
+  const pbrMaps = useMemo(() => resolveGltfPbrMaps(gltf, product.pbrUvChannel ?? 1, modelUrl), [gltf, modelUrl, product.pbrUvChannel]);
 
   return (
     <GarmentMaterialRegistryProvider key={modelUrl}>

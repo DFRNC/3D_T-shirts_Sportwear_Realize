@@ -5,10 +5,7 @@ type shopifyGraphqlResponseType<TData> = {
   errors?: Array<{ message: string }>;
 };
 
-const shopifyAdminGraphql = async <TData>(
-  query: string,
-  variables?: Record<string, unknown>,
-): Promise<TData> => {
+const shopifyAdminGraphql = async <TData>(query: string, variables?: Record<string, unknown>): Promise<TData> => {
   const { storeDomain, accessToken, apiVersion } = assertShopifyConfigured();
 
   const response = await fetch(`https://${storeDomain}/admin/api/${apiVersion}/graphql.json`, {

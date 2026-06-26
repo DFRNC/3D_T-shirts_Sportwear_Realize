@@ -13,9 +13,7 @@ const resolveConfiguratorProduct = async (slug: string): Promise<configuratorPro
         return shopifyProduct;
       }
 
-      console.warn(
-        `[shopify] Product "${slug}" not found by handle or custom.id; falling back to local catalog.`,
-      );
+      console.warn(`[shopify] Product "${slug}" not found by handle or custom.id; falling back to local catalog.`);
     } catch (error) {
       console.warn(`[shopify] Failed to fetch product "${slug}"; falling back to local catalog.`, error);
     }

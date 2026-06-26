@@ -5,7 +5,6 @@ import type { garmentConfigType, garmentLogoSnapshotType, logoInstanceType, logo
 import { create } from 'zustand';
 
 import { LOGO_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@configurator/constants';
-import { loadCachedImage } from '@configurator';
 
 import { createDefaultLogoInstances, createDynamicUserLogoPosition, createLogoInstance, mapProductLogoPositions } from './mapProductLogos';
 
@@ -18,9 +17,9 @@ interface GarmentLogoState {
   selectedInstanceId: string | null;
   initForProduct: (product: garmentConfigType) => void;
   restoreSnapshot: (product: garmentConfigType, snapshot: garmentLogoSnapshotType) => void;
-  addUserInstance: (position: logoPositionType, src: string, fileName: string) => Promise<void>;
-  addFreeUserInstance: (product: garmentConfigType, src: string, fileName: string) => Promise<void>;
-  replaceInstanceImage: (id: string, src: string, fileName: string) => Promise<void>;
+  addUserInstance: (position: logoPositionType, src: string, fileName: string, naturalWidth: number, naturalHeight: number) => void;
+  addFreeUserInstance: (product: garmentConfigType, src: string, fileName: string, naturalWidth: number, naturalHeight: number) => void;
+  replaceInstanceImage: (id: string, src: string, fileName: string, naturalWidth: number, naturalHeight: number) => void;
   removeInstance: (id: string) => void;
   duplicateInstance: (id: string) => void;
   setSelectedInstance: (id: string) => void;
@@ -40,11 +39,6 @@ const resolveLogoInstancesForRender = (instances: logoInstanceType[], preview: l
 };
 
 const buildPositionsKey = (product: garmentConfigType) => JSON.stringify(product.logoPositions ?? []);
-
-const resolveLogoNaturalSize = async (src: string) => {
-  const image = await loadCachedImage(src);
-  return { width: image.naturalWidth, height: image.naturalHeight };
-};
 
 const syncInstancesFromPositions = (instances: logoInstanceType[], positions: logoPositionType[]) =>
   instances.map((instance) => {
@@ -99,40 +93,37 @@ const useGarmentLogo = create<GarmentLogoState>((set, get) => ({
       selectedInstanceId: snapshot.selectedInstanceId,
     });
   },
-  addUserInstance: async (position, src, fileName) => {
-    const natural = await resolveLogoNaturalSize(src);
+  addUserInstance: (position, src, fileName, naturalWidth, naturalHeight) => {
     const instance = createLogoInstance(position, `${position.key}_user_${Date.now()}`, {
       src,
       fileName,
       isDefault: false,
-      naturalWidth: natural.width,
-      naturalHeight: natural.height,
+      naturalWidth,
+      naturalHeight,
       uploadRotation: LOGO_UPLOAD_ROTATION_DEG,
     });
 
     set((state) => ({ instances: [...state.instances, instance] }));
   },
-  addFreeUserInstance: async (product, src, fileName) => {
+  addFreeUserInstance: (product, src, fileName, naturalWidth, naturalHeight) => {
     const { instances } = get();
     const userCount = instances.filter((instance) => !instance.isDefault).length;
 
     if (userCount >= LOGO_SLOT_COUNT) return;
 
     const position = createDynamicUserLogoPosition(product, userCount);
-    const natural = await resolveLogoNaturalSize(src);
     const instance = createLogoInstance(position, `${position.key}_${Date.now()}`, {
       src,
       fileName,
       isDefault: false,
-      naturalWidth: natural.width,
-      naturalHeight: natural.height,
+      naturalWidth,
+      naturalHeight,
       uploadRotation: LOGO_UPLOAD_ROTATION_DEG,
     });
 
     set((state) => ({ instances: [...state.instances, instance] }));
   },
-  replaceInstanceImage: async (id, src, fileName) => {
-    const natural = await resolveLogoNaturalSize(src);
+  replaceInstanceImage: (id, src, fileName, naturalWidth, naturalHeight) => {
     set((state) => ({
       instances: state.instances.map((instance) =>
         instance.id === id
@@ -140,8 +131,8 @@ const useGarmentLogo = create<GarmentLogoState>((set, get) => ({
               ...instance,
               src,
               fileName,
-              naturalWidth: natural.width,
-              naturalHeight: natural.height,
+              naturalWidth,
+              naturalHeight,
             }
           : instance,
       ),

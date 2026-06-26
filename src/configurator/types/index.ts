@@ -3,12 +3,7 @@ export type { configuratorProductHydrationType } from './configuratorProductHydr
 export type { garmentGltfSceneType } from './garmentGltfSceneType';
 export type { garmentMaterialRegistryValueType } from './garmentMaterialRegistry';
 export type { PrintPlacementInstance } from './printPlacementInstance';
-export type {
-  garmentPartMeshPropsType,
-  preserveGltfMeshPropsType,
-  printGizmoInstancePropsType,
-  staticGltfMeshPropsType,
-} from './sceneComponentProps';
+export type { garmentPartMeshPropsType, preserveGltfMeshPropsType, printGizmoInstancePropsType, staticGltfMeshPropsType } from './sceneComponentProps';
 export type { composeLogoStampAtlasInputType, logoStampAtlasType } from './composeLogoStampAtlas';
 export type { composeNameMaskAtlasInputType, nameMaskAtlasType } from './composeNameMaskAtlas';
 export type { drawNameMaskGeometryInputType, drawNameStrokeMaskGeometryInputType, textCanvasDrawOptionsType } from './drawNameOnAtlas';

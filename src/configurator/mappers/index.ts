@@ -30,6 +30,7 @@ export {
   resolvePartIdForAtlasUv,
 } from './mapProductLogos';
 export { mapDefaultPattern, mapProductDesigns } from './mapProductDesigns';
+export { normalizeDesignId, parseDesignIdFromPatternName, resolveDesignCardPreviewSrc, resolvePatternDesignId } from './resolveDesignCardPreviewSrc';
 export {
   DEFAULT_GRADIENT_COLOR2,
   DEFAULT_PART_GRADIENT,

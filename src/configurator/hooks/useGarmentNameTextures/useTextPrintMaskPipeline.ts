@@ -30,11 +30,7 @@ import {
   type MaskResourceRefs,
 } from './garmentTextPrintTextureUtils';
 
-interface TextPrintMaskPipelineConfig<
-  TInstance extends garmentTextRenderInstanceType,
-  TPreview,
-  TStyle,
-> {
+interface TextPrintMaskPipelineConfig<TInstance extends garmentTextRenderInstanceType, TPreview, TStyle> {
   step: number;
   productPath: string | null;
   instances: TInstance[];
@@ -43,19 +39,10 @@ interface TextPrintMaskPipelineConfig<
   resolveInstances: (instances: TInstance[], preview: TPreview) => TInstance[];
   applyMasks: (material: MeshStandardMaterial, payload: { mask: Texture }) => void;
   applyStyle: (material: MeshStandardMaterial, style: TStyle) => void;
-  buildStyleUniforms: (
-    instances: TInstance[],
-    parts: garmentPartConfigType[],
-    stampSize: stampPixelSizeType,
-    partId: string,
-  ) => TStyle;
+  buildStyleUniforms: (instances: TInstance[], parts: garmentPartConfigType[], stampSize: stampPixelSizeType, partId: string) => TStyle;
 }
 
-const useTextPrintMaskPipeline = <
-  TInstance extends garmentTextRenderInstanceType,
-  TPreview,
-  TStyle,
->({
+const useTextPrintMaskPipeline = <TInstance extends garmentTextRenderInstanceType, TPreview, TStyle>({
   step,
   productPath,
   instances,
@@ -190,12 +177,7 @@ const useTextPrintMaskPipeline = <
 
       if (generation !== maskGenerationRef.current) return;
 
-      const mask = packStackedTextMaskTexture(
-        fillCanvasRef.current!,
-        strokeCanvasRef.current!,
-        stackedCanvasRef.current,
-        stackedTextureRef.current,
-      );
+      const mask = packStackedTextMaskTexture(fillCanvasRef.current!, strokeCanvasRef.current!, stackedCanvasRef.current, stackedTextureRef.current);
       stackedTextureRef.current = mask;
       stackedCanvasRef.current = mask.image as HTMLCanvasElement;
       applyMasksToMaterials(mask);
@@ -226,15 +208,7 @@ const useTextPrintMaskPipeline = <
     if (stackedTextureRef.current) {
       applyMasksToMaterials(stackedTextureRef.current);
     }
-  }, [
-    applyMasksToMaterials,
-    applyStyleToMaterials,
-    hasMaterialsForParts,
-    isSynced,
-    materialRevision,
-    partIds,
-    styleSignature,
-  ]);
+  }, [applyMasksToMaterials, applyStyleToMaterials, hasMaterialsForParts, isSynced, materialRevision, partIds, styleSignature]);
 
   useEffect(
     () => () => {

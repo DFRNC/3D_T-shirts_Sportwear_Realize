@@ -1,14 +1,9 @@
 'use client';
 
 export { useAppNavigate, buildAppPath } from './useAppNavigate';
-export {
-  isConfiguratorStepAvailable,
-  resolveAvailableConfiguratorStepNumbers,
-  resolveProductStepsConfiguration,
-} from './resolveProductStepsConfiguration';
+export { isConfiguratorStepAvailable, resolveAvailableConfiguratorStepNumbers, resolveProductStepsConfiguration } from './resolveProductStepsConfiguration';
 export { useGarmentCatalogPreload, useGarmentCatalogPreloadEffect, warmGarmentCatalogAssets } from './useGarmentCatalogPreload';
 export { useConfiguratorInitialSceneLoad } from './useConfiguratorInitialSceneLoad';
-export { useConfiguratorProductHydration } from './useConfiguratorProductHydration';
 export { useSceneTransitionTrigger } from './useSceneTransitionTrigger';
 export { useCheckoutConfigurationTable } from './useCheckoutConfigurationTable';
 export { useCheckoutInit } from './useCheckoutInit';

@@ -16,15 +16,7 @@ import { cn } from '@utils';
 
 const DEFAULT_PART_COLOR = PALETTE_COLORS[1];
 
-const DesignCardPreview = ({
-  src,
-  layerColors,
-  eager,
-}: {
-  src: string;
-  layerColors?: string[];
-  eager?: boolean;
-}) => {
+const DesignCardPreview = ({ src, layerColors, eager }: { src: string; layerColors?: string[]; eager?: boolean }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const displaySrc = useTintedDesignSvgSrc(src, layerColors);
 
@@ -86,11 +78,7 @@ const ConfigurationDesign = () => {
             onClick={() => setActivePattern(pattern)}
             style={{ contentVisibility: 'auto', contain: 'layout paint style' }}
           >
-            <DesignCardPreview
-              src={pattern.cardPreviewSrc}
-              layerColors={resolvePatternLayerColors(pattern, activePattern, getPartColor)}
-              eager={index < 2}
-            />
+            <DesignCardPreview src={pattern.cardPreviewSrc} layerColors={resolvePatternLayerColors(pattern, activePattern, getPartColor)} eager={index < 2} />
           </Button>
         ))}
       </Grid>

@@ -52,9 +52,7 @@ const importRules = [
   {
     id: 'store-configurator-subpaths',
     test: (filePath) => normalizePath(filePath).includes('src/store/'),
-    patterns: [
-      /from ['"]@configurator\/(utils|scene|runtime|canvas|hooks|gizmo|shaders|providers)(?:\/|['"])/,
-    ],
+    patterns: [/from ['"]@configurator\/(utils|scene|runtime|canvas|hooks|gizmo|shaders|providers)(?:\/|['"])/],
     message: '@store must use @configurator bootstrap facade, @configurator/mappers, or @configurator/constants — not layer subpaths.',
   },
   {
@@ -68,6 +66,18 @@ const importRules = [
     test: (filePath) => normalizePath(filePath).includes('src/hooks/resolveProductStepsConfiguration/'),
     patterns: [/from ['"]@molecules['"]/],
     message: 'Step availability resolver must not import @molecules (merge in useProductStepsConfiguration instead).',
+  },
+  {
+    id: 'configurator-no-utils',
+    test: (filePath) => normalizePath(filePath).includes('src/configurator/'),
+    patterns: [/from ['"]@utils(?:\/|['"])/],
+    message: '@configurator must not import @utils.',
+  },
+  {
+    id: 'molecules-configurator-types-only',
+    test: (filePath) => normalizePath(filePath).includes('src/ui/components/atomic/molecules/'),
+    patterns: [/from ['"]@configurator(?!\/types)(?:\/|['"])/],
+    message: 'Molecules may only import @configurator/types, not the configurator runtime.',
   },
 ];
 

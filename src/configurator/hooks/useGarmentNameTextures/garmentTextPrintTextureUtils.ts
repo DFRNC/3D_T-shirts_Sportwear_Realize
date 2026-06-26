@@ -39,8 +39,7 @@ const buildStyleSignature = (instances: garmentTextRenderInstanceType[]) =>
     })),
   );
 
-const stampSizeChanged = (previous: stampPixelSizeType, next: stampPixelSizeType) =>
-  previous.width !== next.width || previous.height !== next.height;
+const stampSizeChanged = (previous: stampPixelSizeType, next: stampPixelSizeType) => previous.width !== next.width || previous.height !== next.height;
 
 interface MaskResourceRefs {
   fillCanvasRef: { current: HTMLCanvasElement | null };
@@ -61,11 +60,7 @@ const ensureMaskResources = (stampSize: stampPixelSizeType, refs: MaskResourceRe
 
   if (!refs.stackedCanvasRef.current) {
     refs.stackedCanvasRef.current = document.createElement('canvas');
-    refs.stackedTextureRef.current = packStackedTextMaskTexture(
-      refs.fillCanvasRef.current,
-      refs.strokeCanvasRef.current,
-      refs.stackedCanvasRef.current,
-    );
+    refs.stackedTextureRef.current = packStackedTextMaskTexture(refs.fillCanvasRef.current, refs.strokeCanvasRef.current, refs.stackedCanvasRef.current);
   }
 
   if (!stampSizeChanged(refs.stampSizeRef.current, stampSize)) return;
@@ -76,11 +71,7 @@ const ensureMaskResources = (stampSize: stampPixelSizeType, refs: MaskResourceRe
   refs.strokeCanvasRef.current.height = stampSize.height;
   refs.stackedTextureRef.current?.dispose();
   refs.stackedCanvasRef.current = document.createElement('canvas');
-  refs.stackedTextureRef.current = packStackedTextMaskTexture(
-    refs.fillCanvasRef.current,
-    refs.strokeCanvasRef.current,
-    refs.stackedCanvasRef.current,
-  );
+  refs.stackedTextureRef.current = packStackedTextMaskTexture(refs.fillCanvasRef.current, refs.strokeCanvasRef.current, refs.stackedCanvasRef.current);
   refs.stampSizeRef.current = stampSize;
 };
 
@@ -94,12 +85,5 @@ const clearMaskRuntime = (refs: MaskResourceRefs, prevFillSignatureRef: { curren
   prevFillSignatureRef.current = '';
 };
 
-export {
-  DEFAULT_STAMP_SIZE,
-  buildFillSignature,
-  buildStrokeSignature,
-  buildStyleSignature,
-  clearMaskRuntime,
-  ensureMaskResources,
-};
+export { DEFAULT_STAMP_SIZE, buildFillSignature, buildStrokeSignature, buildStyleSignature, clearMaskRuntime, ensureMaskResources };
 export type { MaskResourceRefs };

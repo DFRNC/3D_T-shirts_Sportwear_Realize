@@ -4,12 +4,15 @@ import { useCallback, useEffect } from 'react';
 
 import { preloadGarmentAppearance, preloadGarmentProduct, preloadGarmentScene } from '@configurator';
 import type { modelIdType } from '@types';
-import { hasModel } from '@utils';
+import { getModel, hasModel } from '@utils';
 
 const warmGarmentCatalogAssets = (modelId: modelIdType) => {
-  preloadGarmentProduct(modelId);
-  preloadGarmentAppearance(modelId);
-  preloadGarmentScene(modelId);
+  const product = getModel(modelId);
+  if (!product) return;
+
+  preloadGarmentProduct(product);
+  preloadGarmentAppearance(product);
+  preloadGarmentScene(product);
 };
 
 const useGarmentCatalogPreload = () => {
@@ -28,7 +31,8 @@ const useGarmentCatalogPreload = () => {
 const useGarmentCatalogPreloadEffect = (modelIds: modelIdType[]) => {
   useEffect(() => {
     for (const modelId of modelIds) {
-      preloadGarmentProduct(modelId);
+      const product = getModel(modelId);
+      if (product) preloadGarmentProduct(product);
     }
   }, [modelIds]);
 };

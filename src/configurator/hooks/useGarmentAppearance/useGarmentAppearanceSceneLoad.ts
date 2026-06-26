@@ -90,8 +90,7 @@ const useGarmentAppearanceSceneLoad = ({
 
     if (activePatternKey) {
       const masksReady =
-        masksPatternKeyRef.current === activePatternKey &&
-        (Boolean(maskTexturesRef.current[0]) || maskTexturesFailedKeyRef.current === activePatternKey);
+        masksPatternKeyRef.current === activePatternKey && (Boolean(maskTexturesRef.current[0]) || maskTexturesFailedKeyRef.current === activePatternKey);
       if (!masksReady) return false;
     }
 

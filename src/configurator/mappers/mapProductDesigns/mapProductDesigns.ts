@@ -1,6 +1,6 @@
 import type { designPatternItemType, garmentConfigType } from '@types';
 
-import { resolveDesignCardPreviewSrc } from '@utils';
+import { resolveDesignCardPreviewSrc } from '../resolveDesignCardPreviewSrc';
 
 const mapProductDesigns = (product: garmentConfigType): designPatternItemType[] =>
   product.patterns.map((pattern, patternIndex) => ({

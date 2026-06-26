@@ -234,10 +234,7 @@ const isConfiguratorCollection = (collection: shopifyCollectionListNodeType, pro
 
 const buildHomeCollection = async (collection: shopifyCollectionListNodeType): Promise<homePageCollectionType | null> => {
   const products = await fetchCollectionProducts(collection.id);
-  const visibleProducts =
-    collection.typeMetafield?.value === CONFIGURATOR_COLLECTION_TYPE
-      ? products
-      : products.filter((product) => product.modelId);
+  const visibleProducts = collection.typeMetafield?.value === CONFIGURATOR_COLLECTION_TYPE ? products : products.filter((product) => product.modelId);
 
   if (!isConfiguratorCollection(collection, visibleProducts)) {
     return null;
@@ -285,8 +282,7 @@ const fetchConfiguratorCollections = async (): Promise<homePageCollectionType[]>
     };
   }>(listQuery);
 
-  const candidates =
-    listData.collections?.nodes?.filter((collection) => collection.handle !== FRONTPAGE_HANDLE) ?? [];
+  const candidates = listData.collections?.nodes?.filter((collection) => collection.handle !== FRONTPAGE_HANDLE) ?? [];
 
   const collections = await Promise.all(candidates.map((collection) => buildHomeCollection(collection)));
 

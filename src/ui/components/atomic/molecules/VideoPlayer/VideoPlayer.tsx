@@ -122,23 +122,23 @@ const VideoPlayer = ({
           <div className={playerSurfaceClassName}>
             <Suspense fallback={null}>
               <ReactPlayerLazy
-              {...props}
-              src={normalizedSrc}
-              config={playerConfig}
-              controls={controls}
-              disableRemotePlayback
-              playsInline={playsInline}
-              playing={effectivePlaying}
-              volume={volume}
-              pip={false}
-              light={lightMode}
-              fallback={false}
-              width="100%"
-              height="100%"
-              style={{ width: '100%', height: '100%' }}
-              onReady={handlePlayerReady}
-              onClickPreview={handlePreviewClick}
-              playIcon={customPoster && !hasStarted ? <></> : undefined}
+                {...props}
+                src={normalizedSrc}
+                config={playerConfig}
+                controls={controls}
+                disableRemotePlayback
+                playsInline={playsInline}
+                playing={effectivePlaying}
+                volume={volume}
+                pip={false}
+                light={lightMode}
+                fallback={false}
+                width="100%"
+                height="100%"
+                style={{ width: '100%', height: '100%' }}
+                onReady={handlePlayerReady}
+                onClickPreview={handlePreviewClick}
+                playIcon={customPoster && !hasStarted ? <></> : undefined}
               />
             </Suspense>
           </div>

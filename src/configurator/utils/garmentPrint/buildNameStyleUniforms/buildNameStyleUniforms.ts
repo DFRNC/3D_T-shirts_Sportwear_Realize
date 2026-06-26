@@ -1,4 +1,11 @@
-import type { nameSlotBounds4Type, nameSlotColor4Type, nameSlotFloat4Type, nameSlotVec2Type, nameStyleUniformsType, stampPixelSizeType } from '@configurator/types';
+import type {
+  nameSlotBounds4Type,
+  nameSlotColor4Type,
+  nameSlotFloat4Type,
+  nameSlotVec2Type,
+  nameStyleUniformsType,
+  stampPixelSizeType,
+} from '@configurator/types';
 import type { garmentPartConfigType, garmentTextRenderInstanceType } from '@types';
 import { FULL_UV_BOUNDS, NAME_REFERENCE_FONT_SIZE, NAME_SLOT_COUNT, PRINT_UPLOAD_ROTATION_DEG } from '@configurator/constants';
 import { resolvePartPrintRotation, resolvePartUvBounds } from '../../resolveProductRenderConfig/resolveProductRenderConfig';

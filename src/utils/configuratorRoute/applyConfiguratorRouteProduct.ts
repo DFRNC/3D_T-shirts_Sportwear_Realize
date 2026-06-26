@@ -1,0 +1,31 @@
+import type { configuratorProductHydrationType } from '@configurator/types';
+import { preloadGarmentAppearance, preloadGarmentProduct, preloadGarmentScene } from '@configurator';
+import { useConfigurationCart, useConfiguratorProduct, useConfiguratorSceneLoad } from '@store';
+import type { modelIdType } from '@types';
+
+import { DEFAULT_MODEL_ID, deriveLocalBusiness, hasModel } from '../garmentCatalog/garmentCatalog';
+
+const resolveRouteModel = (slug: string, product: configuratorProductHydrationType | null) => {
+  const slugModelId = hasModel(slug) ? slug : null;
+  const isMapped = product != null && hasModel(product.modelId);
+
+  const modelId = isMapped ? product.modelId : (slugModelId ?? DEFAULT_MODEL_ID);
+  const business = isMapped ? product.business : slugModelId ? { ...deriveLocalBusiness(slugModelId), handle: slug } : deriveLocalBusiness(modelId);
+
+  return { modelId: modelId as modelIdType, business };
+};
+
+const applyConfiguratorRouteProduct = (slug: string, product: configuratorProductHydrationType | null) => {
+  const { modelId, business } = resolveRouteModel(slug, product);
+
+  useConfiguratorSceneLoad.getState().beginInitialSceneLoad();
+  useConfigurationCart.getState().setActiveItemProduct({ slug, modelId, business });
+
+  const garment = useConfiguratorProduct.getState().product;
+  preloadGarmentProduct(garment);
+  preloadGarmentAppearance(garment);
+  preloadGarmentScene(garment);
+  useConfiguratorSceneLoad.getState().markRouteHydrated();
+};
+
+export { applyConfiguratorRouteProduct, resolveRouteModel };

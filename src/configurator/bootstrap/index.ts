@@ -1,4 +1,3 @@
-export { applyConfiguratorRouteProduct, resolveRouteModel } from './applyConfiguratorRouteProduct';
 export {
   captureConfiguratorPreviewSnapshot,
   loadCachedImage,
@@ -6,4 +5,3 @@ export {
   preloadGarmentProduct,
   preloadGarmentScene,
 } from './configuratorAppFacade';
-
