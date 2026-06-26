@@ -415,13 +415,23 @@ Routes stay **thin**: import from `@pages` only.
 | `dev` / `build` / `start` | Next.js development and production            |
 | `lint` / `lint:fix`    | ESLint over `src/` and `scripts/`                |
 | `format` / `format:check` | Prettier                                      |
-| `validate`             | format + lint + `verify:architecture` + `verify:design-assets` |
+| `validate`             | format + lint + `verify:architecture` |
 | `verify:architecture`  | Legacy paths + import boundaries + 3D constants outside configurator (`scripts/verify-architecture.mjs`) |
-| `verify:design-assets` | Design files and thumbnails per catalog JSON     |
-| `convert:design-assets` | SVG designs → WebP runtime assets             |
+| `convert:design-assets` | SVG design masters → WebP for 3D print atlas (keeps `.svg` originals) |
+| `sync:wasm-assets` | Optional — refresh logo-upload WASM in `public/ghostscript/` after dependency upgrades |
+| `optimize:model` / `optimize:models` | Dev-only GLTF → GLB compression (UV-safe); not part of CI |
 | `test:e2e`             | Playwright                                       |
 
-Node scripts in `scripts/`: logo WASM copy, design verification/conversion, thumbnail generation.
+Node scripts in `scripts/`:
+
+| Script | Keep? | Role |
+| ------ | ----- | ---- |
+| `verify-architecture.mjs` | Yes | CI — legacy paths + import boundaries |
+| `convert-design-assets.mjs` | Yes | Asset pipeline — rasterize heavy design SVGs to WebP for runtime atlas |
+| `sync-wasm-assets.mjs` | Optional manual — refresh WASM after npm package upgrades |
+| `optimize-gltf-model.mjs` | Yes (manual) | Optional dev tool when updating garment GLTF sources |
+
+Removed one-off migration scripts (`add-use-client`, `rename-types-to-camel-type`) and design thumbnail generation (UI uses `public/svg/design/*.svg` templates).
 
 ---
 

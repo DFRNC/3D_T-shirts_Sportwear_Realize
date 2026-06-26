@@ -10,17 +10,14 @@
     "lint:fix": "eslint src scripts --fix --no-warn-ignored",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "validate": "pnpm format:check && pnpm lint && pnpm verify:architecture && pnpm verify:design-assets",
+    "validate": "pnpm format:check && pnpm lint && pnpm verify:architecture",
     "verify:architecture": "node scripts/verify-architecture.mjs",
-    "verify:design-assets": "node scripts/verify-design-assets.mjs",
     "convert:design-assets": "node scripts/convert-design-assets.mjs",
+    "sync:wasm-assets": "node scripts/sync-wasm-assets.mjs",
     "optimize:model": "node scripts/optimize-gltf-model.mjs",
     "optimize:models": "node scripts/optimize-gltf-model.mjs --all",
     "optimize:federer": "node scripts/optimize-gltf-model.mjs federer_calcio",
-    "optimize:calcio": "node scripts/optimize-gltf-model.mjs federer_calcio baggio_calcio bernardi_calcio cruijff_calcio",
-    "generate:design-thumbnails": "node scripts/generate-design-thumbnails.mjs",
-    "postinstall": "pnpm copy:logo-assets",
-    "copy:logo-assets": "node scripts/copy-logo-assets.mjs"
+    "optimize:calcio": "node scripts/optimize-gltf-model.mjs federer_calcio baggio_calcio bernardi_calcio cruijff_calcio"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

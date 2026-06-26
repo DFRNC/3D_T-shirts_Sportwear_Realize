@@ -4,7 +4,7 @@
     {
       "name": "Federer Calcio",
       "type": "shirt",
-      "previewImage": "designs/thumbs/crewneck_design_7.webp",
+      "previewImage": "designs/crewneck_design_7.webp",
       "price": 100,
       "bonus_count": 10,
       "bonus_discount": 20,
@@ -416,7 +416,7 @@
     {
       "name": "Shorts Classic",
       "type": "shorts",
-      "previewImage": "designs/thumbs/mans_shorts_raw_pattern.webp",
+      "previewImage": "designs/mans_shorts_raw_pattern.webp",
       "price": 80,
       "bonus_count": 10,
       "bonus_discount": 15,

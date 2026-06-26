@@ -1,6 +1,6 @@
 import type { designPatternItemType, garmentConfigType } from '@types';
 
-import { resolveDesignCardPreviewSrc, resolveDesignThumbSrc } from '@utils';
+import { resolveDesignCardPreviewSrc } from '@utils';
 
 const mapProductDesigns = (product: garmentConfigType): designPatternItemType[] =>
   product.patterns.map((pattern, patternIndex) => ({
@@ -13,7 +13,6 @@ const mapProductDesigns = (product: garmentConfigType): designPatternItemType[] 
       return {
         key: `pattern-${patternIndex}-part-${partIndex}`,
         src,
-        previewSrc: resolveDesignThumbSrc(src),
       };
     }),
   }));
@@ -32,7 +31,6 @@ const mapDefaultPattern = (product: garmentConfigType): designPatternItemType | 
       return {
         key: `default-pattern-part-${partIndex}`,
         src,
-        previewSrc: resolveDesignThumbSrc(src),
       };
     }),
   };

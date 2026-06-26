@@ -1,7 +1,6 @@
 export { DEFAULT_CURRENCY_CODE, DEFAULT_MODEL_ID, deriveLocalBusiness, getModel, hasModel, MODELS, resolveProductPreviewSrc } from './garmentCatalog';
 export { cn } from './cn';
 export { canvasToPngBlobUrl } from './logoFile/canvasToBlobUrl';
-export { resolveDesignThumbSrc } from './resolveDesignThumbSrc/resolveDesignThumbSrc';
 export {
   normalizeDesignId,
   parseDesignIdFromPatternName,
