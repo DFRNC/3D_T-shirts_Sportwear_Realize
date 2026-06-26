@@ -1,5 +1,11 @@
 export { ConfiguratorCanvas } from './canvas';
 export { applyConfiguratorRouteProduct, resolveRouteModel } from './bootstrap';
+export {
+  captureConfiguratorPreviewSnapshot,
+  loadCachedImage,
+  preloadGarmentAppearance,
+  preloadGarmentProduct,
+} from './bootstrap';
 export * from './mappers';
 export { GarmentMaterialRegistryProvider, PbrMapsProvider, useGarmentMaterialRegistry, useMaterialRegistryRevision, usePbrMaps } from './providers';
 export { GarmentRuntime, PrintGizmoLayer } from './runtime';
@@ -49,9 +55,6 @@ export type {
 export { preloadGarmentScene as preloadConfiguratorScene } from './scene';
 export {
   captureConfiguratorPreview,
-  captureConfiguratorPreviewSnapshot,
-  preloadGarmentAppearance,
-  preloadGarmentProduct,
   registerConfiguratorPreviewCapture,
   unregisterConfiguratorPreviewCapture,
 } from './utils';

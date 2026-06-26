@@ -2,7 +2,7 @@
 
 import type { cartItemConfigurationType, garmentBusinessType, modelIdType } from "@types";
 import { getModel } from "@utils";
-import { preloadGarmentProduct } from '@configurator/utils';
+import { preloadGarmentProduct } from '@configurator';
 
 import { useConfigurationControl } from "../useConfigurationControl";
 import { useConfiguratorProduct } from "../useConfiguratorProduct";

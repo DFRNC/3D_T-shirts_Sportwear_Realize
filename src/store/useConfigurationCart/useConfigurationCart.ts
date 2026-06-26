@@ -8,7 +8,7 @@ import type {
   modelIdType,
 } from "@types";
 import { getModel } from "@utils";
-import { preloadGarmentProduct } from '@configurator/utils';
+import { preloadGarmentProduct } from '@configurator';
 
 import { create } from "zustand";
 

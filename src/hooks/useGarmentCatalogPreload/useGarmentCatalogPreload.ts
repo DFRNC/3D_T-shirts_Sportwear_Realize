@@ -2,8 +2,7 @@
 
 import { useCallback, useEffect } from 'react';
 
-import { preloadGarmentScene } from '@configurator/scene';
-import { preloadGarmentAppearance, preloadGarmentProduct } from '@configurator/utils';
+import { preloadGarmentAppearance, preloadGarmentProduct, preloadGarmentScene } from '@configurator';
 import type { modelIdType } from '@types';
 import { hasModel } from '@utils';
 

@@ -183,7 +183,7 @@ src/configurator/
 
 | Layer       | Alias                   | Responsibility                                              |
 | ----------- | ----------------------- | ----------------------------------------------------------- |
-| `bootstrap` | `@configurator`         | Apply route product, preload GLB + appearance textures      |
+| `bootstrap` | `@configurator`         | Apply route product, preload GLB + appearance textures; **app-facing facade** for preload/preview/image cache |
 | `mappers`   | `@configurator/mappers` | Map product JSON → print positions, instances, gradients    |
 | `canvas`    | `@configurator/canvas`  | WebGL canvas, orbit controls, preview capture wiring        |
 | `scene`     | `@configurator/scene`   | Load GLTF, clone meshes, register garment materials         |
@@ -256,7 +256,7 @@ export { ConfiguratorCanvas as Configurator } from '@configurator';
 ### UI conventions
 
 1. **`app/` routes** only import from `@pages` — no business logic in route files.
-2. **Atoms** are presentational: props only; no store, API, or 3D dependencies.
+2. **Atoms** are presentational: props only; no store, API, or 3D dependencies (e.g. `Logo` receives `href` from `Header`).
 3. **Molecules** may read stores and use hooks from `@hooks`.
 4. **Organisms** compose molecules/atoms; the 3D organism does **not** embed scene code.
 5. **Skeletons** match target layouts; visibility via `useShowConfigurationSkeleton`.
@@ -275,7 +275,7 @@ App-level React hooks (navigation, checkout, cart sync, skeletons, logo upload, 
 | Category        | Examples                                                                 |
 | --------------- | ------------------------------------------------------------------------ |
 | Configurator UX | `useConfiguratorProductHydration`, `useConfiguratorInitialSceneLoad`, `useGarmentCatalogPreload`, `resolveProductStepsConfiguration` |
-| Store wrappers  | `useConfigurationCartSync`, `useProductStepsConfiguration`               |
+| Store wrappers  | `useConfigurationCartSync`, `useProductStepsConfiguration` (merges step meta + `@molecules` content) |
 | UI state        | `useSlidingIndicator`, `useShowConfigurationSkeleton`                    |
 | Checkout        | `useCheckoutInit`, `useNavigateToCheckout`                                 |
 
@@ -473,6 +473,7 @@ Defined in `tsconfig.json`:
 | Gizmo math                   | `@configurator/gizmo`                           |
 | GLSL shader patches          | `@configurator/shaders`                         |
 | Product → print state maps   | `@configurator/mappers` (re-exported via `@store`) |
+| Preload / preview / image cache (app + store) | `@configurator` bootstrap facade (`preloadGarment*`, `captureConfiguratorPreviewSnapshot`, `loadCachedImage`) |
 | In-canvas React context      | `@configurator/providers`                       |
 | 3D pipeline constants        | `@configurator/constants`                       |
 | Product catalog (`getModel`) | `@utils` (`garmentCatalog`)                     |
@@ -482,7 +483,9 @@ Defined in `tsconfig.json`:
 
 ESLint `no-restricted-imports` enforces the same rules for `@hooks/*`, `@utils/*`, `@configurator/hooks/*`, and `@configurator/utils/*`.
 
-**Store → configurator:** `@store` may import `@configurator/mappers` and `@configurator/constants` for hydration; it must not import scene/runtime/canvas layers.
+**Store → configurator:** `@store` may import `@configurator/mappers`, `@configurator/constants`, and the **bootstrap facade** from `@configurator` (preload, preview capture, image cache). It must not import `@configurator/utils`, `@configurator/scene`, `runtime`, or `canvas` directly.
+
+**App hooks → configurator:** preload hooks import the same bootstrap facade from `@configurator`, not layer subpaths. Step availability logic lives in `@hooks/resolveProductStepsConfiguration` (meta only); UI step panels merge content from `@molecules`.
 
 Cross-hook imports inside `@configurator/hooks` use relative paths between sibling folders (never `@alias/*` subpaths).
 

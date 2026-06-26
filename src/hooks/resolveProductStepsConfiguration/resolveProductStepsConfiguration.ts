@@ -1,9 +1,10 @@
-import { STEPS_CONFIGURATION } from '@molecules';
-import type { garmentConfigType, headerConfigItemType } from '@types';
+import { CONFIGURATOR_STEP_META } from '@constants';
+import type { configuratorStepMetaItemType } from '@constants';
+import type { garmentConfigType } from '@types';
 
 import { isConfiguratorStepAvailable } from './isConfiguratorStepAvailable';
 
-const resolveProductStepsConfiguration = (product: garmentConfigType): headerConfigItemType[] =>
-  STEPS_CONFIGURATION.filter((step) => isConfiguratorStepAvailable(product, step.value));
+const resolveProductStepsConfiguration = (product: garmentConfigType): configuratorStepMetaItemType[] =>
+  CONFIGURATOR_STEP_META.filter((step) => isConfiguratorStepAvailable(product, step.value));
 
 export { resolveProductStepsConfiguration };

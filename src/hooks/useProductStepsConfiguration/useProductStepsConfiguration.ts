@@ -2,7 +2,10 @@
 
 import { useEffect, useMemo } from 'react';
 
+import { STEPS_CONFIGURATION } from '@molecules';
+import type { configuratorStepValueType } from '@configurator/types';
 import { useConfigurationControl, useConfiguratorProduct } from '@store';
+
 import { resolveProductStepsConfiguration } from '../resolveProductStepsConfiguration';
 
 const useProductStepsConfiguration = () => {
@@ -10,7 +13,11 @@ const useProductStepsConfiguration = () => {
   const activeStep = useConfigurationControl((state) => state.activeStep);
   const setActiveStep = useConfigurationControl((state) => state.setActiveStep);
 
-  const availableSteps = useMemo(() => resolveProductStepsConfiguration(product), [product]);
+  const availableSteps = useMemo(() => {
+    const availableValues = new Set<configuratorStepValueType>(resolveProductStepsConfiguration(product).map((step) => step.value));
+
+    return STEPS_CONFIGURATION.filter((step) => availableValues.has(step.value as configuratorStepValueType));
+  }, [product]);
 
   useEffect(() => {
     if (availableSteps.some((step) => step.step === activeStep)) return;

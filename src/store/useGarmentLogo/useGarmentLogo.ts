@@ -5,7 +5,7 @@ import type { garmentConfigType, garmentLogoSnapshotType, logoInstanceType, logo
 import { create } from 'zustand';
 
 import { LOGO_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@configurator/constants';
-import { loadCachedImage } from '@configurator/utils';
+import { loadCachedImage } from '@configurator';
 
 import { createDefaultLogoInstances, createDynamicUserLogoPosition, createLogoInstance, mapProductLogoPositions } from './mapProductLogos';
 
