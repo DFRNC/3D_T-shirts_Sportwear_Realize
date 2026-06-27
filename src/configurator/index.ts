@@ -1,13 +1,12 @@
 export { ConfiguratorCanvas } from './canvas';
 export { captureConfiguratorPreviewSnapshot, loadCachedImage, preloadGarmentAppearance, preloadGarmentProduct } from './bootstrap';
 export * from './mappers';
-export { GarmentMaterialRegistryProvider, PbrMapsProvider, useGarmentMaterialRegistry, useMaterialRegistryRevision, usePbrMaps } from './providers';
+export { GarmentMaterialRegistryProvider, useGarmentMaterialRegistry, useMaterialRegistryRevision } from './providers';
 export { GarmentRuntime, PrintGizmoLayer } from './runtime';
 export * from './gizmo';
 export {
   ensureGarmentGltfParsed,
   ensureGarmentProductGltfParsed,
-  extractGltfPbrMaps,
   GarmentMeshes,
   GarmentModel,
   GarmentPartMesh,
@@ -16,7 +15,6 @@ export {
   preloadGarmentGltf,
   preloadGarmentScene,
   PreserveGltfMesh,
-  resolveGltfPbrMaps,
   resolvePreserveMeshes,
   StaticGltfMesh,
   enrichGltfScene,
@@ -43,7 +41,6 @@ export type {
   nameStyleUniformsType,
   patternColorPairType,
   patternMaskPairType,
-  pbrMapsType,
   preserveGltfMeshPropsType,
   printGizmoInstancePropsType,
   PrintPlacementInstance,

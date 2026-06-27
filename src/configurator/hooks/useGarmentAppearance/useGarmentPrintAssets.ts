@@ -1,50 +1,123 @@
 'use client';
 
-import { type RefObject, useEffect } from 'react';
+import { type RefObject, useCallback, useEffect } from 'react';
 
 import type { Texture } from 'three';
 
 import type { patternMaskPairType } from '@configurator/types';
 import type { designPatternItemType } from '@types';
 import { PATTERN_LAYER_COUNT } from '@configurator/constants';
-import { emptyMaskPair, imageToMaskTexture, imageToTexture, resolveRasterDesignSrc, yieldToMain } from '@configurator/utils';
-import { useConfiguratorSceneLoad } from '@store';
+import {
+  emptyMaskPair,
+  imageToMaskTexture,
+  imageToTexture,
+  readProductAppearanceTextures,
+  resolveRasterDesignSrc,
+  syncProductAppearanceTextures,
+  yieldToMain,
+} from '@configurator/utils';
+import { useConfigurationCart, useConfiguratorSceneLoad, useGarmentDesign } from '@store';
 
-type garmentPatternAssetsRefsType = {
+type garmentPrintAssetsRefsType = {
   logosTextureRef: RefObject<Texture | null>;
   maskTexturesRef: RefObject<patternMaskPairType>;
   masksPatternKeyRef: RefObject<string | null>;
   loadSessionRef: RefObject<number>;
+  initialLoadCompletedRef: RefObject<boolean>;
+  transitionLoadCompletedRef: RefObject<boolean>;
+  shaderUpgradePendingRef: RefObject<boolean>;
+  cancelShaderUpgradeRef: RefObject<(() => void) | null>;
   logosTextureFailedRef: RefObject<boolean>;
   maskTexturesFailedKeyRef: RefObject<string | null>;
+  pendingFrameReapplyRef: RefObject<boolean>;
 };
 
-type useGarmentPatternAssetsOptionsType = {
+type useGarmentPrintAssetsOptionsType = {
   productPath: string | null;
   productPathKey: string;
   defaultPattern: designPatternItemType | null;
   activePattern: designPatternItemType | null;
   activePatternKey: string | null;
   textureAnisotropy: number;
-  refs: garmentPatternAssetsRefsType;
-  syncAppearanceCache: (targetPath: string) => void;
-  isLoadSessionActive: (session: number, targetPath: string) => boolean;
+  activeItemId: string | null;
+  refs: garmentPrintAssetsRefsType;
   reapplyAppearance: () => void;
 };
 
-const useGarmentPatternAssets = ({
+const useGarmentPrintAssets = ({
   productPath,
   productPathKey,
   defaultPattern,
   activePattern,
   activePatternKey,
   textureAnisotropy,
-  refs: { logosTextureRef, maskTexturesRef, masksPatternKeyRef, loadSessionRef, logosTextureFailedRef, maskTexturesFailedKeyRef },
-  syncAppearanceCache,
-  isLoadSessionActive,
+  activeItemId,
+  refs: {
+    logosTextureRef,
+    maskTexturesRef,
+    masksPatternKeyRef,
+    loadSessionRef,
+    initialLoadCompletedRef,
+    transitionLoadCompletedRef,
+    shaderUpgradePendingRef,
+    cancelShaderUpgradeRef,
+    logosTextureFailedRef,
+    maskTexturesFailedKeyRef,
+    pendingFrameReapplyRef,
+  },
   reapplyAppearance,
-}: useGarmentPatternAssetsOptionsType) => {
+}: useGarmentPrintAssetsOptionsType) => {
   const isInitialSceneLoading = useConfiguratorSceneLoad((state) => state.isInitialSceneLoading);
+
+  const syncAppearanceCache = useCallback((targetPath: string) => {
+    syncProductAppearanceTextures(targetPath, {
+      logosTexture: logosTextureRef.current,
+      maskTextures: maskTexturesRef.current,
+      masksPatternKey: masksPatternKeyRef.current,
+    });
+  }, [logosTextureRef, maskTexturesRef, masksPatternKeyRef]);
+
+  const isLoadSessionActive = useCallback(
+    (session: number, targetPath: string) => {
+      return session === loadSessionRef.current && useGarmentDesign.getState().productPath === targetPath && targetPath === productPathKey;
+    },
+    [loadSessionRef, productPathKey],
+  );
+
+  useEffect(() => {
+    const cached = readProductAppearanceTextures(productPathKey);
+    logosTextureRef.current = cached.logosTexture;
+    maskTexturesRef.current = cached.maskTextures;
+    masksPatternKeyRef.current = cached.masksPatternKey;
+    pendingFrameReapplyRef.current = true;
+  }, [activeItemId, logosTextureRef, maskTexturesRef, masksPatternKeyRef, pendingFrameReapplyRef, productPathKey]);
+
+  useEffect(() => {
+    loadSessionRef.current += 1;
+    initialLoadCompletedRef.current = false;
+    transitionLoadCompletedRef.current = false;
+    shaderUpgradePendingRef.current = false;
+    logosTextureFailedRef.current = false;
+    maskTexturesFailedKeyRef.current = null;
+    cancelShaderUpgradeRef.current?.();
+    cancelShaderUpgradeRef.current = null;
+
+    return () => {
+      loadSessionRef.current += 1;
+      shaderUpgradePendingRef.current = false;
+      cancelShaderUpgradeRef.current?.();
+      cancelShaderUpgradeRef.current = null;
+    };
+  }, [
+    cancelShaderUpgradeRef,
+    initialLoadCompletedRef,
+    loadSessionRef,
+    logosTextureFailedRef,
+    maskTexturesFailedKeyRef,
+    productPathKey,
+    shaderUpgradePendingRef,
+    transitionLoadCompletedRef,
+  ]);
 
   useEffect(() => {
     if (productPath !== productPathKey || isInitialSceneLoading) return;
@@ -78,12 +151,12 @@ const useGarmentPatternAssets = ({
     defaultPattern,
     isInitialSceneLoading,
     isLoadSessionActive,
+    logosTextureFailedRef,
+    logosTextureRef,
     productPath,
     productPathKey,
     reapplyAppearance,
     loadSessionRef,
-    logosTextureRef,
-    logosTextureFailedRef,
     syncAppearanceCache,
     textureAnisotropy,
   ]);
@@ -143,17 +216,16 @@ const useGarmentPatternAssets = ({
     activePatternKey,
     isInitialSceneLoading,
     isLoadSessionActive,
+    maskTexturesFailedKeyRef,
+    maskTexturesRef,
+    masksPatternKeyRef,
     productPath,
     productPathKey,
     reapplyAppearance,
     loadSessionRef,
-    maskTexturesRef,
-    maskTexturesFailedKeyRef,
-    masksPatternKeyRef,
     syncAppearanceCache,
     textureAnisotropy,
   ]);
 };
 
-export { useGarmentPatternAssets };
-export type { garmentPatternAssetsRefsType };
+export { useGarmentPrintAssets };

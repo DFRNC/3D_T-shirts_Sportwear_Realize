@@ -3,14 +3,11 @@
 import { memo, useEffect, useLayoutEffect, useMemo } from 'react';
 import type { Mesh, MeshStandardMaterial } from 'three';
 
-import { useGarmentMaterialRegistry, usePbrMaps } from '@configurator/providers';
-import { useConfiguratorProduct } from '@store';
+import { useGarmentMaterialRegistry } from '@configurator/providers';
 import type { garmentPartMeshPropsType } from '@configurator/types';
-import { createGarmentMaterial } from '@configurator/utils';
+import { createGarmentMaterial, disposeGarmentMaterial } from '@configurator/utils';
 
 const GarmentPartMesh = memo(({ registryKey, meshName, node, renderOrder = 0 }: garmentPartMeshPropsType) => {
-  const pbrMaps = usePbrMaps();
-  const pbrUvChannel = useConfiguratorProduct((state) => state.product.pbrUvChannel ?? 1);
   const { register, unregister } = useGarmentMaterialRegistry();
 
   const source = node as Mesh;
@@ -21,9 +18,9 @@ const GarmentPartMesh = memo(({ registryKey, meshName, node, renderOrder = 0 }: 
     const sources = Array.isArray(sourceMaterialList) ? sourceMaterialList : sourceMaterialList ? [sourceMaterialList] : [];
 
     return sources.length > 0
-      ? sources.map((sourceMaterial) => createGarmentMaterial(pbrMaps, sourceMaterial as MeshStandardMaterial, pbrUvChannel))
-      : [createGarmentMaterial(pbrMaps, null, pbrUvChannel)];
-  }, [pbrMaps, pbrUvChannel, sourceMaterialList]);
+      ? sources.map((sourceMaterial) => createGarmentMaterial(sourceMaterial as MeshStandardMaterial))
+      : [createGarmentMaterial(null)];
+  }, [sourceMaterialList]);
   const meshMaterial = materials.length === 1 ? materials[0] : materials;
 
   useLayoutEffect(() => {
@@ -45,9 +42,7 @@ const GarmentPartMesh = memo(({ registryKey, meshName, node, renderOrder = 0 }: 
 
     return () => {
       for (const material of materials) {
-        material.aoMap = null;
-        material.normalMap = null;
-        material.dispose();
+        disposeGarmentMaterial(material);
       }
     };
   }, [isRenderable, materials]);

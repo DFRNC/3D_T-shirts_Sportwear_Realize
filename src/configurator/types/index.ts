@@ -27,7 +27,6 @@ export type {
   patternMaskPairType,
 } from './garmentPrint';
 export type { imageTextureOptionsType } from './imageToTexture';
-export type { pbrMapsType } from './pbrMaps';
 export type { stampPixelSizeType } from './stampPixelSize';
 export type {
   buildLogoGizmoElementsInputType,

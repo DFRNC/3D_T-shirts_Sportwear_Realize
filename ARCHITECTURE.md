@@ -156,11 +156,10 @@ src/configurator/
 │       ├── PrintGizmoLayer.tsx
 │       └── PrintGizmoInstance/
 ├── shaders/              # GLSL patches for MeshStandardMaterial (print, gizmo UI)
-├── providers/            # PbrMaps + garment material registry (in-canvas React context)
-│   ├── pbrMapsProvider/
+├── providers/            # Garment material registry (in-canvas React context)
 │   └── garmentMaterialRegistry/
 ├── hooks/                # R3F-facing React hooks
-│   ├── useGarmentAppearance/
+│   ├── useGarmentAppearance/   # useGarmentColors, useGarmentPrintAssets, useSceneLoadGate
 │   ├── useGarmentLogoTextures/
 │   ├── useGarmentNameTextures/
 │   ├── useGizmoPointerContext/
@@ -208,7 +207,7 @@ src/configurator/
 ConfiguratorCanvas
 └── CanvasControl          ← useCartPreviewCapture, ViewControls
 └── SceneModel
-    └── GarmentModel       ← GLTF + PbrMapsProvider + GltfSceneProvider
+    └── GarmentModel       ← GLTF + GltfSceneProvider (native PBR from mesh materials)
         ├── GarmentMeshes  ← GarmentPartMesh | StaticGltfMesh | PreserveGltfMesh
         └── GarmentRuntime ← useGarmentAppearance, useGarment*Textures
             └── PrintGizmoLayer ← gizmo hit-test / drag (renders null; shader-drawn UI)
@@ -227,7 +226,7 @@ Types that belong to the 3D module — **not** general UI or catalog entities:
 | `PrintPlacementInstance`           | UV placement for name/number/logo/testo   |
 | `*PropsType` (scene components)    | R3F component props (part mesh, gizmo, …) |
 
-Shared domain types (`garmentConfigType`, cart, checkout) remain in `@types/entities` and `@types/garment`. Shader pipeline, gizmo, and in-canvas provider types (`pbrMapsType`, `garmentPrintStateType`, `garmentMaterialRegistryValueType`, `printGizmoElementType`, …) live in `@configurator/types`.
+Shared domain types (`garmentConfigType`, cart, checkout) remain in `@types/entities` and `@types/garment`. Shader pipeline, gizmo, and in-canvas provider types (`garmentPrintStateType`, `garmentMaterialRegistryValueType`, `printGizmoElementType`, …) live in `@configurator/types`.
 
 ---
 
@@ -356,7 +355,7 @@ Imported only from `@configurator/**` and `@store` mappers — never from `@cons
 
 ### `src/configurator/providers/` (`@configurator/providers`)
 
-3D-only providers used inside `<Canvas>` / garment scene: `PbrMapsProvider`, `GarmentMaterialRegistryProvider`.
+3D-only providers used inside `<Canvas>` / garment scene: `GarmentMaterialRegistryProvider`. Garment meshes clone native GLTF `MeshStandardMaterial` (PBR maps stay on the source material); the configurator only resets base color for print compositing and upgrades shaders via `createGarmentMaterial`.
 
 ### `src/data/` (`@data`)
 

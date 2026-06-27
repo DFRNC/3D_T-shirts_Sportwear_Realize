@@ -3,7 +3,6 @@
 import { Suspense, useState } from 'react';
 
 import { Canvas } from '@react-three/fiber';
-import { Environment } from '@react-three/drei';
 import * as THREE from 'three';
 
 import { suppressThreeClockDeprecation } from '@configurator/utils';
@@ -24,16 +23,19 @@ const ConfiguratorCanvas = () => {
       style={{ width: '100%', height: '100%' }}
       frameloop="demand"
       gl={{
+        alpha: true,
         antialias: true,
         logarithmicDepthBuffer: true,
         powerPreference: 'high-performance',
         preserveDrawingBuffer: true,
         stencil: true,
         toneMapping: THREE.ACESFilmicToneMapping,
-        toneMappingExposure: 1.12,
+        toneMappingExposure: 0.72,
       }}
-      dpr={[1, 1.5]}
-      onCreated={({ gl }) => {
+      dpr={[1, 2]}
+      onCreated={({ gl, scene }) => {
+        scene.background = null;
+        gl.setClearColor(0x000000, 0);
         const canvas = gl.domElement;
 
         canvas.addEventListener('webglcontextlost', (event) => {
@@ -47,7 +49,6 @@ const ConfiguratorCanvas = () => {
       }}
     >
       <CanvasControl />
-      <Environment preset="sunset" environmentIntensity={0.2} />
       <Suspense fallback={null}>
         <SceneModel />
       </Suspense>

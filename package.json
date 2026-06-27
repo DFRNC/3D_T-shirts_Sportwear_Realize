@@ -18,7 +18,9 @@
     "optimize:model": "node scripts/optimize-gltf-model.mjs",
     "optimize:models": "node scripts/optimize-gltf-model.mjs --all",
     "optimize:federer": "node scripts/optimize-gltf-model.mjs federer_calcio",
-    "optimize:calcio": "node scripts/optimize-gltf-model.mjs federer_calcio baggio_calcio bernardi_calcio cruijff_calcio"
+    "optimize:calcio": "node scripts/optimize-gltf-model.mjs federer_calcio baggio_calcio bernardi_calcio cruijff_calcio",
+    "test:visual": "playwright test",
+    "test:visual:ui": "playwright test --ui"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
@@ -27,6 +29,7 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
+    "@react-three/postprocessing": "^3.0.4",
     "@types/three": "^0.184.1",
     "@uiw/react-color": "^2.10.3",
     "class-variance-authority": "^0.7.1",
@@ -37,6 +40,7 @@
     "next": "16.2.9",
     "overlayscrollbars": "^2.16.0",
     "pdfjs-dist": "^5.7.284",
+    "postprocessing": "^6.39.1",
     "radix-ui": "^1.4.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -55,6 +59,7 @@
     "@gltf-transform/core": "^4.4.0",
     "@gltf-transform/extensions": "^4.4.0",
     "@gltf-transform/functions": "^4.4.0",
+    "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

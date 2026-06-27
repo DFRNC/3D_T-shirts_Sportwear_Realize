@@ -1,30 +1,6 @@
-const garmentVertexUvPars = /* glsl */ `
-#include <uv_pars_vertex>
-varying vec2 vRawUv1;
-varying vec2 vPrintUv;
-varying vec2 vPbrUv;
-`;
-
-const garmentVertexUv = /* glsl */ `
-#include <uv_vertex>
-vPrintUv = uv;
-#ifdef USE_UV1
-  vRawUv1 = uv1;
-#else
-  vRawUv1 = uv;
-#endif
-#ifdef USE_PBR_UV0
-  vPbrUv = uv;
-#else
-  vPbrUv = vRawUv1;
-#endif
-`;
-
 const garmentFragmentUvPars = /* glsl */ `
 #include <uv_pars_fragment>
-varying vec2 vRawUv1;
 varying vec2 vPrintUv;
-varying vec2 vPbrUv;
 #ifdef USE_GRADIENT
 uniform vec4 uPartUvBounds;
 uniform float uGradientEnabled;
@@ -136,6 +112,7 @@ uniform float uPatternOpacity;
 
 vec4 garmentGizmoUiColor;
 vec4 garmentPrintColor;
+float garmentPbrShade;
 
 vec4 garmentCompositeUiLayer( vec4 base, vec4 layer ) {
   base.rgb = layer.rgb * layer.a + base.rgb * ( 1.0 - layer.a );
@@ -362,38 +339,10 @@ vec4 garmentGizmoButtons( vec2 worldUv, vec2 anchor, float scale, vec2 halfPx, f
 #endif
 `;
 
-const garmentNormalFragment = /* glsl */ `
-#ifdef USE_NORMALMAP_TANGENTSPACE
-  vec3 mapN = texture2D( normalMap, vPbrUv ).xyz * 2.0 - 1.0;
-  mapN.xy *= normalScale;
-  normal = normalize( tbn * mapN );
-
-  #ifdef FLIP_SIDED
-    normal = -normal;
-  #endif
-  #ifdef DOUBLE_SIDED
-    normal = normal * faceDirection;
-  #endif
-#endif
-`;
-
 const garmentGizmoLightsFragment = /* glsl */ `
 #ifdef USE_PRINT
   gl_FragColor.rgb = mix( gl_FragColor.rgb, garmentGizmoUiColor.rgb, garmentGizmoUiColor.a );
 #endif
 `;
 
-const garmentRoughnessFragment = /* glsl */ `
-float roughnessFactor = roughness;
-#ifdef USE_ROUGHNESSMAP
-  float fabricR = texture2D( roughnessMap, vRoughnessMapUv ).r;
-  fabricR = pow( fabricR, 0.55 );
-  roughnessFactor *= mix( 0.14, 0.82, fabricR );
-#endif
-#ifdef USE_AOMAP
-  float bakeRough = texture2D( aoMap, vPbrUv ).g;
-  roughnessFactor *= mix( 0.62, 1.0, bakeRough );
-#endif
-`;
-
-export { garmentFragmentUvPars, garmentGizmoLightsFragment, garmentNormalFragment, garmentRoughnessFragment, garmentVertexUv, garmentVertexUvPars };
+export { garmentFragmentUvPars, garmentGizmoLightsFragment };

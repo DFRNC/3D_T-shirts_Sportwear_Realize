@@ -9,7 +9,7 @@ export {
 export { composeLogoStampAtlas } from './composeLogoAtlas/composeLogoStampAtlas';
 export { composeNameMaskAtlas, resolveNameStampSize } from './composeNameAtlas/composeNameMaskAtlas';
 export { measureNameGizmoHalf, measureNameStampPixelSize, unionStampPixelSize } from './drawNameOnAtlas/measureNameStampBounds';
-export { GARMENT_SHADER_VERSION, createGarmentMaterial, upgradeGarmentMaterialShader } from './createGarmentMaterial';
+export { GARMENT_SHADER_VERSION, createGarmentMaterial, disposeGarmentMaterial, upgradeGarmentMaterialShader } from './createGarmentMaterial';
 export { scheduleGarmentShaderUpgrade } from './scheduleGarmentShaderUpgrade/scheduleGarmentShaderUpgrade';
 export { yieldToMain } from './yieldToMain/yieldToMain';
 export { getProductAppearanceTextures, readProductAppearanceTextures, syncProductAppearanceTextures } from './garmentAppearance/garmentProductAppearanceCache';
@@ -89,7 +89,6 @@ export {
   resolveProductGizmoRotation,
 } from './resolveProductRenderConfig/resolveProductRenderConfig';
 export { resolveModelUrl } from './resolveModelUrl';
-export { hasPrintableGarmentParts } from './productPbr';
 export { suppressThreeClockDeprecation } from './suppressThreeClockDeprecation';
 export { preloadGarmentAppearance } from './preloadGarmentAppearance';
 export { preloadGarmentProduct, preloadGarmentProductAssets } from './preloadGarmentProduct';

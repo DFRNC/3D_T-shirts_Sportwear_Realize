@@ -4,10 +4,10 @@ import { type RefObject, useCallback, useEffect, useRef } from 'react';
 
 import type { MeshStandardMaterial, Texture } from 'three';
 
-import type { patternMaskPairType, pbrMapsType } from '@configurator/types';
+import type { patternMaskPairType } from '@configurator/types';
 import type { designPatternItemType, garmentConfigType } from '@types';
 import { useConfiguratorSceneLoad } from '@store';
-import { hasPrintableGarmentParts, resolveRasterDesignSrc, scheduleGarmentShaderUpgrade } from '@configurator/utils';
+import { resolveRasterDesignSrc, scheduleGarmentShaderUpgrade } from '@configurator/utils';
 
 type garmentAppearanceSceneLoadRefsType = {
   logosTextureRef: RefObject<Texture | null>;
@@ -22,19 +22,17 @@ type garmentAppearanceSceneLoadRefsType = {
   maskTexturesFailedKeyRef: RefObject<string | null>;
 };
 
-type useGarmentAppearanceSceneLoadOptionsType = {
+type useSceneLoadGateOptionsType = {
   product: garmentConfigType;
   partIds: readonly string[];
   productPath: string | null;
   productPathKey: string;
   activePatternKey: string | null;
   defaultPattern: designPatternItemType | null;
-  pbrMaps: pbrMapsType | null;
   hasMaterialsForParts: (partIds: readonly string[]) => boolean;
   getMaterials: (partId: string) => readonly MeshStandardMaterial[];
   bumpRevision: () => void;
   invalidate: () => void;
-  isInitialSceneLoading: boolean;
   isSceneTransitionLoading: boolean;
   markInitialSceneLoaded: () => void;
   markSceneTransitionLoaded: () => void;
@@ -43,19 +41,17 @@ type useGarmentAppearanceSceneLoadOptionsType = {
   reapplyAppearanceCore: () => void;
 };
 
-const useGarmentAppearanceSceneLoad = ({
+const useSceneLoadGate = ({
   product,
   partIds,
   productPath,
   productPathKey,
   activePatternKey,
   defaultPattern,
-  pbrMaps,
   hasMaterialsForParts,
   getMaterials,
   bumpRevision,
   invalidate,
-  isInitialSceneLoading,
   isSceneTransitionLoading,
   markInitialSceneLoaded,
   markSceneTransitionLoaded,
@@ -72,15 +68,12 @@ const useGarmentAppearanceSceneLoad = ({
     maskTexturesFailedKeyRef,
   },
   reapplyAppearanceCore,
-}: useGarmentAppearanceSceneLoadOptionsType) => {
-  const hasPrintableParts = hasPrintableGarmentParts(product);
-
+}: useSceneLoadGateOptionsType) => {
   const isCoreSceneReady = useCallback(() => {
     if (!hasMaterialsForParts(partIds)) return false;
-    if (hasPrintableParts && !pbrMaps) return false;
     if (productPath !== productPathKey) return false;
     return true;
-  }, [hasMaterialsForParts, hasPrintableParts, partIds, pbrMaps, productPath, productPathKey]);
+  }, [hasMaterialsForParts, partIds, productPath, productPathKey]);
 
   const isTransitionAppearanceReady = useCallback(() => {
     if (!isCoreSceneReady()) return false;
@@ -179,15 +172,14 @@ const useGarmentAppearanceSceneLoad = ({
       pendingInitialPaintRef.current = true;
     }
 
-    if (initialLoadCompletedRef.current) return;
-
-    if (!isTransitionAppearanceReady()) return;
-
     if (isSceneTransitionLoading && !transitionLoadCompletedRef.current) {
+      if (!isTransitionAppearanceReady()) return;
+
       transitionLoadCompletedRef.current = true;
       if (!runShaderUpgrade(markSceneTransitionLoaded)) {
         finishSceneLoad(markSceneTransitionLoaded);
       }
+      return;
     }
   }, [
     finishSceneLoad,
@@ -212,9 +204,12 @@ const useGarmentAppearanceSceneLoad = ({
   useEffect(() => {
     transitionLoadCompletedRef.current = false;
     shaderUpgradePendingRef.current = false;
-  }, [activePatternKey, shaderUpgradePendingRef, transitionLoadCompletedRef]);
+    cancelShaderUpgradeRef.current?.();
+    cancelShaderUpgradeRef.current = null;
+  }, [activePatternKey, cancelShaderUpgradeRef, shaderUpgradePendingRef, transitionLoadCompletedRef]);
 
   return { completeSceneLoadersIfReady, completeInitialLoadAfterPaint };
 };
 
-export { useGarmentAppearanceSceneLoad };
+export { useSceneLoadGate };
+export type { garmentAppearanceSceneLoadRefsType };

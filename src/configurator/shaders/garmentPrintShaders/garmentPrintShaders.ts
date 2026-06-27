@@ -38,11 +38,21 @@ ${garmentNumberMapFragment}
 #endif
 `;
 
+const garmentPbrShadeCaptureFragment = /* glsl */ `
+#ifdef USE_PRINT
+  float litLuma = max( max( gl_FragColor.r, gl_FragColor.g ), gl_FragColor.b );
+  float albedoLuma = max( max( diffuseColor.r, diffuseColor.g ), diffuseColor.b );
+  garmentPbrShade = clamp( litLuma / max( albedoLuma, 0.001 ), 0.42, 1.0 );
+#endif
+`;
+
 const garmentPrintLightsFragment = /* glsl */ `
 #ifdef USE_PRINT
-  gl_FragColor.rgb = garmentPrintColor.rgb * garmentPrintColor.a + gl_FragColor.rgb * ( 1.0 - garmentPrintColor.a );
+  vec3 flatBase = diffuseColor.rgb;
+  vec3 flatComposite = garmentPrintColor.rgb * garmentPrintColor.a + flatBase * ( 1.0 - garmentPrintColor.a );
+  gl_FragColor.rgb = flatComposite * garmentPbrShade;
   gl_FragColor.a = garmentPrintColor.a + gl_FragColor.a * ( 1.0 - garmentPrintColor.a );
 #endif
 `;
 
-export { garmentPrintLightsFragment, garmentPrintMapFragment };
+export { garmentPbrShadeCaptureFragment, garmentPrintLightsFragment, garmentPrintMapFragment };

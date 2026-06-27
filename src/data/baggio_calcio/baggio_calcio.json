@@ -7,7 +7,6 @@
     "height": 2133
   },
   "preserveGltfMeshes": ["model_inside", "model_label", "model_sweatband"],
-  "pbrUvChannel": 0,
   "parts": [
     {
       "name": "Davanti",
