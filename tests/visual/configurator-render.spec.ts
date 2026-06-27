@@ -38,8 +38,11 @@ for (const route of CONFIGURATOR_ROUTES) {
       fullPage: false,
     });
 
-    await page.locator('canvas').first().screenshot({
-      path: path.join(OUTPUT_DIR, `${route.label}-canvas.png`),
-    });
+    await page
+      .locator('canvas')
+      .first()
+      .screenshot({
+        path: path.join(OUTPUT_DIR, `${route.label}-canvas.png`),
+      });
   });
 }

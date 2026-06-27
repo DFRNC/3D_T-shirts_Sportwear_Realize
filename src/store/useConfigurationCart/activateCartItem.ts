@@ -2,7 +2,7 @@
 
 import type { cartItemConfigurationType, garmentBusinessType, modelIdType } from '@types';
 import { getModel } from '@utils';
-import { preloadGarmentProduct } from '@configurator';
+import { warmProductModelFile } from '@configurator';
 
 import { useConfigurationControl } from '../useConfigurationControl';
 import { useConfiguratorProduct } from '../useConfiguratorProduct';
@@ -30,7 +30,7 @@ const activateCartItem = (get: () => ActivateCartItemGetState, itemId: string, o
   const product = getModel(activeItem.modelId);
   if (!product) return;
 
-  preloadGarmentProduct(product);
+  warmProductModelFile(product);
   useConfiguratorProduct.getState().setProduct(activeItem.modelId, activeItem.business);
   useConfigurationControl.getState().setNumberProduct(activeIndex + 1);
 

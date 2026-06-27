@@ -1,2 +1,2 @@
-export { GARMENT_SHADER_VERSION, createGarmentMaterial, upgradeGarmentMaterialShader } from './createGarmentMaterial';
-export { detachGarmentMaterialMaps, disposeGarmentMaterial } from './disposeGarmentMaterial';
+export { GARMENT_SHADER_VERSION, compileGarmentShader, createGarmentMaterial } from './createGarmentMaterial';
+export { disposeGarmentMaterial } from './disposeGarmentMaterial';

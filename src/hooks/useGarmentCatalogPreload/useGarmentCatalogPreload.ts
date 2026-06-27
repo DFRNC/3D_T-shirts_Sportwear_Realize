@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect } from 'react';
 
-import { ensureGarmentProductGltfParsed, preloadGarmentAppearance, preloadGarmentGltf, preloadGarmentProduct, resolveModelUrl } from '@configurator';
+import { waitForProductModelReady, warmProductAssets } from '@configurator';
 import type { modelIdType } from '@types';
 import { getCatalogProductEntryBySlug, getModel, hasModel } from '@utils';
 
@@ -17,9 +17,7 @@ const warmGarmentCatalogAssets = (modelId: modelIdType) => {
   const product = getModel(modelId);
   if (!product) return;
 
-  preloadGarmentProduct(product);
-  preloadGarmentAppearance(product);
-  preloadGarmentGltf(resolveModelUrl(product));
+  warmProductAssets(product);
 };
 
 const warmGarmentCatalogAssetsEager = async (modelId: modelIdType) => {
@@ -27,7 +25,7 @@ const warmGarmentCatalogAssetsEager = async (modelId: modelIdType) => {
   if (!product) return;
 
   warmGarmentCatalogAssets(modelId);
-  await ensureGarmentProductGltfParsed(product);
+  await waitForProductModelReady(product);
 };
 
 const useGarmentCatalogPreload = () => {

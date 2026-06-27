@@ -2,13 +2,13 @@
 
 import { memo } from 'react';
 
-import { useGarmentAppearance, useGarmentLogoTextures, useGarmentNameTextures } from '@configurator/hooks';
+import { useGarmentLogoTextures, useGarmentNameTextures, useSyncGarmentMaterials } from '@configurator/hooks';
 
 import { PrintGizmoLayer } from '../PrintGizmoLayer';
 
 /** R3F side-effect runtime: appearance, text/logo textures, print gizmo interaction. */
 const GarmentRuntime = memo(() => {
-  useGarmentAppearance();
+  useSyncGarmentMaterials();
   useGarmentNameTextures();
   useGarmentLogoTextures();
 

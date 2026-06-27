@@ -1,6 +1,6 @@
 'use client';
 
-export { useAppNavigate, buildAppPath } from './useAppNavigate';
+export { useAppNavigate } from './useAppNavigate';
 export { isConfiguratorStepAvailable, resolveAvailableConfiguratorStepNumbers, resolveProductStepsConfiguration } from './resolveProductStepsConfiguration';
 export { useGarmentCatalogPreload, useGarmentCatalogPreloadEffect, warmGarmentCatalogAssets, warmGarmentCatalogAssetsEager } from './useGarmentCatalogPreload';
 export { useConfiguratorInitialSceneLoad } from './useConfiguratorInitialSceneLoad';

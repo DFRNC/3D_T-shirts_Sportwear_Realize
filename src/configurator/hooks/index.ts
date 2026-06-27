@@ -1,5 +1,5 @@
 export { useCartPreviewCapture } from './useCartPreviewCapture';
-export { useGarmentAppearance, useGarmentTextures } from './useGarmentAppearance';
+export { useSyncGarmentMaterials } from './useSyncGarmentMaterials';
 export { useGarmentLogoTextures } from './useGarmentLogoTextures';
 export { useGarmentNameTextures } from './useGarmentNameTextures';
 export { useGizmoButtonHover } from './useGizmoButtonHover';

@@ -1,7 +1,7 @@
 import type { garmentConfigType, logoInstanceType, logoPositionConfigType, logoPositionType, uvPointType } from '@types';
 
 import { LOGO_UPLOAD_ROTATION_DEG } from '@configurator/constants';
-import { resolvePartUvBounds } from '@configurator/utils';
+import { resolvePartUvBounds } from '../printLayout';
 
 const resolvePartIdForAtlasUv = (product: garmentConfigType, uv: uvPointType): string => {
   const match = product.parts.find((part) => {

@@ -1,1 +1,1 @@
-export { detachGarmentMaterialMaps, disposeGarmentMaterial } from './disposeGarmentMaterial';
+export { disposeGarmentMaterial } from './disposeGarmentMaterial';

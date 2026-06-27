@@ -2,7 +2,7 @@
 
 import type { cartItemConfigurationType, cartItemType, catalogProductRefType, garmentBusinessType, modelIdType } from '@types';
 import { getModel } from '@utils';
-import { preloadGarmentProduct } from '@configurator';
+import { warmProductModelFile } from '@configurator';
 
 import { create } from 'zustand';
 
@@ -47,7 +47,7 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     const newProduct = getModel(productRef.modelId);
     if (!newProduct) return;
 
-    preloadGarmentProduct(newProduct);
+    warmProductModelFile(newProduct);
 
     persistCartItemSnapshot(get, activeItemId);
 

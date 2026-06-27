@@ -1,6 +1,6 @@
 import type { garmentConfigType, numberInstanceType, numberLimitsType, numberPositionType, textDefaultsConfigType, uvPointType } from '@types';
 
-import { resolvePrintLocalUvToAtlas } from '@configurator/utils';
+import { resolvePrintLocalUvToAtlas } from '../printLayout';
 
 import { resolveGarmentPart } from '../resolveGarmentPart';
 

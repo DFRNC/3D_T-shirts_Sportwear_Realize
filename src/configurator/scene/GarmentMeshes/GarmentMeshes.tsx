@@ -10,9 +10,9 @@ import { useConfiguratorProduct } from '@store';
 import { GarmentPartMesh } from '../GarmentPartMesh';
 import { useGltfScene } from '../GltfSceneProvider';
 import { PreserveGltfMesh } from '../PreserveGltfMesh';
-import { resolvePreserveMeshes } from '../resolvePreserveMeshes';
+import { resolvePreserveMeshes } from '../meshHelpers';
 import { StaticGltfMesh } from '../StaticGltfMesh';
-import { useProgressiveSceneReveal } from '../useProgressiveSceneReveal';
+import { useStaggeredMeshMount } from '../useStaggeredMeshMount';
 
 type garmentMeshEntryType = {
   key: string;
@@ -49,7 +49,7 @@ const GarmentMeshes = () => {
     );
   }, [product.parts, resolveMeshNode]);
 
-  const { revealedCount, isFullyRevealed } = useProgressiveSceneReveal(garmentEntries.length, modelUrl);
+  const { revealedCount, isFullyRevealed } = useStaggeredMeshMount(garmentEntries.length, modelUrl);
 
   return (
     <group>

@@ -17,9 +17,7 @@ const GarmentPartMesh = memo(({ registryKey, meshName, node, renderOrder = 0 }: 
   const materials = useMemo(() => {
     const sources = Array.isArray(sourceMaterialList) ? sourceMaterialList : sourceMaterialList ? [sourceMaterialList] : [];
 
-    return sources.length > 0
-      ? sources.map((sourceMaterial) => createGarmentMaterial(sourceMaterial as MeshStandardMaterial))
-      : [createGarmentMaterial(null)];
+    return sources.length > 0 ? sources.map((sourceMaterial) => createGarmentMaterial(sourceMaterial as MeshStandardMaterial)) : [createGarmentMaterial(null)];
   }, [sourceMaterialList]);
   const meshMaterial = materials.length === 1 ? materials[0] : materials;
 

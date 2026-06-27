@@ -1,6 +1,7 @@
 import type { Object3D } from 'three';
 
-import type { printablePartMeshesType, printGizmoElementType } from '@configurator/types';
+import type { printablePartMeshesType } from '../gizmo/runtime/runtime';
+import type { printGizmoElementType } from '../gizmo/gizmo/gizmo';
 
 interface garmentPartMeshPropsType {
   registryKey: string;

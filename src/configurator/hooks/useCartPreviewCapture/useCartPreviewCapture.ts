@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef } from 'react';
 
 import { useThree } from '@react-three/fiber';
 
-import { captureConfiguratorPreview, registerConfiguratorPreviewCapture, unregisterConfiguratorPreviewCapture } from '@configurator/utils';
+import { captureConfiguratorPreview, registerConfiguratorPreviewCapture, unregisterConfiguratorPreviewCapture } from '../../bootstrap/previewCapture';
 import {
   useConfigurationCart,
   useConfiguratorProduct,

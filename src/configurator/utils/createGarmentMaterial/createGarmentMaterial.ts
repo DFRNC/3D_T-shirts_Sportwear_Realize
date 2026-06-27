@@ -38,10 +38,7 @@ const appendGarmentPrintShaderChunks = (shader: { vertexShader: string; fragment
     .replace('#include <uv_pars_fragment>', `#include <uv_pars_fragment>\n${garmentPrintFragmentPars}`)
     .replace('#include <map_fragment>', `#include <map_fragment>\n${garmentGradientMapFragment}\n${garmentPrintMapFragment}`)
     .replace('#include <opaque_fragment>', `${garmentPbrShadeCaptureFragment}\n#include <opaque_fragment>`)
-    .replace(
-      '#include <tonemapping_fragment>',
-      `${garmentPrintLightsFragment}\n#include <tonemapping_fragment>\n${garmentGizmoLightsFragment}`,
-    );
+    .replace('#include <tonemapping_fragment>', `${garmentPrintLightsFragment}\n#include <tonemapping_fragment>\n${garmentGizmoLightsFragment}`);
 };
 
 const configureGarmentShader = (material: MeshStandardMaterial) => {
@@ -73,7 +70,7 @@ const createGarmentMaterial = (source: MeshStandardMaterial | null | undefined):
   return material;
 };
 
-const upgradeGarmentMaterialShader = (material: MeshStandardMaterial) => {
+const compileGarmentShader = (material: MeshStandardMaterial) => {
   const isCurrentVersion = material.userData.garmentShaderVersion === GARMENT_SHADER_VERSION;
   if (material.userData.garmentShaderMode === 'full' && isCurrentVersion) return;
 
@@ -84,4 +81,4 @@ const upgradeGarmentMaterialShader = (material: MeshStandardMaterial) => {
   material.needsUpdate = true;
 };
 
-export { GARMENT_SHADER_VERSION, createGarmentMaterial, upgradeGarmentMaterialShader };
+export { GARMENT_SHADER_VERSION, compileGarmentShader, createGarmentMaterial };

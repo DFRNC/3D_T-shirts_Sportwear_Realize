@@ -19,4 +19,4 @@ const disposeGarmentMaterial = (material: MeshStandardMaterial) => {
   material.dispose();
 };
 
-export { detachGarmentMaterialMaps, disposeGarmentMaterial };
+export { disposeGarmentMaterial };

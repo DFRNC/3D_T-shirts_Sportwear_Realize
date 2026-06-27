@@ -29,4 +29,4 @@ const syncProductAppearanceTextures = (
 
 const readProductAppearanceTextures = (productPath: string): productAppearanceTexturesType => getProductAppearanceTextures(productPath);
 
-export { getProductAppearanceTextures, readProductAppearanceTextures, syncProductAppearanceTextures };
+export { readProductAppearanceTextures, syncProductAppearanceTextures };

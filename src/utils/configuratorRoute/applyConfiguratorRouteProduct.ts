@@ -1,7 +1,7 @@
 'use client';
 
 import type { configuratorProductHydrationType } from '@configurator/types';
-import { preloadGarmentAppearance, preloadGarmentProduct, preloadGarmentScene } from '@configurator';
+import { warmProductAssets } from '@configurator';
 import { useConfigurationCart, useConfiguratorProduct, useConfiguratorSceneLoad } from '@store';
 import type { modelIdType } from '@types';
 
@@ -27,9 +27,7 @@ const applyConfiguratorRouteProduct = (slug: string, product: configuratorProduc
   const garment = useConfiguratorProduct.getState().product;
 
   queueMicrotask(() => {
-    preloadGarmentProduct(garment);
-    preloadGarmentAppearance(garment);
-    preloadGarmentScene(garment);
+    warmProductAssets(garment);
   });
 };
 

@@ -127,68 +127,48 @@ All real-time 3D logic lives in `src/configurator/`. Import via `@configurator` 
 
 ```
 src/configurator/
-├── index.ts              # Public API (canvas, scene, runtime, gizmo, bootstrap, utils, types)
-├── constants/            # 3D pipeline constants (atlas size, slot counts, gizmo chrome, fonts)
-├── gizmo/                # Hit-test, drag, printable mesh construction, button hover/reveal
-├── mappers/              # Product catalog → runtime print/gradient state (used by @store)
-│   ├── mapProductDesigns/
-│   ├── mapProductNames/
-│   ├── mapProductNumbers/
-│   ├── mapProductLogos/
-│   └── partGradient/
-├── bootstrap/            # App-facing facade: preload GLB/appearance, preview capture, image cache
+├── index.ts              # Public API: ConfiguratorCanvas + bootstrap (warm, wait, preview)
+├── bootstrap/            # App-facing facade: warm, wait, preview capture
+│   ├── configuratorAppFacade.ts
+│   ├── warmProductAssets.ts
+│   ├── warmProductGltfCache.ts
+│   └── previewCapture/   # Cart preview snapshot bridge
 ├── canvas/               # R3F <Canvas>, controls, scene mount
 │   ├── ConfiguratorCanvas/
 │   ├── CanvasControl/
 │   ├── SceneModel/
 │   └── ViewControls/
-├── scene/                # GLTF loading, mesh cloning, PBR extraction
+├── scene/                # GLTF loading, mesh cloning, progressive mount
+│   ├── gltf/             # buildGltfNodeIndex, waitForGltfModelReady
+│   ├── meshHelpers/      # gltfMeshHelpers, resolvePreserveMeshes
 │   ├── GarmentModel/
 │   ├── GarmentMeshes/
-│   ├── GarmentPartMesh/
-│   ├── GltfSceneProvider/
-│   ├── PreserveGltfMesh/
-│   ├── StaticGltfMesh/
-│   └── *.ts              # gltfMeshHelpers, preloadGarmentScene, …
+│   └── useStaggeredMeshMount/
 ├── runtime/              # Side-effect layers inside <Canvas>
-│   ├── GarmentRuntime/   # appearance + texture hooks + PrintGizmoLayer
+│   ├── GarmentRuntime/
 │   └── PrintGizmoLayer/
-│       ├── PrintGizmoLayer.tsx
-│       └── PrintGizmoInstance/
-├── shaders/              # GLSL patches for MeshStandardMaterial (print, gizmo UI)
-├── providers/            # Garment material registry (in-canvas React context)
-│   └── garmentMaterialRegistry/
 ├── hooks/                # R3F-facing React hooks
-│   ├── useGarmentAppearance/   # useGarmentColors, useGarmentPrintAssets, useSceneLoadGate
-│   ├── useGarmentLogoTextures/
-│   ├── useGarmentNameTextures/
-│   ├── useGizmoPointerContext/
-│   ├── useGizmoSelection/
-│   ├── usePrintGizmoDrag/
-│   ├── usePrintPlacementMigration/
-│   └── …
-├── utils/                # Pure 3D/print helpers (no React)
-│   ├── createGarmentMaterial/
-│   ├── garmentPrint/
-│   ├── composeLogoAtlas/
-│   ├── orbitCamera/
-│   ├── configuratorPreviewCapture/
-│   └── …
-└── types/                # Configurator-owned TypeScript types
-    ├── configuratorStep/
-    ├── configuratorProductHydration/
-    ├── garmentGltfSceneType/
-    ├── gizmo/            # Gizmo element, drag, pointer-target types
-    ├── printPlacementInstance/
-    ├── sceneComponentProps/
-    └── index.ts
+│   └── useSyncGarmentMaterials/   # composite: colors, pattern textures, load-ready
+├── mappers/              # Product JSON → runtime state (@store)
+│   └── printLayout/      # UV math (no utils dependency)
+├── gizmo/
+├── shaders/
+├── providers/
+├── constants/
+├── utils/                # Domain barrels: loading, print, material, render
+│   ├── loading/          # gltfModelCache, warm*, loadImage, resolveModelUrl
+│   ├── print/            # garmentPrint, compose*Atlas, drawNameOnAtlas
+│   ├── material/         # createGarmentMaterial, compileGarmentShadersOverFrames
+│   ├── render/           # orbitCamera, garmentGradient, resolveProductRenderConfig
+│   └── index.ts          # re-exports all domain barrels
+└── types/
 ```
 
 ### Layer responsibilities
 
 | Layer       | Alias                     | Responsibility                                                                           |
 | ----------- | ------------------------- | ---------------------------------------------------------------------------------------- |
-| `bootstrap` | `@configurator`           | Preload GLB + appearance textures; **app-facing facade** for preload/preview/image cache |
+| `bootstrap` | `@configurator`           | **Public app API**: warm assets, wait for GLTF, preview capture, image cache |
 | `mappers`   | `@configurator/mappers`   | Map product JSON → print positions, instances, gradients                                 |
 | `canvas`    | `@configurator/canvas`    | WebGL canvas, orbit controls, preview capture wiring                                     |
 | `scene`     | `@configurator/scene`     | Load GLTF, clone meshes, register garment materials                                      |
@@ -209,7 +189,7 @@ ConfiguratorCanvas
 └── SceneModel
     └── GarmentModel       ← GLTF + GltfSceneProvider (native PBR from mesh materials)
         ├── GarmentMeshes  ← GarmentPartMesh | StaticGltfMesh | PreserveGltfMesh
-        └── GarmentRuntime ← useGarmentAppearance, useGarment*Textures
+        └── GarmentRuntime ← useSyncGarmentMaterials, useGarment*Textures
             └── PrintGizmoLayer ← gizmo hit-test / drag (renders null; shader-drawn UI)
                 └── PrintGizmoInstance × N
 ```
@@ -488,7 +468,7 @@ Defined in `tsconfig.json`:
 | Gizmo math                                    | `@configurator/gizmo`                                                                                         |
 | GLSL shader patches                           | `@configurator/shaders`                                                                                       |
 | Product → print state maps                    | `@configurator/mappers` (re-exported via `@store`)                                                            |
-| Preload / preview / image cache (app + store) | `@configurator` bootstrap facade (`preloadGarment*`, `captureConfiguratorPreviewSnapshot`, `loadCachedImage`) |
+| Warm / preview / image cache (app + store) | `@configurator` bootstrap facade (`warmProductAssets`, `warmProductGltfCache`, `captureConfiguratorPreviewSnapshot`, `loadCachedImage`) |
 | Route → store hydration                       | `@utils/configuratorRoute` (`applyConfiguratorRouteProduct`, `resolveRouteModel`)                             |
 | In-canvas React context                       | `@configurator/providers`                                                                                     |
 | 3D pipeline constants                         | `@configurator/constants`                                                                                     |

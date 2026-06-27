@@ -1,6 +1,7 @@
 import type { garmentConfigType, garmentPartConfigType, printAtlasConfigType, uvBoundsType, uvPointType } from '@types';
 
 import { DEFAULT_PART_TEXTURE_SIZE, FULL_UV_BOUNDS, PRINT_ATLAS_HEIGHT, PRINT_ATLAS_WIDTH } from '@configurator/constants';
+import { resolvePartUvBounds, resolvePrintLocalUvToAtlas } from '../../mappers/printLayout';
 
 const DEFAULT_PRINT_ATLAS: printAtlasConfigType = {
   width: PRINT_ATLAS_WIDTH,
@@ -10,8 +11,6 @@ const DEFAULT_PRINT_ATLAS: printAtlasConfigType = {
 const resolvePrintAtlasSize = (product: garmentConfigType): printAtlasConfigType => product.printAtlas ?? DEFAULT_PRINT_ATLAS;
 
 const resolvePartTextureSize = (product: garmentConfigType): number => product.partTextureSize ?? DEFAULT_PART_TEXTURE_SIZE;
-
-const resolvePartUvBounds = (part: garmentPartConfigType): uvBoundsType => part.uvBounds ?? FULL_UV_BOUNDS;
 
 const resolvePartPrintRotation = (part: garmentPartConfigType): number => part.printRotation ?? part.gradient?.rotation ?? 0;
 
@@ -29,16 +28,6 @@ const clampUvToPartBounds = (uv: uvPointType, bounds: uvBoundsType = FULL_UV_BOU
   x: Math.min(bounds.maxX, Math.max(bounds.minX, uv.x)),
   y: Math.min(bounds.maxY, Math.max(bounds.minY, uv.y)),
 });
-
-/** Print placement UV in JSON is 0..1 inside the part; shaders expect atlas coordinates. */
-const resolvePrintLocalUvToAtlas = (part: garmentPartConfigType, localUv: uvPointType): uvPointType => {
-  const bounds = resolvePartUvBounds(part);
-
-  return {
-    x: bounds.minX + localUv.x * (bounds.maxX - bounds.minX),
-    y: bounds.minY + localUv.y * (bounds.maxY - bounds.minY),
-  };
-};
 
 const repairPrintInstancePlacement = <T extends { partId: string; uv: uvPointType }>(instance: T, parts: garmentPartConfigType[]): T => {
   const assignedPart = parts.find((part) => part.id === instance.partId);

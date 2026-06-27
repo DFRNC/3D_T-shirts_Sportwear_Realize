@@ -1,7 +1,11 @@
 export {
   captureConfiguratorPreviewSnapshot,
+  isGltfModelReady,
   loadCachedImage,
-  preloadGarmentAppearance,
-  preloadGarmentProduct,
-  preloadGarmentScene,
+  waitForGltfModelReady,
+  waitForProductModelReady,
+  warmDefaultDesignTextures,
+  warmProductAssets,
+  warmProductGltfCache,
+  warmProductModelFile,
 } from './configuratorAppFacade';

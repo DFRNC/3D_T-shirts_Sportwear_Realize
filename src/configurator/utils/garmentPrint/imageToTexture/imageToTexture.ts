@@ -1,7 +1,7 @@
 import { ClampToEdgeWrapping, LinearFilter, LinearMipmapLinearFilter, NoColorSpace, SRGBColorSpace, Texture } from 'three';
 
 import type { imageTextureOptionsType } from '@configurator/types';
-import { loadCachedImage } from '../../loadCachedImage/loadCachedImage';
+import { loadCachedImage } from '../../loading/loadCachedImage';
 
 const textureCache = new Map<string, Texture>();
 const maskTextureCache = new Map<string, Texture>();
@@ -57,16 +57,4 @@ const imageToMaskTexture = async (src: string, options?: imageTextureOptionsType
   return texture;
 };
 
-const clearImageTextureCache = () => {
-  for (const texture of textureCache.values()) {
-    texture.dispose();
-  }
-  textureCache.clear();
-
-  for (const texture of maskTextureCache.values()) {
-    texture.dispose();
-  }
-  maskTextureCache.clear();
-};
-
-export { clearImageTextureCache, configureImageTextureSampling, configureMaskTextureSampling, imageToMaskTexture, imageToTexture };
+export { configureImageTextureSampling, configureMaskTextureSampling, imageToMaskTexture, imageToTexture };

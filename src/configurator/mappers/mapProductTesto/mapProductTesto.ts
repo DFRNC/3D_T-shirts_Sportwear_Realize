@@ -1,6 +1,6 @@
 import type { garmentConfigType, testoInstanceType, testoLimitsType, testoPositionType, textDefaultsConfigType } from '@types';
 
-import { resolvePrintLocalUvToAtlas } from '@configurator/utils';
+import { resolvePrintLocalUvToAtlas } from '../printLayout';
 
 import { resolveGarmentPart } from '../resolveGarmentPart';
 
