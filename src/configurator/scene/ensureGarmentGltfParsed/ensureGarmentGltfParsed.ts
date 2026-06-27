@@ -1,5 +1,6 @@
 import { useGLTF } from '@react-three/drei';
-import { GLTFLoader, type GLTF } from 'three-stdlib';
+import type { GLTF } from 'three-stdlib';
+import { GLTFLoader } from 'three-stdlib';
 import { peek } from 'suspend-react';
 
 import type { garmentConfigType } from '@types';

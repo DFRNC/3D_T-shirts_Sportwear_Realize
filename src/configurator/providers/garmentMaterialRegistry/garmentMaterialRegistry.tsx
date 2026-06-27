@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useMemo, useRef, useSyncExternalStore } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore } from 'react';
 
 import type { garmentMaterialRegistryValueType } from '@configurator/types';
 import type { MeshStandardMaterial } from 'three';
@@ -11,20 +11,30 @@ const GarmentMaterialRegistryProvider = ({ children }: { children: React.ReactNo
   const materialsRef = useRef<Map<string, Set<MeshStandardMaterial>>>(new Map());
   const revisionRef = useRef(0);
   const listenersRef = useRef(new Set<() => void>());
+  const notifyFrameRef = useRef<number | null>(null);
 
   const notifyMaterials = useCallback(() => {
     revisionRef.current += 1;
     listenersRef.current.forEach((listener) => listener());
   }, []);
 
+  const scheduleNotifyMaterials = useCallback(() => {
+    if (notifyFrameRef.current != null) return;
+
+    notifyFrameRef.current = requestAnimationFrame(() => {
+      notifyFrameRef.current = null;
+      notifyMaterials();
+    });
+  }, [notifyMaterials]);
+
   const register = useCallback(
     (key: string, material: MeshStandardMaterial) => {
       const bucket = materialsRef.current.get(key) ?? new Set<MeshStandardMaterial>();
       bucket.add(material);
       materialsRef.current.set(key, bucket);
-      notifyMaterials();
+      scheduleNotifyMaterials();
     },
-    [notifyMaterials],
+    [scheduleNotifyMaterials],
   );
 
   const unregister = useCallback(
@@ -34,9 +44,9 @@ const GarmentMaterialRegistryProvider = ({ children }: { children: React.ReactNo
 
       bucket.delete(material);
       if (bucket.size === 0) materialsRef.current.delete(key);
-      notifyMaterials();
+      scheduleNotifyMaterials();
     },
-    [notifyMaterials],
+    [scheduleNotifyMaterials],
   );
 
   const getMaterials = useCallback((key: string) => {
@@ -59,6 +69,14 @@ const GarmentMaterialRegistryProvider = ({ children }: { children: React.ReactNo
   const bumpRevision = useCallback(() => {
     notifyMaterials();
   }, [notifyMaterials]);
+
+  useEffect(() => {
+    return () => {
+      if (notifyFrameRef.current != null) {
+        cancelAnimationFrame(notifyFrameRef.current);
+      }
+    };
+  }, []);
 
   const value = useMemo(
     () => ({

@@ -1,7 +1,5 @@
 'use client';
 
-import { useGLTF } from '@react-three/drei';
-
 import { useConfiguratorProduct } from '@store';
 import type { garmentConfigType } from '@types';
 

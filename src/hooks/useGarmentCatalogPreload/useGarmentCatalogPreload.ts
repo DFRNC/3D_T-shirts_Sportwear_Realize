@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect } from 'react';
 
-import { ensureGarmentProductGltfParsed, preloadGarmentAppearance, preloadGarmentProduct, preloadGarmentGltf, resolveModelUrl } from '@configurator';
+import { ensureGarmentProductGltfParsed, preloadGarmentAppearance, preloadGarmentGltf, preloadGarmentProduct, resolveModelUrl } from '@configurator';
 import type { modelIdType } from '@types';
 import { getCatalogProductEntryBySlug, getModel, hasModel } from '@utils';
 

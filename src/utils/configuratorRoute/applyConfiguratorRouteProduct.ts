@@ -1,3 +1,5 @@
+'use client';
+
 import type { configuratorProductHydrationType } from '@configurator/types';
 import { preloadGarmentAppearance, preloadGarmentProduct, preloadGarmentScene } from '@configurator';
 import { useConfigurationCart, useConfiguratorProduct, useConfiguratorSceneLoad } from '@store';
@@ -20,12 +22,15 @@ const applyConfiguratorRouteProduct = (slug: string, product: configuratorProduc
 
   useConfiguratorSceneLoad.getState().beginInitialSceneLoad();
   useConfigurationCart.getState().setActiveItemProduct({ slug, modelId, business });
+  useConfiguratorSceneLoad.getState().markRouteHydrated();
 
   const garment = useConfiguratorProduct.getState().product;
-  preloadGarmentProduct(garment);
-  preloadGarmentAppearance(garment);
-  preloadGarmentScene(garment);
-  useConfiguratorSceneLoad.getState().markRouteHydrated();
+
+  queueMicrotask(() => {
+    preloadGarmentProduct(garment);
+    preloadGarmentAppearance(garment);
+    preloadGarmentScene(garment);
+  });
 };
 
 export { applyConfiguratorRouteProduct, resolveRouteModel };

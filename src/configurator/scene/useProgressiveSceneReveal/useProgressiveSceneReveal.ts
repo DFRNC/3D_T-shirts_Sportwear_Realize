@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useFrame } from '@react-three/fiber';
 
@@ -12,22 +12,31 @@ const useProgressiveSceneReveal = (totalCount: number, resetKey: string) => {
   const isSceneTransitionLoading = useConfiguratorSceneLoad((state) => state.isSceneTransitionLoading);
   const shouldRevealProgressively = isInitialSceneLoading || isSceneTransitionLoading;
 
-  const [revealedCount, setRevealedCount] = useState(() => (shouldRevealProgressively ? 0 : totalCount));
+  const session = `${resetKey}:${totalCount}:${shouldRevealProgressively}`;
 
-  useEffect(() => {
-    setRevealedCount(shouldRevealProgressively ? 0 : totalCount);
-  }, [resetKey, shouldRevealProgressively, totalCount]);
+  const [progress, setProgress] = useState(() => ({
+    session: '',
+    revealedCount: shouldRevealProgressively ? 0 : totalCount,
+  }));
+
+  if (progress.session !== session) {
+    setProgress({
+      session,
+      revealedCount: shouldRevealProgressively ? 0 : totalCount,
+    });
+  }
 
   useFrame(() => {
     if (!shouldRevealProgressively) return;
 
-    setRevealedCount((current) => {
-      if (current >= totalCount) return current;
-      return current + 1;
+    setProgress((current) => {
+      if (current.session !== session) return current;
+      if (current.revealedCount >= totalCount) return current;
+      return { ...current, revealedCount: current.revealedCount + 1 };
     });
   });
 
-  const effectiveCount = shouldRevealProgressively ? revealedCount : totalCount;
+  const effectiveCount = shouldRevealProgressively ? progress.revealedCount : totalCount;
 
   return {
     revealedCount: effectiveCount,

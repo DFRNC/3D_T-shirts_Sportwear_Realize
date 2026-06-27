@@ -22,22 +22,17 @@ const scheduleGarmentShaderUpgrade = ({ parts, getMaterials, invalidate, onCompl
   let queueIndex = 0;
   let frameId = 0;
 
-  const finish = () => {
-    if (cancelled) return;
-    invalidate();
-    onComplete();
-  };
-
   const configureNext = () => {
     if (cancelled) return;
 
     if (queueIndex >= materialQueue.length) {
-      finish();
+      onComplete();
       return;
     }
 
     upgradeGarmentMaterialShader(materialQueue[queueIndex]);
     queueIndex += 1;
+    invalidate();
     frameId = requestAnimationFrame(configureNext);
   };
 

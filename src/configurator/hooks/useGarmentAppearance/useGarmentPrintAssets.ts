@@ -16,7 +16,7 @@ import {
   syncProductAppearanceTextures,
   yieldToMain,
 } from '@configurator/utils';
-import { useConfigurationCart, useConfiguratorSceneLoad, useGarmentDesign } from '@store';
+import { useConfiguratorSceneLoad, useGarmentDesign } from '@store';
 
 type garmentPrintAssetsRefsType = {
   logosTextureRef: RefObject<Texture | null>;
