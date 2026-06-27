@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { exit } from 'node:process';
+import { scanModuleStructure } from './lib/scan-module-structure.mjs';
 
 const forbiddenPaths = [
   'src/gizmo',
@@ -161,7 +162,13 @@ for (const filePath of walkSourceFiles('src')) {
   }
 }
 
-const hasViolations = pathViolations.length > 0 || importViolations.length > 0 || constantViolations.length > 0;
+const moduleStructureViolations = scanModuleStructure('src');
+
+const hasViolations =
+  pathViolations.length > 0 ||
+  importViolations.length > 0 ||
+  constantViolations.length > 0 ||
+  moduleStructureViolations.length > 0;
 
 if (hasViolations) {
   console.error('Architecture guard failed.\n');
@@ -170,6 +177,14 @@ if (hasViolations) {
     console.error('Forbidden legacy paths:');
     pathViolations.forEach((path) => console.error(`  - ${path}`));
     console.error('');
+  }
+
+  if (moduleStructureViolations.length > 0) {
+    console.error('Module folder structure violations:');
+    moduleStructureViolations.forEach(({ type, path: filePath }) =>
+      console.error(`  - [${type}] ${filePath.replace(/\\/g, '/')}`),
+    );
+    console.error('  Expected: ModuleName/ModuleName.ts(x) + index.ts (see ARCHITECTURE.md § Module folder pattern).\n');
   }
 
   if (importViolations.length > 0) {

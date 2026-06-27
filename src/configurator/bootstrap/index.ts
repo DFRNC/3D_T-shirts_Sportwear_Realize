@@ -1,9 +1,10 @@
+export { warmProductAssets } from './warmProductAssets';
+export { warmProductGltfCache } from './warmProductGltfCache';
+export { waitForProductModelReady } from '@configurator/scene';
+export { isGltfModelReady, loadCachedImage } from '@configurator/utils';
 export {
+  captureConfiguratorPreview,
   captureConfiguratorPreviewSnapshot,
-  isGltfModelReady,
-  loadCachedImage,
-  waitForProductModelReady,
-  warmProductAssets,
-  warmProductGltfCache,
-} from './configuratorAppFacade';
-export { captureConfiguratorPreview, registerConfiguratorPreviewCapture, unregisterConfiguratorPreviewCapture } from './previewCapture';
+  registerConfiguratorPreviewCapture,
+  unregisterConfiguratorPreviewCapture,
+} from './previewCapture';

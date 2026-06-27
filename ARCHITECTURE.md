@@ -129,9 +129,9 @@ All real-time 3D logic lives in `src/configurator/`. Import via `@configurator` 
 src/configurator/
 ├── index.ts              # Public API: ConfiguratorCanvas + bootstrap (warm, wait, preview)
 ├── bootstrap/            # App-facing facade: warm, wait, preview capture
-│   ├── configuratorAppFacade.ts
-│   ├── warmProductAssets.ts
-│   ├── warmProductGltfCache.ts
+│   ├── index.ts
+│   ├── warmProductAssets/
+│   ├── warmProductGltfCache/
 │   └── previewCapture/   # Cart preview snapshot bridge
 ├── canvas/               # R3F <Canvas>, controls, scene mount
 │   ├── ConfiguratorCanvas/
@@ -282,7 +282,7 @@ Domain-scoped Zustand stores:
 | `useConfiguratorSceneLoad`                                          | 3D scene loading state      |
 | `useCheckout`                                                       | Checkout rows and pricing   |
 
-Each store is a folder: `use*.ts` + thin `map*.ts` re-exports (print/gradient mappers live in `@configurator/mappers`).
+Each store is a folder: `useStoreName/useStoreName.ts` + `index.ts`. Helpers (`map*.ts`, cart/checkout utils) live in **their own subfolders** with `index.ts` — not as loose files next to sibling subfolders. Print/gradient mappers re-export from `@configurator/mappers`.
 
 ### `src/types/` (`@types`)
 
@@ -405,7 +405,8 @@ Routes stay **thin**: import from `@pages` only.
 | `format` / `format:check`            | Prettier                                                                                                 |
 | `validate`                           | format + lint + `typecheck` + `verify:architecture`                                                      |
 | `typecheck`                          | `tsc --noEmit`                                                                                           |
-| `verify:architecture`                | Legacy paths + import boundaries + 3D constants outside configurator (`scripts/verify-architecture.mjs`) |
+| `verify:architecture`                | Legacy paths + import boundaries + module folder structure + 3D constants outside configurator (`scripts/verify-architecture.mjs`) |
+| `scan:module-structure`              | Standalone check for module folder pattern (`scripts/scan-module-structure.mjs`)                                                   |
 | `convert:design-assets`              | SVG design masters → WebP for 3D print atlas (keeps `.svg` originals)                                    |
 | `sync:wasm-assets`                   | Optional — refresh logo-upload WASM in `public/ghostscript/` after dependency upgrades                   |
 | `optimize:model` / `optimize:models` | Dev-only GLTF → GLB compression (UV-safe); not part of CI                                                |
@@ -416,7 +417,9 @@ Node scripts in `scripts/`:
 
 | Script                      | Keep?                                                     | Role                                                                   |
 | --------------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `verify-architecture.mjs`   | Yes                                                       | CI — legacy paths + import boundaries                                  |
+| `verify-architecture.mjs`   | Yes                                                       | CI — legacy paths + import boundaries + module folder structure      |
+| `scan-module-structure.mjs` | Yes (manual / CI via verify)                              | Module folder pattern only                                             |
+| `lib/scan-module-structure.mjs` | Yes                                                   | Shared scanner used by verify + scan scripts                           |
 | `convert-design-assets.mjs` | Yes                                                       | Asset pipeline — rasterize heavy design SVGs to WebP for runtime atlas |
 | `sync-wasm-assets.mjs`      | Optional manual — refresh WASM after npm package upgrades |
 | `optimize-gltf-model.mjs`   | Yes (manual)                                              | Optional dev tool when updating garment GLTF sources                   |
@@ -500,7 +503,59 @@ Do **not** import `@configurator/utils/loading|print|material|render` — use th
 
 **Cross-module imports:** use **`@` path aliases** (layer barrels or wildcard subpaths). Relative `import … from '../…'` / `import … from './…'` is **not allowed** in implementation files. **`index.ts` barrel re-exports** may still use `export { X } from './X'`.
 
-ESLint `no-restricted-imports` blocks `@configurator/utils/*` subpaths. `verify:architecture` blocks relative imports and legacy folder paths.
+ESLint `no-restricted-imports` blocks `@configurator/utils/*` subpaths. `verify:architecture` blocks relative imports, legacy folder paths, and module folder structure violations.
+
+### Module folder pattern
+
+Every exportable unit in `src/` follows Atomic-style folders. **Enforced by `verify:architecture`** (`scripts/lib/scan-module-structure.mjs`).
+
+#### Single module
+
+```
+FeatureName/
+├── FeatureName.ts(x)   # primary implementation (name matches folder)
+└── index.ts            # export * from './FeatureName'  (or named export for components)
+```
+
+#### Section folder (only subfolders + one barrel)
+
+At layer roots (`shopify/`, `hooks/`, `store/`, `canvas/`, …) and grouping folders (`garmentPrint/`, `previewCapture/`):
+
+- **Only** `index.ts` and named subfolder-modules — no loose `.ts`/`.tsx` next to subfolders.
+- `index.ts` re-exports public API from child modules.
+
+#### Module with helpers
+
+When a module has both a primary file and helpers, helpers get **their own subfolders** (same pattern), not loose siblings:
+
+```
+useSyncGarmentMaterials/
+├── useSyncGarmentMaterials.ts
+├── index.ts
+├── buildPatternColors/
+│   ├── buildPatternColors.ts
+│   └── index.ts
+└── syncGarmentMaterialState/
+    ├── syncGarmentMaterialState.ts
+    └── index.ts
+```
+
+Sibling imports stay `./buildPatternColors` (resolves to subfolder `index.ts`).
+
+#### Container-only folder
+
+Folders that contain **only** subfolders (no primary file) must have `index.ts` that re-exports children:
+
+```
+composeLogoAtlas/
+├── index.ts              # export * from './composeLogoPrintAtlas'; …
+├── composeLogoPrintAtlas/
+└── composeLogoStampAtlas/
+```
+
+**Exceptions (no `index.ts` required):** organizational roots `src/ui`, `src/ui/components`, `src/ui/components/atomic` — they group atomic layers, not exportable modules. Config files (`config.ts`) and ambient `.d.ts` are exempt.
+
+Applies to: UI components, stores, hooks, Shopify clients, configurator layers, utils, types submodules.
 
 **Store → configurator:** `@store` may import `@configurator/mappers`, `@configurator/constants`, and the **bootstrap facade** from `@configurator` (preload, preview capture, image cache). It must not import `@configurator/utils`, `@configurator/scene`, `runtime`, or `canvas` directly.
 
@@ -509,18 +564,6 @@ ESLint `no-restricted-imports` blocks `@configurator/utils/*` subpaths. `verify:
 **Reverse boundaries:** `@configurator` must not import `@utils`. `@molecules` may import `@configurator/types` only (no runtime/configurator barrels). Scene component prop types live in `@configurator/types`, not `@types/ui`.
 
 **Sibling modules** within the same alias root (e.g. hooks → hooks, molecules → molecules) use **wildcard subpaths** such as `@configurator/hooks/useGizmoIconAtlas` or `@molecules/ConfigurationTools/ColorControl` — not `../` chains.
-
-### Module folder pattern
-
-Every exportable unit follows Atomic-style folders:
-
-```
-FeatureName/
-├── FeatureName.ts(x)
-└── index.ts          # export { FeatureName } from './FeatureName'
-```
-
-Applies to: UI components, configurator components, hooks, gizmo modules, utils.
 
 ### Deprecation policy
 

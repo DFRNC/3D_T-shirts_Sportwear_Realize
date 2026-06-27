@@ -1,0 +1,1 @@
+export { resolveProductCatalogPreviewSrc } from './resolveProductCatalogPreviewSrc';
