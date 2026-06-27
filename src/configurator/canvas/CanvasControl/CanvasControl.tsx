@@ -8,8 +8,8 @@ const CanvasControl = () => {
 
   return (
     <>
-      <ambientLight intensity={0.16} />
-      <directionalLight position={[2, 4, 3]} intensity={0.45} />
+      <ambientLight intensity={1.5} />
+      <directionalLight position={[2, 4, 3]} intensity={0.1} />
       <directionalLight position={[-2, 1, -1]} intensity={0.1} />
       <ViewControls />
       <Environment preset="studio" environmentIntensity={0.2} background={false} />
