@@ -1,11 +1,5 @@
 'use client';
 
-
-
-
-
-
-
 import type { catalogProductRefType, productCatalogPopoverPropsType, productCollectionIdType } from '@types';
 import { AtomPopover, AtomPopoverContent, AtomPopoverTrigger, Button, Grid, Text } from '@atoms';
 import { PRODUCT_COLLECTIONS } from '@constants';

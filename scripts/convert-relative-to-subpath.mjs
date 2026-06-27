@@ -67,13 +67,7 @@ for (const filePath of walk(SRC)) {
 
   content = content.replace(/^import\s+(type\s+)?(.+?)\s+from\s+['"](\.[^'"]+)['"];?\s*$/gm, (full, typePrefix, specifiers, relPath) => {
     const absTarget = resolve(dirname(filePath), relPath);
-    const tryPaths = [
-      absTarget,
-      `${absTarget}.ts`,
-      `${absTarget}.tsx`,
-      join(absTarget, 'index.ts'),
-      join(absTarget, 'index.tsx'),
-    ];
+    const tryPaths = [absTarget, `${absTarget}.ts`, `${absTarget}.tsx`, join(absTarget, 'index.ts'), join(absTarget, 'index.tsx')];
 
     const resolved = tryPaths.find((candidate) => existsSync(candidate));
     if (!resolved) return full;

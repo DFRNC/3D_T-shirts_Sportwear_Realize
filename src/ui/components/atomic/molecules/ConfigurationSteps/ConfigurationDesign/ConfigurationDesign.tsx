@@ -1,17 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
-
-
-
-
-
 import { ColorControl } from '@molecules/ConfigurationTools/ColorControl';
 import { ColorTabControl } from '@molecules/ConfigurationTools/ColorTabControl';
 import { PatternLayerColorControl } from '@molecules/ConfigurationTools/PatternLayerColorControl';

@@ -1,21 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { GarmentMaterialRegistryProvider } from '@configurator/providers';
 import { buildGltfNodeIndex, GarmentMeshes, GltfSceneProvider } from '@configurator/scene';
 import { GLTF_USE_DRACO, GLTF_USE_MESHOPT, resolveModelUrl } from '@configurator/utils';

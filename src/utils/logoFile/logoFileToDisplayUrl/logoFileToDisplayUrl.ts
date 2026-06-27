@@ -1,13 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
-
 import { convertEpsPsToDisplayUrl } from '@utils/logoFile/converters/ghostscript';
 import { convertWithMagick } from '@utils/logoFile/converters/imagemagick';
 import { nativeFileToDisplayUrl } from '@utils/logoFile/converters/nativeImage';

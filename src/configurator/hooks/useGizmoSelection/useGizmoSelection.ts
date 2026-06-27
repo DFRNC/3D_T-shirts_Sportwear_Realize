@@ -1,13 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
-
 import type { printGizmoElementType } from '@configurator/types';
 import { clearGizmoButtonHover, resolveGizmoPointerTarget } from '@configurator/gizmo';
 import { useGizmoPointerContext } from '@configurator/hooks/useGizmoPointerContext';

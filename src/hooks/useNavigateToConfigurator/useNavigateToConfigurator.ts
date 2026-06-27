@@ -1,7 +1,5 @@
 'use client';
 
-
-
 import { useAppNavigate } from '@hooks/useAppNavigate';
 import { useCallback } from 'react';
 const useNavigateToConfigurator = () => {

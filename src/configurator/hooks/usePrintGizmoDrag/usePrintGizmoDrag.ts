@@ -1,23 +1,17 @@
 'use client';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import type { gizmoButtonHitType, printablePartMeshesType, printDragMoveStateType, printGizmoElementType } from '@configurator/types';
 import type { uvPointType } from '@types';
 import { setGizmoDragging } from '@configurator/canvas';
-import { GIZMO_CORNERS, logGizmoPlacementForConfig, raycastPrintUv, resolveGizmoPointerTarget, resolvePrintDragMove, setGizmoButtonDragActive, toPrintLocalPx } from '@configurator/gizmo';
+import {
+  GIZMO_CORNERS,
+  logGizmoPlacementForConfig,
+  raycastPrintUv,
+  resolveGizmoPointerTarget,
+  resolvePrintDragMove,
+  setGizmoButtonDragActive,
+  toPrintLocalPx,
+} from '@configurator/gizmo';
 import { useGizmoPointerContext } from '@configurator/hooks/useGizmoPointerContext';
 import { useConfiguratorProduct, useGarmentLogo, useGarmentName, useGarmentNumber, useGarmentTesto } from '@store';
 import { useEffect, useRef } from 'react';

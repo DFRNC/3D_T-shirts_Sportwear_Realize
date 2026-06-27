@@ -1,10 +1,5 @@
 'use client';
 
-
-
-
-
-
 import type { configuratorStepValueType } from '@configurator/types';
 import { resolveProductStepsConfiguration } from '@hooks/resolveProductStepsConfiguration';
 import { STEPS_CONFIGURATION } from '@molecules';

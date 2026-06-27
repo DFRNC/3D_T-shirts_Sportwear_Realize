@@ -1,12 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
 import type { namePartFormPropsType, namePositionType } from '@types';
 import { AccordionAtom, Button, Flex, SvgIcon, Text } from '@atoms';
 import { CONFIGURATOR_NAME_POSITION_SELECT_LABEL } from '@constants';

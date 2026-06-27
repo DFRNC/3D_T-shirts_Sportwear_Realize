@@ -1,14 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
-
-
 import { captureGarmentConfiguration, useConfigurationCart } from '@store/useConfigurationCart';
 import { sanitizeNumberText } from '@store/useGarmentNumber';
 import { buildCheckoutRows, createCheckoutRowFromPreset, extractCheckoutRowPreset } from '@store/useCheckout/buildCheckoutRows';

@@ -1,10 +1,5 @@
 'use client';
 
-
-
-
-
-
 import type { filePickContextType } from '@types';
 import { Flex } from '@atoms';
 import { useLogoFileHandler, useStepLogo } from '@hooks';

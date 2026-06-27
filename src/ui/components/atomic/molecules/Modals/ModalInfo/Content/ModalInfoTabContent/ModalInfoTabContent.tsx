@@ -1,8 +1,5 @@
 'use client';
 
-
-
-
 import type { modalInfoTabContentPropsType } from '@types';
 import { AtomTabsContent, Flex, Text } from '@atoms';
 import { ModalInfoSectionParts } from '@molecules/Modals/ModalInfo/Content/ModalInfoTabContent/ModalInfoSectionParts';

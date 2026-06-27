@@ -1,11 +1,5 @@
 'use client';
 
-
-
-
-
-
-
 import { ColorControl } from '@molecules/ConfigurationTools/ColorControl';
 import { RangeControl } from '@molecules/ConfigurationTools/RangeControl';
 import { ToggleControl } from '@molecules/ConfigurationTools/ToggleControl';

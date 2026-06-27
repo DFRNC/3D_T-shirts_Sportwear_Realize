@@ -12,11 +12,7 @@ const printableParts: printablePartMeshesType[] = [
 
 describe('resolvePrintDragMove', () => {
   it('applies drag offset and clamps to part bounds', () => {
-    const result = resolvePrintDragMove(
-      { partId: 'front', uv: { x: 0.2, y: 0.2 } },
-      { offset: { x: 0.5, y: 0.5 }, activePartId: 'front' },
-      printableParts,
-    );
+    const result = resolvePrintDragMove({ partId: 'front', uv: { x: 0.2, y: 0.2 } }, { offset: { x: 0.5, y: 0.5 }, activePartId: 'front' }, printableParts);
 
     expect(result).toEqual({
       uv: { x: 0.4, y: 0.4 },
@@ -36,11 +32,7 @@ describe('resolvePrintDragMove', () => {
       },
     ];
 
-    const result = resolvePrintDragMove(
-      { partId: 'back', uv: { x: 0.7, y: 0.7 } },
-      { offset: { x: 0.2, y: 0.2 }, activePartId: 'front' },
-      parts,
-    );
+    const result = resolvePrintDragMove({ partId: 'back', uv: { x: 0.7, y: 0.7 } }, { offset: { x: 0.2, y: 0.2 }, activePartId: 'front' }, parts);
 
     expect(result?.partId).toBe('back');
     expect(result?.state.activePartId).toBe('back');

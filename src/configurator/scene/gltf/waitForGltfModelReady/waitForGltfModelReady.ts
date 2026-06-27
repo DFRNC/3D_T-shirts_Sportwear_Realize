@@ -3,7 +3,6 @@ import type { GLTF } from 'three-stdlib';
 import type { garmentConfigType } from '@types';
 import { isGltfModelReady, readCachedGarmentGltf, resolveModelUrl, warmGltfModelCache, yieldToMain } from '@configurator/utils';
 
-
 const GLTF_PARSE_TIMEOUT_MS = 60_000;
 
 const waitForGltfModelReady = async (modelUrl: string): Promise<GLTF> => {

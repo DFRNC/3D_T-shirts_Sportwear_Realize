@@ -1,9 +1,5 @@
 'use client';
 
-
-
-
-
 import type { productGalleryBlockPropsType } from '@types';
 import { Grid, Text } from '@atoms';
 import { ProductFlipCard } from '@molecules/ProductFlipCard';

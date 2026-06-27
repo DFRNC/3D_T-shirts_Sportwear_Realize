@@ -1,8 +1,5 @@
 'use client';
 
-
-
-
 import { CartIcon } from '@molecules/UserBar/CartIcon';
 import { UserIcon } from '@molecules/UserBar/UserIcon';
 import { Button, Flex } from '@atoms';

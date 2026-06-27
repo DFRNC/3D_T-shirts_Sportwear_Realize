@@ -1,25 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import type { Object3D } from 'three';
 import { GarmentPartMesh, PreserveGltfMesh, resolvePreserveMeshes, StaticGltfMesh, useGltfScene, useStaggeredMeshMount } from '@configurator/scene';
 import { resolveModelUrl } from '@configurator/utils';

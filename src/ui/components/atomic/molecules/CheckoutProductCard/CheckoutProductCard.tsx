@@ -1,13 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
-
 import type { checkoutProductCardPropsType } from '@types';
 import { AtomImage, Box, Button, Flex, Grid, SvgIcon, Text } from '@atoms';
 import { CHECKOUT_SHIPPING_DAYS_LABEL } from '@constants';

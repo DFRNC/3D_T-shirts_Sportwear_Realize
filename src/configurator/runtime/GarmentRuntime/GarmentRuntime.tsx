@@ -1,11 +1,5 @@
 'use client';
 
-
-
-
-
-
-
 import { useGarmentLogoTextures, useGarmentTextPrintTextures, useSyncGarmentMaterials } from '@configurator/hooks';
 import { PrintGizmoLayer } from '@configurator/runtime';
 import { memo } from 'react';

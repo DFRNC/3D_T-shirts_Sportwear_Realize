@@ -6,8 +6,4 @@ export {
   warmProductAssets,
   warmProductGltfCache,
 } from './configuratorAppFacade';
-export {
-  captureConfiguratorPreview,
-  registerConfiguratorPreviewCapture,
-  unregisterConfiguratorPreviewCapture,
-} from './previewCapture';
+export { captureConfiguratorPreview, registerConfiguratorPreviewCapture, unregisterConfiguratorPreviewCapture } from './previewCapture';

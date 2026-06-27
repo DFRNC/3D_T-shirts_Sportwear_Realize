@@ -1,18 +1,19 @@
 'use client';
 
-
-
-
-
-
-
-
 import type { numberPartFormPropsType, numberPositionType } from '@types';
 import { AccordionAtom, Button, Flex, SvgIcon, Text } from '@atoms';
 import { CONFIGURATOR_NUMBER_POSITION_SELECT_LABEL } from '@constants';
 import { useConfigurationPositionPicker } from '@hooks';
 import { ColorTabControl, ConfigurationPositionSelect, FontSelectRow, PartColorSwitch, RangeControl } from '@molecules/ConfigurationTools';
-import { createNumberInstance, resolveNumberDefaults, resolveNumberLimits, resolveNumberLineHeightShow, sanitizeNumberText, useConfiguratorProduct, useGarmentNumber } from '@store';
+import {
+  createNumberInstance,
+  resolveNumberDefaults,
+  resolveNumberLimits,
+  resolveNumberLineHeightShow,
+  sanitizeNumberText,
+  useConfiguratorProduct,
+  useGarmentNumber,
+} from '@store';
 import { useCallback, useMemo } from 'react';
 const NumberPartForm = ({ instanceId, limits, placeholder, lineHeightShow }: numberPartFormPropsType) => {
   const instance = useGarmentNumber((state) => state.instances.find((item) => item.id === instanceId));

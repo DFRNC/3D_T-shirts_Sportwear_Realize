@@ -1,6 +1,5 @@
 'use client';
 
-
 import { LogoFileError } from '@utils/logoFile/logoFileError';
 let magickInitPromise: Promise<void> | null = null;
 

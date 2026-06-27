@@ -3,7 +3,6 @@ import { LinearFilter, PerspectiveCamera, RGBAFormat, SRGBColorSpace, Vector3, W
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { resolveGarmentCenter } from '@configurator/utils';
 
-
 const THUMBNAIL_WIDTH = 160;
 const THUMBNAIL_HEIGHT = 128;
 const PREVIEW_CAMERA_OFFSET = new Vector3(0, 0.05, 0.78);

@@ -1,8 +1,5 @@
 'use client';
 
-
-
-
 import type { garmentConfigType, garmentTestoSnapshotType, testoInstanceType, testoPositionType, testoPreviewType } from '@types';
 import { mapProductTestoPositions } from '@store/useGarmentTesto/mapProductTesto';
 import { create } from 'zustand';

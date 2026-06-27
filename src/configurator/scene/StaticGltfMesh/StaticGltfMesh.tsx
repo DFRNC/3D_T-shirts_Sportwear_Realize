@@ -1,13 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
-
 import type { staticGltfMeshPropsType } from '@configurator/types';
 import { applyStaticColor, disposeMeshResources, tagGarmentMeshes } from '@configurator/scene';
 import { DEFAULT_COLOR } from '@store';

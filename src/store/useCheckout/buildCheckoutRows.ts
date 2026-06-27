@@ -1,9 +1,5 @@
 'use client';
 
-
-
-
-
 import { sanitizeNumberText } from '@store/useGarmentNumber';
 import { extractUniqueTestoTexts } from '@store/useCheckout/extractUniqueTestoTexts';
 import type { cartItemConfigurationType, checkoutRowPresetType } from '@types';

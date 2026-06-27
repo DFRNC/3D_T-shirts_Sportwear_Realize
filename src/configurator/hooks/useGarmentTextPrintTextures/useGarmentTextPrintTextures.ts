@@ -1,17 +1,26 @@
 'use client';
 
-
-
-
-
-
-
-
-
 import { NAME_SLOT_COUNT } from '@configurator/constants';
 import { useTextPrintMaskPipeline } from '@configurator/hooks/useGarmentTextPrintTextures/useTextPrintMaskPipeline';
-import { applyGarmentNameMasks, applyGarmentNameStyle, applyGarmentNumberMasks, applyGarmentNumberStyle, applyGarmentTestoMasks, applyGarmentTestoStyle, buildNameStyleUniforms, buildNumberStyleUniforms, buildTestoStyleUniforms } from '@configurator/utils';
-import { resolveInstancesForRender, resolveNumberInstancesForRender, resolveTestoInstancesForRender, useGarmentName, useGarmentNumber, useGarmentTesto } from '@store';
+import {
+  applyGarmentNameMasks,
+  applyGarmentNameStyle,
+  applyGarmentNumberMasks,
+  applyGarmentNumberStyle,
+  applyGarmentTestoMasks,
+  applyGarmentTestoStyle,
+  buildNameStyleUniforms,
+  buildNumberStyleUniforms,
+  buildTestoStyleUniforms,
+} from '@configurator/utils';
+import {
+  resolveInstancesForRender,
+  resolveNumberInstancesForRender,
+  resolveTestoInstancesForRender,
+  useGarmentName,
+  useGarmentNumber,
+  useGarmentTesto,
+} from '@store';
 const NAME_STEP = 4;
 const NUMBER_STEP = 5;
 const TESTO_STEP = 6;

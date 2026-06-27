@@ -1,10 +1,5 @@
 'use client';
 
-
-
-
-
-
 import { AtomTabs } from '@atoms';
 import { useProductStepsConfiguration } from '@hooks';
 import { ConfiguratorStepTabsList } from '@molecules/ConfiguratorStepTabs/ConfiguratorStepTabsList';

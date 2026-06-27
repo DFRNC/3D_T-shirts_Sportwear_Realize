@@ -1,10 +1,5 @@
 'use client';
 
-
-
-
-
-
 import type { configuratorProductHydrationType } from '@configurator/types';
 import type { modelIdType } from '@types';
 import { warmProductAssets } from '@configurator';

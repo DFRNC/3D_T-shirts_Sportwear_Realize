@@ -1,9 +1,5 @@
 'use client';
 
-
-
-
-
 import { CheckoutTableEditableCell } from '@molecules/CheckoutTableEditableCell';
 import { CheckoutTablePlaceholder } from '@molecules/CheckoutTablePlaceholder';
 import type { checkoutTestoEditableCellPropsType } from '@types';

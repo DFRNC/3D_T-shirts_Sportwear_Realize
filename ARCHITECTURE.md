@@ -169,20 +169,20 @@ src/configurator/
 
 ### Layer responsibilities
 
-| Layer       | Alias                     | Responsibility                                                                           |
-| ----------- | ------------------------- | ---------------------------------------------------------------------------------------- |
+| Layer       | Alias                     | Responsibility                                                               |
+| ----------- | ------------------------- | ---------------------------------------------------------------------------- |
 | `bootstrap` | `@configurator`           | **Public app API**: warm assets, wait for GLTF, preview capture, image cache |
-| `mappers`   | `@configurator/mappers`   | Map product JSON → print positions, instances, gradients                                 |
-| `canvas`    | `@configurator/canvas`    | WebGL canvas, orbit controls, preview capture wiring                                     |
-| `scene`     | `@configurator/scene`     | Load GLTF, clone meshes, register garment materials                                      |
-| `runtime`   | `@configurator/runtime`   | In-canvas side effects: textures, gizmo selection/drag                                   |
-| `hooks`     | `@configurator/hooks`     | React hooks that bridge `@store` ↔ shader uniforms                                       |
-| `utils`     | `@configurator/utils`     | Atlases, uniform builders, material factory, orbit math                                  |
-| `gizmo`     | `@configurator/gizmo`     | Hit-testing, drag resolution, gizmo element builders                                     |
-| `shaders`   | `@configurator/shaders`   | GLSL fragments/vertex patches for garment print material                                 |
-| `providers` | `@configurator/providers` | Bridge scene materials ↔ hook-driven uniform updates                                     |
-| `constants` | `@configurator/constants` | Atlas dimensions, UV bounds, slot counts, gizmo chrome                                   |
-| `types`     | `@configurator/types`     | Configurator, shader, and gizmo types                                                    |
+| `mappers`   | `@configurator/mappers`   | Map product JSON → print positions, instances, gradients                     |
+| `canvas`    | `@configurator/canvas`    | WebGL canvas, orbit controls, preview capture wiring                         |
+| `scene`     | `@configurator/scene`     | Load GLTF, clone meshes, register garment materials                          |
+| `runtime`   | `@configurator/runtime`   | In-canvas side effects: textures, gizmo selection/drag                       |
+| `hooks`     | `@configurator/hooks`     | React hooks that bridge `@store` ↔ shader uniforms                           |
+| `utils`     | `@configurator/utils`     | Atlases, uniform builders, material factory, orbit math                      |
+| `gizmo`     | `@configurator/gizmo`     | Hit-testing, drag resolution, gizmo element builders                         |
+| `shaders`   | `@configurator/shaders`   | GLSL fragments/vertex patches for garment print material                     |
+| `providers` | `@configurator/providers` | Bridge scene materials ↔ hook-driven uniform updates                         |
+| `constants` | `@configurator/constants` | Atlas dimensions, UV bounds, slot counts, gizmo chrome                       |
+| `types`     | `@configurator/types`     | Configurator, shader, and gizmo types                                        |
 
 ### R3F component tree (simplified)
 
@@ -409,8 +409,8 @@ Routes stay **thin**: import from `@pages` only.
 | `convert:design-assets`              | SVG design masters → WebP for 3D print atlas (keeps `.svg` originals)                                    |
 | `sync:wasm-assets`                   | Optional — refresh logo-upload WASM in `public/ghostscript/` after dependency upgrades                   |
 | `optimize:model` / `optimize:models` | Dev-only GLTF → GLB compression (UV-safe); not part of CI                                                |
-| `test:unit`                          | Vitest — printLayout, render config, gizmo drag                             |
-| `test:visual`                        | Playwright                                                                 |
+| `test:unit`                          | Vitest — printLayout, render config, gizmo drag                                                          |
+| `test:visual`                        | Playwright                                                                                               |
 
 Node scripts in `scripts/`:
 
@@ -460,14 +460,14 @@ Defined in `tsconfig.json`:
 
 **Wildcard subpaths** (sibling modules within the same alias root):
 
-| Pattern | Example |
-| ------- | ------- |
-| `@configurator/hooks/*` | `@configurator/hooks/useGizmoIconAtlas` |
-| `@configurator/scene/*` | `@configurator/scene/meshHelpers` |
-| `@molecules/*` | `@molecules/ConfigurationTools/ColorControl` |
-| `@store/*` | `@store/useGarmentName` |
-| `@utils/*` | `@utils/logoFile/detectFormat` |
-| `@data/*` | `@data/baggio_calcio/baggio_calcio.json` |
+| Pattern                 | Example                                      |
+| ----------------------- | -------------------------------------------- |
+| `@configurator/hooks/*` | `@configurator/hooks/useGizmoIconAtlas`      |
+| `@configurator/scene/*` | `@configurator/scene/meshHelpers`            |
+| `@molecules/*`          | `@molecules/ConfigurationTools/ColorControl` |
+| `@store/*`              | `@store/useGarmentName`                      |
+| `@utils/*`              | `@utils/logoFile/detectFormat`               |
+| `@data/*`               | `@data/baggio_calcio/baggio_calcio.json`     |
 
 Do **not** import `@configurator/utils/loading|print|material|render` — use the **`@configurator/utils`** barrel only.
 
@@ -477,22 +477,22 @@ Do **not** import `@configurator/utils/loading|print|material|render` — use th
 
 ### Import rules (configurator)
 
-| From                                          | Import via                                                                                                    |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| R3F components / runtime                      | `@configurator`, `@configurator/scene`, …                                                                     |
-| 3D hooks                                      | `@configurator/hooks`                                                                                         |
-| Print / material / render utils (inside configurator) | `@configurator/utils`                                      |
-| UV bounds / local→atlas                                 | `@configurator/mappers` (`printLayout`)                    |
-| Configurator types                            | `@configurator/types`                                                                                         |
-| Gizmo math                                    | `@configurator/gizmo`                                                                                         |
-| GLSL shader patches                           | `@configurator/shaders`                                                                                       |
-| Product → print state maps                    | `@configurator/mappers` (re-exported via `@store`)                                                            |
-| Warm / preview (app + store) | `@configurator` bootstrap: `ConfiguratorCanvas`, `warmProductAssets`, `warmProductGltfCache`, `waitForProductModelReady`, `captureConfiguratorPreviewSnapshot`, `isGltfModelReady`, `loadCachedImage` |
-| Route → store hydration                       | `@utils/configuratorRoute` (`applyConfiguratorRouteProduct`, `resolveRouteModel`)                             |
-| In-canvas React context                       | `@configurator/providers`                                                                                     |
-| 3D pipeline constants                         | `@configurator/constants`                                                                                     |
-| Product catalog (`getModel`)                  | `@utils` (`garmentCatalog`)                                                                                   |
-| User configuration                            | `@store`                                                                                                      |
+| From                                                  | Import via                                                                                                                                                                                            |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| R3F components / runtime                              | `@configurator`, `@configurator/scene`, …                                                                                                                                                             |
+| 3D hooks                                              | `@configurator/hooks`                                                                                                                                                                                 |
+| Print / material / render utils (inside configurator) | `@configurator/utils`                                                                                                                                                                                 |
+| UV bounds / local→atlas                               | `@configurator/mappers` (`printLayout`)                                                                                                                                                               |
+| Configurator types                                    | `@configurator/types`                                                                                                                                                                                 |
+| Gizmo math                                            | `@configurator/gizmo`                                                                                                                                                                                 |
+| GLSL shader patches                                   | `@configurator/shaders`                                                                                                                                                                               |
+| Product → print state maps                            | `@configurator/mappers` (re-exported via `@store`)                                                                                                                                                    |
+| Warm / preview (app + store)                          | `@configurator` bootstrap: `ConfiguratorCanvas`, `warmProductAssets`, `warmProductGltfCache`, `waitForProductModelReady`, `captureConfiguratorPreviewSnapshot`, `isGltfModelReady`, `loadCachedImage` |
+| Route → store hydration                               | `@utils/configuratorRoute` (`applyConfiguratorRouteProduct`, `resolveRouteModel`)                                                                                                                     |
+| In-canvas React context                               | `@configurator/providers`                                                                                                                                                                             |
+| 3D pipeline constants                                 | `@configurator/constants`                                                                                                                                                                             |
+| Product catalog (`getModel`)                          | `@utils` (`garmentCatalog`)                                                                                                                                                                           |
+| User configuration                                    | `@store`                                                                                                                                                                                              |
 
 **Inside `@configurator`:** import utils via **`@configurator/utils`** — not relative `../utils/...` paths and not `@configurator/utils/loading|print|…` domain subpaths.
 

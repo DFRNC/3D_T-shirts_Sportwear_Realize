@@ -4,8 +4,6 @@ import { canvasToPngBlobUrl } from '@utils/logoFile/canvasToBlobUrl';
 import { LogoFileError } from '@utils/logoFile/logoFileError';
 import UTIF from 'utif';
 
-
-
 const convertTiffToDisplayUrl = async (buffer: ArrayBuffer): Promise<string> => {
   try {
     const ifds = UTIF.decode(buffer);

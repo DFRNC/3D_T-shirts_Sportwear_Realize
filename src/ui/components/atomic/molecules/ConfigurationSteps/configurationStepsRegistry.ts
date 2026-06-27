@@ -1,15 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
-
-
-
 import { ConfigurationColorize } from '@molecules/ConfigurationSteps/ConfigurationColorize';
 import { ConfigurationDesign } from '@molecules/ConfigurationSteps/ConfigurationDesign';
 import { ConfigurationLogo } from '@molecules/ConfigurationSteps/ConfigurationLogo';

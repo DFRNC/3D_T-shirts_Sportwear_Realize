@@ -1,10 +1,5 @@
 'use client';
 
-
-
-
-
-
 import type { checkoutTableEditableCellPropsType } from '@types';
 import { AtomInput, Button, Flex, SvgIcon } from '@atoms';
 import { CheckoutTablePlaceholder } from '@molecules/CheckoutTablePlaceholder';

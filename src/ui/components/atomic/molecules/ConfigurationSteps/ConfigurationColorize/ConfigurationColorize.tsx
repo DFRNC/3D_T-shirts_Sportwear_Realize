@@ -1,11 +1,5 @@
 'use client';
 
-
-
-
-
-
-
 import { ColorControl } from '@molecules/ConfigurationTools/ColorControl';
 import { PartColorSwitch } from '@molecules/ConfigurationTools/PartColorSwitch';
 import type { partColorControlPropsType } from '@types';

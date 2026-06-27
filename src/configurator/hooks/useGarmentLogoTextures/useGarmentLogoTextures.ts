@@ -1,32 +1,28 @@
 'use client';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import type { Texture } from 'three';
 import { LOGO_SLOT_COUNT } from '@configurator/constants';
 import { buildLogoStampSignature, buildLogoStyleSignature } from '@configurator/hooks/useGarmentLogoTextures/logoTextureSignatures';
 import { useLogoUniformSync } from '@configurator/hooks/useGarmentLogoTextures/useLogoUniformSync';
 import { useGizmoIconAtlas } from '@configurator/hooks/useGizmoIconAtlas';
 import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@configurator/providers';
-import { applyGarmentGizmoIcons, applyGarmentGizmoRotation, applyGarmentLogoGizmoFrame, applyGarmentLogoStamp, applyGarmentLogoStyle, applyGarmentPrintAtlasSize, buildLogoGizmoFrameUniforms, buildLogoStyleUniforms, canvasToMaskTexture, composeLogoStampAtlas, getEmptyPrintTexture, loadCachedImage, repairPrintInstancePlacement, resolvePrintAtlasSize, resolveProductGizmoRotation } from '@configurator/utils';
+import {
+  applyGarmentGizmoIcons,
+  applyGarmentGizmoRotation,
+  applyGarmentLogoGizmoFrame,
+  applyGarmentLogoStamp,
+  applyGarmentLogoStyle,
+  applyGarmentPrintAtlasSize,
+  buildLogoGizmoFrameUniforms,
+  buildLogoStyleUniforms,
+  canvasToMaskTexture,
+  composeLogoStampAtlas,
+  getEmptyPrintTexture,
+  loadCachedImage,
+  repairPrintInstancePlacement,
+  resolvePrintAtlasSize,
+  resolveProductGizmoRotation,
+} from '@configurator/utils';
 import { useThree } from '@react-three/fiber';
 import { resolveLogoInstancesForRender, useConfigurationControl, useConfiguratorProduct, useConfiguratorSceneLoad, useGarmentLogo } from '@store';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';

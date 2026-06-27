@@ -86,8 +86,7 @@ const groupBySource = (entries) => {
   return map;
 };
 
-const formatImport = (isType, symbols, source) =>
-  `import ${isType ? 'type ' : ''}{ ${symbols.join(', ')} } from '${source}';`;
+const formatImport = (isType, symbols, source) => `import ${isType ? 'type ' : ''}{ ${symbols.join(', ')} } from '${source}';`;
 
 let changedFiles = 0;
 

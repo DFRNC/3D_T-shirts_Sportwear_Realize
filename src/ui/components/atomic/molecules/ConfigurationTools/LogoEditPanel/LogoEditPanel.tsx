@@ -1,9 +1,5 @@
 'use client';
 
-
-
-
-
 import type { logoEditPanelPropsType } from '@types';
 import { AtomImage, Button, Flex, Grid, SvgIcon, Text } from '@atoms';
 import { useStepLogo } from '@hooks';

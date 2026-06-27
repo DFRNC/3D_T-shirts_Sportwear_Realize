@@ -1,6 +1,5 @@
 'use client';
 
-
 import { LogoFileError } from '@utils/logoFile/logoFileError';
 interface WorkerResult {
   id: number;

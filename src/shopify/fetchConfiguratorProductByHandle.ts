@@ -1,7 +1,12 @@
 import { shopifyAdminGraphql } from '@shopify/adminClient';
 import { getShopifyApiMode } from '@shopify/config';
 import { shopifyGraphql } from '@shopify/graphqlClient';
-import { mapShopifyProductBusiness, PRODUCT_BUSINESS_FIELDS, resolveProductModelId, type shopifyProductBusinessNodeType } from '@shopify/mapShopifyProductBusiness';
+import {
+  mapShopifyProductBusiness,
+  PRODUCT_BUSINESS_FIELDS,
+  resolveProductModelId,
+  type shopifyProductBusinessNodeType,
+} from '@shopify/mapShopifyProductBusiness';
 import type { configuratorProductHydrationType } from '@configurator/types';
 const ADMIN_PRODUCT_BY_HANDLE_QUERY = `#graphql
   query ConfiguratorProductByHandle($handle: String!) {

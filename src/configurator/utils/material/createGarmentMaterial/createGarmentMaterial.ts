@@ -1,5 +1,12 @@
 import type { garmentPrintStateType } from '@configurator/types';
-import { garmentFragmentUvPars, garmentGizmoLightsFragment, garmentGradientMapFragment, garmentPbrShadeCaptureFragment, garmentPrintLightsFragment, garmentPrintMapFragment } from '@configurator/shaders';
+import {
+  garmentFragmentUvPars,
+  garmentGizmoLightsFragment,
+  garmentGradientMapFragment,
+  garmentPbrShadeCaptureFragment,
+  garmentPrintLightsFragment,
+  garmentPrintMapFragment,
+} from '@configurator/shaders';
 import { applyGarmentPrintBase, bindGarmentPrintShaderUniforms, type GarmentGradientState, getEmptyPrintTexture } from '@configurator/utils';
 import { MeshStandardMaterial, Vector4 } from 'three';
 const GARMENT_SHADER_VERSION = 'garment-print-v91-diffuse-shade-tonemap';

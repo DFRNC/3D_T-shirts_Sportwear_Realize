@@ -1,10 +1,5 @@
 'use client';
 
-
-
-
-
-
 import { ModalInfoListIcon } from '@molecules/Modals/ModalInfo/Content/ModalInfoTabContent/ModalInfoListIcon';
 import { ModalInfoTable } from '@molecules/Modals/ModalInfo/Content/ModalInfoTabContent/ModalInfoTable';
 import type { modalInfoSectionPartsPropsType } from '@types';

@@ -1,23 +1,11 @@
 'use client';
 
-
-
-
-
-
-
-
-
 import { CanvasControl, SceneModel } from '@configurator/canvas';
 import { suppressThreeClockDeprecation } from '@configurator/utils';
 import { Canvas } from '@react-three/fiber';
 import { useConfiguratorSceneLoad } from '@store';
 import { Suspense, useState } from 'react';
 import * as THREE from 'three';
-
-
-
-
 
 suppressThreeClockDeprecation();
 

@@ -1,7 +1,5 @@
 'use client';
 
-
-
 import { buildLoaderWavePath, WAVE_SPEED } from '@molecules/Loaders/MainLoader/buildLoaderWavePath';
 import { useLayoutEffect, useRef } from 'react';
 const supportsOffscreenCanvas = () => typeof OffscreenCanvas !== 'undefined';

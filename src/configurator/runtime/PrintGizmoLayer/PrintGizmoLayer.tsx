@@ -1,25 +1,27 @@
 'use client';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import type { PrintPlacementInstance } from '@configurator/types';
-import { buildLogoGizmoElements, buildNameGizmoElements, buildNumberGizmoElements, buildPrintablePartMeshes, buildTestoGizmoElements } from '@configurator/gizmo';
+import {
+  buildLogoGizmoElements,
+  buildNameGizmoElements,
+  buildNumberGizmoElements,
+  buildPrintablePartMeshes,
+  buildTestoGizmoElements,
+} from '@configurator/gizmo';
 import { useGizmoButtonHover, useGizmoSelection, usePrintPlacementMigration } from '@configurator/hooks';
 import { PrintGizmoInstance } from '@configurator/runtime';
 import { repairPrintInstancePlacement, resolvePrintAtlasSize } from '@configurator/utils';
-import { resolveNameLimits, resolveNumberLimits, resolveTestoLimits, useConfigurationControl, useConfiguratorProduct, useGarmentLogo, useGarmentName, useGarmentNumber, useGarmentTesto } from '@store';
+import {
+  resolveNameLimits,
+  resolveNumberLimits,
+  resolveTestoLimits,
+  useConfigurationControl,
+  useConfiguratorProduct,
+  useGarmentLogo,
+  useGarmentName,
+  useGarmentNumber,
+  useGarmentTesto,
+} from '@store';
 import { memo, useCallback, useEffect, useMemo } from 'react';
 const NAME_STEP = 4;
 const NUMBER_STEP = 5;

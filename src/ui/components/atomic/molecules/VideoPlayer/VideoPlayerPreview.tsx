@@ -1,8 +1,5 @@
 'use client';
 
-
-
-
 import { AtomImage, Flex, LogoYOU, Text } from '@atoms';
 import { MainLoaderBackground } from '@molecules/Loaders/MainLoader/MainLoaderBackground';
 import { FaPlay } from 'react-icons/fa';

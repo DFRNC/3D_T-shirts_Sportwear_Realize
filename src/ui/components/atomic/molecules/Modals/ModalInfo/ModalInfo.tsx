@@ -1,11 +1,5 @@
 'use client';
 
-
-
-
-
-
-
 import { AtomTabsSlidingList } from '@molecules/AtomTabsSlidingList';
 import { ModalInfoTabContent } from '@molecules/Modals/ModalInfo/Content';
 import { MODAL_INFO_TABS } from '@molecules/Modals/ModalInfo/modalInfoTabs';

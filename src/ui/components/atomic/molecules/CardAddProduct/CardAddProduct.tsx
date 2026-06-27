@@ -1,13 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
-
 import { ProductCatalogPopover } from '@molecules/ProductCatalogPopover';
 import { ProductSessionAddButton } from '@molecules/ProductSessionAddButton';
 import { ProductSessionRow } from '@molecules/ProductSessionRow';

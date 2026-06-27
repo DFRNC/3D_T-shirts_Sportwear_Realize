@@ -1,8 +1,5 @@
 'use client';
 
-
-
-
 import type { garmentConfigType, garmentNumberSnapshotType, numberInstanceType, numberPositionType, numberPreviewType } from '@types';
 import { mapProductNumberPositions } from '@store/useGarmentNumber/mapProductNumbers';
 import { create } from 'zustand';

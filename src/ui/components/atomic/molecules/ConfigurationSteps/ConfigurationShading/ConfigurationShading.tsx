@@ -1,11 +1,5 @@
 'use client';
 
-
-
-
-
-
-
 import { PartColorSwitch } from '@molecules/ConfigurationTools/PartColorSwitch';
 import { ShadingControl } from '@molecules/ConfigurationTools/ShadingControl';
 import { AccordionAtom, Flex } from '@atoms';

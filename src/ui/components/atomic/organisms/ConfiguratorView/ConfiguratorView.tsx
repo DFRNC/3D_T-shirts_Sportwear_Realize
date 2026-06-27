@@ -1,9 +1,5 @@
 'use client';
 
-
-
-
-
 import { Configurator } from '@organisms/Configurator';
 import { ConfiguratorCanvasLoader } from '@organisms/ConfiguratorCanvasLoader';
 import { useConfiguratorSceneLoad } from '@store';

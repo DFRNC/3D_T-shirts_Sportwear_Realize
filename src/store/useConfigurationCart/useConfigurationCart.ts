@@ -1,16 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
-
-
-
-
 import { useConfiguratorProduct } from '@store/useConfiguratorProduct';
 import { activateCartItem } from '@store/useConfigurationCart/activateCartItem';
 import { areGarmentPrintStoresSynced } from '@store/useConfigurationCart/areGarmentPrintStoresSynced';

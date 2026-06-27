@@ -1,21 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { useGarmentColors } from '@configurator/hooks/useSyncGarmentMaterials/useGarmentColors';
 import { useGarmentLoadReady } from '@configurator/hooks/useSyncGarmentMaterials/useGarmentLoadReady';
 import { useLoadPatternTextures } from '@configurator/hooks/useSyncGarmentMaterials/useLoadPatternTextures';

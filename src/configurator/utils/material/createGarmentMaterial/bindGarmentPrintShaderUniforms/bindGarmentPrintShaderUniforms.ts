@@ -1,6 +1,14 @@
 import type { garmentPrintStateType } from '@configurator/types';
 import type { Texture, WebGLProgramParametersWithUniforms } from 'three';
-import { LOGO_SLOT_COUNT, NAME_GIZMO_BTN_ACTIVE_COLOR, NAME_GIZMO_BTN_FILL_COLOR, NAME_GIZMO_ICON_COLOR, NAME_SLOT_COUNT, PRINT_ATLAS_HEIGHT, PRINT_ATLAS_WIDTH } from '@configurator/constants';
+import {
+  LOGO_SLOT_COUNT,
+  NAME_GIZMO_BTN_ACTIVE_COLOR,
+  NAME_GIZMO_BTN_FILL_COLOR,
+  NAME_GIZMO_ICON_COLOR,
+  NAME_SLOT_COUNT,
+  PRINT_ATLAS_HEIGHT,
+  PRINT_ATLAS_WIDTH,
+} from '@configurator/constants';
 import { hydrateGarmentLogoUniforms, hydrateGarmentNameUniforms, hydrateGarmentNumberUniforms, hydrateGarmentTestoUniforms } from '@configurator/utils';
 import { Color, MeshStandardMaterial, Vector2, Vector4 } from 'three';
 type GarmentGradientState = {

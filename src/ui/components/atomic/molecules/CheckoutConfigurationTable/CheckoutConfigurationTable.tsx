@@ -1,13 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
-
 import { createCheckoutConfigurationTableColumns } from '@molecules/CheckoutConfigurationTable/checkoutConfigurationTableColumns';
 import { getCheckoutColumnStyle } from '@molecules/CheckoutConfigurationTable/getCheckoutColumnStyle';
 import type { checkoutConfigurationTablePropsType } from '@types';

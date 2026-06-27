@@ -1,10 +1,5 @@
 'use client';
 
-
-
-
-
-
 import { DefaultBrandLogoPlaceholder } from '@molecules/ConfigurationTools/DefaultBrandLogoPlaceholder';
 import { LogoListRow } from '@molecules/ConfigurationTools/LogoListRow';
 import type { logoUploadedFilesSectionPropsType } from '@types';

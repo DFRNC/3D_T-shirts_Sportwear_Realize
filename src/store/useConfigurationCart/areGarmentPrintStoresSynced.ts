@@ -1,10 +1,5 @@
 'use client';
 
-
-
-
-
-
 import { useGarmentDesign } from '@store/useGarmentDesign';
 import { useGarmentLogo } from '@store/useGarmentLogo';
 import { useGarmentName } from '@store/useGarmentName';

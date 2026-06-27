@@ -1,16 +1,15 @@
 'use client';
 
-
-
-
-
-
-
-
-
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { orbitControlsRef, syncOrbitControlsEnabled } from '@configurator/canvas';
-import { applyOrbitZoomAroundPoint, clampOrbitCameraOutsideGarment, clampOrbitTargetToGarment, recenterOrbitTargetByZoom, resolveCursorFocusPoint, resolveGarmentCenter } from '@configurator/utils';
+import {
+  applyOrbitZoomAroundPoint,
+  clampOrbitCameraOutsideGarment,
+  clampOrbitTargetToGarment,
+  recenterOrbitTargetByZoom,
+  resolveCursorFocusPoint,
+  resolveGarmentCenter,
+} from '@configurator/utils';
 import { OrbitControls } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useConfiguratorProduct } from '@store';

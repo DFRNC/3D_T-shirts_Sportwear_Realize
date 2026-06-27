@@ -1,8 +1,5 @@
 'use client';
 
-
-
-
 import type { cartItemConfigurationType, garmentColorSnapshotType, garmentConfigType } from '@types';
 import { PALETTE_COLORS } from '@constants';
 import { createDefaultCartItemConfiguration, createDefaultColorSnapshot } from '@store/useConfigurationCart/cartItemConfiguration';

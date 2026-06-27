@@ -1,8 +1,5 @@
 'use client';
 
-
-
-
 import { resolveAvailableConfiguratorStepNumbers } from '@hooks';
 import { useConfiguratorProduct } from '@store/useConfiguratorProduct';
 import { create } from 'zustand';

@@ -1,21 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import type { useSyncGarmentMaterialsRefs } from '@configurator/hooks/useSyncGarmentMaterials/useSyncGarmentMaterialsRefs';
 import type { garmentPrintStateType } from '@configurator/types';
 import { applyPartColors, applyPatternTints, applyPrintState } from '@configurator/hooks/useSyncGarmentMaterials/syncGarmentMaterialState';

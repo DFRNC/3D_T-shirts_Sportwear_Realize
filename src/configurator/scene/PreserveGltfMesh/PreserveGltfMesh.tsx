@@ -1,11 +1,5 @@
 'use client';
 
-
-
-
-
-
-
 import type { preserveGltfMeshPropsType } from '@configurator/types';
 import { biasInsideShellDepth, disposeMeshResources, tagGarmentMeshes } from '@configurator/scene';
 import { memo, useEffect, useMemo } from 'react';

@@ -1,8 +1,5 @@
 'use client';
 
-
-
-
 import { useAppNavigate } from '@hooks/useAppNavigate';
 import { useCheckout, useConfigurationCart } from '@store';
 import { useCallback } from 'react';

@@ -1,10 +1,5 @@
 'use client';
 
-
-
-
-
-
 import type { patternLayerColorControlPropsType } from '@types';
 import { Flex, Text } from '@atoms';
 import { ColorControl } from '@molecules/ConfigurationTools/ColorControl';

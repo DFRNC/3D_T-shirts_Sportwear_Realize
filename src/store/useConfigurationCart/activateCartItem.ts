@@ -1,12 +1,5 @@
 'use client';
 
-
-
-
-
-
-
-
 import { useConfigurationControl } from '@store/useConfigurationControl';
 import { useConfiguratorProduct } from '@store/useConfiguratorProduct';
 import { applyGarmentConfiguration, captureGarmentConfiguration } from '@store/useConfigurationCart/cartItemConfiguration';
