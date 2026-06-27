@@ -40,9 +40,10 @@ ${garmentNumberMapFragment}
 
 const garmentPbrShadeCaptureFragment = /* glsl */ `
 #ifdef USE_PRINT
-  float litLuma = max( max( gl_FragColor.r, gl_FragColor.g ), gl_FragColor.b );
+  // Diffuse-only shade — excludes specular that blew out flat panels (e.g. shorts back).
+  float diffuseLuma = max( max( totalDiffuse.r, totalDiffuse.g ), totalDiffuse.b );
   float albedoLuma = max( max( diffuseColor.r, diffuseColor.g ), diffuseColor.b );
-  garmentPbrShade = clamp( litLuma / max( albedoLuma, 0.001 ), 0.42, 1.0 );
+  garmentPbrShade = clamp( diffuseLuma / max( albedoLuma, 0.001 ), 0.42, 1.0 );
 #endif
 `;
 

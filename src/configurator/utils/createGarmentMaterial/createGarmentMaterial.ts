@@ -14,7 +14,7 @@ import { getEmptyPrintTexture } from '../garmentPrint/emptyPrintTexture';
 import { applyGarmentPrintBase } from './applyGarmentPrintBase';
 import { bindGarmentPrintShaderUniforms, type GarmentGradientState } from './bindGarmentPrintShaderUniforms';
 
-const GARMENT_SHADER_VERSION = 'garment-print-v90-pbr-shade-overlay';
+const GARMENT_SHADER_VERSION = 'garment-print-v91-diffuse-shade-tonemap';
 
 const garmentPrintFragmentPars = garmentFragmentUvPars.replace('#include <uv_pars_fragment>\n', '');
 
@@ -37,9 +37,10 @@ const appendGarmentPrintShaderChunks = (shader: { vertexShader: string; fragment
   shader.fragmentShader = shader.fragmentShader
     .replace('#include <uv_pars_fragment>', `#include <uv_pars_fragment>\n${garmentPrintFragmentPars}`)
     .replace('#include <map_fragment>', `#include <map_fragment>\n${garmentGradientMapFragment}\n${garmentPrintMapFragment}`)
+    .replace('#include <opaque_fragment>', `${garmentPbrShadeCaptureFragment}\n#include <opaque_fragment>`)
     .replace(
       '#include <tonemapping_fragment>',
-      `${garmentPbrShadeCaptureFragment}\n#include <tonemapping_fragment>\n${garmentPrintLightsFragment}\n${garmentGizmoLightsFragment}`,
+      `${garmentPrintLightsFragment}\n#include <tonemapping_fragment>\n${garmentGizmoLightsFragment}`,
     );
 };
 
