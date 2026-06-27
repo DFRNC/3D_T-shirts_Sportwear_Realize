@@ -1,10 +1,9 @@
 import type { garmentBusinessType, garmentConfigType, modelIdType } from '@types';
 
-import baggioData from '../../data/baggio_calcio/baggio_calcio.json';
-import bernardiData from '../../data/bernardi_calcio/bernardi_calcio.json';
-import cruijffData from '../../data/cruijff_calcio/cruijff_calcio.json';
-import federerData from '../../data/federer_calcio/federer_calcio.json';
-
+import baggioData from '@data/baggio_calcio/baggio_calcio.json';
+import bernardiData from '@data/bernardi_calcio/bernardi_calcio.json';
+import cruijffData from '@data/cruijff_calcio/cruijff_calcio.json';
+import federerData from '@data/federer_calcio/federer_calcio.json';
 /**
  * Geometry-only model catalog, keyed by model id.
  * The model id equals the data folder name and the Shopify product `custom.id` metafield —

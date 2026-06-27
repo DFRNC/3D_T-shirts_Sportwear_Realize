@@ -1,25 +1,21 @@
 'use client';
 
-import type {
-  cartItemConfigurationType,
-  garmentColorSnapshotType,
-  garmentConfigType,
-  logoInstanceType,
-  nameInstanceType,
-  numberInstanceType,
-  partGradientType,
-  testoInstanceType,
-  uvPointType,
-} from '@types';
+
+
+
+
+
+
+
+
+import { buildDefaultGradients, useGarmentColor } from '@store/useGarmentColor';
+import { useGarmentDesign } from '@store/useGarmentDesign';
+import { useGarmentLogo } from '@store/useGarmentLogo';
+import { useGarmentName } from '@store/useGarmentName';
+import { useGarmentNumber } from '@store/useGarmentNumber';
+import { useGarmentTesto } from '@store/useGarmentTesto';
+import type { cartItemConfigurationType, garmentColorSnapshotType, garmentConfigType, logoInstanceType, nameInstanceType, numberInstanceType, partGradientType, testoInstanceType, uvPointType } from '@types';
 import { PALETTE_COLORS } from '@constants';
-
-import { buildDefaultGradients, useGarmentColor } from '../useGarmentColor';
-import { useGarmentDesign } from '../useGarmentDesign';
-import { useGarmentLogo } from '../useGarmentLogo';
-import { useGarmentName } from '../useGarmentName';
-import { useGarmentNumber } from '../useGarmentNumber';
-import { useGarmentTesto } from '../useGarmentTesto';
-
 const DEFAULT_COLOR = PALETTE_COLORS[0];
 const DEFAULT_OPACITY = 1;
 

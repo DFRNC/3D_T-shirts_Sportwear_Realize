@@ -1,3 +1,4 @@
+export { buildLineHeightTextGizmoElements } from './buildLineHeightTextGizmoElements';
 export { buildLogoGizmoElements } from './buildLogoGizmoElements';
 export { buildNameGizmoElements } from './buildNameGizmoElements';
 export { buildTestoGizmoElements } from './buildTestoGizmoElements';

@@ -136,6 +136,7 @@ src/configurator/
 ├── canvas/               # R3F <Canvas>, controls, scene mount
 │   ├── ConfiguratorCanvas/
 │   ├── CanvasControl/
+│   ├── orbitGuard/       # aside hover + gizmo drag orbit lock
 │   ├── SceneModel/
 │   └── ViewControls/
 ├── scene/                # GLTF loading, mesh cloning, progressive mount
@@ -148,7 +149,9 @@ src/configurator/
 │   ├── GarmentRuntime/
 │   └── PrintGizmoLayer/
 ├── hooks/                # R3F-facing React hooks
-│   └── useSyncGarmentMaterials/   # composite: colors, pattern textures, load-ready
+│   ├── useSyncGarmentMaterials/
+│   ├── useGarmentLogoTextures/    # stamp atlas + useLogoUniformSync
+│   └── useGarmentTextPrintTextures/  # name/number/testo (was useGarmentNameTextures)
 ├── mappers/              # Product JSON → runtime state (@store)
 │   └── printLayout/      # UV math (no utils dependency)
 ├── gizmo/
@@ -406,7 +409,8 @@ Routes stay **thin**: import from `@pages` only.
 | `convert:design-assets`              | SVG design masters → WebP for 3D print atlas (keeps `.svg` originals)                                    |
 | `sync:wasm-assets`                   | Optional — refresh logo-upload WASM in `public/ghostscript/` after dependency upgrades                   |
 | `optimize:model` / `optimize:models` | Dev-only GLTF → GLB compression (UV-safe); not part of CI                                                |
-| `test:e2e`                           | Playwright                                                                                               |
+| `test:unit`                          | Vitest — printLayout, render config, gizmo drag                             |
+| `test:visual`                        | Playwright                                                                 |
 
 Node scripts in `scripts/`:
 
@@ -441,6 +445,7 @@ Defined in `tsconfig.json`:
 | `@fonts`                      | `src/fonts`                   |
 | `@shopify`                    | `src/shopify`                 |
 | **`@configurator`**           | `src/configurator`            |
+| **`@configurator/bootstrap`** | `src/configurator/bootstrap`  |
 | **`@configurator/gizmo`**     | `src/configurator/gizmo`      |
 | **`@configurator/shaders`**   | `src/configurator/shaders`    |
 | **`@configurator/mappers`**   | `src/configurator/mappers`    |
@@ -453,6 +458,19 @@ Defined in `tsconfig.json`:
 | **`@configurator/types`**     | `src/configurator/types`      |
 | **`@configurator/constants`** | `src/configurator/constants`  |
 
+**Wildcard subpaths** (sibling modules within the same alias root):
+
+| Pattern | Example |
+| ------- | ------- |
+| `@configurator/hooks/*` | `@configurator/hooks/useGizmoIconAtlas` |
+| `@configurator/scene/*` | `@configurator/scene/meshHelpers` |
+| `@molecules/*` | `@molecules/ConfigurationTools/ColorControl` |
+| `@store/*` | `@store/useGarmentName` |
+| `@utils/*` | `@utils/logoFile/detectFormat` |
+| `@data/*` | `@data/baggio_calcio/baggio_calcio.json` |
+
+Do **not** import `@configurator/utils/loading|print|material|render` — use the **`@configurator/utils`** barrel only.
+
 ---
 
 ## Conventions
@@ -463,21 +481,26 @@ Defined in `tsconfig.json`:
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | R3F components / runtime                      | `@configurator`, `@configurator/scene`, …                                                                     |
 | 3D hooks                                      | `@configurator/hooks`                                                                                         |
-| Print / material utils                        | `@configurator/utils`                                                                                         |
+| Print / material / render utils (inside configurator) | `@configurator/utils`                                      |
+| UV bounds / local→atlas                                 | `@configurator/mappers` (`printLayout`)                    |
 | Configurator types                            | `@configurator/types`                                                                                         |
 | Gizmo math                                    | `@configurator/gizmo`                                                                                         |
 | GLSL shader patches                           | `@configurator/shaders`                                                                                       |
 | Product → print state maps                    | `@configurator/mappers` (re-exported via `@store`)                                                            |
-| Warm / preview / image cache (app + store) | `@configurator` bootstrap facade (`warmProductAssets`, `warmProductGltfCache`, `captureConfiguratorPreviewSnapshot`, `loadCachedImage`) |
+| Warm / preview (app + store) | `@configurator` bootstrap: `ConfiguratorCanvas`, `warmProductAssets`, `warmProductGltfCache`, `waitForProductModelReady`, `captureConfiguratorPreviewSnapshot`, `isGltfModelReady`, `loadCachedImage` |
 | Route → store hydration                       | `@utils/configuratorRoute` (`applyConfiguratorRouteProduct`, `resolveRouteModel`)                             |
 | In-canvas React context                       | `@configurator/providers`                                                                                     |
 | 3D pipeline constants                         | `@configurator/constants`                                                                                     |
 | Product catalog (`getModel`)                  | `@utils` (`garmentCatalog`)                                                                                   |
 | User configuration                            | `@store`                                                                                                      |
 
-**No subpath imports:** tsconfig defines barrel aliases only (e.g. `@molecules`, `@configurator/hooks`) — never `@alias/*` wildcards and never `@alias/FeatureName/...`. UI: `@atoms`, `@molecules`, `@organisms`, …; configurator: `@configurator` or layer barrels. Sibling files inside one module use relative imports.
+**Inside `@configurator`:** import utils via **`@configurator/utils`** — not relative `../utils/...` paths and not `@configurator/utils/loading|print|…` domain subpaths.
 
-ESLint `no-restricted-imports` enforces the same rules for `@hooks/*`, `@utils/*`, `@configurator/hooks/*`, and `@configurator/utils/*`.
+**Outside `@configurator`:** `@store` and app hooks use **`@configurator`** bootstrap facade; `@configurator/mappers` / `@configurator/types` where needed — not layer subpaths.
+
+**Cross-module imports:** use **`@` path aliases** (layer barrels or wildcard subpaths). Relative `import … from '../…'` / `import … from './…'` is **not allowed** in implementation files. **`index.ts` barrel re-exports** may still use `export { X } from './X'`.
+
+ESLint `no-restricted-imports` blocks `@configurator/utils/*` subpaths. `verify:architecture` blocks relative imports and legacy folder paths.
 
 **Store → configurator:** `@store` may import `@configurator/mappers`, `@configurator/constants`, and the **bootstrap facade** from `@configurator` (preload, preview capture, image cache). It must not import `@configurator/utils`, `@configurator/scene`, `runtime`, or `canvas` directly.
 
@@ -485,9 +508,7 @@ ESLint `no-restricted-imports` enforces the same rules for `@hooks/*`, `@utils/*
 
 **Reverse boundaries:** `@configurator` must not import `@utils`. `@molecules` may import `@configurator/types` only (no runtime/configurator barrels). Scene component prop types live in `@configurator/types`, not `@types/ui`.
 
-Cross-hook imports inside `@configurator/hooks` use relative paths between sibling folders (never `@alias/*` subpaths).
-
-Within the same module (`canvas/`, `scene/`, `utils/`, `hooks/`), relative imports between siblings are allowed.
+**Sibling modules** within the same alias root (e.g. hooks → hooks, molecules → molecules) use **wildcard subpaths** such as `@configurator/hooks/useGizmoIconAtlas` or `@molecules/ConfigurationTools/ColorControl` — not `../` chains.
 
 ### Module folder pattern
 

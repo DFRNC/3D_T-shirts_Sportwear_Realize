@@ -1,9 +1,5 @@
 import type { garmentConfigType, nameInstanceType, nameLimitsType, namePositionType, textDefaultsConfigType } from '@types';
-
-import { resolvePrintLocalUvToAtlas } from '../printLayout';
-
-import { resolveGarmentPart } from '../resolveGarmentPart';
-
+import { resolveGarmentPart, resolvePrintLocalUvToAtlas } from '@configurator/mappers';
 const resolveNameDefaults = (product: garmentConfigType): textDefaultsConfigType => {
   if (!product.nameDefaults) {
     throw new Error(`Product "${product.path}" defines namePositions but is missing nameDefaults.`);

@@ -1,8 +1,8 @@
 import type { Camera, ColorSpace, Scene, WebGLRenderer } from 'three';
 import { LinearFilter, PerspectiveCamera, RGBAFormat, SRGBColorSpace, Vector3, WebGLRenderTarget } from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+import { resolveGarmentCenter } from '@configurator/utils';
 
-import { resolveGarmentCenter } from '../../utils/orbitCamera';
 
 const THUMBNAIL_WIDTH = 160;
 const THUMBNAIL_HEIGHT = 128;

@@ -1,19 +1,27 @@
 'use client';
 
+
+
+
+
+
+
+
+
+
+
+
+import { useConfiguratorProduct } from '@store/useConfiguratorProduct';
+import { activateCartItem } from '@store/useConfigurationCart/activateCartItem';
+import { areGarmentPrintStoresSynced } from '@store/useConfigurationCart/areGarmentPrintStoresSynced';
+import { captureGarmentConfiguration, cloneCartItemConfiguration, createDefaultCartItemConfiguration } from '@store/useConfigurationCart/cartItemConfiguration';
+import { inheritCartItemConfiguration } from '@store/useConfigurationCart/inheritCartItemConfiguration';
+import { createCartItem, createDefaultCartItem } from '@store/useConfigurationCart/mapCartItems';
+import { persistCartItemSnapshot } from '@store/useConfigurationCart/persistCartItemSnapshot';
 import type { cartItemConfigurationType, cartItemType, catalogProductRefType, garmentBusinessType, modelIdType } from '@types';
+import { warmProductAssets } from '@configurator';
 import { getModel } from '@utils';
-import { warmProductModelFile } from '@configurator';
-
 import { create } from 'zustand';
-
-import { activateCartItem } from './activateCartItem';
-import { captureGarmentConfiguration, cloneCartItemConfiguration, createDefaultCartItemConfiguration } from './cartItemConfiguration';
-import { inheritCartItemConfiguration } from './inheritCartItemConfiguration';
-import { createCartItem, createDefaultCartItem } from './mapCartItems';
-import { persistCartItemSnapshot } from './persistCartItemSnapshot';
-import { areGarmentPrintStoresSynced } from './areGarmentPrintStoresSynced';
-import { useConfiguratorProduct } from '../useConfiguratorProduct';
-
 interface ConfigurationCartState {
   items: cartItemType[];
   activeItemId: string;
@@ -47,7 +55,7 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     const newProduct = getModel(productRef.modelId);
     if (!newProduct) return;
 
-    warmProductModelFile(newProduct);
+    warmProductAssets(newProduct);
 
     persistCartItemSnapshot(get, activeItemId);
 

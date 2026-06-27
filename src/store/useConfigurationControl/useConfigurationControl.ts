@@ -1,10 +1,11 @@
 'use client';
 
-import { create } from 'zustand';
 
-import { useConfiguratorProduct } from '../useConfiguratorProduct';
+
+
 import { resolveAvailableConfiguratorStepNumbers } from '@hooks';
-
+import { useConfiguratorProduct } from '@store/useConfiguratorProduct';
+import { create } from 'zustand';
 interface ConfigurationControlState {
   activeStep: number;
   name: string;

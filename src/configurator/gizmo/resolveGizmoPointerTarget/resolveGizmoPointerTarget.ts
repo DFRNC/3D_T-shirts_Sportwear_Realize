@@ -1,23 +1,10 @@
-import type {
-  gizmoButtonHitType,
-  gizmoPointerTargetType,
-  printablePartMeshesType,
-  printGizmoElementType,
-  printUvHitType,
-  resolveGizmoPointerTargetContextType,
-  resolveGizmoPointerTargetOptionsType,
-} from '@configurator/types';
+import type { gizmoButtonHitType, gizmoPointerTargetType, printablePartMeshesType, printGizmoElementType, printUvHitType, resolveGizmoPointerTargetContextType, resolveGizmoPointerTargetOptionsType } from '@configurator/types';
 import type { garmentPartConfigType } from '@types';
-
 import type { Object3D } from 'three';
+import { getGizmoButtonReveal, hitTestGizmoButton, hitTestGizmoFrame, toPrintLocalPx } from '@configurator/gizmo';
+import { resolvePartUvBounds } from '@configurator/mappers';
+import { resolvePartPrintRotation } from '@configurator/utils';
 import { Vector2 } from 'three';
-
-import { resolvePartPrintRotation, resolvePartUvBounds } from '@configurator/utils';
-
-import { getGizmoButtonReveal } from '../gizmoButtonReveal/gizmoButtonReveal';
-import { hitTestGizmoButton, hitTestGizmoFrame } from '../hitTestGizmoButton/hitTestGizmoButton';
-import { toPrintLocalPx } from '../printLocalSpace/printLocalSpace';
-
 const toLocalPx = (uv: { x: number; y: number }, element: printGizmoElementType, atlasSize: { width: number; height: number }) =>
   toPrintLocalPx(uv, element.uv, atlasSize, element.partRotation, element.gizmoRotation);
 

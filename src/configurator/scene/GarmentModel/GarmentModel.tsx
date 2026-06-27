@@ -1,18 +1,27 @@
 'use client';
 
-import { type ReactNode, useMemo } from 'react';
 
-import { useGLTF } from '@react-three/drei';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import { GarmentMaterialRegistryProvider } from '@configurator/providers';
-import { GLTF_USE_DRACO, GLTF_USE_MESHOPT } from '../../utils/loading/gltfModelCache';
+import { buildGltfNodeIndex, GarmentMeshes, GltfSceneProvider } from '@configurator/scene';
+import { GLTF_USE_DRACO, GLTF_USE_MESHOPT, resolveModelUrl } from '@configurator/utils';
+import { useGLTF } from '@react-three/drei';
 import { useConfiguratorProduct } from '@store';
-import { resolveModelUrl } from '@configurator/utils';
-
-import { GarmentMeshes } from '../GarmentMeshes';
-import { GltfSceneProvider } from '../GltfSceneProvider';
-import { buildGltfNodeIndex } from '../gltf';
-
+import { type ReactNode, useMemo } from 'react';
 const GarmentModel = ({ children }: { children?: ReactNode }) => {
   const product = useConfiguratorProduct((state) => state.product);
   const modelUrl = resolveModelUrl(product);

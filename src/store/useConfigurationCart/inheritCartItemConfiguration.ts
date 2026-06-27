@@ -1,9 +1,11 @@
 'use client';
 
+
+
+
 import type { cartItemConfigurationType, garmentColorSnapshotType, garmentConfigType } from '@types';
 import { PALETTE_COLORS } from '@constants';
-import { createDefaultCartItemConfiguration, createDefaultColorSnapshot } from './cartItemConfiguration';
-
+import { createDefaultCartItemConfiguration, createDefaultColorSnapshot } from '@store/useConfigurationCart/cartItemConfiguration';
 const DEFAULT_COLOR = PALETTE_COLORS[0];
 const SHIRT_TYPE = 'shirt';
 const SHORTS_TYPE = 'shorts';

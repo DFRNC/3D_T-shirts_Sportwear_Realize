@@ -1,8 +1,6 @@
-import { CONFIGURATOR_STEP_META } from '@constants';
 import type { garmentConfigType } from '@types';
-
-import { isConfiguratorStepAvailable } from './isConfiguratorStepAvailable';
-
+import { CONFIGURATOR_STEP_META } from '@constants';
+import { isConfiguratorStepAvailable } from '@hooks/resolveProductStepsConfiguration/isConfiguratorStepAvailable';
 const resolveAvailableConfiguratorStepNumbers = (product: garmentConfigType): number[] =>
   CONFIGURATOR_STEP_META.filter((step) => isConfiguratorStepAvailable(product, step.value)).map((step) => step.step);
 

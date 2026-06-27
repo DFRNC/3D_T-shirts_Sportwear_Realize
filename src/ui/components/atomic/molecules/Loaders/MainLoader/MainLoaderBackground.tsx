@@ -1,9 +1,9 @@
 'use client';
 
+
+
+import { buildLoaderWavePath, WAVE_SPEED } from '@molecules/Loaders/MainLoader/buildLoaderWavePath';
 import { useLayoutEffect, useRef } from 'react';
-
-import { buildLoaderWavePath, WAVE_SPEED } from './buildLoaderWavePath';
-
 const supportsOffscreenCanvas = () => typeof OffscreenCanvas !== 'undefined';
 
 const startSvgWaveAnimation = (path: SVGPathElement) => {

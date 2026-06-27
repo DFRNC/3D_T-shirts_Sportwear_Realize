@@ -1,15 +1,7 @@
 import type { buildLogoGizmoElementsInputType, printGizmoElementType } from '@configurator/types';
 
 import { LOGO_SCALE_MAX, LOGO_SCALE_MIN, LOGO_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@configurator/constants';
-import {
-  resolveGizmoElementRotationDeg,
-  resolveLogoDisplayScale,
-  resolveLogoGizmoHalf,
-  resolveLogoReferenceDrawSize,
-  resolvePartPrintRotation,
-  resolvePrintAtlasSize,
-  resolveProductGizmoRotation,
-} from '@configurator/utils';
+import { resolveGizmoElementRotationDeg, resolveLogoDisplayScale, resolveLogoGizmoHalf, resolveLogoReferenceDrawSize, resolvePartPrintRotation, resolvePrintAtlasSize, resolveProductGizmoRotation } from '@configurator/utils';
 
 const buildLogoGizmoElements = ({ product, instances }: buildLogoGizmoElementsInputType): printGizmoElementType[] => {
   const partsById = Object.fromEntries(product.parts.map((part) => [part.id, part]));

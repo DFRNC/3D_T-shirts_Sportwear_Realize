@@ -9,5 +9,5 @@ export { loadCachedImage } from './loadCachedImage';
 export { loadImage } from './loadImage';
 export { warmDefaultDesignTextures } from './warmDefaultDesignTextures';
 export { warmProductModelFile } from './warmProductModelFile';
-export { resolveModelUrl } from '../resolveModelUrl';
-export { yieldToMain } from '../yieldToMain/yieldToMain';
+export { resolveModelUrl } from './resolveModelUrl';
+export { yieldToMain } from './yieldToMain';

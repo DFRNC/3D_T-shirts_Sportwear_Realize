@@ -1,13 +1,15 @@
 'use client';
 
-import type { modalInfoSectionPartsPropsType } from '@types';
 
+
+
+
+
+import { ModalInfoListIcon } from '@molecules/Modals/ModalInfo/Content/ModalInfoTabContent/ModalInfoListIcon';
+import { ModalInfoTable } from '@molecules/Modals/ModalInfo/Content/ModalInfoTabContent/ModalInfoTable';
+import type { modalInfoSectionPartsPropsType } from '@types';
 import { AtomImage, AtomList, AtomRichText, Flex } from '@atoms';
 import { cn, withListPunctuation } from '@utils';
-
-import { ModalInfoListIcon } from './ModalInfoListIcon';
-import { ModalInfoTable } from './ModalInfoTable';
-
 const ModalInfoSectionParts = ({ parts }: modalInfoSectionPartsPropsType) => {
   return (
     <Flex className="w-full flex-col items-stretch gap-4">

@@ -1,10 +1,8 @@
+import { DEFAULT_MODEL_ID, deriveLocalBusiness, getModel, hasModel, resolveProductPreviewSrc } from '@utils/garmentCatalog/garmentCatalog';
+import { resolveProductCatalogPreviewSrc } from '@utils/resolveProductCatalogPreviewSrc/resolveProductCatalogPreviewSrc';
 import type { configuratorProductHydrationType } from '@configurator/types';
 import type { catalogProductEntryType, catalogProductRefType, productCollectionIdType } from '@types';
 import { CATALOG_PRODUCT_ENTRIES, PRODUCT_COLLECTIONS } from '@constants';
-
-import { DEFAULT_MODEL_ID, deriveLocalBusiness, getModel, hasModel, resolveProductPreviewSrc } from '../garmentCatalog/garmentCatalog';
-import { resolveProductCatalogPreviewSrc } from '../resolveProductCatalogPreviewSrc/resolveProductCatalogPreviewSrc';
-
 const getCatalogProductEntry = (collection: productCollectionIdType, slug: string): catalogProductEntryType | undefined =>
   CATALOG_PRODUCT_ENTRIES.find((entry) => entry.collection === collection && entry.slug === slug);
 

@@ -1,5 +1,4 @@
-import { loadImage } from '../loadImage';
-
+import { loadImage } from '@configurator/utils';
 const imageCache = new Map<string, Promise<HTMLImageElement>>();
 
 const loadCachedImage = (src: string): Promise<HTMLImageElement> => {

@@ -1,7 +1,5 @@
 import type { garmentConfigType, garmentPartConfigType, partGradientConfigType, partGradientType } from '@types';
-
-import { DEFAULT_GRADIENT_COLOR2, DISABLED_PART_GRADIENT } from './partGradientTypes';
-
+import { DEFAULT_GRADIENT_COLOR2, DISABLED_PART_GRADIENT } from '@configurator/mappers';
 const FALLBACK_GRADIENT_CONFIG: partGradientConfigType = {
   reversed: false,
   rotation: 0,

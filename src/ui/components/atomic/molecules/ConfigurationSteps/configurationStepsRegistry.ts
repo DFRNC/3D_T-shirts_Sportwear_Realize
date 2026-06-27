@@ -1,17 +1,25 @@
 'use client';
 
-import type { headerConfigItemType } from '@types';
+
+
+
+
+
+
+
+
+
+
+import { ConfigurationColorize } from '@molecules/ConfigurationSteps/ConfigurationColorize';
+import { ConfigurationDesign } from '@molecules/ConfigurationSteps/ConfigurationDesign';
+import { ConfigurationLogo } from '@molecules/ConfigurationSteps/ConfigurationLogo';
+import { ConfigurationNaming } from '@molecules/ConfigurationSteps/ConfigurationNaming';
+import { ConfigurationNumbers } from '@molecules/ConfigurationSteps/ConfigurationNumbers';
+import { ConfigurationShading } from '@molecules/ConfigurationSteps/ConfigurationShading';
+import { ConfigurationTesto } from '@molecules/ConfigurationSteps/ConfigurationTesto';
 import type { configuratorStepValueType } from '@configurator/types';
+import type { headerConfigItemType } from '@types';
 import { CONFIGURATOR_STEP_META } from '@constants';
-
-import { ConfigurationColorize } from './ConfigurationColorize';
-import { ConfigurationDesign } from './ConfigurationDesign';
-import { ConfigurationLogo } from './ConfigurationLogo';
-import { ConfigurationNaming } from './ConfigurationNaming';
-import { ConfigurationNumbers } from './ConfigurationNumbers';
-import { ConfigurationShading } from './ConfigurationShading';
-import { ConfigurationTesto } from './ConfigurationTesto';
-
 const CONFIGURATION_STEP_CONTENT: Record<configuratorStepValueType, headerConfigItemType['content']> = {
   colore: ConfigurationColorize,
   design: ConfigurationDesign,

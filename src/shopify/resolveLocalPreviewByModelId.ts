@@ -1,7 +1,5 @@
 import { CATALOG_PRODUCT_ENTRIES } from '@constants';
-
-import { resolveProductFlipCardSrc } from '../utils/resolveProductFlipCardSrc/resolveProductFlipCardSrc';
-
+import { resolveProductFlipCardSrc } from '@utils';
 const resolveLocalPreviewByModelId = (modelId: string | null | undefined) => {
   if (!modelId) {
     return { previewSrc: null, activePreviewSrc: null };

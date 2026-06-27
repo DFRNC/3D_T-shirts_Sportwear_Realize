@@ -1,15 +1,18 @@
 'use client';
 
+
+
+
+
+
+
+import { useGarmentLogoTextures, useGarmentTextPrintTextures, useSyncGarmentMaterials } from '@configurator/hooks';
+import { PrintGizmoLayer } from '@configurator/runtime';
 import { memo } from 'react';
-
-import { useGarmentLogoTextures, useGarmentNameTextures, useSyncGarmentMaterials } from '@configurator/hooks';
-
-import { PrintGizmoLayer } from '../PrintGizmoLayer';
-
 /** R3F side-effect runtime: appearance, text/logo textures, print gizmo interaction. */
 const GarmentRuntime = memo(() => {
   useSyncGarmentMaterials();
-  useGarmentNameTextures();
+  useGarmentTextPrintTextures();
   useGarmentLogoTextures();
 
   return <PrintGizmoLayer />;

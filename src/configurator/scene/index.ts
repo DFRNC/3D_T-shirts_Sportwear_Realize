@@ -1,20 +1,12 @@
 'use client';
 
-import { GarmentMeshes } from './GarmentMeshes';
-import { GarmentModel } from './GarmentModel';
-import { GltfSceneProvider, useGltfScene } from './GltfSceneProvider';
-import { GarmentPartMesh } from './GarmentPartMesh';
-import { PreserveGltfMesh } from './PreserveGltfMesh';
-import { StaticGltfMesh } from './StaticGltfMesh';
-
+export { useStaggeredMeshMount } from './useStaggeredMeshMount';
 export { buildGltfNodeIndex, waitForGltfModelReady, waitForProductModelReady } from './gltf';
 export { resolvePreserveMeshes } from './meshHelpers';
-export {
-  GarmentMeshes,
-  GarmentModel,
-  GarmentPartMesh,
-  GltfSceneProvider,
-  PreserveGltfMesh,
-  StaticGltfMesh,
-  useGltfScene,
-};
+export { applyStaticColor, biasInsideShellDepth, disposeMeshResources, tagGarmentMeshes } from './meshHelpers';
+export { GarmentMeshes } from './GarmentMeshes';
+export { GarmentModel } from './GarmentModel';
+export { GarmentPartMesh } from './GarmentPartMesh';
+export { GltfSceneProvider, useGltfScene } from './GltfSceneProvider';
+export { PreserveGltfMesh } from './PreserveGltfMesh';
+export { StaticGltfMesh } from './StaticGltfMesh';

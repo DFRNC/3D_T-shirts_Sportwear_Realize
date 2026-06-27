@@ -1,10 +1,11 @@
 'use client';
 
+
+
+
 import type { cartItemConfigurationType } from '@types';
 import { captureConfiguratorPreviewSnapshot } from '@configurator';
-
-import { captureGarmentConfiguration } from './cartItemConfiguration';
-
+import { captureGarmentConfiguration } from '@store/useConfigurationCart/cartItemConfiguration';
 interface persistCartItemSnapshotGetState {
   saveConfiguration: (itemId: string, configuration: cartItemConfigurationType) => void;
   savePreview: (itemId: string, previewSrc: string) => void;

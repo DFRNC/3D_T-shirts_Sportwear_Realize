@@ -1,11 +1,17 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 
-import { clearGizmoButtonHover, resolveGizmoPointerTarget } from '@configurator/gizmo';
+
+
+
+
+
+
+
 import type { printGizmoElementType } from '@configurator/types';
-import { useGizmoPointerContext } from '../useGizmoPointerContext';
-
+import { clearGizmoButtonHover, resolveGizmoPointerTarget } from '@configurator/gizmo';
+import { useGizmoPointerContext } from '@configurator/hooks/useGizmoPointerContext';
+import { useEffect, useRef } from 'react';
 interface GizmoSelectionStore {
   selectedInstanceId: string | null;
   setSelectedInstance: (id: string) => void;

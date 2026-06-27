@@ -1,10 +1,11 @@
 'use client';
 
+
+
+
+import { CartIcon } from '@molecules/UserBar/CartIcon';
+import { UserIcon } from '@molecules/UserBar/UserIcon';
 import { Button, Flex } from '@atoms';
-
-import { CartIcon } from './CartIcon';
-import { UserIcon } from './UserIcon';
-
 const UserBar = () => {
   return (
     <Flex variant="user_bar">

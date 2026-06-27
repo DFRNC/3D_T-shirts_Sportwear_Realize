@@ -1,19 +1,30 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import type { Object3D } from 'three';
-
+import { GarmentPartMesh, PreserveGltfMesh, resolvePreserveMeshes, StaticGltfMesh, useGltfScene, useStaggeredMeshMount } from '@configurator/scene';
 import { resolveModelUrl } from '@configurator/utils';
 import { useConfiguratorProduct } from '@store';
-
-import { GarmentPartMesh } from '../GarmentPartMesh';
-import { useGltfScene } from '../GltfSceneProvider';
-import { PreserveGltfMesh } from '../PreserveGltfMesh';
-import { resolvePreserveMeshes } from '../meshHelpers';
-import { StaticGltfMesh } from '../StaticGltfMesh';
-import { useStaggeredMeshMount } from '../useStaggeredMeshMount';
-
+import { useCallback, useMemo } from 'react';
 type garmentMeshEntryType = {
   key: string;
   registryKey: string;

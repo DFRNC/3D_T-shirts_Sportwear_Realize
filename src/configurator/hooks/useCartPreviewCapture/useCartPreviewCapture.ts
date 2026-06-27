@@ -1,22 +1,13 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
 
+
+
+
+import { captureConfiguratorPreview, registerConfiguratorPreviewCapture, unregisterConfiguratorPreviewCapture } from '@configurator/bootstrap';
 import { useThree } from '@react-three/fiber';
-
-import { captureConfiguratorPreview, registerConfiguratorPreviewCapture, unregisterConfiguratorPreviewCapture } from '../../bootstrap/previewCapture';
-import {
-  useConfigurationCart,
-  useConfiguratorProduct,
-  useConfiguratorSceneLoad,
-  useGarmentColor,
-  useGarmentDesign,
-  useGarmentLogo,
-  useGarmentName,
-  useGarmentNumber,
-  useGarmentTesto,
-} from '@store';
-
+import { useConfigurationCart, useConfiguratorProduct, useConfiguratorSceneLoad, useGarmentColor, useGarmentDesign, useGarmentLogo, useGarmentName, useGarmentNumber, useGarmentTesto } from '@store';
+import { useCallback, useEffect, useRef } from 'react';
 const PREVIEW_CAPTURE_DEBOUNCE_MS = 400;
 const PREVIEW_CAPTURE_IDLE_TIMEOUT_MS = 3000;
 

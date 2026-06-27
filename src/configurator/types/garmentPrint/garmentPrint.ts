@@ -1,7 +1,5 @@
+import type { stampPixelSizeType } from '@configurator/types';
 import type { Texture } from 'three';
-
-import type { stampPixelSizeType } from '../stampPixelSize';
-
 type patternColorPairType = [string, string];
 type patternMaskPairType = [Texture, Texture];
 

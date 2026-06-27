@@ -1,5 +1,4 @@
-import { assertShopifyConfigured } from './config';
-
+import { assertShopifyConfigured } from '@shopify/config';
 type shopifyGraphqlResponseType<TData> = {
   data?: TData;
   errors?: Array<{ message: string }>;

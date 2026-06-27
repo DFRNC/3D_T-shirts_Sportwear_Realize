@@ -1,9 +1,7 @@
+import { isShopifyEnabled } from '@shopify/config';
+import { fetchConfiguratorProductByHandle } from '@shopify/fetchConfiguratorProductByHandle';
 import type { configuratorProductHydrationType } from '@configurator/types';
 import { resolveConfiguratorProductBySlug } from '@utils';
-
-import { isShopifyEnabled } from './config';
-import { fetchConfiguratorProductByHandle } from './fetchConfiguratorProductByHandle';
-
 const resolveConfiguratorProduct = async (slug: string): Promise<configuratorProductHydrationType | null> => {
   if (isShopifyEnabled()) {
     try {

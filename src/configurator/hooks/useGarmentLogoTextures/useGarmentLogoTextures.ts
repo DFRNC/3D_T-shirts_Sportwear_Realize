@@ -1,69 +1,36 @@
 'use client';
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 
-import { useThree } from '@react-three/fiber';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import type { Texture } from 'three';
-
-import {
-  getGizmoButtonsRevealUniforms,
-  getGizmoHoverUniforms,
-  setGizmoButtonsRevealTarget,
-  subscribeGizmoButtonHover,
-  subscribeGizmoButtonReveal,
-} from '@configurator/gizmo';
-import { useGizmoIconAtlas } from '../useGizmoIconAtlas';
-import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@configurator/providers';
-import { resolveLogoInstancesForRender, useConfigurationControl, useConfiguratorProduct, useConfiguratorSceneLoad, useGarmentLogo } from '@store';
 import { LOGO_SLOT_COUNT } from '@configurator/constants';
-import {
-  applyGarmentGizmoHover,
-  applyGarmentGizmoIcons,
-  applyGarmentGizmoRotation,
-  applyGarmentLogoGizmoButtonsReveal,
-  applyGarmentLogoGizmoFrame,
-  applyGarmentLogoStamp,
-  applyGarmentLogoStyle,
-  applyGarmentPrintAtlasSize,
-  buildLogoGizmoFrameUniforms,
-  buildLogoStyleUniforms,
-  canvasToMaskTexture,
-  composeLogoStampAtlas,
-  getEmptyPrintTexture,
-  loadCachedImage,
-  repairPrintInstancePlacement,
-  resolvePrintAtlasSize,
-  resolveProductGizmoRotation,
-} from '@configurator/utils';
-
-const NAME_STEP = 4;
+import { buildLogoStampSignature, buildLogoStyleSignature } from '@configurator/hooks/useGarmentLogoTextures/logoTextureSignatures';
+import { useLogoUniformSync } from '@configurator/hooks/useGarmentLogoTextures/useLogoUniformSync';
+import { useGizmoIconAtlas } from '@configurator/hooks/useGizmoIconAtlas';
+import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@configurator/providers';
+import { applyGarmentGizmoIcons, applyGarmentGizmoRotation, applyGarmentLogoGizmoFrame, applyGarmentLogoStamp, applyGarmentLogoStyle, applyGarmentPrintAtlasSize, buildLogoGizmoFrameUniforms, buildLogoStyleUniforms, canvasToMaskTexture, composeLogoStampAtlas, getEmptyPrintTexture, loadCachedImage, repairPrintInstancePlacement, resolvePrintAtlasSize, resolveProductGizmoRotation } from '@configurator/utils';
+import { useThree } from '@react-three/fiber';
+import { resolveLogoInstancesForRender, useConfigurationControl, useConfiguratorProduct, useConfiguratorSceneLoad, useGarmentLogo } from '@store';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 const LOGO_STEP = 7;
-
-const buildLogoStampSignature = (instances: ReturnType<typeof resolveLogoInstancesForRender>) =>
-  JSON.stringify(
-    instances.map((instance) => ({
-      id: instance.id,
-      src: instance.src,
-      opacity: instance.opacity,
-      naturalWidth: instance.naturalWidth,
-      naturalHeight: instance.naturalHeight,
-      scale: instance.scale,
-    })),
-  );
-
-const buildLogoStyleSignature = (instances: ReturnType<typeof resolveLogoInstancesForRender>) =>
-  JSON.stringify(
-    instances.map((instance) => ({
-      id: instance.id,
-      uv: instance.uv,
-      rotation: instance.rotation,
-      uploadRotation: instance.uploadRotation ?? 0,
-      scale: instance.scale,
-      partId: instance.partId,
-      showFrame: instance.showFrame,
-      showGizmo: instance.showGizmo,
-    })),
-  );
 
 const useGarmentLogoTextures = () => {
   const product = useConfiguratorProduct((state) => state.product);
@@ -86,8 +53,6 @@ const useGarmentLogoTextures = () => {
   const stampCellSizeRef = useRef({ width: 1, height: 1 });
   const generationRef = useRef(0);
   const prevStampSignatureRef = useRef('');
-  const prevSelectedIdRef = useRef<string | null>(null);
-  const prevSelectedSlotRef = useRef(-1);
 
   const instancesForRender = useMemo(
     () =>
@@ -239,55 +204,7 @@ const useGarmentLogoTextures = () => {
     }
   }, [applyLogoStyleAndFrame, applyStampToMaterials, isSceneReady, materialRevision, partIds, styleSignature]);
 
-  useEffect(() => {
-    if (activeStep !== LOGO_STEP) return;
-
-    const snap =
-      prevSelectedIdRef.current === selectedInstanceId &&
-      prevSelectedSlotRef.current !== selectedSlotIndex &&
-      prevSelectedSlotRef.current >= 0 &&
-      selectedSlotIndex >= 0;
-
-    prevSelectedIdRef.current = selectedInstanceId;
-    prevSelectedSlotRef.current = selectedSlotIndex;
-
-    setGizmoButtonsRevealTarget(selectedSlotIndex, snap);
-  }, [activeStep, selectedInstanceId, selectedSlotIndex]);
-
-  useEffect(() => {
-    if (activeStep === NAME_STEP || activeStep === LOGO_STEP) return;
-    setGizmoButtonsRevealTarget(-1);
-  }, [activeStep]);
-
-  useEffect(() => {
-    const applyHover = () => {
-      const hover = getGizmoHoverUniforms();
-      for (const part of product.parts) {
-        for (const material of getMaterials(part.id)) {
-          applyGarmentGizmoHover(material, hover);
-        }
-      }
-      invalidate();
-    };
-
-    applyHover();
-    return subscribeGizmoButtonHover(applyHover);
-  }, [getMaterials, invalidate, product.parts]);
-
-  useEffect(() => {
-    const applyReveal = () => {
-      const reveal = getGizmoButtonsRevealUniforms();
-      for (const part of product.parts) {
-        for (const material of getMaterials(part.id)) {
-          applyGarmentLogoGizmoButtonsReveal(material, reveal);
-        }
-      }
-      invalidate();
-    };
-
-    applyReveal();
-    return subscribeGizmoButtonReveal(applyReveal);
-  }, [getMaterials, invalidate, product.parts]);
+  useLogoUniformSync({ product, activeStep, selectedInstanceId, selectedSlotIndex });
 
   useEffect(() => () => clearRuntime(), [clearRuntime]);
 };

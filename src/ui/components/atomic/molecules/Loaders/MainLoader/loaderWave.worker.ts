@@ -1,5 +1,4 @@
-import { buildLoaderWavePath, WAVE_SPEED } from './buildLoaderWavePath';
-
+import { buildLoaderWavePath, WAVE_SPEED } from '@molecules/Loaders/MainLoader/buildLoaderWavePath';
 type InitMessage = {
   type: 'init';
   canvas: OffscreenCanvas;

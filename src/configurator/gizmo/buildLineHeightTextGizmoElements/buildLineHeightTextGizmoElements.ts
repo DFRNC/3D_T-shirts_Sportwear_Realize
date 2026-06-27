@@ -1,14 +1,7 @@
 import type { printGizmoElementKindType, printGizmoElementType } from '@configurator/types';
 import type { garmentConfigType, numberInstanceType, testoInstanceType } from '@types';
 import { NAME_REFERENCE_FONT_SIZE, NAME_SLOT_COUNT } from '@configurator/constants';
-import {
-  measureNameGizmoHalf,
-  resolveGizmoElementRotationDeg,
-  resolvePartPrintRotation,
-  resolveProductGizmoRotation,
-  resolveTextGizmoHalf,
-  resolveTextGizmoMeasureOptions,
-} from '@configurator/utils';
+import { measureNameGizmoHalf, resolveGizmoElementRotationDeg, resolvePartPrintRotation, resolveProductGizmoRotation, resolveTextGizmoHalf, resolveTextGizmoMeasureOptions } from '@configurator/utils';
 
 const measureCanvas = typeof document !== 'undefined' ? document.createElement('canvas') : null;
 const measureCtx = measureCanvas?.getContext('2d') ?? null;

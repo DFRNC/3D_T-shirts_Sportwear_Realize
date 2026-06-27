@@ -1,8 +1,9 @@
 'use client';
 
-import { canvasToPngBlobUrl } from '../../canvasToBlobUrl';
-import { LogoFileError } from '../../logoFileError';
 
+
+import { canvasToPngBlobUrl } from '@utils/logoFile/canvasToBlobUrl';
+import { LogoFileError } from '@utils/logoFile/logoFileError';
 let pdfjsModule: typeof import('pdfjs-dist') | null = null;
 
 const ensurePdfJs = async (): Promise<typeof import('pdfjs-dist')> => {

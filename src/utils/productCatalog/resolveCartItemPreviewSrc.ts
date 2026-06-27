@@ -1,9 +1,7 @@
+import { getModel, resolveProductPreviewSrc } from '@utils/garmentCatalog/garmentCatalog';
+import { resolveProductCatalogPreviewSrc } from '@utils/resolveProductCatalogPreviewSrc/resolveProductCatalogPreviewSrc';
+import { getCatalogProductEntry } from '@utils/productCatalog/productCatalog';
 import type { cartItemType } from '@types';
-
-import { getModel, resolveProductPreviewSrc } from '../garmentCatalog/garmentCatalog';
-import { resolveProductCatalogPreviewSrc } from '../resolveProductCatalogPreviewSrc/resolveProductCatalogPreviewSrc';
-import { getCatalogProductEntry } from './productCatalog';
-
 const resolveCartItemPreviewSrc = (item: Pick<cartItemType, 'collection' | 'slug' | 'modelId'>) => {
   const entry = getCatalogProductEntry(item.collection, item.slug);
   const product = getModel(item.modelId);

@@ -1,16 +1,21 @@
 'use client';
 
-import { Button, SvgIcon } from '@atoms';
 
-import { CHECKOUT_CONFIGURATION_TABLE_COLUMNS } from '@constants';
+
+
+
+
+
+
+
+import { CheckoutQuantityStepper } from '@molecules/CheckoutQuantityStepper';
+import { CheckoutSizePopover } from '@molecules/CheckoutSizePopover';
+import { CheckoutTableEditableCell } from '@molecules/CheckoutTableEditableCell';
+import { CheckoutTestoEditableCell } from '@molecules/CheckoutTestoEditableCell';
 import type { checkoutConfigurationTableColumnHandlersType, checkoutConfigurationTableColumnType } from '@types';
+import { Button, SvgIcon } from '@atoms';
+import { CHECKOUT_CONFIGURATION_TABLE_COLUMNS } from '@constants';
 import { NUMBER_MAX_LENGTH, sanitizeNumberText } from '@store';
-
-import { CheckoutQuantityStepper } from '../CheckoutQuantityStepper';
-import { CheckoutSizePopover } from '../CheckoutSizePopover';
-import { CheckoutTableEditableCell } from '../CheckoutTableEditableCell';
-import { CheckoutTestoEditableCell } from '../CheckoutTestoEditableCell';
-
 const getColumnSizing = (id: (typeof CHECKOUT_CONFIGURATION_TABLE_COLUMNS)[number]['id']) => {
   const column = CHECKOUT_CONFIGURATION_TABLE_COLUMNS.find((item) => item.id === id);
 

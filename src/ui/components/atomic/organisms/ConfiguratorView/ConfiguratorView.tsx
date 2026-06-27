@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect } from 'react';
 
+
+
+
+import { Configurator } from '@organisms/Configurator';
+import { ConfiguratorCanvasLoader } from '@organisms/ConfiguratorCanvasLoader';
 import { useConfiguratorSceneLoad } from '@store';
-
-import { Configurator } from '../Configurator';
-import { ConfiguratorCanvasLoader } from '../ConfiguratorCanvasLoader';
-
+import { useEffect } from 'react';
 const INITIAL_SCENE_WATCHDOG_MS = 8_000;
 
 const ConfiguratorView = () => {

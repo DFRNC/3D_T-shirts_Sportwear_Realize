@@ -1,23 +1,19 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
 
-import { AccordionAtom, Button, Flex, SvgIcon, Text } from '@atoms';
-import { useConfigurationPositionPicker } from '@hooks';
-import { CONFIGURATOR_TESTO_POSITION_SELECT_LABEL } from '@constants';
-import {
-  createTestoInstance,
-  resolveTestoDefaults,
-  resolveTestoLetterSpacingShow,
-  resolveTestoLimits,
-  resolveTestoLineHeightShow,
-  useConfiguratorProduct,
-  useGarmentTesto,
-} from '@store';
+
+
+
+
+
+
 import type { testoPartFormPropsType, testoPositionType } from '@types';
-
-import { ColorTabControl, ConfigurationPositionSelect, FontSelectRow, PartColorSwitch, RangeControl } from '../../ConfigurationTools';
-
+import { AccordionAtom, Button, Flex, SvgIcon, Text } from '@atoms';
+import { CONFIGURATOR_TESTO_POSITION_SELECT_LABEL } from '@constants';
+import { useConfigurationPositionPicker } from '@hooks';
+import { ColorTabControl, ConfigurationPositionSelect, FontSelectRow, PartColorSwitch, RangeControl } from '@molecules/ConfigurationTools';
+import { createTestoInstance, resolveTestoDefaults, resolveTestoLetterSpacingShow, resolveTestoLimits, resolveTestoLineHeightShow, useConfiguratorProduct, useGarmentTesto } from '@store';
+import { useCallback, useMemo } from 'react';
 const TestoPartForm = ({ instanceId, limits, placeholder, lineHeightShow, letterSpacingShow }: testoPartFormPropsType) => {
   const instance = useGarmentTesto((state) => state.instances.find((item) => item.id === instanceId));
   const updateInstance = useGarmentTesto((state) => state.updateInstance);

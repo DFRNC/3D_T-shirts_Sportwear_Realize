@@ -1,11 +1,15 @@
 'use client';
 
-import { useGarmentDesign } from '../useGarmentDesign';
-import { useGarmentLogo } from '../useGarmentLogo';
-import { useGarmentName } from '../useGarmentName';
-import { useGarmentNumber } from '../useGarmentNumber';
-import { useGarmentTesto } from '../useGarmentTesto';
 
+
+
+
+
+import { useGarmentDesign } from '@store/useGarmentDesign';
+import { useGarmentLogo } from '@store/useGarmentLogo';
+import { useGarmentName } from '@store/useGarmentName';
+import { useGarmentNumber } from '@store/useGarmentNumber';
+import { useGarmentTesto } from '@store/useGarmentTesto';
 const areGarmentPrintStoresSynced = (expectedProductPath: string) => {
   const productPaths = [
     useGarmentDesign.getState().productPath,

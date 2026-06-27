@@ -1,12 +1,15 @@
 'use client';
 
+
+
+
+
+
 import type { configuratorProductHydrationType } from '@configurator/types';
+import type { modelIdType } from '@types';
 import { warmProductAssets } from '@configurator';
 import { useConfigurationCart, useConfiguratorProduct, useConfiguratorSceneLoad } from '@store';
-import type { modelIdType } from '@types';
-
-import { DEFAULT_MODEL_ID, deriveLocalBusiness, hasModel } from '../garmentCatalog/garmentCatalog';
-
+import { DEFAULT_MODEL_ID, deriveLocalBusiness, hasModel } from '@utils/garmentCatalog/garmentCatalog';
 const resolveRouteModel = (slug: string, product: configuratorProductHydrationType | null) => {
   const slugModelId = hasModel(slug) ? slug : null;
   const isMapped = product != null && hasModel(product.modelId);

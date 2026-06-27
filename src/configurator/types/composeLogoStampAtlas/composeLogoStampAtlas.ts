@@ -1,7 +1,5 @@
+import type { stampPixelSizeType } from '@configurator/types';
 import type { logoInstanceType } from '@types';
-
-import type { stampPixelSizeType } from '../stampPixelSize';
-
 interface logoStampAtlasType {
   canvas: HTMLCanvasElement;
   cellSize: stampPixelSizeType;

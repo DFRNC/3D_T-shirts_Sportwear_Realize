@@ -1,12 +1,13 @@
 'use client';
 
-import { CHECKOUT_DEFAULT_SIZE } from '@constants';
+
+
+
+
+import { sanitizeNumberText } from '@store/useGarmentNumber';
+import { extractUniqueTestoTexts } from '@store/useCheckout/extractUniqueTestoTexts';
 import type { cartItemConfigurationType, checkoutRowPresetType } from '@types';
-
-import { sanitizeNumberText } from '../useGarmentNumber';
-
-import { extractUniqueTestoTexts } from './extractUniqueTestoTexts';
-
+import { CHECKOUT_DEFAULT_SIZE } from '@constants';
 const createCheckoutRow = (size: string, name = '', number = '', testoTexts: string[] = [], quantity = 1) => ({
   id: crypto.randomUUID(),
   size,

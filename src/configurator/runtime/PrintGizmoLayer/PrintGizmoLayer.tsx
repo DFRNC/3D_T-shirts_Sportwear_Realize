@@ -1,31 +1,26 @@
 'use client';
 
-import { memo, useCallback, useEffect, useMemo } from 'react';
 
-import {
-  buildLogoGizmoElements,
-  buildNameGizmoElements,
-  buildNumberGizmoElements,
-  buildPrintablePartMeshes,
-  buildTestoGizmoElements,
-} from '@configurator/gizmo';
-import { useGizmoButtonHover, useGizmoSelection, usePrintPlacementMigration } from '@configurator/hooks';
+
+
+
+
+
+
+
+
+
+
+
+
+
 import type { PrintPlacementInstance } from '@configurator/types';
-import {
-  resolveNameLimits,
-  resolveNumberLimits,
-  resolveTestoLimits,
-  useConfigurationControl,
-  useConfiguratorProduct,
-  useGarmentLogo,
-  useGarmentName,
-  useGarmentNumber,
-  useGarmentTesto,
-} from '@store';
+import { buildLogoGizmoElements, buildNameGizmoElements, buildNumberGizmoElements, buildPrintablePartMeshes, buildTestoGizmoElements } from '@configurator/gizmo';
+import { useGizmoButtonHover, useGizmoSelection, usePrintPlacementMigration } from '@configurator/hooks';
+import { PrintGizmoInstance } from '@configurator/runtime';
 import { repairPrintInstancePlacement, resolvePrintAtlasSize } from '@configurator/utils';
-
-import { PrintGizmoInstance } from './PrintGizmoInstance';
-
+import { resolveNameLimits, resolveNumberLimits, resolveTestoLimits, useConfigurationControl, useConfiguratorProduct, useGarmentLogo, useGarmentName, useGarmentNumber, useGarmentTesto } from '@store';
+import { memo, useCallback, useEffect, useMemo } from 'react';
 const NAME_STEP = 4;
 const NUMBER_STEP = 5;
 const TESTO_STEP = 6;

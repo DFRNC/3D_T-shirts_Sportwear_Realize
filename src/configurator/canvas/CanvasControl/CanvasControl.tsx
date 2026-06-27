@@ -1,11 +1,14 @@
 'use client';
 
-import { Environment } from '@react-three/drei';
 
+
+
+
+
+
+import { ViewControls } from '@configurator/canvas';
 import { useCartPreviewCapture } from '@configurator/hooks';
-
-import { ViewControls } from '../ViewControls';
-
+import { Environment } from '@react-three/drei';
 const CanvasControl = () => {
   useCartPreviewCapture();
 

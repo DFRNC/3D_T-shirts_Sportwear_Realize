@@ -20,7 +20,8 @@
     "optimize:federer": "node scripts/optimize-gltf-model.mjs federer_calcio",
     "optimize:calcio": "node scripts/optimize-gltf-model.mjs federer_calcio baggio_calcio bernardi_calcio cruijff_calcio",
     "test:visual": "playwright test",
-    "test:visual:ui": "playwright test --ui"
+    "test:visual:ui": "playwright test --ui",
+    "test:unit": "vitest run"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
@@ -71,6 +72,7 @@
     "prettier": "^3.8.3",
     "sharp": "0.34.5",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.9"
   }
 }

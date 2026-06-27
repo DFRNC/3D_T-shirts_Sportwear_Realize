@@ -1,7 +1,7 @@
 export { useCartPreviewCapture } from './useCartPreviewCapture';
 export { useSyncGarmentMaterials } from './useSyncGarmentMaterials';
 export { useGarmentLogoTextures } from './useGarmentLogoTextures';
-export { useGarmentNameTextures } from './useGarmentNameTextures';
+export { useGarmentTextPrintTextures, useGarmentNameTextures } from './useGarmentTextPrintTextures';
 export { useGizmoButtonHover } from './useGizmoButtonHover';
 export { useGizmoIconAtlas } from './useGizmoIconAtlas';
 export { useGizmoPointerContext } from './useGizmoPointerContext';

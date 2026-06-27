@@ -1,8 +1,4 @@
-import { garmentLogoMapFragment } from '../garmentLogoShaders';
-import { garmentNameMapFragment } from '../garmentNameShaders';
-import { garmentNumberMapFragment } from '../garmentNumberShaders';
-import { garmentTestoMapFragment } from '../garmentTestoShaders';
-
+import { garmentLogoMapFragment, garmentNameMapFragment, garmentNumberMapFragment, garmentTestoMapFragment } from '@configurator/shaders';
 const garmentPrintMapFragment = /* glsl */ `
 #ifdef USE_PRINT
   vec4 printColor = vec4( 0.0 );

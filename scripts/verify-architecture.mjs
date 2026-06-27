@@ -12,6 +12,12 @@ const forbiddenPaths = [
   'src/configurator/utils/configuratorPreviewCapture',
   'src/configurator/utils/loadCachedImage',
   'src/configurator/utils/loadImage',
+  'src/configurator/utils/garmentPrint',
+  'src/configurator/utils/createGarmentMaterial',
+  'src/configurator/utils/composeLogoAtlas',
+  'src/configurator/utils/orbitCamera',
+  'src/configurator/utils/orbitFlag',
+  'src/configurator/hooks/useGarmentNameTextures',
   'src/hooks/useGarmentLogoTextures',
   'src/hooks/useGarmentNameTextures',
   'src/hooks/useGizmoSelection',
@@ -92,6 +98,35 @@ const importRules = [
     test: (filePath) => normalizePath(filePath).includes('src/ui/components/atomic/molecules/'),
     patterns: [/from ['"]@configurator(?!\/types)(?:\/|['"])/],
     message: 'Molecules may only import @configurator/types, not the configurator runtime.',
+  },
+  {
+    id: 'configurator-use-utils-alias',
+    test: (filePath) => normalizePath(filePath).includes('src/configurator/') && !normalizePath(filePath).includes('src/configurator/utils/'),
+    patterns: [/from ['"](?:\.\.\/)+utils\//],
+    message: 'Inside @configurator import utils via @configurator/utils — not relative ../utils/... paths.',
+  },
+  {
+    id: 'configurator-no-utils-subpaths',
+    test: (filePath) => normalizePath(filePath).includes('src/configurator/'),
+    patterns: [/from ['"]@configurator\/utils\/(loading|print|material|render)(?:\/|['"])/],
+    message: 'Use @configurator/utils barrel — not @configurator/utils/loading|print|material|render subpaths.',
+  },
+  {
+    id: 'hooks-no-scene',
+    test: (filePath) => normalizePath(filePath).includes('src/configurator/hooks/'),
+    patterns: [/from ['"]@configurator\/scene(?:\/|['"])/],
+    message: 'hooks/ must not import @configurator/scene — use providers bridge instead.',
+  },
+  {
+    id: 'no-parent-relative-imports',
+    test: (filePath) => {
+      const normalized = normalizePath(filePath);
+      if (!normalized.endsWith('.ts') && !normalized.endsWith('.tsx')) return false;
+      if (normalized.endsWith('/index.ts') || normalized.endsWith('/index.tsx')) return false;
+      return normalized.includes('src/');
+    },
+    patterns: [/^\s*import\s+.*from\s+['"]\.\.\//m, /^\s*import\s+.*from\s+['"]\.\//m],
+    message: 'Use @ path aliases for imports — not relative ./ or ../ (index.ts barrel re-exports are exempt).',
   },
 ];
 

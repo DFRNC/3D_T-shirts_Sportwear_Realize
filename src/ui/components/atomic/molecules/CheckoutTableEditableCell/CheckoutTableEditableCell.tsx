@@ -1,14 +1,15 @@
 'use client';
 
-import { useCallback, useState } from 'react';
 
-import { AtomInput, Button, Flex, SvgIcon } from '@atoms';
+
+
+
 
 import type { checkoutTableEditableCellPropsType } from '@types';
+import { AtomInput, Button, Flex, SvgIcon } from '@atoms';
+import { CheckoutTablePlaceholder } from '@molecules/CheckoutTablePlaceholder';
 import { cn } from '@utils';
-
-import { CheckoutTablePlaceholder } from '../CheckoutTablePlaceholder';
-
+import { useCallback, useState } from 'react';
 const CheckoutTableEditableCell = ({
   value,
   placeholder,

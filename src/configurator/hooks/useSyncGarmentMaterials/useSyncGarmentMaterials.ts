@@ -1,17 +1,29 @@
 'use client';
 
-import { useCallback, useEffect, useLayoutEffect } from 'react';
 
-import { useFrame, useThree } from '@react-three/fiber';
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import { useGarmentColors } from '@configurator/hooks/useSyncGarmentMaterials/useGarmentColors';
+import { useGarmentLoadReady } from '@configurator/hooks/useSyncGarmentMaterials/useGarmentLoadReady';
+import { useLoadPatternTextures } from '@configurator/hooks/useSyncGarmentMaterials/useLoadPatternTextures';
+import { useSyncGarmentMaterialsRefs } from '@configurator/hooks/useSyncGarmentMaterials/useSyncGarmentMaterialsRefs';
 import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@configurator/providers';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useConfigurationCart, useConfiguratorSceneLoad, useGarmentDesign } from '@store';
-
-import { useGarmentColors } from './useGarmentColors';
-import { useGarmentLoadReady } from './useGarmentLoadReady';
-import { useLoadPatternTextures } from './useLoadPatternTextures';
-import { useSyncGarmentMaterialsRefs } from './useSyncGarmentMaterialsRefs';
-
+import { useCallback, useEffect, useLayoutEffect } from 'react';
 /** Syncs store colors, design, and textures onto garment materials (R3F side-effect hook). */
 const useSyncGarmentMaterials = () => {
   const refs = useSyncGarmentMaterialsRefs();

@@ -1,13 +1,15 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
 
-import { STEPS_CONFIGURATION } from '@molecules';
+
+
+
+
 import type { configuratorStepValueType } from '@configurator/types';
+import { resolveProductStepsConfiguration } from '@hooks/resolveProductStepsConfiguration';
+import { STEPS_CONFIGURATION } from '@molecules';
 import { useConfigurationControl, useConfiguratorProduct } from '@store';
-
-import { resolveProductStepsConfiguration } from '../resolveProductStepsConfiguration';
-
+import { useEffect, useMemo } from 'react';
 const useProductStepsConfiguration = () => {
   const product = useConfiguratorProduct((state) => state.product);
   const activeStep = useConfigurationControl((state) => state.activeStep);

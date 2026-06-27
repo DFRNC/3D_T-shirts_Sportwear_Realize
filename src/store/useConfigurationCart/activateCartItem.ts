@@ -1,14 +1,19 @@
 'use client';
 
+
+
+
+
+
+
+
+import { useConfigurationControl } from '@store/useConfigurationControl';
+import { useConfiguratorProduct } from '@store/useConfiguratorProduct';
+import { applyGarmentConfiguration, captureGarmentConfiguration } from '@store/useConfigurationCart/cartItemConfiguration';
+import { persistCartItemSnapshot } from '@store/useConfigurationCart/persistCartItemSnapshot';
 import type { cartItemConfigurationType, garmentBusinessType, modelIdType } from '@types';
+import { warmProductAssets } from '@configurator';
 import { getModel } from '@utils';
-import { warmProductModelFile } from '@configurator';
-
-import { useConfigurationControl } from '../useConfigurationControl';
-import { useConfiguratorProduct } from '../useConfiguratorProduct';
-import { applyGarmentConfiguration, captureGarmentConfiguration } from './cartItemConfiguration';
-import { persistCartItemSnapshot } from './persistCartItemSnapshot';
-
 interface ActivateCartItemGetState {
   items: Array<{ id: string; modelId: modelIdType; business: garmentBusinessType }>;
   saveConfiguration: (itemId: string, configuration: cartItemConfigurationType) => void;
@@ -30,7 +35,7 @@ const activateCartItem = (get: () => ActivateCartItemGetState, itemId: string, o
   const product = getModel(activeItem.modelId);
   if (!product) return;
 
-  warmProductModelFile(product);
+  warmProductAssets(product);
   useConfiguratorProduct.getState().setProduct(activeItem.modelId, activeItem.business);
   useConfigurationControl.getState().setNumberProduct(activeIndex + 1);
 

@@ -1,7 +1,5 @@
+import type { stampPixelSizeType } from '@configurator/types';
 import type { garmentTextRenderInstanceType } from '@types';
-
-import type { stampPixelSizeType } from '../stampPixelSize';
-
 interface composeNameMaskAtlasInputType {
   instances: garmentTextRenderInstanceType[];
   fillCanvas?: HTMLCanvasElement;

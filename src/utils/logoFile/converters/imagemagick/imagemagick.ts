@@ -1,7 +1,7 @@
 'use client';
 
-import { LogoFileError } from '../../logoFileError';
 
+import { LogoFileError } from '@utils/logoFile/logoFileError';
 let magickInitPromise: Promise<void> | null = null;
 
 const ensureMagick = async (): Promise<typeof import('@imagemagick/magick-wasm')> => {

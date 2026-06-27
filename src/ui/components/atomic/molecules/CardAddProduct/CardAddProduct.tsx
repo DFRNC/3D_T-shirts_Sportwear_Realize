@@ -1,17 +1,21 @@
 'use client';
 
-import { useMemo } from 'react';
 
+
+
+
+
+
+
+
+import { ProductCatalogPopover } from '@molecules/ProductCatalogPopover';
+import { ProductSessionAddButton } from '@molecules/ProductSessionAddButton';
+import { ProductSessionRow } from '@molecules/ProductSessionRow';
 import { Flex, ScrollArea } from '@atoms';
-
 import { useGarmentCatalogPreloadEffect } from '@hooks';
-import { getCatalogProductEntry, getModel, resolveCartItemDisplayPreview } from '@utils';
 import { useConfigurationCart } from '@store';
-
-import { ProductCatalogPopover } from '../ProductCatalogPopover';
-import { ProductSessionAddButton } from '../ProductSessionAddButton';
-import { ProductSessionRow } from '../ProductSessionRow';
-
+import { getCatalogProductEntry, getModel, resolveCartItemDisplayPreview } from '@utils';
+import { useMemo } from 'react';
 const CardAddProduct = () => {
   const items = useConfigurationCart((state) => state.items);
   const activeItemId = useConfigurationCart((state) => state.activeItemId);

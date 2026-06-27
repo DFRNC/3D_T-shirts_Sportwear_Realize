@@ -1,9 +1,7 @@
-import { HOME_PRODUCT_GALLERY_BLOCKS } from '@constants';
+import { isShopifyEnabled } from '@shopify/config';
+import { fetchConfiguratorCollections } from '@shopify/fetchConfiguratorCollections';
 import type { homePageCollectionType } from '@types';
-
-import { isShopifyEnabled } from './config';
-import { fetchConfiguratorCollections } from './fetchConfiguratorCollections';
-
+import { HOME_PRODUCT_GALLERY_BLOCKS } from '@constants';
 const resolveLocalHomeCollections = (): homePageCollectionType[] =>
   HOME_PRODUCT_GALLERY_BLOCKS.map(({ id, title, items }) => ({
     id,

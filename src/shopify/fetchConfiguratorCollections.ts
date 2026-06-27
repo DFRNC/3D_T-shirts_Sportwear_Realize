@@ -1,10 +1,8 @@
+import { shopifyAdminGraphql } from '@shopify/adminClient';
+import { getShopifyApiMode, getShopifyHomeCollectionHandles } from '@shopify/config';
+import { shopifyGraphql } from '@shopify/graphqlClient';
+import { resolveLocalPreviewByModelId } from '@shopify/resolveLocalPreviewByModelId';
 import type { homePageCollectionType } from '@types';
-
-import { getShopifyApiMode, getShopifyHomeCollectionHandles } from './config';
-import { shopifyAdminGraphql } from './adminClient';
-import { shopifyGraphql } from './graphqlClient';
-import { resolveLocalPreviewByModelId } from './resolveLocalPreviewByModelId';
-
 const CONFIGURATOR_COLLECTION_TYPE = 'configurator';
 const FRONTPAGE_HANDLE = 'frontpage';
 

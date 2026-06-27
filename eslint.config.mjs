@@ -27,12 +27,8 @@ const eslintConfig = defineConfig([
         {
           patterns: [
             {
-              group: ['@atoms/*', '@molecules/*', '@organisms/*', '@templates/*', '@pages/*', '@hooks/*', '@utils/*', '@store/*'],
-              message: 'Import via barrel alias only (e.g. @molecules), not subpaths.',
-            },
-            {
-              group: ['@configurator/hooks/*', '@configurator/utils/*'],
-              message: 'Import via @configurator/hooks or @configurator/utils barrels, or use relative paths inside the module.',
+              group: ['@configurator/utils/*'],
+              message: 'Use @configurator/utils barrel — not @configurator/utils/loading|print|material|render subpaths.',
             },
           ],
         },
@@ -109,6 +105,10 @@ const eslintConfig = defineConfig([
             {
               group: ['@utils/*'],
               message: 'Configurator module must not depend on @utils.',
+            },
+            {
+              group: ['@configurator/utils/*'],
+              message: 'Use @configurator/utils barrel — not domain subpaths (loading|print|material|render).',
             },
           ],
         },

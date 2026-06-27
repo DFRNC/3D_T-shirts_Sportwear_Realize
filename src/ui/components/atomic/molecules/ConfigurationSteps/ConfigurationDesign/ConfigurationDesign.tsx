@@ -1,19 +1,29 @@
 'use client';
 
-import { useCallback, useState } from 'react';
 
-import { AtomImage, Button, Flex, Grid, SvgIcon } from '@atoms';
-import { useTintedDesignSvgSrc } from '@hooks';
-import { ColorControl } from '../../ConfigurationTools/ColorControl';
-import { ColorTabControl } from '../../ConfigurationTools/ColorTabControl';
-import { PatternLayerColorControl } from '../../ConfigurationTools/PatternLayerColorControl';
-import { RangeControl } from '../../ConfigurationTools/RangeControl';
-import { PALETTE_COLORS } from '@constants';
-import { useConfiguratorProduct, useGarmentDesign } from '@store';
+
+
+
+
+
+
+
+
+
+
+
+import { ColorControl } from '@molecules/ConfigurationTools/ColorControl';
+import { ColorTabControl } from '@molecules/ConfigurationTools/ColorTabControl';
+import { PatternLayerColorControl } from '@molecules/ConfigurationTools/PatternLayerColorControl';
+import { RangeControl } from '@molecules/ConfigurationTools/RangeControl';
 import type { designPatternItemType } from '@types';
+import { AtomImage, Button, Flex, Grid, SvgIcon } from '@atoms';
+import { PALETTE_COLORS } from '@constants';
+import { useTintedDesignSvgSrc } from '@hooks';
 import { PatternPreviewSkeleton } from '@skeletons';
+import { useConfiguratorProduct, useGarmentDesign } from '@store';
 import { cn } from '@utils';
-
+import { useCallback, useState } from 'react';
 const DEFAULT_PART_COLOR = PALETTE_COLORS[1];
 
 const DesignCardPreview = ({ src, layerColors, eager }: { src: string; layerColors?: string[]; eager?: boolean }) => {

@@ -1,22 +1,21 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 
+
+
+
+
+
+
+
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+import { orbitControlsRef, syncOrbitControlsEnabled } from '@configurator/canvas';
+import { applyOrbitZoomAroundPoint, clampOrbitCameraOutsideGarment, clampOrbitTargetToGarment, recenterOrbitTargetByZoom, resolveCursorFocusPoint, resolveGarmentCenter } from '@configurator/utils';
 import { OrbitControls } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
-import { Raycaster, Vector3 } from 'three';
-import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
-
-import {
-  applyOrbitZoomAroundPoint,
-  clampOrbitCameraOutsideGarment,
-  clampOrbitTargetToGarment,
-  recenterOrbitTargetByZoom,
-  resolveCursorFocusPoint,
-  resolveGarmentCenter,
-} from '@configurator/utils';
 import { useConfiguratorProduct } from '@store';
-
+import { useEffect, useRef } from 'react';
+import { Raycaster, Vector3 } from 'three';
 const ORBIT_MIN_DISTANCE = 0.05;
 const ORBIT_MAX_DISTANCE = 0.8;
 /** Default orbit distance after switching products (zoomed-out framing). */
@@ -179,6 +178,10 @@ const ViewControls = () => {
 
   return (
     <OrbitControls
+      ref={(instance) => {
+        orbitControlsRef.current = instance;
+        syncOrbitControlsEnabled();
+      }}
       makeDefault
       enablePan={false}
       enableZoom={false}

@@ -1,10 +1,8 @@
 import type { GLTF } from 'three-stdlib';
 
 import type { garmentConfigType } from '@types';
+import { isGltfModelReady, readCachedGarmentGltf, resolveModelUrl, warmGltfModelCache, yieldToMain } from '@configurator/utils';
 
-import { isGltfModelReady, readCachedGarmentGltf, warmGltfModelCache } from '../../../utils/loading/gltfModelCache';
-import { resolveModelUrl } from '../../../utils/resolveModelUrl';
-import { yieldToMain } from '../../../utils/yieldToMain/yieldToMain';
 
 const GLTF_PARSE_TIMEOUT_MS = 60_000;
 

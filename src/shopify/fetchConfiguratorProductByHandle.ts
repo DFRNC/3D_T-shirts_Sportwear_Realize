@@ -1,10 +1,8 @@
+import { shopifyAdminGraphql } from '@shopify/adminClient';
+import { getShopifyApiMode } from '@shopify/config';
+import { shopifyGraphql } from '@shopify/graphqlClient';
+import { mapShopifyProductBusiness, PRODUCT_BUSINESS_FIELDS, resolveProductModelId, type shopifyProductBusinessNodeType } from '@shopify/mapShopifyProductBusiness';
 import type { configuratorProductHydrationType } from '@configurator/types';
-
-import { getShopifyApiMode } from './config';
-import { shopifyAdminGraphql } from './adminClient';
-import { shopifyGraphql } from './graphqlClient';
-import { mapShopifyProductBusiness, PRODUCT_BUSINESS_FIELDS, resolveProductModelId, type shopifyProductBusinessNodeType } from './mapShopifyProductBusiness';
-
 const ADMIN_PRODUCT_BY_HANDLE_QUERY = `#graphql
   query ConfiguratorProductByHandle($handle: String!) {
     productByIdentifier(identifier: { handle: $handle }) {

@@ -1,5 +1,5 @@
-export { readProductAppearanceTextures, syncProductAppearanceTextures } from '../garmentAppearance/garmentProductAppearanceCache';
-export { applyGarmentGradient, applyGarmentPartUvBounds } from '../garmentGradient/applyGarmentGradient';
+export { readProductAppearanceTextures, syncProductAppearanceTextures } from './garmentAppearance/garmentProductAppearanceCache';
+export { applyGarmentGradient, applyGarmentPartUvBounds } from './garmentGradient/applyGarmentGradient';
 export {
   clampUvToPartBounds,
   isColorOnlyGarmentPart,
@@ -8,11 +8,9 @@ export {
   resolveGizmoElementRotationDeg,
   resolvePartPrintRotation,
   resolvePartTextureSize,
-  resolvePartUvBounds,
   resolvePrintAtlasSize,
-  resolvePrintLocalUvToAtlas,
   resolveProductGizmoRotation,
-} from '../resolveProductRenderConfig/resolveProductRenderConfig';
+} from './resolveProductRenderConfig';
 export {
   ORBIT_SURFACE_CLEARANCE,
   applyOrbitZoomAroundPoint,
@@ -21,5 +19,5 @@ export {
   recenterOrbitTargetByZoom,
   resolveCursorFocusPoint,
   resolveGarmentCenter,
-} from '../orbitCamera';
-export { suppressThreeClockDeprecation } from '../suppressThreeClockDeprecation';
+} from './orbitCamera';
+export { suppressThreeClockDeprecation } from './suppressThreeClockDeprecation';

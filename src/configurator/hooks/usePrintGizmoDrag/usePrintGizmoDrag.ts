@@ -1,21 +1,26 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 
-import {
-  GIZMO_CORNERS,
-  logGizmoPlacementForConfig,
-  raycastPrintUv,
-  resolveGizmoPointerTarget,
-  resolvePrintDragMove,
-  setGizmoButtonDragActive,
-  toPrintLocalPx,
-} from '@configurator/gizmo';
+
+
+
+
+
+
+
+
+
+
+
+
+
 import type { gizmoButtonHitType, printablePartMeshesType, printDragMoveStateType, printGizmoElementType } from '@configurator/types';
 import type { uvPointType } from '@types';
+import { setGizmoDragging } from '@configurator/canvas';
+import { GIZMO_CORNERS, logGizmoPlacementForConfig, raycastPrintUv, resolveGizmoPointerTarget, resolvePrintDragMove, setGizmoButtonDragActive, toPrintLocalPx } from '@configurator/gizmo';
+import { useGizmoPointerContext } from '@configurator/hooks/useGizmoPointerContext';
 import { useConfiguratorProduct, useGarmentLogo, useGarmentName, useGarmentNumber, useGarmentTesto } from '@store';
-import { useGizmoPointerContext } from '../useGizmoPointerContext';
-
+import { useEffect, useRef } from 'react';
 type DragMode = 'move' | 'rotate' | 'scale';
 
 const resolvePrintRotation = (printableParts: printablePartMeshesType[], partId: string, fallback: number) =>
@@ -77,7 +82,7 @@ const usePrintGizmoDrag = ({ element, elements, printableParts, atlasSize, gizmo
     });
 
     const setControls = (enabled: boolean) => {
-      if (ctx.current.controls) ctx.current.controls.enabled = enabled;
+      setGizmoDragging(!enabled);
     };
 
     const GIZMO_LOG_THROTTLE_MS = 250;

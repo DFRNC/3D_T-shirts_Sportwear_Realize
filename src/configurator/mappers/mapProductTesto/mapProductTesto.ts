@@ -1,9 +1,5 @@
 import type { garmentConfigType, testoInstanceType, testoLimitsType, testoPositionType, textDefaultsConfigType } from '@types';
-
-import { resolvePrintLocalUvToAtlas } from '../printLayout';
-
-import { resolveGarmentPart } from '../resolveGarmentPart';
-
+import { resolveGarmentPart, resolvePrintLocalUvToAtlas } from '@configurator/mappers';
 const TESTO_DEFAULT_LINE_HEIGHT = 1.5;
 const TESTO_DEFAULT_LETTER_SPACING = 0;
 

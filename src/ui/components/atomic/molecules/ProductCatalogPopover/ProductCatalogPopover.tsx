@@ -1,15 +1,17 @@
 'use client';
 
+
+
+
+
+
+
 import type { catalogProductRefType, productCatalogPopoverPropsType, productCollectionIdType } from '@types';
-import { listCatalogProductsByCollection } from '@utils';
-import { PRODUCT_COLLECTIONS } from '@constants';
-
-import { useState } from 'react';
-
 import { AtomPopover, AtomPopoverContent, AtomPopoverTrigger, Button, Grid, Text } from '@atoms';
-
-import { ProductCatalogOption } from '../ProductCatalogOption';
-
+import { PRODUCT_COLLECTIONS } from '@constants';
+import { ProductCatalogOption } from '@molecules/ProductCatalogOption';
+import { listCatalogProductsByCollection } from '@utils';
+import { useState } from 'react';
 type catalogPopoverViewType = 'groups' | 'products';
 
 const ProductCatalogPopover = ({ activeCollection, onSelect, children, contentSide = 'right', contentAlign = 'start' }: productCatalogPopoverPropsType) => {

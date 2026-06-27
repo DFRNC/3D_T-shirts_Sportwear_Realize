@@ -1,9 +1,5 @@
 import type { garmentConfigType, numberInstanceType, numberLimitsType, numberPositionType, textDefaultsConfigType, uvPointType } from '@types';
-
-import { resolvePrintLocalUvToAtlas } from '../printLayout';
-
-import { resolveGarmentPart } from '../resolveGarmentPart';
-
+import { resolveGarmentPart, resolvePrintLocalUvToAtlas } from '@configurator/mappers';
 const NUMBER_MAX_LENGTH = 2;
 const NUMBER_DEFAULT_LINE_HEIGHT = 1.5;
 

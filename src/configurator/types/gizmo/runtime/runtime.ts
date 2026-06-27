@@ -1,8 +1,6 @@
-import type { Camera, Raycaster, Scene } from 'three';
-
-import type { printGizmoElementType } from '../gizmo/gizmo';
+import type { printGizmoElementType } from '@configurator/types';
 import type { uvBoundsType, uvPointType } from '@types';
-
+import type { Camera, Raycaster, Scene } from 'three';
 interface gizmoButtonHoverTargetType {
   slotIndex: number;
   cornerIndex: number;

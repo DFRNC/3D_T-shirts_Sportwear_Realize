@@ -1,7 +1,5 @@
 import type { garmentConfigType } from '@types';
-
-import { resolveModelUrl } from '../../resolveModelUrl/resolveModelUrl';
-
+import { resolveModelUrl } from '@configurator/utils';
 const warmedModelUrls = new Set<string>();
 
 const warmModelFile = (url: string) => {

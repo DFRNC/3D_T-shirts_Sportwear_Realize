@@ -7,16 +7,8 @@ import type { Texture } from 'three';
 import type { patternMaskPairType } from '@configurator/types';
 import type { designPatternItemType } from '@types';
 import { PATTERN_LAYER_COUNT } from '@configurator/constants';
-import {
-  emptyMaskPair,
-  imageToMaskTexture,
-  imageToTexture,
-  readProductAppearanceTextures,
-  resolveRasterDesignSrc,
-  syncProductAppearanceTextures,
-  yieldToMain,
-} from '@configurator/utils';
 import { useConfiguratorSceneLoad, useGarmentDesign } from '@store';
+import { emptyMaskPair, imageToMaskTexture, imageToTexture, readProductAppearanceTextures, resolveRasterDesignSrc, syncProductAppearanceTextures, yieldToMain } from '@configurator/utils';
 
 type garmentPrintAssetsRefsType = {
   logosTextureRef: RefObject<Texture | null>;

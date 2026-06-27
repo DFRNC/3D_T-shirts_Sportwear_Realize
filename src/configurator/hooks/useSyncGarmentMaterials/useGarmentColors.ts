@@ -1,16 +1,29 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
 
-import { useGarmentMaterialRegistry } from '@configurator/providers';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import type { useSyncGarmentMaterialsRefs } from '@configurator/hooks/useSyncGarmentMaterials/useSyncGarmentMaterialsRefs';
 import type { garmentPrintStateType } from '@configurator/types';
-import { useConfiguratorProduct, useGarmentColor, useGarmentDesign } from '@store';
+import { applyPartColors, applyPatternTints, applyPrintState } from '@configurator/hooks/useSyncGarmentMaterials/syncGarmentMaterialState';
+import { buildPatternColors } from '@configurator/hooks/useSyncGarmentMaterials/buildPatternColors';
+import { useGarmentMaterialRegistry } from '@configurator/providers';
 import { emptyMaskPair } from '@configurator/utils';
-
-import { applyPartColors, applyPatternTints, applyPrintState } from './syncGarmentMaterialState';
-import { buildPatternColors } from './buildPatternColors';
-import type { useSyncGarmentMaterialsRefs } from './useSyncGarmentMaterialsRefs';
-
+import { useConfiguratorProduct, useGarmentColor, useGarmentDesign } from '@store';
+import { useCallback, useMemo } from 'react';
 type syncGarmentMaterialsRefsReturnType = ReturnType<typeof useSyncGarmentMaterialsRefs>;
 
 type useGarmentColorsOptionsType = {
