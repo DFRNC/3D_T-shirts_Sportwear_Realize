@@ -53,7 +53,7 @@ const ProductSessionRow = ({ name, previewSrc, active = false, onSelect, onRemov
           <Box
             asChild
             className={cn(
-              'fixed z-50 overflow-hidden transition-[box-shadow] duration-200 ease-out',
+              'fixed z-50 overflow-hidden transition-shadow duration-200 ease-out',
               isExpanded && 'w-max',
             )}
             style={{

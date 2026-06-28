@@ -6,19 +6,13 @@
     "width": 4096,
     "height": 1679
   },
-  "preserveGltfMeshes": [
-    "basketball_top_inside",
-    "basketball_top_sweatband",
-    "basketball_top_label"
-  ],
+  "preserveGltfMeshes": ["basketball_top_inside", "basketball_top_sweatband", "basketball_top_label"],
   "parts": [
     {
       "name": "Davanti",
       "label": "Davanti",
       "id": "canotta_magik_basket_front",
-      "meshNames": [
-        "basketball_top_front"
-      ],
+      "meshNames": ["basketball_top_front"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.5251,
@@ -39,9 +33,7 @@
       "name": "Retro",
       "label": "Retro",
       "id": "canotta_magik_basket_back",
-      "meshNames": [
-        "basketball_top_back"
-      ],
+      "meshNames": ["basketball_top_back"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.0013,
@@ -62,9 +54,7 @@
       "name": "Manica 1",
       "label": "Manica 1",
       "id": "canotta_magik_basket_sleeve_left",
-      "meshNames": [
-        "basketball_top_sleeve_left"
-      ],
+      "meshNames": ["basketball_top_sleeve_left"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.481,
@@ -85,9 +75,7 @@
       "name": "Manica 2",
       "label": "Manica 2",
       "id": "canotta_magik_basket_sleeve_right",
-      "meshNames": [
-        "basketball_top_sleeve_right"
-      ],
+      "meshNames": ["basketball_top_sleeve_right"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.5395,
@@ -108,24 +96,12 @@
       "name": "Collar",
       "label": "Collar",
       "id": "canotta_magik_basket_collar",
-      "meshNames": [
-        "basketball_top_collar"
-      ],
+      "meshNames": ["basketball_top_collar"],
       "renderOrder": 1,
       "colorOnly": true
     }
   ],
-  "patterns": [
-    {
-      "name": "Design 1",
-      "parts": [
-        {
-          "path_name": "design_1.webp"
-        }
-      ],
-      "designId": "design_01"
-    }
-  ],
+  "patterns": [],
   "default_pattern": [
     {
       "name": "Logos",
