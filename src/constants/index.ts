@@ -43,9 +43,9 @@ const CATALOG_PRODUCT_ENTRIES: catalogProductEntryType[] = [
   { collection: 'second', slug: 'sylla_p', name: 'Sylla PallaVolo', modelId: 'sylla_pallavolo', configurable: true },
   { collection: 'second', slug: 'lollo_p', name: 'Lollo PallaVolo', modelId: 'lollo_pallavolo', configurable: true },
   { collection: 'third', slug: 'canotta_mb', name: 'Canotta Basket', modelId: 'canotta_magik_basket', configurable: true },
-  { collection: 'third', slug: 'malone_b', name: 'Malone Basket', configurable: false },
-  { collection: 'fourd', slug: 'federer_c', name: 'Federer Completo', configurable: false },
-  { collection: 'fourd', slug: 'cruijff_c', name: 'Cruijff Completo', configurable: false },
+  { collection: 'third', slug: 'malone_b', name: 'Malone Basket', modelId: 'malone_basket', configurable: true },
+  { collection: 'fourd', slug: 'federer_c', name: 'Federer Completo', modelId: 'federer_completo', configurable: true },
+  { collection: 'fourd', slug: 'cruijff_c', name: 'Cruijff Completo', modelId: 'cruijff_completo', configurable: true },
 ];
 
 const DEFAULT_CATALOG_PRODUCT = CATALOG_PRODUCT_ENTRIES.find((entry) => entry.slug === 'federer_p')!;
