@@ -2,8 +2,7 @@
 
 import type { configuratorProductHydrationType } from '@configurator/types';
 import type { modelIdType } from '@types';
-import { warmProductAssets } from '@configurator';
-import { useConfigurationCart, useConfiguratorProduct, useConfiguratorSceneLoad } from '@store';
+import { useConfigurationCart, useConfiguratorSceneLoad } from '@store';
 import { DEFAULT_MODEL_ID, deriveLocalBusiness, hasModel } from '@utils/garmentCatalog/garmentCatalog';
 const resolveRouteModel = (slug: string, product: configuratorProductHydrationType | null) => {
   const slugModelId = hasModel(slug) ? slug : null;
@@ -21,12 +20,6 @@ const applyConfiguratorRouteProduct = (slug: string, product: configuratorProduc
   useConfiguratorSceneLoad.getState().beginInitialSceneLoad();
   useConfigurationCart.getState().setActiveItemProduct({ slug, modelId, business });
   useConfiguratorSceneLoad.getState().markRouteHydrated();
-
-  const garment = useConfiguratorProduct.getState().product;
-
-  queueMicrotask(() => {
-    warmProductAssets(garment);
-  });
 };
 
 export { applyConfiguratorRouteProduct, resolveRouteModel };

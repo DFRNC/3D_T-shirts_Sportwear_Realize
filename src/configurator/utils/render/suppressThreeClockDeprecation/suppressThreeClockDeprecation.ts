@@ -8,9 +8,15 @@ const suppressThreeClockDeprecation = () => {
   const originalWarn = console.warn.bind(console);
   console.warn = (...args: unknown[]) => {
     const message = args[0];
-    if (typeof message === 'string' && message.includes('THREE.Clock') && message.includes('deprecated')) {
+    if (typeof message !== 'string') {
+      originalWarn(...args);
       return;
     }
+
+    if (message.includes('THREE.Clock') && message.includes('deprecated')) return;
+    if (message.includes('THREE.WebGLProgram')) return;
+    if (message.includes('cannot be represented accurately in double precision')) return;
+
     originalWarn(...args);
   };
 };

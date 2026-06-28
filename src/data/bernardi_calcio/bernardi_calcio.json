@@ -6,13 +6,19 @@
     "width": 4096,
     "height": 2257
   },
-  "preserveGltfMeshes": ["model_inside", "model_label", "model_sweatband"],
+  "preserveGltfMeshes": [
+    "model_inside",
+    "model_label",
+    "model_sweatband"
+  ],
   "parts": [
     {
       "name": "Davanti",
       "label": "Davanti",
       "id": "bernardi_calcio_front",
-      "meshNames": ["model_front"],
+      "meshNames": [
+        "model_front"
+      ],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.6215,
@@ -33,7 +39,9 @@
       "name": "Retro",
       "label": "Retro",
       "id": "bernardi_calcio_back",
-      "meshNames": ["model_back"],
+      "meshNames": [
+        "model_back"
+      ],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.0019,
@@ -54,7 +62,9 @@
       "name": "Manica 1",
       "label": "Manica 1",
       "id": "bernardi_calcio_sleeve_left",
-      "meshNames": ["model_sleeve_left"],
+      "meshNames": [
+        "model_sleeve_left"
+      ],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.3319,
@@ -75,7 +85,9 @@
       "name": "Manica 2",
       "label": "Manica 2",
       "id": "bernardi_calcio_sleeve_right",
-      "meshNames": ["model_sleeve_right"],
+      "meshNames": [
+        "model_sleeve_right"
+      ],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.3865,
@@ -96,7 +108,9 @@
       "name": "Collar",
       "label": "Collar",
       "id": "bernardi_calcio_collar",
-      "meshNames": ["model_collar"],
+      "meshNames": [
+        "model_collar"
+      ],
       "renderOrder": 1,
       "colorOnly": true
     }

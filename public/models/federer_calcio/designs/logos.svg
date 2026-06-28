@@ -2,15 +2,18 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 9331 4900" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <g id="Artboard1" transform="matrix(1,0,0,1,-4910,-25133)">
-        <rect x="4910" y="25133" width="9331" height="4900" style="fill:none;"/>
         <g id="File-di-stampa" serif:id="File di stampa" transform="matrix(1,0,0,1,1342.996235,16)">
             <g>
                 <g id="Gruppo-20" serif:id="Gruppo 20">
-                    <g id="Realize_1" transform="matrix(1,-0,-0,1,3567.003765,25117)">
-                        <use xlink:href="#_Image1" x="1628.996" y="1558" width="67px" height="482px"/>
+                    <g id="_Image1_" serif:id="_Image1" transform="matrix(1,0,0,1,5195.999765,26675)">
+                        <g id="Realize_1">
+                            <use id="_Image1_1" serif:id="_Image1" xlink:href="#_Image1" x="0" y="0" width="67px" height="482px"/>
+                        </g>
                     </g>
-                    <g id="Logo-Realize-sport-.4-39xh4-89-copia-2" serif:id="Logo Realize sport .4,39xh4,89 copia 2" transform="matrix(1,-0,-0,1,3567.003765,25117)">
-                        <use xlink:href="#_Image2" x="5622.996" y="2712" width="283px" height="253px"/>
+                    <g id="_Image2_" serif:id="_Image2" transform="matrix(1,0,0,1,9504.999765,27639)">
+                        <g id="Logo-Realize-sport-.4-39xh4-89-copia-2" serif:id="Logo Realize sport .4,39xh4,89 copia 2">
+                            <use id="_Image2_1" serif:id="_Image2" xlink:href="#_Image2" x="0" y="0" width="283px" height="253px"/>
+                        </g>
                     </g>
                 </g>
             </g>

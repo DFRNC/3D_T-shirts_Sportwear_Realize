@@ -18,6 +18,7 @@
     "sync:wasm-assets": "node scripts/sync-wasm-assets.mjs",
     "optimize:model": "node scripts/optimize-gltf-model.mjs",
     "optimize:models": "node scripts/optimize-gltf-model.mjs --all",
+    "validate:model-uv": "node scripts/validate-model-uv.mjs --all",
     "optimize:federer": "node scripts/optimize-gltf-model.mjs federer_calcio",
     "optimize:calcio": "node scripts/optimize-gltf-model.mjs federer_calcio baggio_calcio bernardi_calcio cruijff_calcio",
     "test:visual": "playwright test",

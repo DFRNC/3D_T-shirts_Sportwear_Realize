@@ -1,4 +1,5 @@
 import { assertShopifyConfigured } from '@shopify/config';
+import { fetchShopifyWithTimeout } from '@shopify/fetchShopifyWithTimeout';
 type shopifyGraphqlResponseType<TData> = {
   data?: TData;
   errors?: Array<{ message: string }>;
@@ -7,7 +8,7 @@ type shopifyGraphqlResponseType<TData> = {
 const shopifyAdminGraphql = async <TData>(query: string, variables?: Record<string, unknown>): Promise<TData> => {
   const { storeDomain, accessToken, apiVersion } = assertShopifyConfigured();
 
-  const response = await fetch(`https://${storeDomain}/admin/api/${apiVersion}/graphql.json`, {
+  const response = await fetchShopifyWithTimeout(`https://${storeDomain}/admin/api/${apiVersion}/graphql.json`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -17,14 +17,14 @@ const warmGarmentCatalogAssets = (modelId: modelIdType) => {
   const product = getModel(modelId);
   if (!product) return;
 
-  warmProductAssets(product);
+  warmProductAssets(product, { deferHeavy: true });
 };
 
 const warmGarmentCatalogAssetsEager = async (modelId: modelIdType) => {
   const product = getModel(modelId);
   if (!product) return;
 
-  warmGarmentCatalogAssets(modelId);
+  warmProductAssets(product, { deferHeavy: true });
   await waitForProductModelReady(product);
 };
 

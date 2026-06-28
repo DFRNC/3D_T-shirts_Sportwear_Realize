@@ -28,7 +28,7 @@ const activateCartItem = (get: () => ActivateCartItemGetState, itemId: string, o
   const product = getModel(activeItem.modelId);
   if (!product) return;
 
-  warmProductAssets(product);
+  warmProductAssets(product, { deferHeavy: true });
   useConfiguratorProduct.getState().setProduct(activeItem.modelId, activeItem.business);
   useConfigurationControl.getState().setNumberProduct(activeIndex + 1);
 

@@ -1,4 +1,5 @@
 import { assertShopifyConfigured } from '@shopify/config';
+import { fetchShopifyWithTimeout } from '@shopify/fetchShopifyWithTimeout';
 type shopifyGraphqlResponseType<TData> = {
   data?: TData;
   errors?: Array<{ message: string }>;
@@ -20,7 +21,7 @@ const shopifyGraphql = async <TData>(query: string, variables?: Record<string, u
     headers['X-Shopify-Access-Token'] = accessToken;
   }
 
-  const response = await fetch(endpoint, {
+  const response = await fetchShopifyWithTimeout(endpoint, {
     method: 'POST',
     headers,
     body: JSON.stringify({ query, variables }),

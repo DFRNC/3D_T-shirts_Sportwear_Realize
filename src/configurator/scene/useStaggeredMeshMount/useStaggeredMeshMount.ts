@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 
 import { useConfiguratorSceneLoad } from '@store';
 
 /** Mount scene nodes one per frame while loaders are active. */
 const useStaggeredMeshMount = (totalCount: number, resetKey: string) => {
+  const invalidate = useThree((state) => state.invalidate);
   const isInitialSceneLoading = useConfiguratorSceneLoad((state) => state.isInitialSceneLoading);
   const isSceneTransitionLoading = useConfiguratorSceneLoad((state) => state.isSceneTransitionLoading);
   const shouldRevealProgressively = isInitialSceneLoading || isSceneTransitionLoading;
@@ -34,6 +35,7 @@ const useStaggeredMeshMount = (totalCount: number, resetKey: string) => {
       if (current.revealedCount >= totalCount) return current;
       return { ...current, revealedCount: current.revealedCount + 1 };
     });
+    invalidate();
   });
 
   const effectiveCount = shouldRevealProgressively ? progress.revealedCount : totalCount;

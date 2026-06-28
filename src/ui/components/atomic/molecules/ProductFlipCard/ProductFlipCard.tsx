@@ -26,7 +26,17 @@ const ProductFlipCard = ({ collection, slug, alt, previewSrc, activePreviewSrc, 
   const warmProductAssetsEager = useCallback(() => {
     if (isEagerWarmRef.current) return;
     isEagerWarmRef.current = true;
-    void warmBySlugEager(slug);
+
+    const scheduleEagerWarm = () => {
+      void warmBySlugEager(slug);
+    };
+
+    if (typeof requestIdleCallback !== 'undefined') {
+      requestIdleCallback(scheduleEagerWarm, { timeout: 2_000 });
+      return;
+    }
+
+    requestAnimationFrame(scheduleEagerWarm);
   }, [slug, warmBySlugEager]);
 
   useEffect(() => {
@@ -37,7 +47,6 @@ const ProductFlipCard = ({ collection, slug, alt, previewSrc, activePreviewSrc, 
       (entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return;
         warmProductAssets();
-        warmProductAssetsEager();
         observer.disconnect();
       },
       { rootMargin: '240px' },
@@ -46,12 +55,13 @@ const ProductFlipCard = ({ collection, slug, alt, previewSrc, activePreviewSrc, 
     observer.observe(card);
 
     return () => observer.disconnect();
-  }, [warmProductAssets, warmProductAssetsEager]);
+  }, [warmProductAssets]);
 
   return (
     <Link
       ref={cardRef}
       href={`/${slug}`}
+      prefetch={false}
       tabIndex={0}
       onPointerEnter={warmProductAssets}
       onFocus={warmProductAssets}

@@ -44,7 +44,7 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     const newProduct = getModel(productRef.modelId);
     if (!newProduct) return;
 
-    warmProductAssets(newProduct);
+    warmProductAssets(newProduct, { deferHeavy: true });
 
     persistCartItemSnapshot(get, activeItemId);
 

@@ -1,9 +1,10 @@
 import type { garmentConfigType } from '@types';
 import type { MeshStandardMaterial } from 'three';
-import { compileGarmentShader } from '@configurator/utils';
+import { compileGarmentShader, yieldToMain } from '@configurator/utils';
+
 type CompileGarmentShadersOverFramesOptions = {
   parts: garmentConfigType['parts'];
-  getMaterials: (registryKey: string) => readonly MeshStandardMaterial[];
+  getMaterials: (partId: string) => readonly MeshStandardMaterial[];
   invalidate: () => void;
   onComplete: () => void;
 };
@@ -19,9 +20,8 @@ const compileGarmentShadersOverFrames = ({ parts, getMaterials, invalidate, onCo
 
   let cancelled = false;
   let queueIndex = 0;
-  let frameId = 0;
 
-  const configureNext = () => {
+  const configureNext = async () => {
     if (cancelled) return;
 
     if (queueIndex >= materialQueue.length) {
@@ -32,14 +32,14 @@ const compileGarmentShadersOverFrames = ({ parts, getMaterials, invalidate, onCo
     compileGarmentShader(materialQueue[queueIndex]);
     queueIndex += 1;
     invalidate();
-    frameId = requestAnimationFrame(configureNext);
+    await yieldToMain();
+    if (!cancelled) void configureNext();
   };
 
-  frameId = requestAnimationFrame(configureNext);
+  void configureNext();
 
   return () => {
     cancelled = true;
-    cancelAnimationFrame(frameId);
   };
 };
 
