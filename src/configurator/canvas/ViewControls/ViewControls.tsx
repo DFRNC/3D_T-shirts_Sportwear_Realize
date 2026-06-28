@@ -16,7 +16,7 @@ import { useConfiguratorProduct } from '@store';
 import { useEffect, useRef } from 'react';
 import { Raycaster, Vector3 } from 'three';
 const ORBIT_MIN_DISTANCE = 0.05;
-const ORBIT_MAX_DISTANCE = 0.8;
+const ORBIT_MAX_DISTANCE = 0.9;
 /** Default orbit distance after switching products (zoomed-out framing). */
 const PRODUCT_SWITCH_ZOOM_DISTANCE = ORBIT_MAX_DISTANCE;
 const ORBIT_MAX_AZIMUTH_ANGLE = Math.PI / 2;
