@@ -4,13 +4,11 @@ import { useCallback, useEffect } from 'react';
 
 import { waitForProductModelReady, warmProductAssets } from '@configurator';
 import type { modelIdType } from '@types';
-import { getCatalogProductEntryBySlug, getModel, hasModel } from '@utils';
+import { getModel, hasModel } from '@utils';
 
 const resolveCatalogModelId = (slug: string): modelIdType | null => {
-  const entry = getCatalogProductEntryBySlug(slug);
-  const modelId = entry?.modelId ?? (hasModel(slug) ? slug : null);
-  if (!modelId || !hasModel(modelId)) return null;
-  return modelId;
+  if (hasModel(slug)) return slug;
+  return null;
 };
 
 const warmGarmentCatalogAssets = (modelId: modelIdType) => {

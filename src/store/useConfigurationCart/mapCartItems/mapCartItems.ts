@@ -1,16 +1,17 @@
 'use client';
 
-import type { cartItemType, garmentBusinessType, modelIdType, productCollectionIdType } from '@types';
-import { DEFAULT_CATALOG_PRODUCT } from '@constants';
-import { DEFAULT_MODEL_ID, deriveLocalBusiness } from '@utils';
+import type { cartItemType, garmentBusinessType, modelIdType } from '@types';
+import { DEFAULT_CONFIGURATOR_COLLECTION_HANDLE, DEFAULT_CONFIGURATOR_MODEL_ID, DEFAULT_CONFIGURATOR_SLUG } from '@constants';
+import { deriveLocalBusiness } from '@utils';
 
-const DEFAULT_MODEL: modelIdType = DEFAULT_CATALOG_PRODUCT.modelId ?? DEFAULT_MODEL_ID;
-const DEFAULT_COLLECTION: productCollectionIdType = DEFAULT_CATALOG_PRODUCT.collection;
-const DEFAULT_SLUG = DEFAULT_CATALOG_PRODUCT.slug;
-
-const createCartItem = (params: { collection: productCollectionIdType; slug: string; modelId: modelIdType; business?: garmentBusinessType }): cartItemType => ({
-  id: `cart-${params.collection}-${params.slug}-${crypto.randomUUID()}`,
-  collection: params.collection,
+const createCartItem = (params: {
+  collectionHandle: string;
+  slug: string;
+  modelId: modelIdType;
+  business?: garmentBusinessType;
+}): cartItemType => ({
+  id: `cart-${params.collectionHandle}-${params.slug}-${crypto.randomUUID()}`,
+  collectionHandle: params.collectionHandle,
   slug: params.slug,
   modelId: params.modelId,
   business: params.business ?? deriveLocalBusiness(params.modelId),
@@ -18,9 +19,9 @@ const createCartItem = (params: { collection: productCollectionIdType; slug: str
 
 const createDefaultCartItem = () =>
   createCartItem({
-    collection: DEFAULT_COLLECTION,
-    slug: DEFAULT_SLUG,
-    modelId: DEFAULT_MODEL,
+    collectionHandle: DEFAULT_CONFIGURATOR_COLLECTION_HANDLE,
+    slug: DEFAULT_CONFIGURATOR_SLUG,
+    modelId: DEFAULT_CONFIGURATOR_MODEL_ID,
   });
 
-export { createCartItem, createDefaultCartItem, DEFAULT_COLLECTION, DEFAULT_MODEL, DEFAULT_SLUG };
+export { createCartItem, createDefaultCartItem };

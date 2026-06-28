@@ -7,7 +7,7 @@ import { captureGarmentConfiguration, cloneCartItemConfiguration, createDefaultC
 import { inheritCartItemConfiguration } from '@store/useConfigurationCart/inheritCartItemConfiguration';
 import { createCartItem, createDefaultCartItem } from '@store/useConfigurationCart/mapCartItems';
 import { persistCartItemSnapshot } from '@store/useConfigurationCart/persistCartItemSnapshot';
-import type { cartItemConfigurationType, cartItemType, catalogProductRefType, garmentBusinessType, modelIdType } from '@types';
+import type { cartItemConfigurationType, cartItemType, configuratorCatalogProductPickType, garmentBusinessType, modelIdType } from '@types';
 import { warmProductAssets } from '@configurator';
 import { getModel } from '@utils';
 import { create } from 'zustand';
@@ -16,7 +16,7 @@ interface ConfigurationCartState {
   activeItemId: string;
   configurations: Record<string, cartItemConfigurationType>;
   previews: Record<string, string>;
-  addItem: (product: Pick<catalogProductRefType, 'collection' | 'slug' | 'modelId'>) => void;
+  addItem: (product: configuratorCatalogProductPickType) => void;
   /** Stamp a Shopify product (from the slug route loader) onto the active cart item. */
   setActiveItemProduct: (product: { slug: string; modelId: modelIdType; business: garmentBusinessType }) => void;
   duplicateActiveItem: () => void;
@@ -121,7 +121,7 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     const activePreview = get().getPreview(activeItemId);
 
     const duplicatedItem = createCartItem({
-      collection: activeItem.collection,
+      collectionHandle: activeItem.collectionHandle,
       slug: activeItem.slug,
       modelId: activeItem.modelId,
       business: activeItem.business,

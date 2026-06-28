@@ -41,6 +41,7 @@
       "@hooks/*": ["./src/hooks/*"],
       "@skeletons": ["./src/ui/components/skeletons"],
       "@providers": ["./src/providers"],
+      "@providers/*": ["./src/providers/*"],
       "@constants": ["./src/constants"],
       "@data": ["./src/data"],
       "@data/*": ["./src/data/*"],

@@ -26,6 +26,9 @@ const ADMIN_COLLECTION_LIST_QUERY = `#graphql
         id
         title
         handle
+        image {
+          url
+        }
         typeMetafield: metafield(namespace: "custom", key: "type") {
           value
         }
@@ -41,6 +44,9 @@ const STOREFRONT_COLLECTION_LIST_QUERY = `#graphql
         id
         title
         handle
+        image {
+          url
+        }
         typeMetafield: metafield(namespace: "custom", key: "type") {
           value
         }
@@ -55,6 +61,9 @@ const ADMIN_COLLECTION_BY_HANDLE_QUERY = `#graphql
       id
       title
       handle
+      image {
+        url
+      }
       typeMetafield: metafield(namespace: "custom", key: "type") {
         value
       }
@@ -68,6 +77,9 @@ const STOREFRONT_COLLECTION_BY_HANDLE_QUERY = `#graphql
       id
       title
       handle
+      image {
+        url
+      }
       typeMetafield: metafield(namespace: "custom", key: "type") {
         value
       }
@@ -168,6 +180,7 @@ type shopifyCollectionListNodeType = {
   id: string;
   title: string;
   handle: string;
+  image?: { url?: string | null } | null;
   typeMetafield?: { value: string } | null;
 };
 
@@ -197,7 +210,7 @@ const mapShopifyProduct = (product: shopifyProductNodeType): mappedHomeProductTy
     modelId,
     price: priceAmount != null ? Number(priceAmount) : null,
     currencyCode: minVariantPrice?.currencyCode ?? null,
-    previewSrc: viewImageSrc ?? featuredImageSrc ?? localPreview.previewSrc,
+    previewSrc: featuredImageSrc ?? viewImageSrc ?? localPreview.previewSrc,
     activePreviewSrc: activeViewImageSrc ?? viewImageSrc ?? featuredImageSrc ?? localPreview.activePreviewSrc,
   };
 };
@@ -242,6 +255,7 @@ const buildHomeCollection = async (collection: shopifyCollectionListNodeType): P
     id: collection.id,
     title: collection.title,
     handle: collection.handle,
+    imageSrc: collection.image?.url ?? null,
     products: visibleProducts,
   };
 };

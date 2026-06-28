@@ -1,41 +1,28 @@
+import { cache } from 'react';
+
 import { isShopifyEnabled } from '@shopify/config';
 import { fetchConfiguratorCollections } from '@shopify/fetchConfiguratorCollections';
 import type { homePageCollectionType } from '@types';
-import { HOME_PRODUCT_GALLERY_BLOCKS } from '@constants';
-const resolveLocalHomeCollections = (): homePageCollectionType[] =>
-  HOME_PRODUCT_GALLERY_BLOCKS.map(({ id, title, items }) => ({
-    id,
-    title,
-    handle: id,
-    products: items.map(({ collection, slug, alt }) => ({
-      id: `${collection}-${slug}`,
-      title: alt,
-      handle: slug,
-      status: 'ACTIVE',
-      modelId: null,
-      price: null,
-      currencyCode: null,
-      previewSrc: null,
-      activePreviewSrc: null,
-    })),
-  }));
 
-const resolveHomeCollections = async (): Promise<homePageCollectionType[]> => {
-  if (isShopifyEnabled()) {
-    try {
-      const collections = await fetchConfiguratorCollections();
-
-      if (collections.length > 0) {
-        return collections;
-      }
-
-      console.warn('[shopify] No configurator collections returned; falling back to local catalog.');
-    } catch (error) {
-      console.warn('[shopify] Failed to fetch collections; falling back to local catalog.', error);
-    }
+const resolveHomeCollections = cache(async (): Promise<homePageCollectionType[]> => {
+  if (!isShopifyEnabled()) {
+    console.warn('[shopify] Shopify is disabled; no home collections available.');
+    return [];
   }
 
-  return resolveLocalHomeCollections();
-};
+  try {
+    const collections = await fetchConfiguratorCollections();
 
-export { resolveHomeCollections, resolveLocalHomeCollections };
+    if (collections.length > 0) {
+      return collections;
+    }
+
+    console.warn('[shopify] No configurator collections returned.');
+  } catch (error) {
+    console.warn('[shopify] Failed to fetch collections.', error);
+  }
+
+  return [];
+});
+
+export { resolveHomeCollections };

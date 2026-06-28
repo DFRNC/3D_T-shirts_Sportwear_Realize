@@ -5,13 +5,12 @@ import type {
   nameInstanceType,
   numberInstanceType,
   partGradientType,
-  productCollectionIdType,
   testoInstanceType,
 } from '@types';
 
 interface cartItemType {
   id: string;
-  collection: productCollectionIdType;
+  collectionHandle: string;
   slug: string;
   /** Local geometry model id (== Shopify `custom.id`). */
   modelId: modelIdType;

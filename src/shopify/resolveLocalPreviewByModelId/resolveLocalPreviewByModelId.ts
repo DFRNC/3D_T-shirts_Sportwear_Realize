@@ -1,18 +1,16 @@
-import { CATALOG_PRODUCT_ENTRIES } from '@constants';
-import { resolveProductFlipCardSrc } from '@utils';
+import { getModel, resolveProductPreviewSrc } from '@utils/garmentCatalog/garmentCatalog';
+
 const resolveLocalPreviewByModelId = (modelId: string | null | undefined) => {
   if (!modelId) {
     return { previewSrc: null, activePreviewSrc: null };
   }
 
-  const entry = CATALOG_PRODUCT_ENTRIES.find((catalogEntry) => catalogEntry.modelId === modelId);
-  if (!entry) {
-    return { previewSrc: null, activePreviewSrc: null };
-  }
+  const product = getModel(modelId);
+  const previewSrc = product ? resolveProductPreviewSrc(product) : null;
 
   return {
-    previewSrc: resolveProductFlipCardSrc(entry.collection, entry.slug, 'front'),
-    activePreviewSrc: resolveProductFlipCardSrc(entry.collection, entry.slug, 'back'),
+    previewSrc: previewSrc || null,
+    activePreviewSrc: previewSrc || null,
   };
 };
 

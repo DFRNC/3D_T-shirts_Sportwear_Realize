@@ -1,64 +1,9 @@
-import type { catalogProductEntryType, homeProductGalleryBlockType, productCollectionType } from '@types';
 import type { configuratorStepValueType } from '@configurator/types';
+import type { modelIdType } from '@types';
 
-// --- Product catalog ---
-
-const PRODUCT_COLLECTIONS: productCollectionType[] = [
-  {
-    id: 'first',
-    label: 'Calcio',
-    galleryTitle: 'COMPLETO GARA CALCIO',
-    coverSrc: '/png/products/calcio.png',
-  },
-  {
-    id: 'second',
-    label: 'Pallavolo',
-    galleryTitle: 'COMPLETO GARA PALLAVOLO',
-    coverSrc: '/png/products/pallavolo.png',
-  },
-  {
-    id: 'third',
-    label: 'Basket',
-    galleryTitle: 'COMPLETO GARA basket',
-    coverSrc: '/png/products/basket.png',
-  },
-  {
-    id: 'fourd',
-    label: 'Altro',
-    galleryTitle: 'COMPLETO',
-    coverSrc: '/png/products/altro.png',
-  },
-];
-
-const CATALOG_PRODUCT_ENTRIES: catalogProductEntryType[] = [
-  { collection: 'first', slug: 'baggio', name: 'Baggio', modelId: 'baggio_calcio', configurable: true },
-  { collection: 'first', slug: 'cruijff', name: 'Shorts Cruijff', modelId: 'cruijff_calcio', configurable: true },
-  { collection: 'first', slug: 'federer', name: 'Federer', configurable: false },
-  { collection: 'first', slug: 'bernardi', name: 'Bernardi', modelId: 'bernardi_calcio', configurable: true },
-  { collection: 'second', slug: 'bernardi_p', name: 'Bernardi PallaVolo', modelId: 'bernardi_pallavolo', configurable: true },
-  { collection: 'second', slug: 'federer_p', name: 'Maglia Federer', modelId: 'federer_pallavolo', configurable: true },
-  { collection: 'second', slug: 'cruijff_p', name: 'Cruijff PallaVolo', modelId: 'cruijff_pallavolo', configurable: true },
-  { collection: 'second', slug: 'malone_p', name: 'Malone PallaVolo', modelId: 'malone_pallavolo', configurable: true },
-  { collection: 'second', slug: 'picci', name: 'Picci', modelId: 'picci_pallavolo', configurable: true },
-  { collection: 'second', slug: 'sylla_p', name: 'Sylla PallaVolo', modelId: 'sylla_pallavolo', configurable: true },
-  { collection: 'second', slug: 'lollo_p', name: 'Lollo PallaVolo', modelId: 'lollo_pallavolo', configurable: true },
-  { collection: 'third', slug: 'canotta_mb', name: 'Canotta Basket', modelId: 'canotta_magik_basket', configurable: true },
-  { collection: 'third', slug: 'malone_b', name: 'Malone Basket', modelId: 'malone_basket', configurable: true },
-  { collection: 'fourd', slug: 'federer_c', name: 'Federer Completo', modelId: 'federer_completo', configurable: true },
-  { collection: 'fourd', slug: 'cruijff_c', name: 'Cruijff Completo', modelId: 'cruijff_completo', configurable: true },
-];
-
-const DEFAULT_CATALOG_PRODUCT = CATALOG_PRODUCT_ENTRIES.find((entry) => entry.slug === 'federer_p')!;
-
-const HOME_PRODUCT_GALLERY_BLOCKS: homeProductGalleryBlockType[] = PRODUCT_COLLECTIONS.map((collection) => ({
-  id: `home-${collection.id}`,
-  title: collection.galleryTitle,
-  items: CATALOG_PRODUCT_ENTRIES.filter((entry) => entry.collection === collection.id).map((entry) => ({
-    collection: entry.collection,
-    slug: entry.slug,
-    alt: entry.name,
-  })),
-}));
+const DEFAULT_CONFIGURATOR_MODEL_ID: modelIdType = 'federer_pallavolo';
+const DEFAULT_CONFIGURATOR_SLUG = 'federer_p';
+const DEFAULT_CONFIGURATOR_COLLECTION_HANDLE = '';
 
 // --- Configurator copy ---
 
@@ -196,7 +141,6 @@ const VIDEO_PLAYER_YOUTUBE_CONFIG = {
 export type { configuratorStepMetaItemType };
 
 export {
-  CATALOG_PRODUCT_ENTRIES,
   CHECKOUT_CONFIGURATION_TABLE_COLUMNS,
   CHECKOUT_DEFAULT_SIZE,
   CHECKOUT_MAX_ROW_QUANTITY,
@@ -223,15 +167,15 @@ export {
   CONFIGURATOR_STEP_META,
   CONFIGURATOR_TESTO_POSITION_SELECT_LABEL,
   CONFIGURATOR_UPLOADED_FILES_LABEL,
-  DEFAULT_CATALOG_PRODUCT,
-  HOME_PRODUCT_GALLERY_BLOCKS,
+  DEFAULT_CONFIGURATOR_COLLECTION_HANDLE,
+  DEFAULT_CONFIGURATOR_MODEL_ID,
+  DEFAULT_CONFIGURATOR_SLUG,
   LOGO_ACCEPTED_EXTENSIONS,
   LOGO_ACCEPTED_INPUT,
   LOGO_ACCEPTED_MIMES,
   LOGO_MAX_FILE_SIZE,
   LOGO_SUPPORTED_LABEL,
   PALETTE_COLORS,
-  PRODUCT_COLLECTIONS,
   TUTORIAL_VIDEO_URL,
   VIDEO_PLAYER_DEFAULT_VOLUME,
   VIDEO_PLAYER_YOUTUBE_CONFIG,

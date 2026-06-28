@@ -15,6 +15,7 @@ type homePageCollectionType = {
   id: string;
   title: string;
   handle: string;
+  imageSrc: string | null;
   products: homePageProductType[];
 };
 

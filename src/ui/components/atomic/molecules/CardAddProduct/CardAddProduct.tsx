@@ -6,7 +6,7 @@ import { ProductSessionRow } from '@molecules/ProductSessionRow';
 import { Flex, ScrollArea } from '@atoms';
 import { useGarmentCatalogPreloadEffect } from '@hooks';
 import { useConfigurationCart } from '@store';
-import { getCatalogProductEntry, getModel, resolveCartItemDisplayPreview } from '@utils';
+import { getModel, resolveCartItemDisplayPreview } from '@utils';
 import { useMemo } from 'react';
 const CardAddProduct = () => {
   const items = useConfigurationCart((state) => state.items);
@@ -29,8 +29,7 @@ const CardAddProduct = () => {
             const product = getModel(item.modelId);
             if (!product) return null;
 
-            const catalogEntry = getCatalogProductEntry(item.collection, item.slug);
-            const displayName = catalogEntry?.name ?? item.business.name ?? product.name;
+            const displayName = item.business.name ?? product.name;
 
             return (
               <ProductSessionRow
@@ -46,7 +45,7 @@ const CardAddProduct = () => {
         </Flex>
       </ScrollArea>
       <div className="shrink-0">
-        <ProductCatalogPopover activeCollection={activeItem.collection} onSelect={addItem}>
+        <ProductCatalogPopover activeCollectionHandle={activeItem.collectionHandle} onSelect={addItem}>
           <ProductSessionAddButton />
         </ProductCatalogPopover>
       </div>
