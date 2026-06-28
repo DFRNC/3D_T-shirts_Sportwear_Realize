@@ -3,10 +3,12 @@ import type { garmentBusinessType, garmentConfigType, modelIdType } from '@types
 import baggioData from '@data/baggio_calcio/baggio_calcio.json';
 import bernardiCalcioData from '@data/bernardi_calcio/bernardi_calcio.json';
 import bernardiPallavoloData from '@data/bernardi_pallavolo/bernardi_pallavolo.json';
+import canottaMagikBasketData from '@data/canotta_magik_basket/canotta_magik_basket.json';
 import cruijffCalcioData from '@data/cruijff_calcio/cruijff_calcio.json';
 import cruijffPallavoloData from '@data/cruijff_pallavolo/cruijff_pallavolo.json';
 import federerCalcioData from '@data/federer_calcio/federer_calcio.json';
 import federerPallavoloData from '@data/federer_pallavolo/federer_pallavolo.json';
+import lolloPallavoloData from '@data/lollo_pallavolo/lollo_pallavolo.json';
 import malonePallavoloData from '@data/malone_pallavolo/malone_pallavolo.json';
 import picciPallavoloData from '@data/picci_pallavolo/picci_pallavolo.json';
 import syllaPallavoloData from '@data/sylla_pallavolo/sylla_pallavolo.json';
@@ -18,12 +20,14 @@ import syllaPallavoloData from '@data/sylla_pallavolo/sylla_pallavolo.json';
 const MODELS: Record<modelIdType, garmentConfigType> = {
   // WIP geometry JSON — schema is still being finalized (e.g. testoPositions), so cast through unknown.
   baggio_calcio: baggioData as unknown as garmentConfigType,
+  canotta_magik_basket: canottaMagikBasketData as unknown as garmentConfigType,
   bernardi_calcio: bernardiCalcioData as unknown as garmentConfigType,
   bernardi_pallavolo: bernardiPallavoloData as unknown as garmentConfigType,
   federer_calcio: federerCalcioData as unknown as garmentConfigType,
   federer_pallavolo: federerPallavoloData as unknown as garmentConfigType,
   cruijff_calcio: cruijffCalcioData as unknown as garmentConfigType,
   cruijff_pallavolo: cruijffPallavoloData as unknown as garmentConfigType,
+  lollo_pallavolo: lolloPallavoloData as unknown as garmentConfigType,
   malone_pallavolo: malonePallavoloData as unknown as garmentConfigType,
   picci_pallavolo: picciPallavoloData as unknown as garmentConfigType,
   sylla_pallavolo: syllaPallavoloData as unknown as garmentConfigType,

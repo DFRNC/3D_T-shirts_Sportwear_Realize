@@ -13,8 +13,8 @@ const getShopifyAdminAccessToken = (): string | undefined => readEnv('SHOPIFY_AD
 
 const getShopifyStorefrontAccessToken = (): string | undefined => readEnv('SHOPIFY_STOREFRONT_ACCESS_TOKEN');
 
-/** Home page gallery order: calcio first, pallavolo second. Override via SHOPIFY_HOME_COLLECTION_HANDLES. */
-const DEFAULT_SHOPIFY_HOME_COLLECTION_HANDLES = ['completo-gara-calcio', 'completo-gara-pallavolo'] as const;
+/** Home page gallery order: calcio, pallavolo, basket. Override via SHOPIFY_HOME_COLLECTION_HANDLES. */
+const DEFAULT_SHOPIFY_HOME_COLLECTION_HANDLES = ['completo-gara-calcio', 'completo-gara-pallavolo', 'completo-gara-basket'] as const;
 
 const getShopifyHomeCollectionHandles = (): string[] => {
   const raw = readEnv('SHOPIFY_HOME_COLLECTION_HANDLES');
