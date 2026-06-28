@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { useCallback, useEffect, useRef } from 'react';
 
 import { AtomImage } from '@atoms';
-import { useGarmentCatalogPreload } from '@hooks';
+import { useAppNavigate, useGarmentCatalogPreload } from '@hooks';
 import type { productFlipCardPropsType } from '@types';
 import { cn, resolveProductFlipCardSrc } from '@utils';
 
 const ProductFlipCard = ({ collection, slug, alt, previewSrc, activePreviewSrc, className }: productFlipCardPropsType) => {
+  const { toAppPath } = useAppNavigate();
   const cardRef = useRef<HTMLAnchorElement>(null);
   const isWarmedRef = useRef(false);
   const isEagerWarmRef = useRef(false);
@@ -60,7 +61,7 @@ const ProductFlipCard = ({ collection, slug, alt, previewSrc, activePreviewSrc, 
   return (
     <Link
       ref={cardRef}
-      href={`/${slug}`}
+      href={toAppPath(`/${slug}`)}
       prefetch={false}
       tabIndex={0}
       onPointerEnter={warmProductAssets}

@@ -4,11 +4,13 @@ import { usePathname } from 'next/navigation';
 
 import { LangSwitcher, Search, UserBar } from '@molecules';
 import { Box, Container, Flex, Grid, Logo } from '@atoms';
+import { useAppNavigate } from '@hooks';
 import { useEmbedded } from '@providers';
 import { useConfigurationCart } from '@store';
 
 const Header = () => {
   const { embedded } = useEmbedded();
+  const { toAppPath } = useAppNavigate();
   const pathname = usePathname();
   const activeSlug = useConfigurationCart((state) => state.items.find((item) => item.id === state.activeItemId)?.slug ?? state.items[0]?.slug);
 
@@ -17,7 +19,7 @@ const Header = () => {
   }
 
   const isOnConfigurator = pathname !== '/' && pathname !== '/checkout';
-  const logoHref = isOnConfigurator || !activeSlug ? '/' : `/${activeSlug}`;
+  const logoHref = toAppPath(isOnConfigurator || !activeSlug ? '/' : `/${activeSlug}`);
 
   return (
     <Box variant="header" asChild>
