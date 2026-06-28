@@ -211,6 +211,7 @@ const mapShopifyProduct = (product: shopifyProductNodeType): mappedHomeProductTy
     price: priceAmount != null ? Number(priceAmount) : null,
     currencyCode: minVariantPrice?.currencyCode ?? null,
     previewSrc: featuredImageSrc ?? viewImageSrc ?? localPreview.previewSrc,
+    flipPreviewSrc: viewImageSrc ?? featuredImageSrc ?? localPreview.previewSrc,
     activePreviewSrc: activeViewImageSrc ?? viewImageSrc ?? featuredImageSrc ?? localPreview.activePreviewSrc,
   };
 };

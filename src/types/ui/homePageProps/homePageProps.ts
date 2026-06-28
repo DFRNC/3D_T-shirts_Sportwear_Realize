@@ -8,6 +8,8 @@ type homePageProductType = {
   price: number | null;
   currencyCode: string | null;
   previewSrc: string | null;
+  /** Shopify `custom.view_image` — front side of home flip cards. */
+  flipPreviewSrc: string | null;
   activePreviewSrc: string | null;
 };
 

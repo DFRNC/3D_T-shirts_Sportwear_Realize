@@ -15,7 +15,7 @@ const HomePage = ({ collections }: homePagePropsType) => {
             collection: handle,
             slug: product.handle,
             alt: product.title,
-            previewSrc: product.previewSrc,
+            previewSrc: product.flipPreviewSrc,
             activePreviewSrc: product.activePreviewSrc,
           }))}
         />
