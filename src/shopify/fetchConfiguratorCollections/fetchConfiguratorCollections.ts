@@ -264,10 +264,17 @@ const fetchCollectionByHandle = async (handle: string): Promise<homePageCollecti
 
 const fetchConfiguratorCollections = async (): Promise<homePageCollectionType[]> => {
   const explicitHandles = getShopifyHomeCollectionHandles();
+  const collections = await Promise.all(explicitHandles.map((handle) => fetchCollectionByHandle(handle)));
+  const resolved = collections.filter((collection): collection is homePageCollectionType => collection != null);
+
+  if (resolved.length > 0) {
+    return resolved;
+  }
 
   if (explicitHandles.length > 0) {
-    const collections = await Promise.all(explicitHandles.map((handle) => fetchCollectionByHandle(handle)));
-    return collections.filter((collection): collection is homePageCollectionType => collection != null);
+    console.warn(
+      `[shopify] No home collections resolved for handles: ${explicitHandles.join(', ')}. Falling back to auto-discovery.`,
+    );
   }
 
   const isStorefront = getShopifyApiMode() === 'storefront';
@@ -282,9 +289,9 @@ const fetchConfiguratorCollections = async (): Promise<homePageCollectionType[]>
 
   const candidates = listData.collections?.nodes?.filter((collection) => collection.handle !== FRONTPAGE_HANDLE) ?? [];
 
-  const collections = await Promise.all(candidates.map((collection) => buildHomeCollection(collection)));
+  const discoveredCollections = await Promise.all(candidates.map((collection) => buildHomeCollection(collection)));
 
-  return collections.filter((collection): collection is homePageCollectionType => collection != null);
+  return discoveredCollections.filter((collection): collection is homePageCollectionType => collection != null);
 };
 
 export { fetchConfiguratorCollections };
