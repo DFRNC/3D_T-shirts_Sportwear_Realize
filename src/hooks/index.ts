@@ -12,6 +12,7 @@ export { useCheckoutInit } from './useCheckoutInit';
 export { useCheckoutSummary } from './useCheckoutSummary';
 export { useNavigateToCheckout } from './useNavigateToCheckout';
 export { useSubmitCheckout } from './useSubmitCheckout';
+export { useRequestAddProduct } from './useRequestAddProduct';
 export { useNavigateToConfigurator } from './useNavigateToConfigurator';
 export { useConfigurationCartSync } from './useConfigurationCartSync';
 export { useConfigurationPositionPicker } from './useConfigurationPositionPicker';

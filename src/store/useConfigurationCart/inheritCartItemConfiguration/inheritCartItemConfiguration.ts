@@ -54,6 +54,14 @@ const applySingleReferenceColor = (
   };
 };
 
+const inheritDesignSnapshot = (reference: cartItemConfigurationType['design']): cartItemConfigurationType['design'] => ({
+  activePatternKey: reference.activePatternKey,
+  patternColors: { ...reference.patternColors },
+  designLayerColors: { ...reference.designLayerColors },
+  activeOpacity: reference.activeOpacity,
+  designOpacity: reference.designOpacity,
+});
+
 const inheritCartItemConfiguration = (
   referenceConfiguration: cartItemConfigurationType,
   referenceProduct: garmentConfigType,
@@ -69,6 +77,7 @@ const inheritCartItemConfiguration = (
   return {
     ...defaults,
     color,
+    design: inheritDesignSnapshot(referenceConfiguration.design),
   };
 };
 

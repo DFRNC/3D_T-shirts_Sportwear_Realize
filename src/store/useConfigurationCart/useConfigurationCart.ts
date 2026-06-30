@@ -17,7 +17,7 @@ interface ConfigurationCartState {
   activeItemId: string;
   configurations: Record<string, cartItemConfigurationType>;
   previews: Record<string, string>;
-  addItem: (product: configuratorCatalogProductPickType) => void;
+  addItem: (product: configuratorCatalogProductPickType, options?: { inheritDesign?: boolean }) => void;
   /** Stamp a Shopify product (from the slug route loader) onto the active cart item. */
   setActiveItemProduct: (product: { collectionHandle: string; slug: string; modelId: modelIdType; business: garmentBusinessType }) => void;
   duplicateActiveItem: () => void;
@@ -39,7 +39,8 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
   configurations: {},
   previews: {},
 
-  addItem: (productRef) => {
+  addItem: (productRef, options) => {
+    const inheritDesign = options?.inheritDesign ?? false;
     const { items, activeItemId, configurations } = get();
     const item = createCartItem(productRef);
     const newProduct = getModel(productRef.modelId);
@@ -54,21 +55,23 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
       [activeItemId]: get().getConfiguration(activeItemId) ?? captureGarmentConfiguration(),
     };
 
-    const firstItem = items[0];
-    const firstProduct = getModel(firstItem.modelId);
+    const referenceItem = items.find((entry) => entry.id === activeItemId) ?? items[0];
+    const referenceProduct = getModel(referenceItem.modelId);
     const referenceConfiguration =
-      nextConfigurations[firstItem.id] ?? (firstProduct ? createDefaultCartItemConfiguration(firstProduct) : createDefaultCartItemConfiguration(newProduct));
+      nextConfigurations[referenceItem.id] ??
+      (referenceProduct ? createDefaultCartItemConfiguration(referenceProduct) : createDefaultCartItemConfiguration(newProduct));
 
-    const inheritedConfiguration = firstProduct
-      ? inheritCartItemConfiguration(referenceConfiguration, firstProduct, newProduct)
-      : createDefaultCartItemConfiguration(newProduct);
+    const nextConfiguration =
+      inheritDesign && referenceProduct
+        ? inheritCartItemConfiguration(referenceConfiguration, referenceProduct, newProduct)
+        : createDefaultCartItemConfiguration(newProduct);
 
     set({
       items: [...items, item],
       activeItemId: item.id,
       configurations: {
         ...nextConfigurations,
-        [item.id]: inheritedConfiguration,
+        [item.id]: nextConfiguration,
       },
       previews: get().previews,
     });

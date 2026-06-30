@@ -5,13 +5,13 @@ import { useCallback } from 'react';
 import { Button, Container, Flex, SvgIcon } from '@atoms';
 
 import { ProductCatalogPopover } from '@molecules';
-import { useNavigateToCheckout } from '@hooks';
+import { useNavigateToCheckout, useRequestAddProduct } from '@hooks';
 import { useConfigurationCart, useInfoDialog } from '@store';
 
 const FooterConfiguration = () => {
   const items = useConfigurationCart((state) => state.items);
   const activeItemId = useConfigurationCart((state) => state.activeItemId);
-  const addItem = useConfigurationCart((state) => state.addItem);
+  const { requestAddProduct } = useRequestAddProduct();
   const duplicateActiveItem = useConfigurationCart((state) => state.duplicateActiveItem);
   const setIsOpen = useInfoDialog((state) => state.setIsOpen);
   const { navigateToCheckout } = useNavigateToCheckout();
@@ -33,7 +33,7 @@ const FooterConfiguration = () => {
           <SvgIcon name="share" />
           Condividi
         </Button>
-        <ProductCatalogPopover activeCollectionHandle={activeItem.collectionHandle} onSelect={addItem} contentSide="top" contentAlign="center">
+        <ProductCatalogPopover activeCollectionHandle={activeItem.collectionHandle} onSelect={requestAddProduct} contentSide="top" contentAlign="center">
           <Button size="sm">
             <SvgIcon name="plus" />
             Prodotto

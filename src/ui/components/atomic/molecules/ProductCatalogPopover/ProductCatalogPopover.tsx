@@ -75,6 +75,7 @@ const ProductCatalogPopover = ({
       slug: product.handle,
       modelId: product.modelId,
       business: mapHomePageProductBusiness(product, product.modelId),
+      catalogPreviewSrc: product.previewSrc ?? product.flipPreviewSrc ?? product.activePreviewSrc ?? null,
     });
     handleOpenChange(false);
   };

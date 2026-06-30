@@ -14,6 +14,10 @@ const CONFIGURATOR_NUMBER_POSITION_SELECT_LABEL = 'Dove desideri inserire il num
 const CONFIGURATOR_TESTO_POSITION_SELECT_LABEL = 'Dove desideri inserire il testo?';
 const CONFIGURATOR_POSITION_SELECT_PLACEHOLDER = 'Seleziona posizione';
 const CONFIGURATOR_UPLOADED_FILES_LABEL = 'File caricati';
+const ADD_PRODUCT_DESIGN_MODAL_CONFIRM_LABEL = 'Sì';
+const ADD_PRODUCT_DESIGN_MODAL_DECLINE_LABEL = 'No';
+
+const buildAddProductDesignModalTitle = (productLabel: string): string => `Desideri lo stesso disegno anche su ${productLabel}?`;
 const CONFIGURATOR_DEFAULT_BRAND_LOGO_TITLE = 'Brand Logo';
 const CONFIGURATOR_DEFAULT_BRAND_LOGO_DESCRIPTION = 'I loghi di Realize cambieranno colore per adattarsi alla grafica senza preavviso.';
 const CONFIGURATOR_DEFAULT_BRAND_LOGO_SRC = '/svg/logo.svg';
@@ -156,6 +160,9 @@ export {
   CHECKOUT_SUMMARY_TRUST_ITEMS,
   CHECKOUT_SUMMARY_VAT_LABEL,
   CHECKOUT_TABLE_ADD_ROW_LABEL,
+  ADD_PRODUCT_DESIGN_MODAL_CONFIRM_LABEL,
+  ADD_PRODUCT_DESIGN_MODAL_DECLINE_LABEL,
+  buildAddProductDesignModalTitle,
   CONFIGURATOR_DEFAULT_BRAND_LOGO_DESCRIPTION,
   CONFIGURATOR_DEFAULT_BRAND_LOGO_SRC,
   CONFIGURATOR_DEFAULT_BRAND_LOGO_TITLE,
