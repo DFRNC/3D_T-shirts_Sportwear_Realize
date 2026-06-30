@@ -50,16 +50,14 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
 
     persistCartItemSnapshot(get, activeItemId);
 
-    const nextConfigurations: Record<string, cartItemConfigurationType> = {
-      ...configurations,
-      [activeItemId]: get().getConfiguration(activeItemId) ?? captureGarmentConfiguration(),
-    };
-
     const referenceItem = items.find((entry) => entry.id === activeItemId) ?? items[0];
     const referenceProduct = getModel(referenceItem.modelId);
-    const referenceConfiguration =
-      nextConfigurations[referenceItem.id] ??
-      (referenceProduct ? createDefaultCartItemConfiguration(referenceProduct) : createDefaultCartItemConfiguration(newProduct));
+    const referenceConfiguration = captureGarmentConfiguration();
+
+    const nextConfigurations: Record<string, cartItemConfigurationType> = {
+      ...configurations,
+      [referenceItem.id]: referenceConfiguration,
+    };
 
     const nextConfiguration =
       inheritDesign && referenceProduct

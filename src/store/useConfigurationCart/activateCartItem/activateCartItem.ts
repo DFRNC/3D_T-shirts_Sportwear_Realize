@@ -2,7 +2,7 @@
 
 import { useConfigurationControl } from '@store/useConfigurationControl';
 import { useConfiguratorProduct } from '@store/useConfiguratorProduct';
-import { applyGarmentConfiguration, captureGarmentConfiguration } from '@store/useConfigurationCart/cartItemConfiguration';
+import { applyGarmentConfiguration } from '@store/useConfigurationCart/cartItemConfiguration';
 import { persistCartItemSnapshot } from '@store/useConfigurationCart/persistCartItemSnapshot';
 import type { cartItemConfigurationType, garmentBusinessType, modelIdType } from '@types';
 import { warmProductAssets } from '@configurator';
@@ -15,7 +15,7 @@ interface ActivateCartItemGetState {
 }
 
 const activateCartItem = (get: () => ActivateCartItemGetState, itemId: string, options?: { savePreviousId?: string | null }) => {
-  const { items, saveConfiguration, getConfiguration } = get();
+  const { items, getConfiguration } = get();
   const activeIndex = items.findIndex((item) => item.id === itemId);
   const activeItem = items[activeIndex];
   if (!activeItem) return;
@@ -32,12 +32,7 @@ const activateCartItem = (get: () => ActivateCartItemGetState, itemId: string, o
   useConfiguratorProduct.getState().setProduct(activeItem.modelId, activeItem.business);
   useConfigurationControl.getState().setNumberProduct(activeIndex + 1);
 
-  const configuration = getConfiguration(itemId);
-  applyGarmentConfiguration(product, configuration);
-
-  if (!configuration) {
-    saveConfiguration(itemId, captureGarmentConfiguration());
-  }
+  applyGarmentConfiguration(product, getConfiguration(itemId));
 };
 
 export { activateCartItem };
