@@ -1,4 +1,9 @@
-export { readProductAppearanceTextures, syncProductAppearanceTextures } from './garmentAppearance/garmentProductAppearanceCache';
+export {
+  getAppearanceCacheVersion,
+  isGarmentAppearanceCached,
+  readProductAppearanceTextures,
+  syncProductAppearanceTextures,
+} from './garmentAppearance/garmentProductAppearanceCache';
 export { applyGarmentGradient, applyGarmentPartUvBounds } from './garmentGradient/applyGarmentGradient';
 export {
   clampUvToPartBounds,

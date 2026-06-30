@@ -54,6 +54,7 @@ const useTextPrintMaskPipeline = <TInstance extends garmentTextRenderInstanceTyp
 }: TextPrintMaskPipelineConfig<TInstance, TPreview, TStyle>) => {
   const product = useConfiguratorProduct((state) => state.product);
   const isInitialSceneLoading = useConfiguratorSceneLoad((state) => state.isInitialSceneLoading);
+  const isSceneTransitionLoading = useConfiguratorSceneLoad((state) => state.isSceneTransitionLoading);
   const partIds = useMemo(() => product.parts.map((part) => part.id), [product.parts]);
   const activeStep = useConfigurationControl((state) => state.activeStep);
   const { getMaterials, hasMaterialsForParts } = useGarmentMaterialRegistry();
@@ -97,7 +98,7 @@ const useTextPrintMaskPipeline = <TInstance extends garmentTextRenderInstanceTyp
   const atlasSize = useMemo(() => resolvePrintAtlasSize(product), [product]);
 
   const isSynced = productPath === product.path;
-  const isReady = isSynced && hasMaterialsForParts(partIds) && !isInitialSceneLoading;
+  const isReady = isSynced && hasMaterialsForParts(partIds) && !isInitialSceneLoading && !isSceneTransitionLoading;
 
   const clearRuntime = useCallback(() => {
     clearMaskRuntime(maskRefs, prevFillSignatureRef);

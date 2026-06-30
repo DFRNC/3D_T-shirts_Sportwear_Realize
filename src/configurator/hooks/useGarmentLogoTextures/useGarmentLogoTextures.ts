@@ -31,6 +31,7 @@ const LOGO_STEP = 7;
 const useGarmentLogoTextures = () => {
   const product = useConfiguratorProduct((state) => state.product);
   const isInitialSceneLoading = useConfiguratorSceneLoad((state) => state.isInitialSceneLoading);
+  const isSceneTransitionLoading = useConfiguratorSceneLoad((state) => state.isSceneTransitionLoading);
   const partIds = useMemo(() => product.parts.map((part) => part.id), [product.parts]);
   const activeStep = useConfigurationControl((state) => state.activeStep);
   const logoProductPath = useGarmentLogo((state) => state.productPath);
@@ -42,7 +43,7 @@ const useGarmentLogoTextures = () => {
   const materialRevision = useMaterialRegistryRevision();
   const invalidate = useThree((state) => state.invalidate);
   const isLogoSynced = logoProductPath === product.path;
-  const isSceneReady = isLogoSynced && hasMaterialsForParts(partIds) && !isInitialSceneLoading;
+  const isSceneReady = isLogoSynced && hasMaterialsForParts(partIds) && !isInitialSceneLoading && !isSceneTransitionLoading;
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const textureRef = useRef<Texture | null>(null);

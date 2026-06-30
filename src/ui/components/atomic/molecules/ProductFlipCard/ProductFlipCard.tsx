@@ -27,17 +27,7 @@ const ProductFlipCard = ({ collection, slug, alt, previewSrc, activePreviewSrc, 
   const warmProductAssetsEager = useCallback(() => {
     if (isEagerWarmRef.current) return;
     isEagerWarmRef.current = true;
-
-    const scheduleEagerWarm = () => {
-      void warmBySlugEager(slug);
-    };
-
-    if (typeof requestIdleCallback !== 'undefined') {
-      requestIdleCallback(scheduleEagerWarm, { timeout: 2_000 });
-      return;
-    }
-
-    requestAnimationFrame(scheduleEagerWarm);
+    void warmBySlugEager(slug);
   }, [slug, warmBySlugEager]);
 
   useEffect(() => {

@@ -1,9 +1,11 @@
 'use client';
 
 import type { configuratorProductHydrationType } from '@configurator/types';
+import { beginGarmentModelWarmup } from '@configurator';
 import type { modelIdType } from '@types';
 import { useConfigurationCart, useConfiguratorSceneLoad } from '@store';
-import { DEFAULT_MODEL_ID, deriveLocalBusiness, hasModel } from '@utils/garmentCatalog/garmentCatalog';
+import { DEFAULT_MODEL_ID, deriveLocalBusiness, getModel, hasModel } from '@utils/garmentCatalog/garmentCatalog';
+
 const resolveRouteModel = (slug: string, product: configuratorProductHydrationType | null) => {
   const slugModelId = hasModel(slug) ? slug : null;
   const isMapped = product != null && hasModel(product.modelId);
@@ -16,6 +18,11 @@ const resolveRouteModel = (slug: string, product: configuratorProductHydrationTy
 
 const applyConfiguratorRouteProduct = (collectionHandle: string, slug: string, product: configuratorProductHydrationType | null) => {
   const { modelId, business } = resolveRouteModel(slug, product);
+  const garment = getModel(modelId);
+
+  if (garment) {
+    beginGarmentModelWarmup(garment);
+  }
 
   useConfiguratorSceneLoad.getState().beginInitialSceneLoad();
   useConfigurationCart.getState().setActiveItemProduct({ collectionHandle, slug, modelId, business });
