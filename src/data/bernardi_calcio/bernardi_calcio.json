@@ -3,8 +3,8 @@
   "path": "/models/bernardi_calcio/",
   "modelFile": "model.glb",
   "printAtlas": {
-    "width": 4096,
-    "height": 2257
+    "width": 2048,
+    "height": 1129
   },
   "preserveGltfMeshes": ["model_inside", "model_label", "model_sweatband"],
   "parts": [

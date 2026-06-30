@@ -12,8 +12,8 @@
       "path": "/models/crewneck/crewneck/",
       "modelFile": "crewneck.gltf",
       "printAtlas": {
-        "width": 4096,
-        "height": 2149
+        "width": 2048,
+        "height": 1075
       },
       "gizmoRotation": 0,
       "parts": [
@@ -412,8 +412,8 @@
       "path": "/models/crewneck/mans_shorts/",
       "modelFile": "mans_shorts.gltf",
       "printAtlas": {
-        "width": 4096,
-        "height": 2149
+        "width": 2048,
+        "height": 1075
       },
       "gizmoRotation": -90,
       "hiddenSteps": ["name"],

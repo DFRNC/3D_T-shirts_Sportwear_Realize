@@ -3,8 +3,8 @@
   "path": "/models/malone_pallavolo/",
   "modelFile": "model.glb",
   "printAtlas": {
-    "width": 4096,
-    "height": 2149
+    "width": 2048,
+    "height": 1075
   },
   "preserveGltfMeshes": ["model_inside", "model_laces"],
   "parts": [

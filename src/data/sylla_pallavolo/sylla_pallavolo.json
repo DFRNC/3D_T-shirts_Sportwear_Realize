@@ -3,8 +3,8 @@
   "path": "/models/sylla_pallavolo/",
   "modelFile": "model.glb",
   "printAtlas": {
-    "width": 4096,
-    "height": 2257
+    "width": 2048,
+    "height": 1129
   },
   "preserveGltfMeshes": ["crewneck_womans_inside", "crewneck_womans_inside_label", "crewneck_womans_sweatband"],
   "parts": [

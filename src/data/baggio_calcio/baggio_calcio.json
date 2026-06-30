@@ -3,8 +3,8 @@
   "path": "/models/baggio_calcio/",
   "modelFile": "model.glb",
   "printAtlas": {
-    "width": 4096,
-    "height": 2133
+    "width": 2048,
+    "height": 1067
   },
   "preserveGltfMeshes": ["model_inside", "model_label", "model_sweatband"],
   "parts": [

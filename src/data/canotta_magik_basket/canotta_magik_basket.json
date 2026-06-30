@@ -3,8 +3,8 @@
   "path": "/models/canotta_magik_basket/",
   "modelFile": "model.glb",
   "printAtlas": {
-    "width": 4096,
-    "height": 1679
+    "width": 2048,
+    "height": 840
   },
   "preserveGltfMeshes": ["basketball_top_inside", "basketball_top_sweatband", "basketball_top_label"],
   "parts": [
