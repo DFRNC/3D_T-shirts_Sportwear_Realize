@@ -6,18 +6,13 @@
     "width": 4096,
     "height": 2149
   },
-  "preserveGltfMeshes": [
-    "mans_shorts_inside",
-    "mans_shorts_laces"
-  ],
+  "preserveGltfMeshes": ["mans_shorts_inside", "mans_shorts_laces"],
   "parts": [
     {
       "name": "Davanti",
       "label": "Davanti",
       "id": "lollo_pallavolo_front",
-      "meshNames": [
-        "mans_shorts_left"
-      ],
+      "meshNames": ["mans_shorts_left"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.5035,
@@ -38,9 +33,7 @@
       "name": "Retro",
       "label": "Retro",
       "id": "lollo_pallavolo_back",
-      "meshNames": [
-        "mans_shorts_right"
-      ],
+      "meshNames": ["mans_shorts_right"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.0012,

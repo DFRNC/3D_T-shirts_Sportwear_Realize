@@ -21,8 +21,14 @@ type homePageCollectionType = {
   products: homePageProductType[];
 };
 
+type homePageCollectionSummaryType = Pick<homePageCollectionType, 'id' | 'title' | 'handle' | 'imageSrc'>;
+
 type homePagePropsType = {
-  collections: homePageCollectionType[];
+  collections: homePageCollectionSummaryType[];
 };
 
-export type { homePageCollectionType, homePageProductType, homePagePropsType };
+type collectionPagePropsType = {
+  collection: homePageCollectionType;
+};
+
+export type { collectionPagePropsType, homePageCollectionSummaryType, homePageCollectionType, homePageProductType, homePagePropsType };

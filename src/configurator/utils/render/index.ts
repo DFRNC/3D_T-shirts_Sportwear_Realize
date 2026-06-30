@@ -20,4 +20,4 @@ export {
   resolveCursorFocusPoint,
   resolveGarmentCenter,
 } from './orbitCamera';
-export { suppressThreeClockDeprecation } from './suppressThreeClockDeprecation';
+export { suppressThreeClockDeprecation } from '@configurator/bootstrap/clientConsoleSuppression/suppressThreeClockDeprecation';

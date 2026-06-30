@@ -1,3 +1,5 @@
+import { buildShopifyFrameAncestors } from '@shopify/frameAncestors';
+
 const readEnv = (key: string): string | undefined => {
   const value = process.env[key]?.trim();
   return value ? value : undefined;
@@ -14,12 +16,7 @@ const getShopifyAdminAccessToken = (): string | undefined => readEnv('SHOPIFY_AD
 const getShopifyStorefrontAccessToken = (): string | undefined => readEnv('SHOPIFY_STOREFRONT_ACCESS_TOKEN');
 
 /** Home page gallery order: calcio, pallavolo, basket, completo. Override via SHOPIFY_HOME_COLLECTION_HANDLES. */
-const DEFAULT_SHOPIFY_HOME_COLLECTION_HANDLES = [
-  'completo-gara-calcio',
-  'completo-gara-pallavolo',
-  'completo-gara-basket',
-  'completo',
-] as const;
+const DEFAULT_SHOPIFY_HOME_COLLECTION_HANDLES = ['completo-gara-calcio', 'completo-gara-pallavolo', 'completo-gara-basket', 'completo'] as const;
 
 const getShopifyHomeCollectionHandles = (): string[] => {
   const raw = readEnv('SHOPIFY_HOME_COLLECTION_HANDLES');
@@ -49,18 +46,7 @@ const getShopifyApiMode = (): shopifyApiModeType => {
   return 'admin';
 };
 
-const getShopifyFrameAncestors = (): string[] => {
-  const raw = readEnv('SHOPIFY_FRAME_ANCESTORS');
-
-  if (!raw) {
-    return ['https://*.myshopify.com', 'https://admin.shopify.com'];
-  }
-
-  return raw
-    .split(',')
-    .map((origin) => origin.trim())
-    .filter(Boolean);
-};
+const getShopifyFrameAncestors = (): string[] => buildShopifyFrameAncestors();
 
 const assertShopifyConfigured = (): {
   storeDomain: string;

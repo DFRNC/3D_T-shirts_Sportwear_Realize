@@ -35,13 +35,15 @@ const profilePage = async (page, label) => {
   await page.goto(pageUrl, { waitUntil: 'domcontentloaded', timeout: 120_000 });
 
   // Wait until loader hides or watchdog
-  await page.waitForFunction(
-    () => {
-      const loader = document.querySelector('[aria-busy="true"]');
-      return !loader || loader.getAttribute('aria-busy') === 'false';
-    },
-    { timeout: 60_000 },
-  ).catch(() => {});
+  await page
+    .waitForFunction(
+      () => {
+        const loader = document.querySelector('[aria-busy="true"]');
+        return !loader || loader.getAttribute('aria-busy') === 'false';
+      },
+      { timeout: 60_000 },
+    )
+    .catch(() => {});
 
   await page.waitForTimeout(1500);
 

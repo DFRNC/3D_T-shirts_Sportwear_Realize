@@ -1,7 +1,7 @@
 'use client';
 
 import { AtomPopover, AtomPopoverContent, AtomPopoverTrigger, Button, Grid, Text } from '@atoms';
-import { mapHomePageProductBusiness } from '@shopify/mapHomePageProductBusiness';
+import { mapHomePageProductBusiness } from '@shopify';
 import { useConfiguratorCatalog } from '@providers/configuratorCatalogProvider';
 import { ProductCatalogOption } from '@molecules/ProductCatalogOption';
 import type { homePageCollectionType, productCatalogPopoverPropsType } from '@types';
@@ -90,7 +90,12 @@ const ProductCatalogPopover = ({
       <AtomPopoverContent side={contentSide} align={contentAlign} className="flex flex-col gap-1 p-3" style={{ width: popoverWidthPx }}>
         <Text className="text-[16px]  uppercase font-semibold text-default">{view === 'collections' ? 'Seleziona collezione' : 'Seleziona prodotto'}</Text>
         {view === 'products' && (
-          <Button type="button" variant="ghost" className={cn('h-auto justify-start leading-none items-center gap-1 px-0 text-[14px] font-medium text-default hover:text-active')} onClick={() => setView('collections')}>
+          <Button
+            type="button"
+            variant="ghost"
+            className={cn('h-auto justify-start leading-none items-center gap-1 px-0 text-[14px] font-medium text-default hover:text-active')}
+            onClick={() => setView('collections')}
+          >
             <ArrowLeft className="size-4 shrink-0" /> Collezioni
           </Button>
         )}

@@ -9,7 +9,8 @@ import { createCartItem, createDefaultCartItem } from '@store/useConfigurationCa
 import { persistCartItemSnapshot } from '@store/useConfigurationCart/persistCartItemSnapshot';
 import type { cartItemConfigurationType, cartItemType, configuratorCatalogProductPickType, garmentBusinessType, modelIdType } from '@types';
 import { warmProductAssets } from '@configurator';
-import { getModel } from '@utils';
+import { buildConfiguratorPath, getModel } from '@utils';
+import { postEmbeddedUrlToParent } from '@utils/embeddedUrlSync';
 import { create } from 'zustand';
 interface ConfigurationCartState {
   items: cartItemType[];
@@ -18,7 +19,7 @@ interface ConfigurationCartState {
   previews: Record<string, string>;
   addItem: (product: configuratorCatalogProductPickType) => void;
   /** Stamp a Shopify product (from the slug route loader) onto the active cart item. */
-  setActiveItemProduct: (product: { slug: string; modelId: modelIdType; business: garmentBusinessType }) => void;
+  setActiveItemProduct: (product: { collectionHandle: string; slug: string; modelId: modelIdType; business: garmentBusinessType }) => void;
   duplicateActiveItem: () => void;
   selectItem: (id: string) => void;
   removeItem: (id: string) => void;
@@ -75,7 +76,7 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     activateCartItem(get, item.id);
   },
 
-  setActiveItemProduct: ({ slug, modelId, business }) => {
+  setActiveItemProduct: ({ collectionHandle, slug, modelId, business }) => {
     const { items, activeItemId, configurations } = get();
     const activeItem = items.find((item) => item.id === activeItemId);
     if (!activeItem) return;
@@ -87,7 +88,7 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     // time on every open. Only the slug + business need refreshing in that case.
     if (activeItem.modelId === modelId) {
       set({
-        items: items.map((item) => (item.id === activeItemId ? { ...item, slug, business } : item)),
+        items: items.map((item) => (item.id === activeItemId ? { ...item, collectionHandle, slug, business } : item)),
       });
       useConfiguratorProduct.getState().initFromLoader(modelId, business);
 
@@ -103,7 +104,7 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     const nextConfigurations = Object.fromEntries(Object.entries(configurations).filter(([itemId]) => itemId !== activeItemId));
 
     set({
-      items: items.map((item) => (item.id === activeItemId ? { ...item, slug, modelId, business } : item)),
+      items: items.map((item) => (item.id === activeItemId ? { ...item, collectionHandle, slug, modelId, business } : item)),
       configurations: nextConfigurations,
     });
 
@@ -203,5 +204,35 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     persistCartItemSnapshot(get, activeItemId);
   },
 }));
+
+/**
+ * Mirror the *active* session item into the host (Shopify) URL + SEO when embedded.
+ * Switching/adding products only mutates this store (no Next.js route change), so the
+ * route-based {@link useEmbeddedUrlSync} never fires. We post a `navigate` message here
+ * instead; the theme updates the address bar and refetches product metadata.
+ *
+ * Lives at the store module level (already part of the configurator chunk) on purpose —
+ * wiring this through a provider/React hook pulled the 3D bundle into a second chunk and
+ * produced duplicate `@react-three/fiber` instances ("Hooks can only be used within the
+ * Canvas component").
+ */
+let lastPostedActiveProductPath: string | null = null;
+
+useConfigurationCart.subscribe((state) => {
+  const activeItem = state.items.find((item) => item.id === state.activeItemId);
+
+  if (!activeItem || !activeItem.collectionHandle || !activeItem.slug) {
+    return;
+  }
+
+  const pathname = buildConfiguratorPath(activeItem.collectionHandle, activeItem.slug);
+
+  if (lastPostedActiveProductPath === pathname) {
+    return;
+  }
+
+  lastPostedActiveProductPath = pathname;
+  postEmbeddedUrlToParent(pathname);
+});
 
 export { useConfigurationCart };

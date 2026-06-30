@@ -5,11 +5,11 @@ import { AtomImage, Button, Flex, Grid, SvgIcon, Text } from '@atoms';
 import { ProductSessionPreviewSkeleton } from '@skeletons';
 import type { productSessionRowPropsType } from '@types';
 import { cn } from '@utils';
-
-import { PRODUCT_SESSION_ROW_CARD_WIDTH_PX, PRODUCT_SESSION_ROW_PREVIEW_SIZE_PX } from './productSessionRow.constants';
+import { PRODUCT_SESSION_ROW_CARD_WIDTH_PX, PRODUCT_SESSION_ROW_PREVIEW_SIZE_PX } from '@molecules/ProductSessionRow/productSessionRowConstants';
 
 type productSessionRowCardPropsType = Pick<productSessionRowPropsType, 'name' | 'previewSrc' | 'active' | 'onSelect' | 'onRemove'> & {
-  showDetails: boolean;
+  /** Anchor card: collapsed only. Portal card: details stay mounted and animate via isExpanded. */
+  variant: 'anchor' | 'portal';
   isExpanded: boolean;
   isPreviewLoaded: boolean;
   onPreviewLoad: () => void;
@@ -31,13 +31,16 @@ const ProductSessionRowCard = ({
   name,
   previewSrc,
   active = false,
-  showDetails,
+  variant,
   isExpanded,
   isPreviewLoaded,
   onPreviewLoad,
   onSelect,
   onRemove,
 }: productSessionRowCardPropsType) => {
+  const isPortal = variant === 'portal';
+  const detailsVisible = isPortal && isExpanded;
+
   const handleRemove = (event: { stopPropagation: () => void }) => {
     event.stopPropagation();
     onRemove();
@@ -47,19 +50,16 @@ const ProductSessionRowCard = ({
     <Flex
       data-active={active}
       className={cn(
-        'h-full items-center border border-gray-10 bg-gray-5',
-        'transition-shadow duration-200 ease-out',
-        showDetails ? 'w-max max-w-full overflow-hidden' : 'w-full overflow-hidden',
+        'h-full w-full items-center overflow-hidden border border-gray-10 bg-gray-5',
+        'transition-[border-color,box-shadow] duration-200 ease-out',
         active && 'border-active shadow-sm',
-        isExpanded && 'shadow-md',
+        isPortal && isExpanded && 'shadow-md',
       )}
     >
       <Grid
-        className={cn('h-full items-center', showDetails ? 'w-max max-w-full gap-3 pr-3' : 'w-full overflow-hidden')}
+        className={cn('h-full w-full items-center', isPortal && 'gap-3 pr-3')}
         style={{
-          gridTemplateColumns: showDetails
-            ? `${PRODUCT_SESSION_ROW_CARD_WIDTH_PX}px max-content auto`
-            : `${PRODUCT_SESSION_ROW_CARD_WIDTH_PX}px`,
+          gridTemplateColumns: isPortal ? `${PRODUCT_SESSION_ROW_CARD_WIDTH_PX}px minmax(0, 1fr) auto` : `${PRODUCT_SESSION_ROW_CARD_WIDTH_PX}px`,
         }}
       >
         <Button type="button" variant="ghost" onClick={onSelect} className={cn('h-full w-full p-0', active && 'cursor-default')}>
@@ -67,13 +67,19 @@ const ProductSessionRowCard = ({
             <ProductSessionRowPreview name={name} previewSrc={previewSrc} isPreviewLoaded={isPreviewLoaded} onPreviewLoad={onPreviewLoad} />
           </Flex>
         </Button>
-        {showDetails && (
+        {isPortal && (
           <>
             <Button
               type="button"
               variant="ghost"
               onClick={onSelect}
-              className={cn('h-full w-auto max-w-full min-w-0 justify-start items-center p-0 text-left', active && 'cursor-default')}
+              aria-hidden={!detailsVisible}
+              tabIndex={detailsVisible ? 0 : -1}
+              className={cn(
+                'h-full min-w-0 justify-start items-center overflow-hidden p-0 text-left transition-opacity duration-200 ease-out',
+                active && 'cursor-default',
+                detailsVisible ? 'w-auto opacity-100' : 'pointer-events-none w-0 opacity-0',
+              )}
             >
               <Text className="truncate whitespace-nowrap text-[14px] font-medium">{name}</Text>
             </Button>
@@ -81,7 +87,12 @@ const ProductSessionRowCard = ({
               type="button"
               variant="ghost"
               size="icon"
-              className="shrink-0 bg-transparent hover:bg-transparent"
+              aria-hidden={!detailsVisible}
+              tabIndex={detailsVisible ? 0 : -1}
+              className={cn(
+                'shrink-0 bg-transparent transition-opacity duration-200 ease-out hover:bg-transparent',
+                detailsVisible ? 'opacity-100' : 'pointer-events-none w-0 opacity-0',
+              )}
               aria-label={`Rimuovi ${name}`}
               onClick={handleRemove}
             >

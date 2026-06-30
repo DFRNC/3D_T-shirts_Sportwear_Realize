@@ -1,6 +1,8 @@
 'use client';
 
 export { useAppNavigate } from './useAppNavigate';
+export { useConfiguratorRouteReset } from './useConfiguratorRouteReset';
+export { useEmbeddedUrlSync } from './useEmbeddedUrlSync';
 export { isConfiguratorStepAvailable, resolveAvailableConfiguratorStepNumbers, resolveProductStepsConfiguration } from './resolveProductStepsConfiguration';
 export { useGarmentCatalogPreload, useGarmentCatalogPreloadEffect, warmGarmentCatalogAssets, warmGarmentCatalogAssetsEager } from './useGarmentCatalogPreload';
 export { useConfiguratorInitialSceneLoad } from './useConfiguratorInitialSceneLoad';
@@ -9,6 +11,7 @@ export { useCheckoutConfigurationTable } from './useCheckoutConfigurationTable';
 export { useCheckoutInit } from './useCheckoutInit';
 export { useCheckoutSummary } from './useCheckoutSummary';
 export { useNavigateToCheckout } from './useNavigateToCheckout';
+export { useSubmitCheckout } from './useSubmitCheckout';
 export { useNavigateToConfigurator } from './useNavigateToConfigurator';
 export { useConfigurationCartSync } from './useConfigurationCartSync';
 export { useConfigurationPositionPicker } from './useConfigurationPositionPicker';

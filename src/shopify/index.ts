@@ -1,6 +1,11 @@
 export { assertShopifyConfigured, getShopifyFrameAncestors, isShopifyEnabled } from './config';
+export { createCheckoutCart } from './createCheckoutCart';
+export type { createCheckoutPayloadType, createCheckoutResultType } from './checkoutPayload';
+export { buildShopifyFrameAncestors, buildShopifyFrameAncestorsHeader } from './frameAncestors';
 export { fetchConfiguratorProductByHandle } from './fetchConfiguratorProductByHandle';
-export { fetchConfiguratorCollections } from './fetchConfiguratorCollections';
+export { fetchCollectionByHandle, fetchConfiguratorCollectionSummaries, fetchConfiguratorCollections } from './fetchConfiguratorCollections';
 export { resolveConfiguratorProduct } from './resolveConfiguratorProduct';
+export { resolveHomeCollectionByHandle } from './resolveHomeCollectionByHandle';
+export { resolveHomeCollectionSummaries } from './resolveHomeCollectionSummaries';
 export { resolveHomeCollections } from './resolveHomeCollections';
 export { mapHomePageProductBusiness } from './mapHomePageProductBusiness';

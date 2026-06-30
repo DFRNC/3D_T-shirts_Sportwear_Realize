@@ -6,19 +6,13 @@
     "width": 4096,
     "height": 2149
   },
-  "preserveGltfMeshes": [
-    "model_inside",
-    "model_label",
-    "model_sweatband"
-  ],
+  "preserveGltfMeshes": ["model_inside", "model_label", "model_sweatband"],
   "parts": [
     {
       "name": "Davanti",
       "label": "Davanti",
       "id": "federer_completo_front",
-      "meshNames": [
-        "model_front"
-      ],
+      "meshNames": ["model_front"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.5028,
@@ -39,9 +33,7 @@
       "name": "Retro",
       "label": "Retro",
       "id": "federer_completo_back",
-      "meshNames": [
-        "model_back"
-      ],
+      "meshNames": ["model_back"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.0038,
@@ -62,9 +54,7 @@
       "name": "Manica 1",
       "label": "Manica 1",
       "id": "federer_completo_sleeve_left",
-      "meshNames": [
-        "model_sleeve_left"
-      ],
+      "meshNames": ["model_sleeve_left"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.0026,
@@ -85,9 +75,7 @@
       "name": "Manica 2",
       "label": "Manica 2",
       "id": "federer_completo_sleeve_right",
-      "meshNames": [
-        "model_sleeve_right"
-      ],
+      "meshNames": ["model_sleeve_right"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.3125,
@@ -108,9 +96,7 @@
       "name": "Collar",
       "label": "Collar",
       "id": "federer_completo_collar",
-      "meshNames": [
-        "model_collar"
-      ],
+      "meshNames": ["model_collar"],
       "renderOrder": 1,
       "colorOnly": true
     }

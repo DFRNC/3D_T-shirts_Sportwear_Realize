@@ -14,11 +14,11 @@ const resolveRouteModel = (slug: string, product: configuratorProductHydrationTy
   return { modelId: modelId as modelIdType, business };
 };
 
-const applyConfiguratorRouteProduct = (slug: string, product: configuratorProductHydrationType | null) => {
+const applyConfiguratorRouteProduct = (collectionHandle: string, slug: string, product: configuratorProductHydrationType | null) => {
   const { modelId, business } = resolveRouteModel(slug, product);
 
   useConfiguratorSceneLoad.getState().beginInitialSceneLoad();
-  useConfigurationCart.getState().setActiveItemProduct({ slug, modelId, business });
+  useConfigurationCart.getState().setActiveItemProduct({ collectionHandle, slug, modelId, business });
   useConfiguratorSceneLoad.getState().markRouteHydrated();
 };
 

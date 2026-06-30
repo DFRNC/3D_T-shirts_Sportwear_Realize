@@ -6,18 +6,13 @@
     "width": 4096,
     "height": 2149
   },
-  "preserveGltfMeshes": [
-    "model_inside",
-    "womans_shorts_laces"
-  ],
+  "preserveGltfMeshes": ["model_inside", "womans_shorts_laces"],
   "parts": [
     {
       "name": "Davanti",
       "label": "Davanti",
       "id": "picci_pallavolo_front",
-      "meshNames": [
-        "model_left"
-      ],
+      "meshNames": ["model_left"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.5495,
@@ -38,9 +33,7 @@
       "name": "Retro",
       "label": "Retro",
       "id": "picci_pallavolo_back",
-      "meshNames": [
-        "model_right"
-      ],
+      "meshNames": ["model_right"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.0013,

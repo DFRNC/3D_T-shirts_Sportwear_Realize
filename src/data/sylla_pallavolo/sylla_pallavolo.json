@@ -6,19 +6,13 @@
     "width": 4096,
     "height": 2257
   },
-  "preserveGltfMeshes": [
-    "crewneck_womans_inside",
-    "crewneck_womans_inside_label",
-    "crewneck_womans_sweatband"
-  ],
+  "preserveGltfMeshes": ["crewneck_womans_inside", "crewneck_womans_inside_label", "crewneck_womans_sweatband"],
   "parts": [
     {
       "name": "Davanti",
       "label": "Davanti",
       "id": "sylla_pallavolo_front",
-      "meshNames": [
-        "crewneck_womans_front"
-      ],
+      "meshNames": ["crewneck_womans_front"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.5713,
@@ -39,9 +33,7 @@
       "name": "Retro",
       "label": "Retro",
       "id": "sylla_pallavolo_back",
-      "meshNames": [
-        "crewneck_womans_back"
-      ],
+      "meshNames": ["crewneck_womans_back"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.0012,
@@ -62,9 +54,7 @@
       "name": "Manica 1",
       "label": "Manica 1",
       "id": "sylla_pallavolo_sleeve_left",
-      "meshNames": [
-        "crewneck_womans_sleeve_left"
-      ],
+      "meshNames": ["crewneck_womans_sleeve_left"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.4403,
@@ -85,9 +75,7 @@
       "name": "Manica 2",
       "label": "Manica 2",
       "id": "sylla_pallavolo_sleeve_right",
-      "meshNames": [
-        "crewneck_womans_sleeve_right"
-      ],
+      "meshNames": ["crewneck_womans_sleeve_right"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.3779,
@@ -108,9 +96,7 @@
       "name": "Collar",
       "label": "Collar",
       "id": "sylla_pallavolo_collar",
-      "meshNames": [
-        "crewneck_womans_collar"
-      ],
+      "meshNames": ["crewneck_womans_collar"],
       "renderOrder": 1,
       "colorOnly": true
     }
