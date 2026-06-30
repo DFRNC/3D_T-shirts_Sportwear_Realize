@@ -1,6 +1,6 @@
 'use client';
 
-import { resolveAvailableConfiguratorStepNumbers } from '@hooks';
+import { resolveAvailableConfiguratorStepNumbers } from '@hooks/resolveProductStepsConfiguration';
 import { useConfiguratorProduct } from '@store/useConfiguratorProduct';
 import { create } from 'zustand';
 interface ConfigurationControlState {
