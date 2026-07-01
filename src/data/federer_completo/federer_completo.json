@@ -11,7 +11,7 @@
     {
       "name": "Davanti",
       "label": "Davanti",
-      "id": "federer_calcio_front",
+      "id": "federer_completo_front",
       "meshNames": ["model_front"],
       "renderOrder": 1,
       "uvBounds": {
@@ -32,7 +32,7 @@
     {
       "name": "Retro",
       "label": "Retro",
-      "id": "federer_calcio_back",
+      "id": "federer_completo_back",
       "meshNames": ["model_back"],
       "renderOrder": 1,
       "uvBounds": {
@@ -53,7 +53,7 @@
     {
       "name": "Manica 1",
       "label": "Manica 1",
-      "id": "federer_calcio_sleeve_left",
+      "id": "federer_completo_sleeve_left",
       "meshNames": ["model_sleeve_left"],
       "renderOrder": 1,
       "uvBounds": {
@@ -74,7 +74,7 @@
     {
       "name": "Manica 2",
       "label": "Manica 2",
-      "id": "federer_calcio_sleeve_right",
+      "id": "federer_completo_sleeve_right",
       "meshNames": ["model_sleeve_right"],
       "renderOrder": 1,
       "uvBounds": {
@@ -95,7 +95,7 @@
     {
       "name": "Collar",
       "label": "Collar",
-      "id": "federer_calcio_collar",
+      "id": "federer_completo_collar",
       "meshNames": ["model_collar"],
       "renderOrder": 1,
       "colorOnly": true
@@ -275,7 +275,7 @@
   "namePositions": [
     {
       "label": "Top Back",
-      "partId": "federer_calcio_back",
+      "partId": "federer_completo_back",
       "uv": {
         "x": 0.821,
         "y": 0.5
@@ -288,7 +288,7 @@
     },
     {
       "label": "Bottom Back",
-      "partId": "federer_calcio_back",
+      "partId": "federer_completo_back",
       "uv": {
         "x": 0.255,
         "y": 0.5
@@ -297,13 +297,16 @@
       "fontSize": 100,
       "show_frame": true,
       "show_gizmo": true,
-      "id": "bottom_back"
+      "id": "bottom_back",
+      "conflicts": {
+        "text": ["bottom_back"]
+      }
     }
   ],
   "numberPositions": [
     {
       "label": "Front Center",
-      "partId": "federer_calcio_front",
+      "partId": "federer_completo_front",
       "uv": {
         "x": 0.365,
         "y": 0.5
@@ -319,7 +322,7 @@
     },
     {
       "label": "Front Right",
-      "partId": "federer_calcio_front",
+      "partId": "federer_completo_front",
       "uv": {
         "x": 0.29,
         "y": 0.33
@@ -332,7 +335,7 @@
     },
     {
       "label": "Back",
-      "partId": "federer_calcio_back",
+      "partId": "federer_completo_back",
       "uv": {
         "x": 0.57,
         "y": 0.5
@@ -347,7 +350,7 @@
   "testoPositions": [
     {
       "label": "Front Center",
-      "partId": "federer_calcio_front",
+      "partId": "federer_completo_front",
       "uv": {
         "x": 0.4,
         "y": 0.5
@@ -363,7 +366,7 @@
     },
     {
       "label": "Bottom Back",
-      "partId": "federer_calcio_back",
+      "partId": "federer_completo_back",
       "uv": {
         "x": 0.255,
         "y": 0.5
@@ -379,7 +382,7 @@
     },
     {
       "label": "Top Back",
-      "partId": "federer_calcio_back",
+      "partId": "federer_completo_back",
       "uv": {
         "x": 0.89,
         "y": 0.5

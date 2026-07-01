@@ -297,7 +297,10 @@
       "fontSize": 100,
       "show_frame": true,
       "show_gizmo": true,
-      "id": "bottom_back"
+      "id": "bottom_back",
+      "conflicts": {
+        "text": ["bottom_back"]
+      }
     }
   ],
   "numberPositions": [
