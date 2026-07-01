@@ -41,7 +41,7 @@
         "minY": 0.0192,
         "maxY": 0.8941
       },
-      "printRotation": -90,
+      "printRotation": 270,
       "gradient": {
         "reversed": true,
         "rotation": 0,
@@ -62,7 +62,7 @@
         "minY": 0.0127,
         "maxY": 0.4503
       },
-      "printRotation": -90,
+      "printRotation": 90,
       "gradient": {
         "reversed": false,
         "rotation": 90,
@@ -83,7 +83,7 @@
         "minY": 0.4396,
         "maxY": 0.9957
       },
-      "printRotation": 270,
+      "printRotation": 180,
       "gradient": {
         "reversed": true,
         "rotation": 270,
@@ -278,7 +278,7 @@
       "partId": "bernardi_calcio_back",
       "uv": {
         "x": 0.5,
-        "y": 0.187
+        "y": 0.17
       },
       "rotation": 0,
       "fontSize": 100,
@@ -309,7 +309,7 @@
       "partId": "bernardi_calcio_front",
       "uv": {
         "x": 0.5,
-        "y": 0.355
+        "y": 0.345
       },
       "rotation": 0,
       "fontSize": 80,
@@ -324,8 +324,8 @@
       "label": "Front Right",
       "partId": "bernardi_calcio_front",
       "uv": {
-        "x": 0.648,
-        "y": 0.29
+        "x": 0.675,
+        "y": 0.287
       },
       "rotation": 0,
       "fontSize": 80,
@@ -338,10 +338,10 @@
       "partId": "bernardi_calcio_back",
       "uv": {
         "x": 0.5,
-        "y": 0.41
+        "y": 0.404
       },
       "rotation": 0,
-      "fontSize": 240,
+      "fontSize": 250,
       "show_frame": true,
       "show_gizmo": true,
       "id": "back"
@@ -353,7 +353,7 @@
       "partId": "bernardi_calcio_front",
       "uv": {
         "x": 0.5,
-        "y": 0.4
+        "y": 0.41
       },
       "rotation": 0,
       "fontSize": 100,
@@ -385,7 +385,7 @@
       "partId": "bernardi_calcio_back",
       "uv": {
         "x": 0.5,
-        "y": 0.89
+        "y": 0.1
       },
       "rotation": 0,
       "fontSize": 50,
