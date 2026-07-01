@@ -232,7 +232,7 @@
     "font": "Oswald",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
-    "strokeWidth": 2,
+    "strokeWidth": 0,
     "maxLength": 20,
     "fontSizeMin": 50,
     "fontSizeMax": 400,
@@ -243,7 +243,7 @@
     "font": "Oswald",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
-    "strokeWidth": 2,
+    "strokeWidth": 0,
     "maxLength": 2,
     "fontSizeMin": 50,
     "fontSizeMax": 600,
@@ -258,7 +258,7 @@
     "font": "Oswald",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
-    "strokeWidth": 2,
+    "strokeWidth": 0,
     "maxLength": 20,
     "fontSizeMin": 50,
     "fontSizeMax": 400,
@@ -278,24 +278,26 @@
       "partId": "federer_calcio_back",
       "uv": {
         "x": 0.821,
-        "y": 0.492
+        "y": 0.5
       },
       "rotation": 0,
-      "fontSize": 200,
+      "fontSize": 100,
       "show_frame": true,
-      "show_gizmo": false
+      "show_gizmo": true,
+      "id": "top_back"
     },
     {
       "label": "Bottom Back",
       "partId": "federer_calcio_back",
       "uv": {
         "x": 0.255,
-        "y": 0.479
+        "y": 0.5
       },
       "rotation": 0,
-      "fontSize": 200,
+      "fontSize": 100,
       "show_frame": true,
-      "show_gizmo": false
+      "show_gizmo": true,
+      "id": "bottom_back"
     }
   ],
   "numberPositions": [
@@ -303,37 +305,43 @@
       "label": "Front Center",
       "partId": "federer_calcio_front",
       "uv": {
-        "x": 0.3,
+        "x": 0.365,
         "y": 0.5
       },
       "rotation": 0,
-      "fontSize": 180,
+      "fontSize": 80,
       "show_frame": true,
-      "show_gizmo": false
+      "show_gizmo": true,
+      "id": "front_center",
+      "conflicts": {
+        "text": ["front_center"]
+      }
     },
     {
       "label": "Front Right",
       "partId": "federer_calcio_front",
       "uv": {
-        "x": 0.26,
-        "y": 0.29
+        "x": 0.29,
+        "y": 0.33
       },
       "rotation": 0,
-      "fontSize": 180,
+      "fontSize": 80,
       "show_frame": true,
-      "show_gizmo": false
+      "show_gizmo": true,
+      "id": "front_right"
     },
     {
       "label": "Back",
       "partId": "federer_calcio_back",
       "uv": {
-        "x": 0.573,
+        "x": 0.57,
         "y": 0.5
       },
       "rotation": 0,
-      "fontSize": 580,
+      "fontSize": 270,
       "show_frame": true,
-      "show_gizmo": false
+      "show_gizmo": true,
+      "id": "back"
     }
   ],
   "testoPositions": [
@@ -341,37 +349,46 @@
       "label": "Front Center",
       "partId": "federer_calcio_front",
       "uv": {
-        "x": 0.419,
-        "y": 0.501
+        "x": 0.4,
+        "y": 0.5
       },
       "rotation": 0,
-      "fontSize": 180,
+      "fontSize": 100,
       "show_frame": true,
-      "show_gizmo": false
+      "show_gizmo": true,
+      "id": "front_center",
+      "conflicts": {
+        "number": ["front_center"]
+      }
     },
     {
       "label": "Bottom Back",
       "partId": "federer_calcio_back",
       "uv": {
-        "x": 0.245,
-        "y": 0.479
+        "x": 0.255,
+        "y": 0.5
       },
       "rotation": 0,
-      "fontSize": 180,
+      "fontSize": 100,
       "show_frame": true,
-      "show_gizmo": false
+      "show_gizmo": true,
+      "id": "bottom_back",
+      "conflicts": {
+        "name": ["bottom_back"]
+      }
     },
     {
       "label": "Top Back",
       "partId": "federer_calcio_back",
       "uv": {
-        "x": 0.882,
-        "y": 0.479
+        "x": 0.89,
+        "y": 0.5
       },
       "rotation": 0,
-      "fontSize": 60,
+      "fontSize": 50,
       "show_frame": true,
-      "show_gizmo": false
+      "show_gizmo": true,
+      "id": "top_back"
     }
   ]
 }
