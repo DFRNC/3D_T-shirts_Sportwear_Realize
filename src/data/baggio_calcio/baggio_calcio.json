@@ -83,7 +83,7 @@
         "minY": 0.6927,
         "maxY": 0.9948
       },
-      "printRotation": 270,
+      "printRotation": 90,
       "gradient": {
         "reversed": true,
         "rotation": 270,
