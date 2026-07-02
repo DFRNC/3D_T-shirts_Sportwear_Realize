@@ -4,8 +4,9 @@
   "modelFile": "model.glb",
   "printAtlas": {
     "width": 2048,
-    "height": 1075
+    "height": 729
   },
+  "hiddenSteps": ["name"],
   "preserveGltfMeshes": ["model_inside", "womans_shorts_laces"],
   "parts": [
     {
@@ -20,7 +21,7 @@
         "minY": 0.0044,
         "maxY": 0.9987
       },
-      "printRotation": 180,
+      "printRotation": 270,
       "gradient": {
         "reversed": false,
         "rotation": 0,
@@ -41,7 +42,7 @@
         "minY": 0.0035,
         "maxY": 0.9987
       },
-      "printRotation": 0,
+      "printRotation": 270,
       "gradient": {
         "reversed": true,
         "rotation": 0,
@@ -222,58 +223,90 @@
     "letterSpacingMax": 40,
     "letter_spacing_show": true
   },
-  "namePositions": [
-    {
-      "label": "Back",
-      "partId": "picci_pallavolo_back",
-      "uv": {
-        "x": 0.41,
-        "y": 0.36
-      },
-      "rotation": 0,
-      "fontSize": 200,
-      "show_frame": true,
-      "show_gizmo": false
-    }
-  ],
+  "namePositions": [],
   "numberPositions": [
     {
-      "label": "Front",
-      "partId": "picci_pallavolo_front",
-      "uv": {
-        "x": 0.3,
-        "y": 0.5
-      },
-      "rotation": 0,
-      "fontSize": 180,
-      "show_frame": true,
-      "show_gizmo": false
-    },
-    {
-      "label": "Back",
+      "label": "Right-bottom",
       "partId": "picci_pallavolo_back",
       "uv": {
-        "x": 0.573,
-        "y": 0.5
+        "x": 0.606,
+        "y": 0.724
       },
       "rotation": 0,
-      "fontSize": 580,
+      "fontSize": 90,
       "show_frame": true,
-      "show_gizmo": false
+      "show_gizmo": true,
+      "id": "right-bottom"
+    },
+    {
+      "label": "Right-top",
+      "partId": "picci_pallavolo_back",
+      "uv": {
+        "x": 0.606,
+        "y": 0.539
+      },
+      "rotation": 0,
+      "fontSize": 90,
+      "show_frame": true,
+      "show_gizmo": true,
+      "id": "right-top"
+    },
+    {
+      "label": "Right-center",
+      "partId": "picci_pallavolo_back",
+      "uv": {
+        "x": 0.5,
+        "y": 0.65
+      },
+      "rotation": 0,
+      "fontSize": 90,
+      "show_frame": true,
+      "show_gizmo": true,
+      "id": "right-center",
+      "conflicts": {
+        "text": ["right"]
+      }
+    },
+    {
+      "label": "Left-top",
+      "partId": "picci_pallavolo_front",
+      "uv": {
+        "x": 0.394,
+        "y": 0.539
+      },
+      "rotation": 0,
+      "fontSize": 90,
+      "show_frame": true,
+      "show_gizmo": true,
+      "id": "left-top"
     }
   ],
   "testoPositions": [
     {
-      "label": "Front",
+      "label": "Right",
+      "partId": "picci_pallavolo_back",
+      "uv": {
+        "x": 0.5,
+        "y": 0.6
+      },
+      "rotation": 90,
+      "fontSize": 120,
+      "show_frame": true,
+      "show_gizmo": true,
+      "id": "right"
+    },
+    {
+      "label": "Left",
       "partId": "picci_pallavolo_front",
       "uv": {
-        "x": 0.71,
-        "y": 0.45
+        "x": 0.5,
+        "y": 0.6
       },
-      "rotation": 0,
-      "fontSize": 180,
+      "rotation": 270,
+      "fontSize": 120,
       "show_frame": true,
-      "show_gizmo": false
+      "show_gizmo": true,
+      "id": "left"
     }
   ]
 }
