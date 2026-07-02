@@ -20,7 +20,7 @@
         "minY": 0.0058,
         "maxY": 0.9973
       },
-      "printRotation": 180,
+      "printRotation": 270,
       "gradient": {
         "reversed": false,
         "rotation": 0,
@@ -41,7 +41,7 @@
         "minY": 0.0034,
         "maxY": 0.9976
       },
-      "printRotation": 0,
+      "printRotation": 270,
       "gradient": {
         "reversed": true,
         "rotation": 0,
@@ -222,58 +222,90 @@
     "letterSpacingMax": 40,
     "letter_spacing_show": true
   },
-  "namePositions": [
-    {
-      "label": "Back",
-      "partId": "cruijff_completo_back",
-      "uv": {
-        "x": 0.41,
-        "y": 0.36
-      },
-      "rotation": 0,
-      "fontSize": 200,
-      "show_frame": true,
-      "show_gizmo": false
-    }
-  ],
+  "namePositions": [],
   "numberPositions": [
     {
-      "label": "Front",
-      "partId": "cruijff_completo_front",
-      "uv": {
-        "x": 0.3,
-        "y": 0.5
-      },
-      "rotation": 0,
-      "fontSize": 180,
-      "show_frame": true,
-      "show_gizmo": false
-    },
-    {
-      "label": "Back",
+      "label": "Right-bottom",
       "partId": "cruijff_completo_back",
       "uv": {
-        "x": 0.573,
-        "y": 0.5
+        "x": 0.631,
+        "y": 0.737
       },
       "rotation": 0,
-      "fontSize": 580,
+      "fontSize": 120,
       "show_frame": true,
-      "show_gizmo": false
+      "show_gizmo": true,
+      "id": "right-bottom"
+    },
+    {
+      "label": "Right-top",
+      "partId": "cruijff_completo_back",
+      "uv": {
+        "x": 0.631,
+        "y": 0.57
+      },
+      "rotation": 0,
+      "fontSize": 120,
+      "show_frame": true,
+      "show_gizmo": true,
+      "id": "right-top"
+    },
+    {
+      "label": "Right-center",
+      "partId": "cruijff_completo_back",
+      "uv": {
+        "x": 0.5,
+        "y": 0.65
+      },
+      "rotation": 0,
+      "fontSize": 120,
+      "show_frame": true,
+      "show_gizmo": true,
+      "id": "right-center",
+      "conflicts": {
+        "text": ["right"]
+      }
+    },
+    {
+      "label": "Left-top",
+      "partId": "cruijff_completo_front",
+      "uv": {
+        "x": 0.369,
+        "y": 0.57
+      },
+      "rotation": 0,
+      "fontSize": 120,
+      "show_frame": true,
+      "show_gizmo": true,
+      "id": "left-top"
     }
   ],
   "testoPositions": [
     {
-      "label": "Front",
+      "label": "Right",
+      "partId": "cruijff_completo_back",
+      "uv": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "rotation": 90,
+      "fontSize": 120,
+      "show_frame": true,
+      "show_gizmo": true,
+      "id": "right"
+    },
+    {
+      "label": "Left",
       "partId": "cruijff_completo_front",
       "uv": {
-        "x": 0.71,
-        "y": 0.45
+        "x": 0.5,
+        "y": 0.5
       },
-      "rotation": 0,
-      "fontSize": 180,
+      "rotation": 270,
+      "fontSize": 120,
       "show_frame": true,
-      "show_gizmo": false
+      "show_gizmo": true,
+      "id": "left"
     }
   ]
 }
