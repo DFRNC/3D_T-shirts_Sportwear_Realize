@@ -4,8 +4,9 @@
   "modelFile": "model.glb",
   "printAtlas": {
     "width": 2048,
-    "height": 1075
+    "height": 806
   },
+  "hiddenSteps": ["name"],
   "preserveGltfMeshes": ["model_inside", "model_laces"],
   "parts": [
     {
@@ -226,39 +227,39 @@
   "numberPositions": [
     {
       "label": "Right-bottom",
-      "partId": "cruijff_pallavolo_back",
+      "partId": "cruijff_calcio_back",
       "uv": {
-        "x": 0.631,
-        "y": 0.737
+        "x": 0.609,
+        "y": 0.748
       },
       "rotation": 0,
-      "fontSize": 120,
+      "fontSize": 100,
       "show_frame": true,
       "show_gizmo": true,
       "id": "right-bottom"
     },
     {
       "label": "Right-top",
-      "partId": "cruijff_pallavolo_back",
+      "partId": "cruijff_calcio_back",
       "uv": {
-        "x": 0.631,
-        "y": 0.57
+        "x": 0.609,
+        "y": 0.561
       },
       "rotation": 0,
-      "fontSize": 120,
+      "fontSize": 100,
       "show_frame": true,
       "show_gizmo": true,
       "id": "right-top"
     },
     {
       "label": "Right-center",
-      "partId": "cruijff_pallavolo_back",
+      "partId": "cruijff_calcio_back",
       "uv": {
         "x": 0.5,
         "y": 0.65
       },
       "rotation": 0,
-      "fontSize": 120,
+      "fontSize": 100,
       "show_frame": true,
       "show_gizmo": true,
       "id": "right-center",
@@ -268,13 +269,13 @@
     },
     {
       "label": "Left-top",
-      "partId": "cruijff_pallavolo_front",
+      "partId": "cruijff_calcio_front",
       "uv": {
-        "x": 0.369,
-        "y": 0.57
+        "x": 0.391,
+        "y": 0.561
       },
       "rotation": 0,
-      "fontSize": 120,
+      "fontSize": 100,
       "show_frame": true,
       "show_gizmo": true,
       "id": "left-top"
@@ -283,7 +284,7 @@
   "testoPositions": [
     {
       "label": "Right",
-      "partId": "cruijff_pallavolo_back",
+      "partId": "cruijff_calcio_back",
       "uv": {
         "x": 0.5,
         "y": 0.5
@@ -296,7 +297,7 @@
     },
     {
       "label": "Left",
-      "partId": "cruijff_pallavolo_front",
+      "partId": "cruijff_calcio_front",
       "uv": {
         "x": 0.5,
         "y": 0.5
