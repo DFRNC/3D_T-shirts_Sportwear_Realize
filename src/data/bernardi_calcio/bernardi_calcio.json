@@ -299,7 +299,7 @@
       "show_gizmo": true,
       "id": "bottom_back",
       "conflicts": {
-        "text": ["bottom_back"]
+        "testo": ["bottom_back"]
       }
     }
   ],
@@ -317,7 +317,7 @@
       "show_gizmo": true,
       "id": "front_center",
       "conflicts": {
-        "text": ["front_center"]
+        "testo": ["front_center"]
       }
     },
     {

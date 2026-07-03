@@ -183,7 +183,7 @@
     "font": "Oswald",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
-    "strokeWidth": 2,
+    "strokeWidth": 0,
     "maxLength": 20,
     "fontSizeMin": 50,
     "fontSizeMax": 400,
@@ -194,7 +194,7 @@
     "font": "Oswald",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
-    "strokeWidth": 2,
+    "strokeWidth": 0,
     "maxLength": 2,
     "fontSizeMin": 50,
     "fontSizeMax": 600,
@@ -209,7 +209,7 @@
     "font": "Oswald",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
-    "strokeWidth": 2,
+    "strokeWidth": 0,
     "maxLength": 20,
     "fontSizeMin": 50,
     "fontSizeMax": 400,
@@ -263,7 +263,7 @@
       "show_gizmo": true,
       "id": "right-center",
       "conflicts": {
-        "text": ["right"]
+        "testo": ["right"]
       }
     },
     {
@@ -292,6 +292,9 @@
       "fontSize": 120,
       "show_frame": true,
       "show_gizmo": true,
+      "conflicts": {
+        "number": ["right-center"]
+      },
       "id": "right"
     },
     {

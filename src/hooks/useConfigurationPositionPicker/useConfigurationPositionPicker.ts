@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 import type { configurationPositionPickerInstanceType, configurationPositionPickerPositionType } from '@types';
+import { resolvePrintPositionConflicts } from '@store/resolvePrintPositionConflicts';
 
 interface useConfigurationPositionPickerParamsType<TPosition extends configurationPositionPickerPositionType> {
   positions: TPosition[];
@@ -32,6 +33,8 @@ const useConfigurationPositionPicker = <TPosition extends configurationPositionP
     (positionKey: string) => {
       const position = availablePositions.find((item) => item.key === positionKey);
       if (!position) return;
+
+      resolvePrintPositionConflicts(position);
 
       nextInstanceIdRef.current += 1;
       const instanceId = `${position.key}_${nextInstanceIdRef.current}`;

@@ -48,6 +48,14 @@ interface patternConfigType {
   parts: patternPartConfigType[];
 }
 
+interface printPositionConflictsConfigType {
+  name?: string[];
+  number?: string[];
+  testo?: string[];
+  /** @deprecated Legacy JSON key — use `testo`. */
+  text?: string[];
+}
+
 interface textPositionConfigType {
   label: string;
   uv: uvPointType;
@@ -58,6 +66,8 @@ interface textPositionConfigType {
   interactive?: boolean;
   show_frame?: boolean;
   show_gizmo?: boolean;
+  id?: string;
+  conflicts?: printPositionConflictsConfigType;
 }
 
 interface textDefaultsConfigType {
@@ -175,6 +185,7 @@ export type {
   modelIdType,
   partGradientConfigType,
   patternConfigType,
+  printPositionConflictsConfigType,
   preserveGltfMeshConfigType,
   preserveGltfMeshEntryConfigType,
   printAtlasConfigType,
