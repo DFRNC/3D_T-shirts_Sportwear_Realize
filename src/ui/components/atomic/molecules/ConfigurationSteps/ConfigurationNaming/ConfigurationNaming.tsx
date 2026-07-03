@@ -106,6 +106,7 @@ const ConfigurationNaming = () => {
   const positions = useGarmentName((state) => state.positions);
   const instances = useGarmentName((state) => state.instances);
   const addInstance = useGarmentName((state) => state.addInstance);
+  const removeInstance = useGarmentName((state) => state.removeInstance);
 
   const nameDefaults = useMemo(() => (positions.length > 0 ? resolveNameDefaults(product) : null), [positions.length, product]);
   const limits = useMemo(() => (positions.length > 0 ? resolveNameLimits(product) : null), [positions.length, product]);
@@ -141,8 +142,9 @@ const ConfigurationNaming = () => {
         value: instance.id,
         trigger: <PartColorSwitch color={instance.textColor} label={instance.label} />,
         content: <NamePartForm instanceId={instance.id} limits={limits!} placeholder={nameDefaults?.text ?? ''} />,
+        onDelete: () => removeInstance(instance.id),
       })),
-    [instances, limits, nameDefaults?.text],
+    [instances, limits, nameDefaults?.text, removeInstance],
   );
 
   if (positions.length === 0 || !limits || !nameDefaults) return null;

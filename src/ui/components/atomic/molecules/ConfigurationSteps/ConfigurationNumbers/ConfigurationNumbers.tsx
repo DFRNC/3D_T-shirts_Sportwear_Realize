@@ -129,6 +129,7 @@ const ConfigurationNumbers = () => {
   const positions = useGarmentNumber((state) => state.positions);
   const instances = useGarmentNumber((state) => state.instances);
   const addInstance = useGarmentNumber((state) => state.addInstance);
+  const removeInstance = useGarmentNumber((state) => state.removeInstance);
 
   const numberDefaults = useMemo(() => (positions.length > 0 ? resolveNumberDefaults(product) : null), [positions.length, product]);
   const limits = useMemo(() => (positions.length > 0 ? resolveNumberLimits(product) : null), [positions.length, product]);
@@ -165,8 +166,9 @@ const ConfigurationNumbers = () => {
         value: instance.id,
         trigger: <PartColorSwitch color={instance.textColor} label={instance.label} />,
         content: <NumberPartForm instanceId={instance.id} limits={limits!} placeholder={numberDefaults?.text ?? '00'} lineHeightShow={lineHeightShow} />,
+        onDelete: () => removeInstance(instance.id),
       })),
-    [instances, limits, lineHeightShow, numberDefaults?.text],
+    [instances, limits, lineHeightShow, numberDefaults?.text, removeInstance],
   );
 
   if (positions.length === 0 || !limits || !numberDefaults) return null;

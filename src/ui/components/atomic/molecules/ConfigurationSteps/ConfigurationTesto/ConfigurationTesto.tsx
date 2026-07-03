@@ -136,6 +136,7 @@ const ConfigurationTesto = () => {
   const positions = useGarmentTesto((state) => state.positions);
   const instances = useGarmentTesto((state) => state.instances);
   const addInstance = useGarmentTesto((state) => state.addInstance);
+  const removeInstance = useGarmentTesto((state) => state.removeInstance);
 
   const testoDefaults = useMemo(() => (positions.length > 0 ? resolveTestoDefaults(product) : null), [positions.length, product]);
   const limits = useMemo(() => (positions.length > 0 ? resolveTestoLimits(product) : null), [positions.length, product]);
@@ -181,8 +182,9 @@ const ConfigurationTesto = () => {
             letterSpacingShow={letterSpacingShow}
           />
         ),
+        onDelete: () => removeInstance(instance.id),
       })),
-    [instances, letterSpacingShow, limits, lineHeightShow, testoDefaults?.text],
+    [instances, letterSpacingShow, limits, lineHeightShow, removeInstance, testoDefaults?.text],
   );
 
   if (positions.length === 0 || !limits || !testoDefaults) return null;

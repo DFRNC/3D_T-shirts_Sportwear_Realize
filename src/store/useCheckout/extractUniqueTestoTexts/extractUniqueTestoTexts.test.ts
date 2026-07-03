@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { extractUniqueTestoTexts } from './extractUniqueTestoTexts';
+import { extractUniqueTestoTexts } from '@store/useCheckout/extractUniqueTestoTexts';
 
 describe('extractUniqueTestoTexts', () => {
   it('skips empty and whitespace-only testo instances', () => {
