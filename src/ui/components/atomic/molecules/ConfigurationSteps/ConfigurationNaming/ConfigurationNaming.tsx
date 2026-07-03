@@ -50,7 +50,7 @@ const NamePartForm = ({ instanceId, limits, placeholder }: namePartFormPropsType
   return (
     <Flex variant="configurator_part" className="gap-5 pt-2">
       <Flex variant="configurator_part">
-        <Text variant="configurator_control_label">Carattere</Text>
+        <Text variant="configurator_control_label">Testo</Text>
         <input
           type="text"
           value={sharedPreviewText ?? previewText ?? instance.text}

@@ -54,17 +54,20 @@ const AccordionAtom = ({
 }: accordionAtomPropsType) => {
   return (
     <Accordion className={cn(className)} multiple={multiple} defaultValue={defaultValue} value={value} onValueChange={onValueChange}>
-      {items.map(({ value: itemValue, trigger, content }) => (
-        <AccordionItem key={itemValue} value={itemValue} className={accordionItemVariants({ variant })}>
-          <AccordionTrigger
-            className={cn(accordionTriggerVariants({ variant }))}
-            onClick={() => onItemActivate?.(itemValue)}
-          >
-            {trigger}
-          </AccordionTrigger>
-          <AccordionContent className={accordionContentVariants({ variant })}>{content}</AccordionContent>
-        </AccordionItem>
-      ))}
+      {items.map(({ value: itemValue, trigger, content }) => {
+        const activateItem = () => onItemActivate?.(itemValue);
+
+        return (
+          <AccordionItem key={itemValue} value={itemValue} className={accordionItemVariants({ variant })}>
+            <AccordionTrigger className={cn(accordionTriggerVariants({ variant }))} onClick={activateItem}>
+              {trigger}
+            </AccordionTrigger>
+            <AccordionContent className={accordionContentVariants({ variant })} onClick={activateItem}>
+              {content}
+            </AccordionContent>
+          </AccordionItem>
+        );
+      })}
     </Accordion>
   );
 };

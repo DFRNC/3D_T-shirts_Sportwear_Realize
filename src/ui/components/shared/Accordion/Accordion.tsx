@@ -38,7 +38,7 @@ const AccordionTrigger = ({ className, children, ...props }: AccordionPrimitive.
   );
 };
 
-const AccordionContent = ({ className, children, ...props }: AccordionPrimitive.Panel.Props) => {
+const AccordionContent = ({ className, children, onClick, ...props }: AccordionPrimitive.Panel.Props) => {
   return (
     <AccordionPrimitive.Panel
       data-slot="accordion-content"
@@ -49,7 +49,9 @@ const AccordionContent = ({ className, children, ...props }: AccordionPrimitive.
       )}
       {...props}
     >
-      <div className={cn('p-1', className)}>{children}</div>
+      <div className={cn('p-1', className)} onClick={onClick}>
+        {children}
+      </div>
     </AccordionPrimitive.Panel>
   );
 };

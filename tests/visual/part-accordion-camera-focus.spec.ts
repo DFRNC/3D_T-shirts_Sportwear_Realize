@@ -102,6 +102,14 @@ const clickConfigurationStep = async (page: import('@playwright/test').Page, lab
   await page.waitForTimeout(400);
 };
 
+const clickPartAccordionContent = async (page: import('@playwright/test').Page, label: string) => {
+  const item = page.locator('[data-slot="accordion-item"]').filter({ hasText: new RegExp(label, 'i') });
+  const paletteButton = item.locator('[data-slot="accordion-content"] button[style*="background"]').first();
+  await expect(paletteButton).toBeVisible({ timeout: 10_000 });
+  await paletteButton.scrollIntoViewIfNeeded();
+  await paletteButton.click();
+};
+
 test.describe('part accordion camera focus', () => {
   test('rotates orbit camera for every garment part in COLORE', async ({ page }) => {
     await page.goto(CONFIGURATOR_ROUTE, { waitUntil: 'networkidle' });
@@ -144,6 +152,25 @@ test.describe('part accordion camera focus', () => {
 
       previousState = nextState;
     }
+  });
+
+  test('rotates orbit camera when clicking accordion content in COLORE', async ({ page }) => {
+    await page.goto(CONFIGURATOR_ROUTE, { waitUntil: 'networkidle' });
+    await waitForConfiguratorScene(page);
+
+    await clickPartAccordion(page, 'Manica 2');
+
+    const afterManicaOpen = await readOrbitState(page);
+    await clickPartAccordion(page, 'Retro');
+    await waitForPartFocus(page, 'baggio_calcio_back', afterManicaOpen);
+
+    const beforeContentClick = await readOrbitState(page);
+    await clickPartAccordionContent(page, 'Manica 2');
+    await waitForPartFocus(page, 'baggio_calcio_sleeve_right', beforeContentClick);
+
+    const afterContentClick = await readOrbitState(page);
+    expect(orbitAngularDelta(beforeContentClick, afterContentClick)).toBeGreaterThan(MIN_ORBIT_DELTA);
+    expect(afterContentClick.targetPartId).toBe('baggio_calcio_sleeve_right');
   });
 
   test('does not rotate camera when switching configuration steps', async ({ page }) => {

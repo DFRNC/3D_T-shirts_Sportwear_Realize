@@ -37,6 +37,13 @@ const resolveGarmentCenter = (scene: Object3D, target: Vector3): boolean => {
   return true;
 };
 
+const resolveShortestAngleDelta = (from: number, to: number) => {
+  let delta = to - from;
+  while (delta > Math.PI) delta -= 2 * Math.PI;
+  while (delta < -Math.PI) delta += 2 * Math.PI;
+  return delta;
+};
+
 interface ResolveCursorFocusPointInput {
   camera: Camera;
   controls: OrbitControlsImpl;
@@ -238,4 +245,5 @@ export {
   resolveCursorFocusPoint,
   resolveGarmentCenter,
   resolveOrbitFocusPose,
+  resolveShortestAngleDelta,
 };

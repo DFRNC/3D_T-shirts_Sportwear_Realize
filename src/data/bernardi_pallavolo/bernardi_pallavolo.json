@@ -274,7 +274,7 @@
   },
   "namePositions": [
     {
-      "label": "Top Back",
+      "label": "Nome schiena superiore",
       "partId": "bernardi_pallavolo_back",
       "uv": {
         "x": 0.5,
@@ -287,7 +287,7 @@
       "id": "top_back"
     },
     {
-      "label": "Bottom Back",
+      "label": "Nome schiena inferiore",
       "partId": "bernardi_pallavolo_back",
       "uv": {
         "x": 0.5,
@@ -305,7 +305,7 @@
   ],
   "numberPositions": [
     {
-      "label": "Front Center",
+      "label": "Davanti",
       "partId": "bernardi_pallavolo_front",
       "uv": {
         "x": 0.5,
@@ -321,7 +321,7 @@
       }
     },
     {
-      "label": "Front Right",
+      "label": "Davanti sulla DX",
       "partId": "bernardi_pallavolo_front",
       "uv": {
         "x": 0.675,
@@ -334,7 +334,7 @@
       "id": "front_right"
     },
     {
-      "label": "Back",
+      "label": "Dietro",
       "partId": "bernardi_pallavolo_back",
       "uv": {
         "x": 0.5,
@@ -349,7 +349,7 @@
   ],
   "testoPositions": [
     {
-      "label": "Front Center",
+      "label": "Davanti",
       "partId": "bernardi_pallavolo_front",
       "uv": {
         "x": 0.5,
@@ -365,7 +365,7 @@
       }
     },
     {
-      "label": "Bottom Back",
+      "label": "Nome schiena inferiore",
       "partId": "bernardi_pallavolo_back",
       "uv": {
         "x": 0.5,
@@ -381,7 +381,7 @@
       }
     },
     {
-      "label": "Top Back",
+      "label": "Nome schiena superiore",
       "partId": "bernardi_pallavolo_back",
       "uv": {
         "x": 0.5,

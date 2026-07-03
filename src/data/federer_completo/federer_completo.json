@@ -274,7 +274,7 @@
   },
   "namePositions": [
     {
-      "label": "Top Back",
+      "label": "Nome schiena superiore",
       "partId": "federer_completo_back",
       "uv": {
         "x": 0.821,
@@ -287,7 +287,7 @@
       "id": "top_back"
     },
     {
-      "label": "Bottom Back",
+      "label": "Nome schiena inferiore",
       "partId": "federer_completo_back",
       "uv": {
         "x": 0.255,
@@ -305,7 +305,7 @@
   ],
   "numberPositions": [
     {
-      "label": "Front Center",
+      "label": "Davanti",
       "partId": "federer_completo_front",
       "uv": {
         "x": 0.365,
@@ -321,7 +321,7 @@
       }
     },
     {
-      "label": "Front Right",
+      "label": "Davanti sulla DX",
       "partId": "federer_completo_front",
       "uv": {
         "x": 0.29,
@@ -334,7 +334,7 @@
       "id": "front_right"
     },
     {
-      "label": "Back",
+      "label": "Dietro",
       "partId": "federer_completo_back",
       "uv": {
         "x": 0.57,
@@ -349,7 +349,7 @@
   ],
   "testoPositions": [
     {
-      "label": "Front Center",
+      "label": "Davanti",
       "partId": "federer_completo_front",
       "uv": {
         "x": 0.4,
@@ -365,7 +365,7 @@
       }
     },
     {
-      "label": "Bottom Back",
+      "label": "Nome schiena inferiore",
       "partId": "federer_completo_back",
       "uv": {
         "x": 0.255,
@@ -381,7 +381,7 @@
       }
     },
     {
-      "label": "Top Back",
+      "label": "Nome schiena superiore",
       "partId": "federer_completo_back",
       "uv": {
         "x": 0.89,

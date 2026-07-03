@@ -4,6 +4,7 @@ export { ConfiguratorStepTabs } from './ConfiguratorStepTabs';
 export { ProductGalleryBlock } from './ProductGalleryBlock';
 export { ConfiguratorProduct } from './ConfiguratorProduct';
 export { ConfiguratorProductDescription } from './ConfiguratorProductDescription';
+export { ConfiguratorLogoStepNotice } from './ConfiguratorLogoStepNotice';
 export { CardAddProduct } from './CardAddProduct';
 export { ProductCatalogOption } from './ProductCatalogOption';
 export { ProductCatalogPopover } from './ProductCatalogPopover';

@@ -8,6 +8,7 @@ import {
   clampOrbitCameraOutsideGarment,
   resolveOrbitFocusPose,
   resolvePrintUvWorldPoint,
+  resolveShortestAngleDelta,
 } from '@configurator/utils';
 import { useConfiguratorProduct } from '@store';
 import { useEffect, useRef } from 'react';
@@ -24,8 +25,11 @@ interface focusAnimationType {
   startTime: number;
   fromTarget: Vector3;
   toTarget: Vector3;
-  fromSpherical: Spherical;
-  toSpherical: Spherical;
+  fromRadius: number;
+  toRadius: number;
+  fromPhi: number;
+  toPhi: number;
+  fromTheta: number;
   thetaDelta: number;
 }
 
@@ -86,23 +90,25 @@ const useOrbitCameraFocus = () => {
     const controls = getOrbitControls();
     if (!controls) return;
 
-    offsetRef.current.copy(camera.position).sub(controls.target);
-    const fromSpherical = new Spherical().setFromVector3(offsetRef.current);
+    controls.update();
+
+    const fromRadius = controls.getDistance();
+    const fromPhi = controls.getPolarAngle();
+    const fromTheta = controls.getAzimuthalAngle();
 
     offsetRef.current.copy(nextCamera).sub(nextTarget);
     const toSpherical = new Spherical().setFromVector3(offsetRef.current);
-
-    let thetaDelta = toSpherical.theta - fromSpherical.theta;
-    while (thetaDelta > Math.PI) thetaDelta -= 2 * Math.PI;
-    while (thetaDelta < -Math.PI) thetaDelta += 2 * Math.PI;
 
     animationRef.current = {
       startTime: performance.now(),
       fromTarget: controls.target.clone(),
       toTarget: nextTarget.clone(),
-      fromSpherical,
-      toSpherical,
-      thetaDelta,
+      fromRadius,
+      toRadius: toSpherical.radius,
+      fromPhi,
+      toPhi: toSpherical.phi,
+      fromTheta,
+      thetaDelta: resolveShortestAngleDelta(fromTheta, toSpherical.theta),
     };
 
     controls.enabled = false;
@@ -147,10 +153,10 @@ const useOrbitCameraFocus = () => {
 
     controls.target.lerpVectors(animation.fromTarget, animation.toTarget, progress);
 
-    const { fromSpherical, toSpherical, thetaDelta } = animation;
-    sphericalRef.current.radius = fromSpherical.radius + (toSpherical.radius - fromSpherical.radius) * progress;
-    sphericalRef.current.phi = fromSpherical.phi + (toSpherical.phi - fromSpherical.phi) * progress;
-    sphericalRef.current.theta = fromSpherical.theta + thetaDelta * progress;
+    const { fromRadius, toRadius, fromPhi, toPhi, fromTheta, thetaDelta } = animation;
+    sphericalRef.current.radius = fromRadius + (toRadius - fromRadius) * progress;
+    sphericalRef.current.phi = fromPhi + (toPhi - fromPhi) * progress;
+    sphericalRef.current.theta = fromTheta + thetaDelta * progress;
     offsetRef.current.setFromSpherical(sphericalRef.current);
     camera.position.copy(controls.target).add(offsetRef.current);
     controls.update();
@@ -171,14 +177,13 @@ const useOrbitCameraFocus = () => {
       const controls = getOrbitControls();
       if (!controls) return null;
 
-      offsetRef.current.copy(camera.position).sub(controls.target);
-      const spherical = new Spherical().setFromVector3(offsetRef.current);
+      controls.update();
       const focusState = getConfiguratorCameraFocusState();
 
       return {
-        azimuth: spherical.theta,
-        polar: spherical.phi,
-        radius: spherical.radius,
+        azimuth: controls.getAzimuthalAngle(),
+        polar: controls.getPolarAngle(),
+        radius: controls.getDistance(),
         requestId: focusState.requestId,
         targetPartId: focusState.target?.partId ?? null,
         isAnimating: animationRef.current !== null,

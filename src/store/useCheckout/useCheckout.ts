@@ -3,6 +3,7 @@
 import { captureGarmentConfiguration, useConfigurationCart } from '@store/useConfigurationCart';
 import { sanitizeNumberText } from '@store/useGarmentNumber';
 import { buildCheckoutRows, createCheckoutRowFromPreset, extractCheckoutRowPreset } from '@store/useCheckout/buildCheckoutRows';
+import { isNonemptyPrintText } from '@store/useCheckout/extractUniqueTestoTexts';
 import { getCheckoutDiscountPercent, getProductRowQuantity, getProductsSubtotal, getProductUnitPrice } from '@store/useCheckout/checkoutPricing';
 import { resolveCheckoutPrintAvailability } from '@store/useCheckout/resolveCheckoutPrintAvailability';
 import type { checkoutLineRowPatchType, checkoutProductType } from '@types';
@@ -104,7 +105,16 @@ const useCheckout = create<CheckoutState>((set, get) => ({
             if (row.id !== rowId) return row;
 
             const testoTexts = [...row.testoTexts];
-            testoTexts[patch.testoTextIndex!] = patch.testoText!;
+            const trimmedText = patch.testoText!.trim();
+            const textIndex = patch.testoTextIndex!;
+
+            if (!isNonemptyPrintText(trimmedText)) {
+              if (textIndex < testoTexts.length) {
+                testoTexts.splice(textIndex, 1);
+              }
+            } else {
+              testoTexts[textIndex] = trimmedText;
+            }
 
             return { ...row, testoTexts };
           });
@@ -113,6 +123,10 @@ const useCheckout = create<CheckoutState>((set, get) => ({
         }),
       }));
       return;
+    }
+
+    if (patch.name !== undefined) {
+      normalizedPatch.name = patch.name.trim();
     }
 
     if (patch.name !== undefined && !printAvailability.hasName) {

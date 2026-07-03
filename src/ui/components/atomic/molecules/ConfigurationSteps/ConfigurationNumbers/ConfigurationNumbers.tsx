@@ -59,7 +59,7 @@ const NumberPartForm = ({ instanceId, limits, placeholder, lineHeightShow }: num
   return (
     <Flex variant="configurator_part" className="gap-5 pt-2">
       <Flex variant="configurator_part">
-        <Text variant="configurator_control_label">Carattere</Text>
+        <Text variant="configurator_control_label">Numero</Text>
         <input
           type="text"
           inputMode="numeric"

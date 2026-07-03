@@ -7,4 +7,5 @@ export {
   resolveCursorFocusPoint,
   resolveGarmentCenter,
   resolveOrbitFocusPose,
+  resolveShortestAngleDelta,
 } from './orbitCamera';
