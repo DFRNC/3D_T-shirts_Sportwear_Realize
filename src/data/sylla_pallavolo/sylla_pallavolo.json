@@ -93,8 +93,8 @@
       }
     },
     {
-      "name": "Collar",
-      "label": "Collar",
+      "name": "Collo",
+      "label": "Collo",
       "id": "sylla_pallavolo_collar",
       "meshNames": ["crewneck_womans_collar"],
       "renderOrder": 1,

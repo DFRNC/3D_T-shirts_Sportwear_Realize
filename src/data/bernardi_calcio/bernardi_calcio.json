@@ -93,8 +93,8 @@
       }
     },
     {
-      "name": "Collar",
-      "label": "Collar",
+      "name": "Collo",
+      "label": "Collo",
       "id": "bernardi_calcio_collar",
       "meshNames": ["model_collar"],
       "renderOrder": 1,

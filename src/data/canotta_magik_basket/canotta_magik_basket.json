@@ -93,8 +93,8 @@
       }
     },
     {
-      "name": "Collar",
-      "label": "Collar",
+      "name": "Collo",
+      "label": "Collo",
       "id": "canotta_magik_basket_collar",
       "meshNames": ["basketball_top_collar"],
       "renderOrder": 1,

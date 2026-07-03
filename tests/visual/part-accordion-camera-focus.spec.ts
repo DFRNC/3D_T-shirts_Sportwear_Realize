@@ -7,7 +7,7 @@ const PARTS = [
   { label: 'Davanti', partId: 'baggio_calcio_front' },
   { label: 'Manica 1', partId: 'baggio_calcio_sleeve_left' },
   { label: 'Manica 2', partId: 'baggio_calcio_sleeve_right' },
-  { label: 'Collar', partId: 'baggio_calcio_collar' },
+  { label: 'Collo', partId: 'baggio_calcio_collar' },
 ] as const;
 
 const MIN_ORBIT_DELTA = 0.12;
