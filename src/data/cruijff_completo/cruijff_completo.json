@@ -235,7 +235,7 @@
   "namePositions": [],
   "numberPositions": [
     {
-      "label": "Right-bottom",
+      "label": "Destra inferiore",
       "partId": "cruijff_calcio_back",
       "uv": {
         "x": 0.609,
@@ -248,7 +248,7 @@
       "id": "right-bottom"
     },
     {
-      "label": "Right-top",
+      "label": "Destra superiore",
       "partId": "cruijff_calcio_back",
       "uv": {
         "x": 0.609,
@@ -261,7 +261,7 @@
       "id": "right-top"
     },
     {
-      "label": "Right-center",
+      "label": "Dietro",
       "partId": "cruijff_calcio_back",
       "uv": {
         "x": 0.5,
@@ -279,7 +279,7 @@
       }
     },
     {
-      "label": "Left-top",
+      "label": "Davanti",
       "partId": "cruijff_calcio_front",
       "uv": {
         "x": 0.391,
@@ -294,7 +294,7 @@
   ],
   "testoPositions": [
     {
-      "label": "Right",
+      "label": "Destra",
       "partId": "cruijff_calcio_back",
       "uv": {
         "x": 0.5,
@@ -314,7 +314,7 @@
       "id": "right"
     },
     {
-      "label": "Left",
+      "label": "Sinistra",
       "partId": "cruijff_calcio_front",
       "uv": {
         "x": 0.5,

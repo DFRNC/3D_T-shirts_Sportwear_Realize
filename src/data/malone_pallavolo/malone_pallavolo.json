@@ -225,7 +225,7 @@
   },
   "numberPositions": [
     {
-      "label": "Right-bottom",
+      "label": "Destra inferiore",
       "partId": "malone_pallavolo_back",
       "uv": {
         "x": 0.609,
@@ -238,7 +238,7 @@
       "id": "right-bottom"
     },
     {
-      "label": "Right-top",
+      "label": "Destra superiore",
       "partId": "malone_pallavolo_back",
       "uv": {
         "x": 0.609,
@@ -251,7 +251,7 @@
       "id": "right-top"
     },
     {
-      "label": "Right-center",
+      "label": "Dietro",
       "partId": "malone_pallavolo_back",
       "uv": {
         "x": 0.5,
@@ -267,7 +267,7 @@
       }
     },
     {
-      "label": "Left-top",
+      "label": "Davanti",
       "partId": "malone_pallavolo_front",
       "uv": {
         "x": 0.391,
@@ -282,7 +282,7 @@
   ],
   "testoPositions": [
     {
-      "label": "Right",
+      "label": "Destra",
       "partId": "malone_pallavolo_back",
       "uv": {
         "x": 0.5,
@@ -298,7 +298,7 @@
       "id": "right"
     },
     {
-      "label": "Left",
+      "label": "Sinistra",
       "partId": "malone_pallavolo_front",
       "uv": {
         "x": 0.5,

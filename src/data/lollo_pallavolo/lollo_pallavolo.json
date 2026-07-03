@@ -226,7 +226,7 @@
   "namePositions": [],
   "numberPositions": [
     {
-      "label": "Right-bottom",
+      "label": "Destra inferiore",
       "partId": "lollo_pallavolo_back",
       "uv": {
         "x": 0.607,
@@ -239,7 +239,7 @@
       "id": "right-bottom"
     },
     {
-      "label": "Right-top",
+      "label": "Destra superiore",
       "partId": "lollo_pallavolo_back",
       "uv": {
         "x": 0.607,
@@ -252,7 +252,7 @@
       "id": "right-top"
     },
     {
-      "label": "Right-center",
+      "label": "Dietro",
       "partId": "lollo_pallavolo_back",
       "uv": {
         "x": 0.5,
@@ -268,7 +268,7 @@
       }
     },
     {
-      "label": "Left-top",
+      "label": "Davanti",
       "partId": "lollo_pallavolo_front",
       "uv": {
         "x": 0.394,
@@ -283,7 +283,7 @@
   ],
   "testoPositions": [
     {
-      "label": "Right",
+      "label": "Destra",
       "partId": "lollo_pallavolo_back",
       "uv": {
         "x": 0.5,
@@ -299,7 +299,7 @@
       "id": "right"
     },
     {
-      "label": "Left",
+      "label": "Sinistra",
       "partId": "lollo_pallavolo_front",
       "uv": {
         "x": 0.5,
