@@ -1,4 +1,5 @@
-export { ConfiguratorCanvas } from './canvas';
+export { ConfiguratorCanvas, requestConfiguratorCameraFocus } from './canvas';
+export type { configuratorCameraFocusTargetType, configuratorCameraFocusViewModeType } from './canvas';
 export {
   beginGarmentModelWarmup,
   captureConfiguratorPreviewSnapshot,

@@ -15,6 +15,8 @@ export { useSubmitCheckout } from './useSubmitCheckout';
 export { useRequestAddProduct } from './useRequestAddProduct';
 export { useNavigateToConfigurator } from './useNavigateToConfigurator';
 export { useConfigurationCartSync } from './useConfigurationCartSync';
+export { useGarmentLogoCameraFocus } from './useGarmentLogoCameraFocus';
+export { usePartAccordionCameraFocus } from './usePartAccordionCameraFocus';
 export { useConfigurationPositionPicker } from './useConfigurationPositionPicker';
 export { useControlledState } from './useControlledState';
 export { useSlidingIndicator } from './useSlidingIndicator';

@@ -24,5 +24,8 @@ export {
   recenterOrbitTargetByZoom,
   resolveCursorFocusPoint,
   resolveGarmentCenter,
+  resolveOrbitFocusPose,
 } from './orbitCamera';
+export type { resolvePrintUvWorldPointInputType, resolvePrintUvWorldPointResultType } from './resolvePrintUvWorldPoint';
+export { resolvePrintUvWorldPoint } from './resolvePrintUvWorldPoint';
 export { suppressThreeClockDeprecation } from '@configurator/bootstrap/clientConsoleSuppression/suppressThreeClockDeprecation';

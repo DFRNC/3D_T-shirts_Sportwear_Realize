@@ -2,6 +2,8 @@
 
 import { useCallback, useMemo, useRef, useState } from 'react';
 
+import { requestConfiguratorCameraFocus } from '@configurator';
+import type { configuratorCameraFocusTargetType } from '@configurator';
 import type { configurationPositionPickerInstanceType, configurationPositionPickerPositionType } from '@types';
 import { resolvePrintPositionConflicts } from '@store/resolvePrintPositionConflicts';
 
@@ -9,15 +11,20 @@ interface useConfigurationPositionPickerParamsType<TPosition extends configurati
   positions: TPosition[];
   instances: configurationPositionPickerInstanceType[];
   onAddInstance: (position: TPosition, instanceId: string) => void;
+  resolveFocusFromPosition?: (position: TPosition) => configuratorCameraFocusTargetType | null;
+  resolveFocusFromInstance?: (instance: configurationPositionPickerInstanceType) => configuratorCameraFocusTargetType | null;
 }
 
 const useConfigurationPositionPicker = <TPosition extends configurationPositionPickerPositionType>({
   positions,
   instances,
   onAddInstance,
+  resolveFocusFromPosition,
+  resolveFocusFromInstance,
 }: useConfigurationPositionPickerParamsType<TPosition>) => {
   const nextInstanceIdRef = useRef(0);
   const [openItems, setOpenItems] = useState<string[]>([]);
+  const openItemsRef = useRef<string[]>([]);
 
   const availablePositions = useMemo(() => {
     const usedKeys = new Set(instances.map((instance) => instance.positionKey));
@@ -26,8 +33,26 @@ const useConfigurationPositionPicker = <TPosition extends configurationPositionP
 
   const resolvedOpenItems = useMemo(() => {
     const validIds = new Set(instances.map((instance) => instance.id));
-    return openItems.filter((id) => validIds.has(id));
+    const next = openItems.filter((id) => validIds.has(id));
+    openItemsRef.current = next;
+    return next;
   }, [instances, openItems]);
+
+  const focusFromPosition = useCallback(
+    (position: TPosition) => {
+      const target = resolveFocusFromPosition?.(position);
+      if (target) requestConfiguratorCameraFocus(target);
+    },
+    [resolveFocusFromPosition],
+  );
+
+  const focusFromInstance = useCallback(
+    (instance: configurationPositionPickerInstanceType) => {
+      const target = resolveFocusFromInstance?.(instance);
+      if (target) requestConfiguratorCameraFocus(target);
+    },
+    [resolveFocusFromInstance],
+  );
 
   const handlePositionSelect = useCallback(
     (positionKey: string) => {
@@ -39,18 +64,33 @@ const useConfigurationPositionPicker = <TPosition extends configurationPositionP
       nextInstanceIdRef.current += 1;
       const instanceId = `${position.key}_${nextInstanceIdRef.current}`;
       onAddInstance(position, instanceId);
-      setOpenItems((current) => [...current, instanceId]);
+      focusFromPosition(position);
+      setOpenItems((current) => {
+        const next = [...current, instanceId];
+        openItemsRef.current = next;
+        return next;
+      });
     },
-    [availablePositions, onAddInstance],
+    [availablePositions, focusFromPosition, onAddInstance],
   );
 
-  const handleOpenItemsChange = useCallback((value: string | string[] | null) => {
-    setOpenItems(Array.isArray(value) ? value : value ? [value] : []);
+  const handleItemActivate = useCallback(
+    (instanceId: string) => {
+      const instance = instances.find((item) => item.id === instanceId);
+      if (instance) focusFromInstance(instance);
+    },
+    [focusFromInstance, instances],
+  );
+
+  const handleOpenItemsChange = useCallback((value: string[]) => {
+    openItemsRef.current = [...value];
+    setOpenItems([...value]);
   }, []);
 
   return {
     availablePositions,
     openItems: resolvedOpenItems,
+    handleItemActivate,
     handleOpenItemsChange,
     handlePositionSelect,
   };

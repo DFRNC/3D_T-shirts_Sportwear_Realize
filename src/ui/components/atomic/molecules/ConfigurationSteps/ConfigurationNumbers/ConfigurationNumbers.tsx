@@ -1,6 +1,6 @@
 'use client';
 
-import type { numberPartFormPropsType, numberPositionType } from '@types';
+import type { configurationPositionPickerInstanceType, numberPartFormPropsType, numberPositionType } from '@types';
 import { AccordionAtom, Button, Flex, SvgIcon, Text } from '@atoms';
 import { CONFIGURATOR_NUMBER_POSITION_SELECT_LABEL } from '@constants';
 import { useConfigurationPositionPicker } from '@hooks';
@@ -141,10 +141,22 @@ const ConfigurationNumbers = () => {
     [addInstance, product],
   );
 
-  const { availablePositions, openItems, handleOpenItemsChange, handlePositionSelect } = useConfigurationPositionPicker({
+  const resolveFocusFromPosition = useCallback(
+    (position: numberPositionType) => ({ partId: position.partId, uv: position.uv }),
+    [],
+  );
+
+  const resolveFocusFromInstance = useCallback((instance: configurationPositionPickerInstanceType) => {
+    const item = useGarmentNumber.getState().instances.find((entry) => entry.id === instance.id);
+    return item ? { partId: item.partId, uv: item.uv } : null;
+  }, []);
+
+  const { availablePositions, openItems, handleItemActivate, handleOpenItemsChange, handlePositionSelect } = useConfigurationPositionPicker({
     positions,
     instances,
     onAddInstance: handleAddInstance,
+    resolveFocusFromPosition,
+    resolveFocusFromInstance,
   });
 
   const items = useMemo(
@@ -163,7 +175,16 @@ const ConfigurationNumbers = () => {
     <Flex key={product.path} variant="step_design" className="gap-3">
       <ConfigurationPositionSelect label={CONFIGURATOR_NUMBER_POSITION_SELECT_LABEL} positions={availablePositions} onSelect={handlePositionSelect} />
 
-      {instances.length > 0 && <AccordionAtom items={items} value={openItems} onValueChange={handleOpenItemsChange} multiple className="gap-2" />}
+      {instances.length > 0 && (
+        <AccordionAtom
+          items={items}
+          value={openItems}
+          onValueChange={handleOpenItemsChange}
+          onItemActivate={handleItemActivate}
+          multiple
+          className="gap-2"
+        />
+      )}
     </Flex>
   );
 };

@@ -1,7 +1,7 @@
 'use client';
 
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
-import { orbitControlsRef, syncOrbitControlsEnabled } from '@configurator/canvas';
+import { orbitControlsRef, syncOrbitControlsEnabled, useOrbitCameraFocus } from '@configurator/canvas';
 import {
   applyOrbitZoomAroundPoint,
   clampOrbitCameraOutsideGarment,
@@ -19,7 +19,8 @@ const ORBIT_MIN_DISTANCE = 0.05;
 const ORBIT_MAX_DISTANCE = 0.9;
 /** Default orbit distance after switching products (zoomed-out framing). */
 const PRODUCT_SWITCH_ZOOM_DISTANCE = ORBIT_MAX_DISTANCE;
-const ORBIT_MAX_AZIMUTH_ANGLE = Math.PI / 2;
+const ORBIT_MIN_AZIMUTH_ANGLE = -Math.PI;
+const ORBIT_MAX_AZIMUTH_ANGLE = Math.PI;
 const ORBIT_MAX_POLAR_ANGLE = Math.PI / 1.5;
 const ORBIT_DAMPING_FACTOR = 0.05;
 const ZOOM_WHEEL_SENSITIVITY = 0.0016;
@@ -37,6 +38,7 @@ const ViewControls = () => {
   const gl = useThree((state) => state.gl);
   const invalidate = useThree((state) => state.invalidate);
   const controls = useThree((state) => state.controls as OrbitControlsImpl | undefined);
+  useOrbitCameraFocus();
   const modelId = useConfiguratorProduct((state) => state.modelId);
   const productPath = useConfiguratorProduct((state) => state.product.path);
   const isSceneTransitionLoading = useConfiguratorSceneLoad((state) => state.isSceneTransitionLoading);
@@ -225,6 +227,7 @@ const ViewControls = () => {
       minDistance={ORBIT_MIN_DISTANCE}
       maxDistance={ORBIT_MAX_DISTANCE}
       maxAzimuthAngle={ORBIT_MAX_AZIMUTH_ANGLE}
+      minAzimuthAngle={ORBIT_MIN_AZIMUTH_ANGLE}
       maxPolarAngle={ORBIT_MAX_POLAR_ANGLE}
     />
   );
