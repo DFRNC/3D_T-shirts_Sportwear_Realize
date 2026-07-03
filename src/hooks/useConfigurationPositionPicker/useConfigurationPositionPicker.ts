@@ -24,7 +24,6 @@ const useConfigurationPositionPicker = <TPosition extends configurationPositionP
 }: useConfigurationPositionPickerParamsType<TPosition>) => {
   const nextInstanceIdRef = useRef(0);
   const [openItems, setOpenItems] = useState<string[]>([]);
-  const openItemsRef = useRef<string[]>([]);
 
   const availablePositions = useMemo(() => {
     const usedKeys = new Set(instances.map((instance) => instance.positionKey));
@@ -33,9 +32,7 @@ const useConfigurationPositionPicker = <TPosition extends configurationPositionP
 
   const resolvedOpenItems = useMemo(() => {
     const validIds = new Set(instances.map((instance) => instance.id));
-    const next = openItems.filter((id) => validIds.has(id));
-    openItemsRef.current = next;
-    return next;
+    return openItems.filter((id) => validIds.has(id));
   }, [instances, openItems]);
 
   const focusFromPosition = useCallback(
@@ -65,11 +62,7 @@ const useConfigurationPositionPicker = <TPosition extends configurationPositionP
       const instanceId = `${position.key}_${nextInstanceIdRef.current}`;
       onAddInstance(position, instanceId);
       focusFromPosition(position);
-      setOpenItems((current) => {
-        const next = [...current, instanceId];
-        openItemsRef.current = next;
-        return next;
-      });
+      setOpenItems((current) => [...current, instanceId]);
     },
     [availablePositions, focusFromPosition, onAddInstance],
   );
@@ -83,7 +76,6 @@ const useConfigurationPositionPicker = <TPosition extends configurationPositionP
   );
 
   const handleOpenItemsChange = useCallback((value: string[]) => {
-    openItemsRef.current = [...value];
     setOpenItems([...value]);
   }, []);
 

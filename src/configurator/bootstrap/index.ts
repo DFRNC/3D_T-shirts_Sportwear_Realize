@@ -9,3 +9,7 @@ export {
   registerConfiguratorPreviewCapture,
   unregisterConfiguratorPreviewCapture,
 } from './previewCapture';
+export {
+  CheckoutPreviewCaptureHost,
+  scheduleCheckoutPreviewCapture,
+} from './checkoutPreviewCapture';

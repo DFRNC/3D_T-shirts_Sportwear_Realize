@@ -7,10 +7,10 @@ import {
   imageToTexture,
   isGltfModelReady,
   loadCachedImage,
+  preloadGarmentGltfEager,
   resolveModelUrl,
   resolveRasterDesignSrc,
   syncProductAppearanceTextures,
-  preloadGarmentGltfEager,
   warmProductModelFile,
   yieldToMain,
 } from '@configurator/utils';

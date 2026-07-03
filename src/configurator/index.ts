@@ -3,10 +3,12 @@ export type { configuratorCameraFocusTargetType, configuratorCameraFocusViewMode
 export {
   beginGarmentModelWarmup,
   captureConfiguratorPreviewSnapshot,
+  CheckoutPreviewCaptureHost,
   isGarmentModelReadyForProduct,
   isGltfModelReady,
   loadCachedImage,
   prepareGarmentModel,
+  scheduleCheckoutPreviewCapture,
   waitForProductModelReady,
   warmProductAssets,
   warmProductGltfCache,

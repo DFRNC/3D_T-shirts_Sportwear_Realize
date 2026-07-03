@@ -3,10 +3,12 @@
 import { captureGarmentConfiguration, useConfigurationCart } from '@store/useConfigurationCart';
 import { sanitizeNumberText } from '@store/useGarmentNumber';
 import { buildCheckoutRows, createCheckoutRowFromPreset, extractCheckoutRowPreset } from '@store/useCheckout/buildCheckoutRows';
+import { scheduleCheckoutPreviewCapture } from '@configurator';
+import { applyCheckoutFirstRowToConfiguration } from '@store/useCheckout/applyCheckoutFirstRowToConfiguration';
 import { isNonemptyPrintText } from '@store/useCheckout/extractUniqueTestoTexts';
 import { getCheckoutDiscountPercent, getProductRowQuantity, getProductsSubtotal, getProductUnitPrice } from '@store/useCheckout/checkoutPricing';
 import { resolveCheckoutPrintAvailability } from '@store/useCheckout/resolveCheckoutPrintAvailability';
-import type { checkoutLineRowPatchType, checkoutProductType } from '@types';
+import type { checkoutLineRowPatchType, checkoutLineRowType, checkoutProductType } from '@types';
 import { clampCheckoutRowQuantity } from '@constants';
 import { getModel } from '@utils';
 import { create } from 'zustand';
@@ -25,6 +27,18 @@ interface CheckoutState {
   getDiscountAmount: () => number;
   getGrandTotal: () => number;
 }
+
+const maybeSyncFirstRowPreview = (cartItemId: string, rowId: string, rows: checkoutLineRowType[]) => {
+  const firstRow = rows[0];
+  if (!firstRow || firstRow.id !== rowId) return;
+
+  const cart = useConfigurationCart.getState();
+  const configuration = cart.getConfiguration(cartItemId);
+  if (!configuration) return;
+
+  cart.saveConfiguration(cartItemId, applyCheckoutFirstRowToConfiguration(configuration, firstRow));
+  scheduleCheckoutPreviewCapture(cartItemId);
+};
 
 const useCheckout = create<CheckoutState>((set, get) => ({
   products: [],
@@ -91,8 +105,8 @@ const useCheckout = create<CheckoutState>((set, get) => ({
     const isTestoTextPatch = patch.testoTextIndex !== undefined && patch.testoText !== undefined;
     const cartState = useConfigurationCart.getState();
     const cartItem = cartState.items.find((item) => item.id === cartItemId);
-    const product = cartItem ? getModel(cartItem.modelId) : undefined;
-    const printAvailability = resolveCheckoutPrintAvailability(product);
+    const garment = cartItem ? getModel(cartItem.modelId) : undefined;
+    const printAvailability = resolveCheckoutPrintAvailability(garment);
 
     if (isTestoTextPatch) {
       if (!printAvailability.hasTesto) return;
@@ -122,6 +136,9 @@ const useCheckout = create<CheckoutState>((set, get) => ({
           return { ...product, rows };
         }),
       }));
+
+      const checkoutProduct = get().products.find((entry) => entry.cartItemId === cartItemId);
+      if (checkoutProduct) maybeSyncFirstRowPreview(cartItemId, rowId, checkoutProduct.rows);
       return;
     }
 
@@ -148,6 +165,9 @@ const useCheckout = create<CheckoutState>((set, get) => ({
         return { ...product, rows };
       }),
     }));
+
+    const checkoutProduct = get().products.find((entry) => entry.cartItemId === cartItemId);
+    if (checkoutProduct) maybeSyncFirstRowPreview(cartItemId, rowId, checkoutProduct.rows);
   },
 
   getProductQuantity: (cartItemId) => {

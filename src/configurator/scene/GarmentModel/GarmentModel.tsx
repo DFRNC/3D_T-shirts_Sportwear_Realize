@@ -21,18 +21,12 @@ const GarmentModelLoaded = ({ modelUrl, children }: { modelUrl: string; children
   );
 };
 
-const GarmentModel = ({ children }: { children?: ReactNode }) => {
-  const product = useConfiguratorProduct((state) => state.product);
-  const modelUrl = resolveModelUrl(product);
+const GarmentModelGate = ({ modelUrl, children }: { modelUrl: string; children?: ReactNode }) => {
   const [isModelReady, setIsModelReady] = useState(() => isGltfModelReady(modelUrl));
 
   useEffect(() => {
-    if (isGltfModelReady(modelUrl)) {
-      setIsModelReady(true);
-      return;
-    }
+    if (isGltfModelReady(modelUrl)) return;
 
-    setIsModelReady(false);
     let cancelled = false;
 
     void waitForGltfModelReady(modelUrl).then(() => {
@@ -47,6 +41,17 @@ const GarmentModel = ({ children }: { children?: ReactNode }) => {
   if (!isModelReady) return null;
 
   return <GarmentModelLoaded modelUrl={modelUrl}>{children}</GarmentModelLoaded>;
+};
+
+const GarmentModel = ({ children }: { children?: ReactNode }) => {
+  const product = useConfiguratorProduct((state) => state.product);
+  const modelUrl = resolveModelUrl(product);
+
+  return (
+    <GarmentModelGate key={modelUrl} modelUrl={modelUrl}>
+      {children}
+    </GarmentModelGate>
+  );
 };
 
 export { GarmentModel };

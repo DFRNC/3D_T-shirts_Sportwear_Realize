@@ -1,4 +1,4 @@
-import { MeshStandardMaterial, type Mesh, type Object3D, type Scene } from 'three';
+import { type Mesh, MeshStandardMaterial, type Object3D, type Scene } from 'three';
 import { LOGO_SLOT_COUNT, NAME_SLOT_COUNT } from '@configurator/constants';
 
 type numberUniformType = { value: number };
