@@ -1,4 +1,4 @@
-import { assertShopifyConfigured } from '@shopify/config';
+import { getShopifyAdminAccessToken, getShopifyApiVersion, getShopifyStoreDomain } from '@shopify/config';
 import { fetchShopifyWithTimeout } from '@shopify/fetchShopifyWithTimeout';
 type shopifyGraphqlResponseType<TData> = {
   data?: TData;
@@ -6,7 +6,13 @@ type shopifyGraphqlResponseType<TData> = {
 };
 
 const shopifyAdminGraphql = async <TData>(query: string, variables?: Record<string, unknown>): Promise<TData> => {
-  const { storeDomain, accessToken, apiVersion } = assertShopifyConfigured();
+  const storeDomain = getShopifyStoreDomain();
+  const apiVersion = getShopifyApiVersion();
+  const accessToken = getShopifyAdminAccessToken();
+
+  if (!storeDomain || !accessToken) {
+    throw new Error('[shopify] Missing SHOPIFY_STORE_DOMAIN or SHOPIFY_ADMIN_ACCESS_TOKEN for Admin API.');
+  }
 
   const response = await fetchShopifyWithTimeout(`https://${storeDomain}/admin/api/${apiVersion}/graphql.json`, {
     method: 'POST',

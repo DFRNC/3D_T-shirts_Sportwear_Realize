@@ -9,7 +9,7 @@ type configuratorLayoutPropsType = childrenType & {
 
 const ConfiguratorLayout = async ({ children, params }: configuratorLayoutPropsType) => {
   const { collectionHandle, slug } = await params;
-  const product = await resolveConfiguratorProduct(slug);
+  const product = await resolveConfiguratorProduct(slug, collectionHandle);
 
   return (
     <ConfiguratorCatalogShell>

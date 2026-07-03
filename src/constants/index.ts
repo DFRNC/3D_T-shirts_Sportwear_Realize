@@ -8,6 +8,31 @@ const DEFAULT_CONFIGURATOR_COLLECTION_HANDLE = '';
 // --- Configurator copy ---
 
 const CONFIGURATOR_PRODUCT_DESCRIPTION = "Eventuali liste dei giocatori, quantità e taglie da inserire dopo in 'Completa config.'";
+const CONFIGURATOR_DEFAULT_MINIMUM_COUNT = 5;
+
+type collectionVolumeDiscountConfigType = {
+  minimumOrderCount: number;
+  bonusCount: number;
+  bonusDiscount: number;
+};
+
+const CONFIGURATOR_COLLECTION_VOLUME_DISCOUNTS: Record<string, collectionVolumeDiscountConfigType> = {
+  'completo-gara-calcio': { minimumOrderCount: 5, bonusCount: 25, bonusDiscount: 20 },
+  'completo-gara-pallavolo': { minimumOrderCount: 5, bonusCount: 25, bonusDiscount: 20 },
+  'completo-gara-basket': { minimumOrderCount: 5, bonusCount: 25, bonusDiscount: 20 },
+  completo: { minimumOrderCount: 5, bonusCount: 25, bonusDiscount: 20 },
+};
+
+const resolveShopifyCollectionVolumeDiscount = (collectionHandle: string): collectionVolumeDiscountConfigType | null => {
+  const normalizedHandle = collectionHandle.trim();
+  if (!normalizedHandle) return null;
+
+  return CONFIGURATOR_COLLECTION_VOLUME_DISCOUNTS[normalizedHandle] ?? null;
+};
+
+const buildMinimumQuantityLabel = (minimumCount: number) => `Minimo ${minimumCount} pz`;
+const buildVolumeDiscountLabel = (bonusCount: number, bonusDiscount: number) =>
+  `>${bonusCount} pezzi +${bonusDiscount}% di sconto`;
 const CONFIGURATOR_GRADIENT_ACTIVE_LABEL = 'Sfumatura attiva';
 const CONFIGURATOR_NAME_POSITION_SELECT_LABEL = 'Dove desideri inserire il nome?';
 const CONFIGURATOR_NUMBER_POSITION_SELECT_LABEL = 'Dove desideri inserire il numero?';
@@ -29,7 +54,7 @@ type configuratorStepMetaItemType = {
 };
 
 const CONFIGURATOR_STEP_META: configuratorStepMetaItemType[] = [
-  { value: 'colore', label: 'Color', step: 1 },
+  { value: 'colore', label: 'Colore', step: 1 },
   { value: 'design', label: 'Design', step: 2 },
   { value: 'shading', label: 'Sfumatura', step: 3 },
   { value: 'name', label: 'Nome', step: 4 },
@@ -163,9 +188,12 @@ export {
   ADD_PRODUCT_DESIGN_MODAL_CONFIRM_LABEL,
   ADD_PRODUCT_DESIGN_MODAL_DECLINE_LABEL,
   buildAddProductDesignModalTitle,
+  buildMinimumQuantityLabel,
+  buildVolumeDiscountLabel,
   CONFIGURATOR_DEFAULT_BRAND_LOGO_DESCRIPTION,
   CONFIGURATOR_DEFAULT_BRAND_LOGO_SRC,
   CONFIGURATOR_DEFAULT_BRAND_LOGO_TITLE,
+  CONFIGURATOR_DEFAULT_MINIMUM_COUNT,
   CONFIGURATOR_GRADIENT_ACTIVE_LABEL,
   CONFIGURATOR_NAME_POSITION_SELECT_LABEL,
   CONFIGURATOR_NUMBER_POSITION_SELECT_LABEL,
@@ -183,6 +211,7 @@ export {
   LOGO_MAX_FILE_SIZE,
   LOGO_SUPPORTED_LABEL,
   PALETTE_COLORS,
+  resolveShopifyCollectionVolumeDiscount,
   TUTORIAL_VIDEO_URL,
   VIDEO_PLAYER_DEFAULT_VOLUME,
   VIDEO_PLAYER_YOUTUBE_CONFIG,

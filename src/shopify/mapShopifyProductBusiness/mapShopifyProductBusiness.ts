@@ -51,9 +51,9 @@ const mapShopifyProductBusiness = (node: shopifyProductBusinessNodeType): garmen
   name: node.title,
   price: toNumber(node.priceRangeV2?.minVariantPrice?.amount),
   currencyCode: node.priceRangeV2?.minVariantPrice?.currencyCode ?? 'EUR',
-  bonusCount: toNumber(node.bonusCountMetafield?.value),
-  bonusDiscount: toNumber(node.bonusDiscountMetafield?.value),
   minimumCount: toNumber(node.minimumCountMetafield?.value),
+  bonusDiscount: toNumber(node.bonusDiscountMetafield?.value),
+  bonusCount: toNumber(node.bonusCountMetafield?.value),
 });
 
 export { mapShopifyProductBusiness, PRODUCT_BUSINESS_FIELDS, resolveProductModelId };
