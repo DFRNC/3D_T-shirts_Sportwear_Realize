@@ -1,16 +1,20 @@
 'use client';
 
 import { useCallback } from 'react';
+import { AiOutlineBorderOuter } from 'react-icons/ai';
 
 import { Button, Container, Flex, SvgIcon } from '@atoms';
 
 import { ProductCatalogPopover } from '@molecules';
 import { useNavigateToCheckout, useRequestAddProduct } from '@hooks';
-import { useConfigurationCart, useInfoDialog } from '@store';
+import { useConfigurationCart, useConfigurationControl, useInfoDialog } from '@store';
+import { cn } from '@utils';
 
 const FooterConfiguration = () => {
   const items = useConfigurationCart((state) => state.items);
   const activeItemId = useConfigurationCart((state) => state.activeItemId);
+  const isGizmoVisible = useConfigurationControl((state) => state.isGizmoVisible);
+  const toggleGizmoVisible = useConfigurationControl((state) => state.toggleGizmoVisible);
   const { requestAddProduct } = useRequestAddProduct();
   const duplicateActiveItem = useConfigurationCart((state) => state.duplicateActiveItem);
   const setIsOpen = useInfoDialog((state) => state.setIsOpen);
@@ -25,6 +29,10 @@ const FooterConfiguration = () => {
   const handleInfo = useCallback(() => {
     setIsOpen(true);
   }, [setIsOpen]);
+
+  const handleToggleGizmo = useCallback(() => {
+    toggleGizmoVisible();
+  }, [toggleGizmoVisible]);
 
   return (
     <Container>
@@ -50,6 +58,15 @@ const FooterConfiguration = () => {
         <Button variant="primary" size="sm" onClick={navigateToCheckout}>
           <SvgIcon name="cart" />
           Completa Config.
+        </Button>
+        <Button
+          size="sm"
+          onClick={handleToggleGizmo}
+          aria-pressed={isGizmoVisible}
+          aria-label={isGizmoVisible ? 'Nascondi gizmo' : 'Mostra gizmo'}
+          className={cn('px-3', !isGizmoVisible && 'opacity-50')}
+        >
+          <AiOutlineBorderOuter className="size-6 shrink-0" aria-hidden />
         </Button>
       </Flex>
     </Container>
