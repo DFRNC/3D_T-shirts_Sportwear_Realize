@@ -112,7 +112,6 @@ uniform float uPatternOpacity;
 
 vec4 garmentGizmoUiColor;
 vec4 garmentPrintColor;
-vec3 garmentBaseAlbedo;
 float garmentPbrShade;
 
 vec4 garmentCompositeUiLayer( vec4 base, vec4 layer ) {
