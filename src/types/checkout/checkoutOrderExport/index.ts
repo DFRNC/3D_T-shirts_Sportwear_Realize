@@ -1,8 +1,8 @@
-export type { checkoutLineRowPatchType, checkoutLineRowType, checkoutProductType, checkoutRowPresetType, checkoutPrintAvailabilityType } from './checkout';
 export type {
   buildCheckoutOrderExportParamsType,
   checkoutOrderExportAddressType,
   checkoutOrderExportLineType,
+  checkoutOrderExportMetaType,
   checkoutOrderExportRecipientType,
   checkoutOrderExportType,
 } from './checkoutOrderExport';

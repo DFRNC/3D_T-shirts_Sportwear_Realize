@@ -77,11 +77,10 @@ const CHECKOUT_SHIPPING_DAYS_LABEL = 'Spedizione entro 15-20 giorni lavorativi.'
 const CHECKOUT_CONFIGURATION_TABLE_COLUMNS = [
   { id: 'row', header: 'Riga', size: 60, minSize: 60, maxSize: 60 },
   { id: 'size', header: 'Taglia', size: 88, minSize: 88, maxSize: 88 },
-  { id: 'name', header: 'Nome', size: 213, minSize: 213, maxSize: 213 },
-  { id: 'number', header: 'Numero', size: 116, minSize: 116, maxSize: 116 },
-  { id: 'testo', header: 'Testo', size: 213, minSize: 213, maxSize: 213 },
-  { id: 'quantity', header: 'Quantità', size: 116, minSize: 116, maxSize: 116 },
-  { id: 'actions', header: 'Modifica', size: 116, minSize: 116, maxSize: 116 },
+  { id: 'name', header: 'Nome', size: 176, minSize: 176, maxSize: 176 },
+  { id: 'number', header: 'Numero', size: 128, minSize: 128, maxSize: 128 },
+  { id: 'quantity', header: 'Quantità', size: 132, minSize: 132, maxSize: 132 },
+  { id: 'actions', header: 'Modifica', size: 136, minSize: 136, maxSize: 136 },
 ] as const;
 
 const CHECKOUT_SIZE_SELECT_OPTIONS = CHECKOUT_SIZES.map((size) => ({ label: size, value: size }));
@@ -106,6 +105,21 @@ const CHECKOUT_SUMMARY_TIMELINE_STEPS = [
   { icon: 'truck', label: 'Trasporto', dateKey: 'transport' },
   { icon: 'home', label: 'Consegnato', dateKey: 'delivered' },
 ] as const;
+
+const CHECKOUT_CREATE_ORDER_LABEL = 'Crea ordine';
+const CHECKOUT_ORDER_EXPORT_TITLE = "Conferma d'ordine";
+const CHECKOUT_ORDER_EXPORT_FILENAME = 'conferma-ordine.pdf';
+const CHECKOUT_ORDER_EXPORT_WEBSITE = 'www.realize.com';
+const CHECKOUT_ORDER_EXPORT_EMAIL = 'email.is.here@email';
+const CHECKOUT_ORDER_EXPORT_LOGO_SRC = '/svg/logo_you.svg';
+const CHECKOUT_ORDER_EXPORT_RECIPIENT_TITLE = 'Destinatario';
+const CHECKOUT_ORDER_EXPORT_SHIPPING_TITLE = 'Indirizzo di spedizione';
+const CHECKOUT_ORDER_EXPORT_BILLING_TITLE = 'Indirizzo di fatturazione';
+const CHECKOUT_ORDER_EXPORT_ORDER_DATE_LABEL = "Data dell'ordine:";
+const CHECKOUT_ORDER_EXPORT_ORDER_NUMBER_LABEL = "Numero d'ordine:";
+const CHECKOUT_ORDER_EXPORT_VAT_LABEL = 'IVA 22%';
+const CHECKOUT_ORDER_EXPORT_VAT_INCLUDED_LABEL = 'IVA 22% inclusa';
+const CHECKOUT_ORDER_EXPORT_COPYRIGHT_PREFIX = 'All Rights Reserved';
 
 // --- UI palette ---
 
@@ -184,6 +198,20 @@ export {
   CHECKOUT_SUMMARY_TOTAL_LABEL,
   CHECKOUT_SUMMARY_TRUST_ITEMS,
   CHECKOUT_SUMMARY_VAT_LABEL,
+  CHECKOUT_CREATE_ORDER_LABEL,
+  CHECKOUT_ORDER_EXPORT_BILLING_TITLE,
+  CHECKOUT_ORDER_EXPORT_COPYRIGHT_PREFIX,
+  CHECKOUT_ORDER_EXPORT_EMAIL,
+  CHECKOUT_ORDER_EXPORT_FILENAME,
+  CHECKOUT_ORDER_EXPORT_LOGO_SRC,
+  CHECKOUT_ORDER_EXPORT_ORDER_DATE_LABEL,
+  CHECKOUT_ORDER_EXPORT_ORDER_NUMBER_LABEL,
+  CHECKOUT_ORDER_EXPORT_RECIPIENT_TITLE,
+  CHECKOUT_ORDER_EXPORT_SHIPPING_TITLE,
+  CHECKOUT_ORDER_EXPORT_TITLE,
+  CHECKOUT_ORDER_EXPORT_VAT_INCLUDED_LABEL,
+  CHECKOUT_ORDER_EXPORT_VAT_LABEL,
+  CHECKOUT_ORDER_EXPORT_WEBSITE,
   CHECKOUT_TABLE_ADD_ROW_LABEL,
   ADD_PRODUCT_DESIGN_MODAL_CONFIRM_LABEL,
   ADD_PRODUCT_DESIGN_MODAL_DECLINE_LABEL,
