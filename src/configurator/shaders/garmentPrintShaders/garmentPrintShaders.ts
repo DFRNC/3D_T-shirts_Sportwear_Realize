@@ -37,8 +37,15 @@ ${garmentNumberMapFragment}
 const garmentPbrShadeCaptureFragment = /* glsl */ `
 #ifdef USE_PRINT
   // Diffuse-only shade — excludes specular that blew out flat panels (e.g. shorts back).
+  // Use pre-gradient albedo so dark gradient targets (e.g. #000000) do not zero out luma
+  // and break smooth transitions at full opacity.
   float diffuseLuma = max( max( totalDiffuse.r, totalDiffuse.g ), totalDiffuse.b );
-  float albedoLuma = max( max( diffuseColor.r, diffuseColor.g ), diffuseColor.b );
+  #ifdef USE_GRADIENT
+  vec3 shadeAlbedo = garmentBaseAlbedo;
+  #else
+  vec3 shadeAlbedo = diffuseColor.rgb;
+  #endif
+  float albedoLuma = max( max( shadeAlbedo.r, shadeAlbedo.g ), shadeAlbedo.b );
   garmentPbrShade = clamp( diffuseLuma / max( albedoLuma, 0.001 ), 0.42, 1.0 );
 #endif
 `;
