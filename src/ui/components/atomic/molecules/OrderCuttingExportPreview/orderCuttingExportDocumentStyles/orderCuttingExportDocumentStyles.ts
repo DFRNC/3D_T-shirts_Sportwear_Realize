@@ -46,7 +46,9 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 .cutting-export__table th,
 .cutting-export__table td {
   border: 1px solid #CDCDCD;
-  padding: 6px 8px;
+  padding: 8px;
+  height: 1px;
+  min-height: 28px;
   vertical-align: middle;
   text-align: left;
   word-break: break-word;
@@ -105,18 +107,28 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 .cutting-export__step-header {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 8px;
-  padding: 6px 8px;
+  min-height: 32px;
+  padding: 8px;
   border-bottom: 1px solid #CDCDCD;
   background: #E8E8EB;
   color: #000;
   font-size: 11px;
   font-weight: 700;
+  line-height: 1.2;
   text-transform: uppercase;
 }
 
 .cutting-export__step-index {
+  display: flex;
+  align-items: center;
   min-width: 18px;
+}
+
+.cutting-export__step-title {
+  display: flex;
+  align-items: center;
 }
 
 .cutting-export__step-body {
@@ -172,7 +184,9 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__step-params th,
 .cutting-export__step-params td {
-  padding: 6px 8px;
+  padding: 8px;
+  height: 1px;
+  min-height: 28px;
   border: 1px solid #CDCDCD;
   text-align: left;
   vertical-align: middle;
@@ -359,10 +373,14 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 }
 
 .cutting-export__uv-layer-card-header {
-  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 8px;
   border-bottom: 1px solid #E8E8EB;
   font-size: 10px;
   font-weight: 700;
+  line-height: 1.2;
   text-transform: uppercase;
 }
 
@@ -396,8 +414,10 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 .cutting-export__specs-table th,
 .cutting-export__specs-table td {
   border: 1px solid #CDCDCD;
-  padding: 6px 8px;
-  vertical-align: top;
+  padding: 8px;
+  height: 1px;
+  min-height: 28px;
+  vertical-align: middle;
   text-align: left;
 }
 
@@ -427,7 +447,9 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 .cutting-export__articles-table th,
 .cutting-export__articles-table td {
   border: 1px solid #CDCDCD;
-  padding: 6px 8px;
+  padding: 8px;
+  height: 1px;
+  min-height: 28px;
   text-align: center;
   vertical-align: middle;
 }
@@ -448,10 +470,6 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
   color: #000;
   font-weight: 700;
   background: #E8E8EB;
-}
-
-.cutting-export__articles-table tbody td {
-  height: 28px;
 }
 
 .cutting-export-pages {

@@ -14,6 +14,7 @@ const ORDER_CUTTING_EXPORT_PDF_HEIGHT_MM = 297;
 const ORDER_CUTTING_EXPORT_PDF_MARGIN_MM = 12;
 const ORDER_CUTTING_EXPORT_PAGE_NUMBER_FONT_SIZE = 10;
 const ORDER_CUTTING_EXPORT_CAPTURE_SCALE = 1;
+const ORDER_CUTTING_EXPORT_JPEG_QUALITY = 0.6;
 const ORDER_CUTTING_EXPORT_CAPTURE_TIMEOUT_MS = 45_000;
 const ORDER_CUTTING_EXPORT_IMAGE_WAIT_MS = 3_000;
 
@@ -83,19 +84,26 @@ const captureHtmlElement = (element: HTMLElement, height: number) =>
     'PDF capture',
   );
 
+const encodePdfPageCanvas = (canvas: HTMLCanvasElement) => canvas.toDataURL('image/jpeg', ORDER_CUTTING_EXPORT_JPEG_QUALITY);
+
 const appendCanvasToPdf = (pdf: jsPDF, canvas: HTMLCanvasElement, pageIndex: number) => {
   if (pageIndex > 0) {
     pdf.addPage();
   }
 
   pdf.addImage(
-    canvas.toDataURL('image/png'),
-    'PNG',
+    encodePdfPageCanvas(canvas),
+    'JPEG',
     0,
     0,
     ORDER_CUTTING_EXPORT_PDF_WIDTH_MM,
     ORDER_CUTTING_EXPORT_PDF_HEIGHT_MM,
+    undefined,
+    'FAST',
   );
+
+  canvas.width = 0;
+  canvas.height = 0;
 };
 
 const addPdfPageLinks = (pdf: jsPDF, pageElement: HTMLElement, pageIndex: number, pageHeightPx: number) => {
@@ -139,7 +147,7 @@ const downloadOrderCuttingExportPdf = async (documentElement: HTMLElement, filen
   }
 
   const pages = getCapturePages(captureRoot);
-  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
 
   try {
     for (let pageIndex = 0; pageIndex < pages.length; pageIndex += 1) {
