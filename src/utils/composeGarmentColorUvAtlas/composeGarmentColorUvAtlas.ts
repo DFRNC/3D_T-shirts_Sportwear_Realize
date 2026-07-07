@@ -6,6 +6,8 @@ import { GLTFLoader } from 'three-stdlib';
 
 type rgbColorType = { r: number; g: number; b: number };
 
+type pixelColorResolverType = (x: number, y: number) => rgbColorType;
+
 type garmentColorAtlasPartType = orderCuttingExportColorPartSpecType & {
   meshNames: string[];
 };
@@ -81,7 +83,7 @@ const rasterizeTriangle = (
   by: number,
   cx: number,
   cy: number,
-  color: rgbColorType,
+  resolveColor: pixelColorResolverType,
 ) => {
   const minX = Math.max(0, Math.floor(Math.min(ax, bx, cx)));
   const maxX = Math.min(width - 1, Math.ceil(Math.max(ax, bx, cx)));
@@ -92,6 +94,7 @@ const rasterizeTriangle = (
     for (let x = minX; x <= maxX; x += 1) {
       if (!isPointInsideTriangle(x + 0.5, y + 0.5, ax, ay, bx, by, cx, cy)) continue;
 
+      const color = resolveColor(x + 0.5, y + 0.5);
       const index = (y * width + x) * 4;
       pixels[index] = color.r;
       pixels[index + 1] = color.g;
@@ -101,7 +104,7 @@ const rasterizeTriangle = (
   }
 };
 
-const rasterizeMeshUv = (mesh: Mesh, pixels: Uint8ClampedArray, width: number, height: number, color: rgbColorType) => {
+const rasterizeMeshUv = (mesh: Mesh, pixels: Uint8ClampedArray, width: number, height: number, resolveColor: pixelColorResolverType) => {
   const uvAttribute = mesh.geometry.getAttribute('uv') as BufferAttribute | undefined;
   if (!uvAttribute) return;
 
@@ -111,7 +114,7 @@ const rasterizeMeshUv = (mesh: Mesh, pixels: Uint8ClampedArray, width: number, h
     const a = uvToPixel(uvAttribute.getX(ia), uvAttribute.getY(ia), width, height);
     const b = uvToPixel(uvAttribute.getX(ib), uvAttribute.getY(ib), width, height);
     const c = uvToPixel(uvAttribute.getX(ic), uvAttribute.getY(ic), width, height);
-    rasterizeTriangle(pixels, width, height, a.x, a.y, b.x, b.y, c.x, c.y, color);
+    rasterizeTriangle(pixels, width, height, a.x, a.y, b.x, b.y, c.x, c.y, resolveColor);
   };
 
   if (indexAttribute) {
@@ -153,6 +156,46 @@ const pixelsToBlobUrl = (pixels: Uint8ClampedArray, width: number, height: numbe
     );
   });
 
+const mixRgb = (a: rgbColorType, b: rgbColorType, t: number): rgbColorType => ({
+  r: a.r + (b.r - a.r) * t,
+  g: a.g + (b.g - a.g) * t,
+  b: a.b + (b.b - a.b) * t,
+});
+
+/** CPU port of `garmentGradientMask` from the garment fragment shader. */
+const buildGradientColorResolver = (part: garmentColorAtlasPartType, atlasWidth: number, atlasHeight: number): pixelColorResolverType => {
+  const baseColor = hexToRgb(part.color);
+  const gradient = part.gradient;
+  if (!gradient) return () => baseColor;
+
+  const color2 = hexToRgb(gradient.color2);
+  const rotationRad = (gradient.rotation * Math.PI) / 180;
+  const dirX = Math.cos(rotationRad);
+  const dirY = Math.sin(rotationRad);
+  const startX = 0.5 - dirX * 0.5;
+  const startY = 0.5 - dirY * 0.5;
+  const lengthSq = dirX * dirX + dirY * dirY;
+  const mid = gradient.position;
+  const spread = gradient.softness * 0.5;
+  const stop0 = Math.max(0, mid - spread);
+  const stop1 = Math.min(1, Math.max(mid + spread, stop0 + 0.001));
+  const { minX, minY, maxX, maxY } = gradient.uvBounds;
+  const spanX = maxX - minX || 1;
+  const spanY = maxY - minY || 1;
+
+  return (x, y) => {
+    const partU = (x / atlasWidth - minX) / spanX;
+    const partV = (y / atlasHeight - minY) / spanY;
+    let t = ((partU - startX) * dirX + (partV - startY) * dirY) / lengthSq;
+    t = Math.min(1, Math.max(0, t));
+
+    const smoothT = Math.min(1, Math.max(0, (t - stop0) / (stop1 - stop0)));
+    const mask = smoothT * smoothT * (3 - 2 * smoothT) * gradient.opacity;
+
+    return mixRgb(baseColor, color2, mask);
+  };
+};
+
 const composeGarmentColorUvAtlas = async (
   modelSrc: string,
   atlasWidth: number,
@@ -163,12 +206,12 @@ const composeGarmentColorUvAtlas = async (
   const pixels = new Uint8ClampedArray(atlasWidth * atlasHeight * 4);
 
   parts.forEach((part) => {
-    const color = hexToRgb(part.color);
+    const resolveColor = buildGradientColorResolver(part, atlasWidth, atlasHeight);
 
     part.meshNames.forEach((meshName) => {
       const mesh = findMeshByName(gltf.scene, meshName);
       if (!mesh) return;
-      rasterizeMeshUv(mesh, pixels, atlasWidth, atlasHeight, color);
+      rasterizeMeshUv(mesh, pixels, atlasWidth, atlasHeight, resolveColor);
     });
   });
 

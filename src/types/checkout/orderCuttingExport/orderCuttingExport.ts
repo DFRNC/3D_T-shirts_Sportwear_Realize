@@ -1,7 +1,7 @@
 import type { configuratorStepValueType } from '@configurator/types';
-import type { cartItemConfigurationType, checkoutProductType, modelIdType, uvBoundsType } from '@types';
+import type { cartItemConfigurationType, checkoutProductType, modelIdType, uvBoundsType, uvPointType } from '@types';
 
-type orderCuttingExportComposeKindType = 'design-layer' | 'design-mix' | 'color-atlas';
+type orderCuttingExportComposeKindType = 'design-layer' | 'design-mix' | 'color-atlas' | 'gradient-atlas' | 'text-layer';
 
 /** @deprecated Use orderCuttingExportComposeKindType */
 type orderCuttingExportDesignComposeKindType = orderCuttingExportComposeKindType;
@@ -11,10 +11,38 @@ interface orderCuttingExportDesignLayerSpecType {
   color: string;
 }
 
+interface orderCuttingExportGradientSpecType {
+  /** Gradient end color; base part color is the start. Already resolved for `reversed`. */
+  color2: string;
+  /** Degrees, same convention as the garment shader. */
+  rotation: number;
+  position: number;
+  softness: number;
+  opacity: number;
+  /** Part UV bounds the shader normalizes against. */
+  uvBounds: uvBoundsType;
+}
+
 interface orderCuttingExportColorPartSpecType {
   label: string;
   color: string;
   meshNames: string[];
+  gradient?: orderCuttingExportGradientSpecType;
+}
+
+interface orderCuttingExportTextLayerSpecType {
+  text: string;
+  font: string;
+  textColor: string;
+  strokeColor: string;
+  strokeWidth: number;
+  fontSize: number;
+  /** Anchor in atlas UV space (0..1). */
+  uv: uvPointType;
+  /** Total print rotation in degrees (instance + placement + upload + part). */
+  rotation: number;
+  lineHeight?: number;
+  letterSpacing?: number;
 }
 
 interface orderCuttingExportDownloadFileType {
@@ -30,14 +58,22 @@ interface orderCuttingExportDownloadFileType {
   layers?: orderCuttingExportDesignLayerSpecType[];
   uvBounds?: uvBoundsType;
   colorParts?: orderCuttingExportColorPartSpecType[];
+  textLayers?: orderCuttingExportTextLayerSpecType[];
   atlasWidth?: number;
   atlasHeight?: number;
   modelSrc?: string;
 }
 
+interface orderCuttingExportStepDetailParamType {
+  label: string;
+  value: string;
+}
+
 interface orderCuttingExportStepDetailType {
   label: string;
   value: string;
+  /** Extra key/value rows rendered stacked under the main value. */
+  params?: orderCuttingExportStepDetailParamType[];
 }
 
 interface orderCuttingExportConfigurationStepType {
@@ -117,8 +153,11 @@ export type {
   orderCuttingExportDesignComposeKindType,
   orderCuttingExportDesignLayerSpecType,
   orderCuttingExportDownloadFileType,
+  orderCuttingExportGradientSpecType,
   orderCuttingExportPrintAtlasType,
   orderCuttingExportProductType,
+  orderCuttingExportStepDetailParamType,
   orderCuttingExportStepDetailType,
+  orderCuttingExportTextLayerSpecType,
   orderCuttingExportType,
 };

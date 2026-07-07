@@ -26,8 +26,7 @@ ${garmentTestoMapFragment}
 ${garmentNumberMapFragment}
 
   vec4 defaultDesign = texture2D( uDefaultLogos, vPrintUv );
-  defaultDesign.rgb *= uPatternColor0;
-  defaultDesign.a = smoothstep( 0.4, 0.6, defaultDesign.a );
+  defaultDesign.a = step( 0.5, defaultDesign.a );
   garmentPrintColor = printColor;
   garmentPrintColor.rgb = defaultDesign.rgb * defaultDesign.a + garmentPrintColor.rgb * ( 1.0 - defaultDesign.a );
   garmentPrintColor.a = defaultDesign.a + garmentPrintColor.a * ( 1.0 - defaultDesign.a );

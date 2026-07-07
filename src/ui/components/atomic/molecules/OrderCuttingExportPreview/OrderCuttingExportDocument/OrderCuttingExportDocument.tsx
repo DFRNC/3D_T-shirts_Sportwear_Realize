@@ -80,24 +80,45 @@ const OrderCuttingExportDocument = ({ exportData }: orderCuttingExportDocumentPr
                     {step.isConfigured ? (
                       <>
                         {step.details.length > 0 ? (
-                          <dl className="cutting-export__step-details">
-                            {step.details.map((detail) => (
-                              <div key={`${step.key}-${detail.label}`} className="cutting-export__step-detail">
-                                <dt>{detail.label}</dt>
-                                <dd>{detail.value}</dd>
-                              </div>
-                            ))}
-                          </dl>
+                          step.details.every((detail) => !detail.params?.length) ? (
+                            <table className="cutting-export__step-params cutting-export__step-params--plain">
+                              <tbody>
+                                {step.details.map((detail) => (
+                                  <tr key={`${step.key}-${detail.label}`}>
+                                    <th scope="row">{detail.label}</th>
+                                    <td>{detail.value}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          ) : (
+                            <dl className="cutting-export__step-details">
+                              {step.details.map((detail) => (
+                                <div key={`${step.key}-${detail.label}`} className="cutting-export__step-detail">
+                                  <dt>{detail.label}</dt>
+                                  {detail.params?.length ? null : <dd>{detail.value}</dd>}
+                                  {detail.params?.length ? (
+                                    <table className="cutting-export__step-params">
+                                      <tbody>
+                                        {detail.params.map((param) => (
+                                          <tr key={`${step.key}-${detail.label}-${param.label}`}>
+                                            <th scope="row">{param.label}</th>
+                                            <td>{param.value}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  ) : null}
+                                </div>
+                              ))}
+                            </dl>
+                          )
                         ) : null}
 
                         {step.downloadFiles.length > 0 ? (
                           <div className="cutting-export__downloads">
                             {step.downloadFiles.map((file) => (
-                              <OrderCuttingExportDownloadCard
-                                key={file.key}
-                                file={file}
-                                printAtlas={product.printAtlas}
-                              />
+                              <OrderCuttingExportDownloadCard key={file.key} file={file} />
                             ))}
                           </div>
                         ) : null}

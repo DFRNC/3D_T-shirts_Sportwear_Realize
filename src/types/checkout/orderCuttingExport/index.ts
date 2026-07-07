@@ -9,8 +9,11 @@ export type {
   orderCuttingExportDesignComposeKindType,
   orderCuttingExportDesignLayerSpecType,
   orderCuttingExportDownloadFileType,
+  orderCuttingExportGradientSpecType,
   orderCuttingExportPrintAtlasType,
   orderCuttingExportProductType,
+  orderCuttingExportStepDetailParamType,
   orderCuttingExportStepDetailType,
+  orderCuttingExportTextLayerSpecType,
   orderCuttingExportType,
 } from './orderCuttingExport';

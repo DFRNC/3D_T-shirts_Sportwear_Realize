@@ -5,7 +5,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
   max-width: 100%;
   margin: 0 auto;
   padding: 24px 28px 32px;
-  color: #000;
+  color: #454545;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 11px;
   line-height: 1.35;
@@ -20,6 +20,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__title {
   margin: 0 0 4px;
+  color: #000;
   font-size: 18px;
   font-weight: 700;
   text-align: center;
@@ -28,6 +29,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__subtitle {
   margin: 0 0 16px;
+  color: #000;
   font-size: 11px;
   font-weight: 700;
   text-align: center;
@@ -43,7 +45,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__table th,
 .cutting-export__table td {
-  border: 1px solid #000;
+  border: 1px solid #CDCDCD;
   padding: 6px 8px;
   vertical-align: middle;
   text-align: left;
@@ -52,18 +54,20 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__table th {
   width: 22%;
+  color: #000;
   font-weight: 700;
-  background: #fff;
+  background: #E8E8EB;
 }
 
 .cutting-export__table td {
+  color: #454545;
   font-weight: 400;
 }
 
 .cutting-export__product {
   margin-bottom: 24px;
   padding-top: 8px;
-  border-top: 2px solid #000;
+  border-top: 1px solid #E8E8EB;
 }
 
 .cutting-export__product-header {
@@ -72,6 +76,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__product-title {
   margin: 0 0 4px;
+  color: #000;
   font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
@@ -80,7 +85,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 .cutting-export__product-meta {
   margin: 0;
   font-size: 10px;
-  color: #333;
+  color: #979797;
 }
 
 .cutting-export__steps {
@@ -91,7 +96,9 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 }
 
 .cutting-export__step {
-  border: 1px solid #000;
+  border: 1px solid #CDCDCD;
+  border-radius: 4px;
+  overflow: hidden;
   background: #fff;
 }
 
@@ -100,7 +107,9 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
   align-items: center;
   gap: 8px;
   padding: 6px 8px;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #CDCDCD;
+  background: #E8E8EB;
+  color: #000;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -117,7 +126,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 .cutting-export__step-empty {
   margin: 0;
   font-style: italic;
-  color: #444;
+  color: #979797;
 }
 
 .cutting-export__step-details {
@@ -126,10 +135,10 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__step-detail {
   display: grid;
-  grid-template-columns: 34% 1fr;
-  gap: 8px;
-  padding: 4px 0;
-  border-bottom: 1px solid #e5e5e5;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  padding: 6px 0;
+  border-bottom: 1px solid #E8E8EB;
 }
 
 .cutting-export__step-detail:last-child {
@@ -138,24 +147,66 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__step-detail dt {
   margin: 0;
+  color: #000;
+  font-size: 13px;
   font-weight: 700;
 }
 
 .cutting-export__step-detail dd {
   margin: 0;
+  color: #454545;
   word-break: break-word;
+}
+
+.cutting-export__step-params {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin: 4px 0 2px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 11px;
+}
+
+.cutting-export__step-params th,
+.cutting-export__step-params td {
+  padding: 6px 8px;
+  border: 1px solid #CDCDCD;
+  text-align: left;
+  vertical-align: middle;
+  word-break: break-word;
+}
+
+.cutting-export__step-params th {
+  width: 34%;
+  color: #979797;
+  font-weight: 400;
+  background: #fff;
+}
+
+.cutting-export__step-params td {
+  color: #454545;
+}
+
+.cutting-export__step-params--plain {
+  margin: 0;
+}
+
+.cutting-export__step-params--plain th {
+  color: #000;
+  font-weight: 700;
 }
 
 .cutting-export__downloads {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
 }
 
 .cutting-export__download-card {
   display: block;
   padding: 8px;
-  border: 1px solid #000;
+  border: 1px solid #CDCDCD;
+  border-radius: 4px;
   color: inherit;
   text-decoration: none;
   background: #fff;
@@ -172,8 +223,10 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__download-preview-frame {
   position: relative;
-  min-height: 120px;
+  height: 200px;
   margin-bottom: 6px;
+  overflow: hidden;
+  border: 1px solid #E8E8EB;
   background-color: #fff;
   background-image:
     linear-gradient(45deg, #e4e4e4 25%, transparent 25%),
@@ -192,22 +245,23 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 120px;
+  height: 100%;
   font-size: 10px;
-  color: #666;
+  color: #979797;
 }
 
 .cutting-export__download-preview {
   display: block;
   width: 100%;
-  height: auto;
-  margin-bottom: 6px;
-  object-fit: contain;
+  height: 100%;
+  margin: 0;
+  object-fit: cover;
   background: #fff;
 }
 
 .cutting-export__download-label {
   display: block;
+  color: #000;
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
@@ -217,7 +271,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
   display: block;
   margin-top: 2px;
   font-size: 9px;
-  color: #333;
+  color: #979797;
   word-break: break-all;
 }
 
@@ -229,7 +283,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
   position: relative;
   width: 100%;
   margin-bottom: 12px;
-  border: 1px solid #000;
+  border: 1px solid #CDCDCD;
   background: #fff;
   overflow: hidden;
 }
@@ -256,7 +310,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
   justify-content: space-between;
   gap: 12px;
   padding: 6px 8px;
-  border-top: 1px solid #000;
+  border-top: 1px solid #E8E8EB;
   font-size: 10px;
 }
 
@@ -267,13 +321,13 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 }
 
 .cutting-export__uv-layer-card {
-  border: 1px solid #000;
+  border: 1px solid #CDCDCD;
   background: #fff;
 }
 
 .cutting-export__uv-layer-card-header {
   padding: 6px 8px;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #E8E8EB;
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
@@ -295,7 +349,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 .cutting-export__uv-layer-file {
   margin: 6px 0 0;
   font-size: 9px;
-  color: #333;
+  color: #979797;
   word-break: break-all;
 }
 
@@ -308,7 +362,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__specs-table th,
 .cutting-export__specs-table td {
-  border: 1px solid #000;
+  border: 1px solid #CDCDCD;
   padding: 6px 8px;
   vertical-align: top;
   text-align: left;
@@ -316,7 +370,9 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__specs-table th {
   width: 34%;
+  color: #000;
   font-weight: 700;
+  background: #E8E8EB;
 }
 
 .cutting-export__specs-logos {
@@ -336,22 +392,28 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__articles-table th,
 .cutting-export__articles-table td {
-  border: 1px solid #000;
+  border: 1px solid #CDCDCD;
   padding: 6px 8px;
   text-align: center;
   vertical-align: middle;
 }
 
+.cutting-export__articles-table td {
+  color: #454545;
+}
+
 .cutting-export__articles-table thead tr:first-child th {
-  background: #00ffff;
+  background: #E8E8EB;
+  color: #000;
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .cutting-export__articles-table thead tr:nth-child(2) th {
+  color: #000;
   font-weight: 700;
-  background: #fff;
+  background: #E8E8EB;
 }
 
 .cutting-export__articles-table tbody td {

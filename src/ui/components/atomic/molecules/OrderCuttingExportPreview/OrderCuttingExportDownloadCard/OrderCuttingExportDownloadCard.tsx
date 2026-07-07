@@ -2,17 +2,17 @@
 
 import { useEffect, useState } from 'react';
 
-import type { orderCuttingExportDownloadFileType, orderCuttingExportPrintAtlasType } from '@types';
+import type { orderCuttingExportDownloadFileType } from '@types';
 import { composeGarmentColorUvAtlas } from '@utils/composeGarmentColorUvAtlas';
 import { composeDesignUvLayerPreview, composeDesignUvMixPreview } from '@utils/composeDesignUvPreview';
+import { composeTextUvLayer } from '@utils/composeTextUvLayer';
 import { AtomImage } from '@atoms';
 
 type orderCuttingExportDownloadCardPropsType = {
   file: orderCuttingExportDownloadFileType;
-  printAtlas: orderCuttingExportPrintAtlasType;
 };
 
-const OrderCuttingExportDownloadCard = ({ file, printAtlas }: orderCuttingExportDownloadCardPropsType) => {
+const OrderCuttingExportDownloadCard = ({ file }: orderCuttingExportDownloadCardPropsType) => {
   const [composedUrl, setComposedUrl] = useState<string | null>(file.previewSrc ?? (file.downloadUrl || null));
   const [isLoading, setIsLoading] = useState(Boolean(file.composeKind));
 
@@ -35,8 +35,16 @@ const OrderCuttingExportDownloadCard = ({ file, printAtlas }: orderCuttingExport
           objectUrl = await composeDesignUvLayerPreview(file.maskSrc, file.color, file.opacity ?? 1);
         } else if (file.composeKind === 'design-mix' && file.layers?.length) {
           objectUrl = await composeDesignUvMixPreview(file.layers, file.opacity ?? 1);
-        } else if (file.composeKind === 'color-atlas' && file.modelSrc && file.colorParts?.length && file.atlasWidth && file.atlasHeight) {
+        } else if (
+          (file.composeKind === 'color-atlas' || file.composeKind === 'gradient-atlas') &&
+          file.modelSrc &&
+          file.colorParts?.length &&
+          file.atlasWidth &&
+          file.atlasHeight
+        ) {
           objectUrl = await composeGarmentColorUvAtlas(file.modelSrc, file.atlasWidth, file.atlasHeight, file.colorParts);
+        } else if (file.composeKind === 'text-layer' && file.textLayers?.length && file.atlasWidth && file.atlasHeight) {
+          objectUrl = await composeTextUvLayer(file.atlasWidth, file.atlasHeight, file.textLayers);
         }
 
         if (isCancelled) {
@@ -80,6 +88,7 @@ const OrderCuttingExportDownloadCard = ({ file, printAtlas }: orderCuttingExport
     file.modelSrc,
     file.opacity,
     file.previewSrc,
+    file.textLayers,
   ]);
 
   const href = composedUrl ?? file.downloadUrl;
@@ -102,13 +111,7 @@ const OrderCuttingExportDownloadCard = ({ file, printAtlas }: orderCuttingExport
       <div className="cutting-export__download-preview-frame">
         {isLoading ? <span className="cutting-export__download-loading">Composizione UV…</span> : null}
         {!isLoading && composedUrl ? (
-          <AtomImage
-            src={composedUrl}
-            alt={file.label}
-            className="cutting-export__download-preview"
-            width={printAtlas.width}
-            height={printAtlas.height}
-          />
+          <AtomImage src={composedUrl} alt={file.label} className="cutting-export__download-preview" fit="cover" />
         ) : null}
       </div>
       <span className="cutting-export__download-label">{file.label}</span>
