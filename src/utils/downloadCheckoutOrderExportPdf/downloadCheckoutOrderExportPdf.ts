@@ -13,6 +13,8 @@ const ORDER_EXPORT_PDF_WIDTH_MM = 210;
 const ORDER_EXPORT_PDF_HEIGHT_MM = 297;
 const ORDER_EXPORT_PDF_MARGIN_MM = 12;
 const ORDER_EXPORT_PAGE_NUMBER_FONT_SIZE = 10;
+const ORDER_EXPORT_CAPTURE_SCALE = 1;
+const ORDER_EXPORT_JPEG_QUALITY = 0.84;
 
 const waitForDocumentImages = (root: HTMLElement) =>
   Promise.all(
@@ -42,7 +44,7 @@ const getCapturePages = (captureRoot: HTMLElement) => {
 
 const capturePageCanvas = (pageElement: HTMLElement) =>
   html2canvas(pageElement, {
-    scale: 2,
+    scale: ORDER_EXPORT_CAPTURE_SCALE,
     useCORS: true,
     backgroundColor: '#ffffff',
     logging: false,
@@ -51,6 +53,28 @@ const capturePageCanvas = (pageElement: HTMLElement) =>
     windowWidth: ORDER_EXPORT_PAGE_WIDTH_PX,
     windowHeight: ORDER_EXPORT_PAGE_HEIGHT_PX,
   });
+
+const encodePdfPageCanvas = (canvas: HTMLCanvasElement) => canvas.toDataURL('image/jpeg', ORDER_EXPORT_JPEG_QUALITY);
+
+const appendCanvasToPdf = (pdf: jsPDF, canvas: HTMLCanvasElement, pageIndex: number) => {
+  if (pageIndex > 0) {
+    pdf.addPage();
+  }
+
+  pdf.addImage(
+    encodePdfPageCanvas(canvas),
+    'JPEG',
+    0,
+    0,
+    ORDER_EXPORT_PDF_WIDTH_MM,
+    ORDER_EXPORT_PDF_HEIGHT_MM,
+    undefined,
+    'FAST',
+  );
+
+  canvas.width = 0;
+  canvas.height = 0;
+};
 
 const addPdfPageNumbers = (pdf: jsPDF) => {
   const totalPages = pdf.getNumberOfPages();
@@ -72,17 +96,11 @@ const downloadCheckoutOrderExportPdf = async (documentElement: HTMLElement, file
   await waitForDocumentImages(captureRoot);
 
   const pages = getCapturePages(captureRoot);
-  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
 
   for (let index = 0; index < pages.length; index += 1) {
     const canvas = await capturePageCanvas(pages[index]);
-    const imageData = canvas.toDataURL('image/png');
-
-    if (index > 0) {
-      pdf.addPage();
-    }
-
-    pdf.addImage(imageData, 'PNG', 0, 0, ORDER_EXPORT_PDF_WIDTH_MM, ORDER_EXPORT_PDF_HEIGHT_MM);
+    appendCanvasToPdf(pdf, canvas, index);
   }
 
   addPdfPageNumbers(pdf);
