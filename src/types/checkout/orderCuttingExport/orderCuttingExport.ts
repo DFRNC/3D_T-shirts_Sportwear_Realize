@@ -105,7 +105,6 @@ interface orderCuttingExportProductType {
   modelId: modelIdType;
   modelLabel: string;
   printAtlas: orderCuttingExportPrintAtlasType;
-  articles: orderCuttingExportArticleType[];
   steps: orderCuttingExportConfigurationStepType[];
 }
 
@@ -126,6 +125,7 @@ interface orderCuttingExportType {
   orderNumber: string;
   orderDate: string;
   customer: orderCuttingExportCustomerType;
+  articles: orderCuttingExportArticleType[];
   products: orderCuttingExportProductType[];
 }
 

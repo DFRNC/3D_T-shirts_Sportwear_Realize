@@ -11,6 +11,7 @@ export { useCheckoutConfigurationTable } from './useCheckoutConfigurationTable';
 export { useCheckoutInit } from './useCheckoutInit';
 export { useCheckoutSummary } from './useCheckoutSummary';
 export { useCheckoutOrderExport } from './useCheckoutOrderExport';
+export { useOrderCuttingExport } from './useOrderCuttingExport';
 export { useNavigateToCheckout } from './useNavigateToCheckout';
 export { useSubmitCheckout } from './useSubmitCheckout';
 export { useRequestAddProduct } from './useRequestAddProduct';

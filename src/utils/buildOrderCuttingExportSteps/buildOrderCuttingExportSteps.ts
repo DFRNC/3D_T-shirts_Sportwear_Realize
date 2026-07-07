@@ -2,7 +2,6 @@ import type { configuratorStepValueType } from '@configurator/types';
 import { buildPatternColors } from '@configurator/hooks/useSyncGarmentMaterials/buildPatternColors';
 import { mapProductDesigns, resolveGradientColors, resolvePartUvBounds } from '@configurator/mappers';
 import { PRINT_UPLOAD_ROTATION_DEG } from '@configurator/constants';
-import { resolvePartPrintRotation } from '@configurator/utils';
 import { CONFIGURATOR_STEP_META, ORDER_CUTTING_EXPORT_DATA_NOT_SPECIFIED } from '@constants';
 import type {
   cartItemConfigurationType,
@@ -29,6 +28,9 @@ const resolvePartLabel = (model: garmentConfigType, partId: string): string => {
   const part = model.parts.find((item) => item.id === partId || item.name === partId);
   return part ? part.label || part.name : partId;
 };
+
+const resolvePartPrintRotation = (part: garmentConfigType['parts'][number]): number =>
+  part.printRotation ?? part.gradient?.rotation ?? 0;
 
 const resolvePatternIndex = (activePatternKey: string | null): number => {
   if (!activePatternKey) return 0;

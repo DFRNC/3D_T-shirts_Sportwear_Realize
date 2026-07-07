@@ -3,13 +3,19 @@
 import type { orderCuttingExportType } from '@types';
 import { ORDER_CUTTING_EXPORT_DOCUMENT_STYLES } from '@molecules/OrderCuttingExportPreview/orderCuttingExportDocumentStyles';
 import { OrderCuttingExportDownloadCard } from '@molecules/OrderCuttingExportPreview/OrderCuttingExportDownloadCard';
+import { OrderCuttingExportDownloadCardStatic } from '@molecules/OrderCuttingExportPreview/OrderCuttingExportDownloadCardStatic';
+
+type orderCuttingExportDocumentVariantType = 'interactive' | 'pdf';
 
 type orderCuttingExportDocumentPropsType = {
   exportData: orderCuttingExportType;
+  variant?: orderCuttingExportDocumentVariantType;
 };
 
-const OrderCuttingExportDocument = ({ exportData }: orderCuttingExportDocumentPropsType) => {
-  const { customer, products } = exportData;
+const OrderCuttingExportDocument = ({ exportData, variant = 'interactive' }: orderCuttingExportDocumentPropsType) => {
+  const { customer, products, articles } = exportData;
+  const emptyArticleRows = Math.max(0, 4 - articles.length);
+  const DownloadCard = variant === 'pdf' ? OrderCuttingExportDownloadCardStatic : OrderCuttingExportDownloadCard;
 
   return (
     <>
@@ -56,6 +62,41 @@ const OrderCuttingExportDocument = ({ exportData }: orderCuttingExportDocumentPr
               <th>PEC</th>
               <td>{customer.pec}</td>
             </tr>
+          </tbody>
+        </table>
+
+        <table className="cutting-export__articles-table">
+          <thead>
+            <tr>
+              <th colSpan={5}>Articoli ordine</th>
+            </tr>
+            <tr>
+              <th>Modello</th>
+              <th>Taglia</th>
+              <th>PZ</th>
+              <th>Nome maglia</th>
+              <th>Numero</th>
+            </tr>
+          </thead>
+          <tbody>
+            {articles.map((article, index) => (
+              <tr key={`${article.modelLabel}-${article.size}-${article.jerseyName}-${article.number}-${index}`}>
+                <td>{article.modelLabel}</td>
+                <td>{article.size}</td>
+                <td>{article.quantity}</td>
+                <td>{article.jerseyName}</td>
+                <td>{article.number}</td>
+              </tr>
+            ))}
+            {Array.from({ length: emptyArticleRows }).map((_, index) => (
+              <tr key={`empty-row-${index}`}>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+            ))}
           </tbody>
         </table>
 
@@ -118,7 +159,7 @@ const OrderCuttingExportDocument = ({ exportData }: orderCuttingExportDocumentPr
                         {step.downloadFiles.length > 0 ? (
                           <div className="cutting-export__downloads">
                             {step.downloadFiles.map((file) => (
-                              <OrderCuttingExportDownloadCard key={file.key} file={file} />
+                              <DownloadCard key={file.key} file={file} />
                             ))}
                           </div>
                         ) : null}
@@ -130,41 +171,6 @@ const OrderCuttingExportDocument = ({ exportData }: orderCuttingExportDocumentPr
                 </article>
               ))}
             </div>
-
-            <table className="cutting-export__articles-table">
-              <thead>
-                <tr>
-                  <th colSpan={5}>Articoli ordine</th>
-                </tr>
-                <tr>
-                  <th>Modello</th>
-                  <th>Taglia</th>
-                  <th>PZ</th>
-                  <th>Nome maglia</th>
-                  <th>Numero</th>
-                </tr>
-              </thead>
-              <tbody>
-                {product.articles.map((article) => (
-                  <tr key={`${product.cartItemId}-${article.size}-${article.jerseyName}-${article.number}`}>
-                    <td>{article.modelLabel}</td>
-                    <td>{article.size}</td>
-                    <td>{article.quantity}</td>
-                    <td>{article.jerseyName}</td>
-                    <td>{article.number}</td>
-                  </tr>
-                ))}
-                {Array.from({ length: Math.max(0, 4 - product.articles.length) }).map((_, index) => (
-                  <tr key={`${product.cartItemId}-empty-row-${index}`}>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </section>
         ))}
       </div>

@@ -4,7 +4,10 @@ export { buildAppPath, isEmbeddedSession, resolveEmbeddedContext } from './embed
 export { buildCollectionPath, buildConfiguratorPath, isConfiguratorPath, isInternalAppPath } from './appPaths';
 export { buildOrderPreset } from './buildOrderPreset';
 export { buildCheckoutOrderExport, formatCheckoutOrderDate } from './buildCheckoutOrderExport';
+export { buildOrderCuttingExport } from './buildOrderCuttingExport';
 export { downloadCheckoutOrderExportPdf } from './downloadCheckoutOrderExportPdf';
+export { downloadOrderCuttingExportPdf } from './downloadOrderCuttingExportPdf';
+export { hasOrderCuttingExportDownloadTarget, openOrderCuttingExportDownloadTarget, resolveOrderCuttingExportDownloadHref } from './resolveOrderCuttingExportDownloadHref';
 export { resolveAbsoluteAssetUrl } from './resolveAbsoluteAssetUrl';
 export { canvasToPngBlobUrl } from './logoFile/canvasToBlobUrl';
 export { applyConfiguratorRouteProduct, resolveRouteModel } from './configuratorRoute';

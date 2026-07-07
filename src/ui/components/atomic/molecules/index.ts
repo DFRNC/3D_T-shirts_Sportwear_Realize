@@ -15,6 +15,7 @@ export { CheckoutQuantityStepper } from './CheckoutQuantityStepper';
 export { CheckoutSizePopover } from './CheckoutSizePopover';
 export { CheckoutProductCard } from './CheckoutProductCard';
 export { CheckoutOrderExport } from './CheckoutOrderExport';
+export { OrderCuttingExport } from './OrderCuttingExport';
 export { CheckoutSummaryPanel } from './CheckoutSummaryPanel';
 export { LangSwitcher } from './LangSwitcher';
 export { Notification } from './Notification';

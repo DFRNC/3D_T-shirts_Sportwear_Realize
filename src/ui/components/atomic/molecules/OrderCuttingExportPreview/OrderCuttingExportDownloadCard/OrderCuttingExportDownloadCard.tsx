@@ -6,7 +6,10 @@ import type { orderCuttingExportDownloadFileType } from '@types';
 import { composeGarmentColorUvAtlas } from '@utils/composeGarmentColorUvAtlas';
 import { composeDesignUvLayerPreview, composeDesignUvMixPreview } from '@utils/composeDesignUvPreview';
 import { composeTextUvLayer } from '@utils/composeTextUvLayer';
+import { openOrderCuttingExportDownloadTarget, resolveOrderCuttingExportDownloadHref } from '@utils/resolveOrderCuttingExportDownloadHref';
 import { AtomImage } from '@atoms';
+
+const DOWNLOAD_PREVIEW_SIZE_PX = 60;
 
 type orderCuttingExportDownloadCardPropsType = {
   file: orderCuttingExportDownloadFileType;
@@ -91,28 +94,33 @@ const OrderCuttingExportDownloadCard = ({ file }: orderCuttingExportDownloadCard
     file.textLayers,
   ]);
 
-  const href = composedUrl ?? file.downloadUrl;
-  const isDisabled = !href || isLoading;
+  const href = resolveOrderCuttingExportDownloadHref(file, composedUrl);
 
   return (
     <a
-      className={`cutting-export__download-card${isDisabled ? ' cutting-export__download-card--disabled' : ''}`}
-      href={isDisabled ? undefined : href}
-      download={isDisabled ? undefined : file.fileName}
+      className={`cutting-export__download-card${isLoading ? ' cutting-export__download-card--disabled' : ''}`}
+      href={href}
       target="_blank"
-      rel="noreferrer"
-      aria-disabled={isDisabled}
+      rel="noopener noreferrer"
+      aria-disabled={isLoading}
       onClick={(event) => {
-        if (isDisabled) {
-          event.preventDefault();
-        }
+        event.preventDefault();
+        openOrderCuttingExportDownloadTarget(href, isLoading);
       }}
     >
       <div className="cutting-export__download-preview-frame">
         {isLoading ? <span className="cutting-export__download-loading">Composizione UV…</span> : null}
         {!isLoading && composedUrl ? (
-          <AtomImage src={composedUrl} alt={file.label} className="cutting-export__download-preview" fit="cover" />
+          <AtomImage
+            src={composedUrl}
+            alt={file.label}
+            className="cutting-export__download-preview"
+            fit="cover"
+            width={DOWNLOAD_PREVIEW_SIZE_PX}
+            height={DOWNLOAD_PREVIEW_SIZE_PX}
+          />
         ) : null}
+        {!isLoading && !composedUrl ? <span className="cutting-export__download-placeholder">{file.label}</span> : null}
       </div>
       <span className="cutting-export__download-label">{file.label}</span>
       <span className="cutting-export__download-file">{file.fileName}</span>

@@ -120,6 +120,9 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 }
 
 .cutting-export__step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   padding: 8px;
 }
 
@@ -130,7 +133,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 }
 
 .cutting-export__step-details {
-  margin: 0 0 8px;
+  margin: 0;
 }
 
 .cutting-export__step-detail {
@@ -161,7 +164,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 .cutting-export__step-params {
   grid-column: 1 / -1;
   width: 100%;
-  margin: 4px 0 2px;
+  margin: 4px 0 0;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 11px;
@@ -197,24 +200,31 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 }
 
 .cutting-export__downloads {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
+  align-items: flex-start;
 }
 
 .cutting-export__download-card {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
+  max-width: 100%;
   padding: 8px;
   border: 1px solid #CDCDCD;
   border-radius: 4px;
   color: inherit;
   text-decoration: none;
   background: #fff;
+  cursor: pointer;
 }
 
 .cutting-export__download-card--disabled {
   pointer-events: none;
   opacity: 0.7;
+  cursor: default;
 }
 
 .cutting-export__download-card:hover {
@@ -223,7 +233,8 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__download-preview-frame {
   position: relative;
-  height: 200px;
+  width: 60px;
+  height: 60px;
   margin-bottom: 6px;
   overflow: hidden;
   border: 1px solid #E8E8EB;
@@ -233,27 +244,45 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
     linear-gradient(-45deg, #e4e4e4 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, #e4e4e4 75%),
     linear-gradient(-45deg, transparent 75%, #e4e4e4 75%);
-  background-size: 16px 16px;
+  background-size: 8px 8px;
   background-position:
     0 0,
-    0 8px,
-    8px -8px,
-    -8px 0;
+    0 4px,
+    4px -4px,
+    -4px 0;
 }
 
 .cutting-export__download-loading {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   height: 100%;
-  font-size: 10px;
+  padding: 4px;
+  font-size: 8px;
+  line-height: 1.2;
   color: #979797;
+  text-align: center;
+}
+
+.cutting-export__download-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 4px;
+  font-size: 8px;
+  line-height: 1.2;
+  font-weight: 700;
+  text-align: center;
+  color: #454545;
 }
 
 .cutting-export__download-preview {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 60px;
+  height: 60px;
   margin: 0;
   object-fit: cover;
   background: #fff;
@@ -261,16 +290,20 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__download-label {
   display: block;
+  width: 60px;
   color: #000;
   font-size: 10px;
   font-weight: 700;
+  line-height: 1.3;
   text-transform: uppercase;
 }
 
 .cutting-export__download-file {
   display: block;
+  width: 60px;
   margin-top: 2px;
   font-size: 9px;
+  line-height: 1.3;
   color: #979797;
   word-break: break-all;
 }
@@ -388,6 +421,7 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
+  margin-bottom: 18px;
 }
 
 .cutting-export__articles-table th,
@@ -418,6 +452,32 @@ const ORDER_CUTTING_EXPORT_DOCUMENT_STYLES = `
 
 .cutting-export__articles-table tbody td {
   height: 28px;
+}
+
+.cutting-export-pages {
+  width: 794px;
+}
+
+.cutting-export-page {
+  box-sizing: border-box;
+  width: 794px;
+  height: 1123px;
+  padding: 24px 28px 32px;
+  overflow: hidden;
+  color: #454545;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  line-height: 1.35;
+  background: #fff;
+}
+
+.cutting-export-page__inner {
+  width: 100%;
+}
+
+.cutting-export--pdf-single-page {
+  height: auto;
+  min-height: auto;
 }
 `;
 
