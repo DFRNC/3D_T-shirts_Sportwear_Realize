@@ -38,7 +38,7 @@ const activateCartItem = async (get: () => ActivateCartItemGetState, itemId: str
   const needsPrepare = needsGarmentModelPrepare(activeItem.modelId, product);
 
   if (savePreviousId && savePreviousId !== itemId && items.some((item) => item.id === savePreviousId)) {
-    // Configuration only — preview thumbnails stay fresh via useCartPreviewCapture (sync capture blocks the main thread).
+    // Configuration only — preview is captured synchronously in selectItem before activation.
     persistCartItemConfiguration(get, savePreviousId);
   }
 

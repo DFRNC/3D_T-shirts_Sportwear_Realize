@@ -45,7 +45,7 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     const newProduct = getModel(productRef.modelId);
     if (!newProduct) return;
 
-    persistCartItemSnapshot(get, activeItemId);
+    persistCartItemSnapshot(get, activeItemId, { previewMode: 'sync' });
 
     const referenceItem = items.find((entry) => entry.id === activeItemId) ?? items[0];
     const referenceProduct = getModel(referenceItem.modelId);
@@ -114,7 +114,7 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     const activeItem = items.find((item) => item.id === activeItemId);
     if (!activeItem) return;
 
-    persistCartItemSnapshot(get, activeItemId);
+    persistCartItemSnapshot(get, activeItemId, { previewMode: 'sync' });
 
     const currentConfiguration = get().getConfiguration(activeItemId) ?? captureGarmentConfiguration();
     const activePreview = get().getPreview(activeItemId);
@@ -144,6 +144,7 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     const { items, activeItemId } = get();
     if (!items.some((item) => item.id === id) || activeItemId === id) return;
 
+    persistCartItemSnapshot(get, activeItemId, { previewMode: 'sync' });
     void activateCartItem(get, id, { savePreviousId: activeItemId });
     set({ activeItemId: id });
   },

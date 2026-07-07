@@ -9,7 +9,20 @@ interface persistCartItemSnapshotGetState {
   savePreview: (itemId: string, previewSrc: string) => void;
 }
 
-const schedulePreviewPersist = (work: () => void) => {
+let pendingPreviewPersistGeneration = 0;
+
+const cancelPendingPreviewPersist = () => {
+  pendingPreviewPersistGeneration += 1;
+};
+
+const schedulePreviewPersist = (get: () => persistCartItemSnapshotGetState, itemId: string) => {
+  const generation = ++pendingPreviewPersistGeneration;
+
+  const work = () => {
+    if (generation !== pendingPreviewPersistGeneration) return;
+    persistCartItemPreview(get, itemId);
+  };
+
   if (typeof requestIdleCallback !== 'undefined') {
     requestIdleCallback(work, { timeout: 1_500 });
     return;
@@ -42,11 +55,17 @@ const persistCartItemSnapshot = (
   if (previewMode === 'skip') return;
 
   if (previewMode === 'sync') {
+    cancelPendingPreviewPersist();
     persistCartItemPreview(get, itemId);
     return;
   }
 
-  schedulePreviewPersist(() => persistCartItemPreview(get, itemId));
+  schedulePreviewPersist(get, itemId);
 };
 
-export { persistCartItemConfiguration, persistCartItemPreview, persistCartItemSnapshot };
+export {
+  cancelPendingPreviewPersist,
+  persistCartItemConfiguration,
+  persistCartItemPreview,
+  persistCartItemSnapshot,
+};

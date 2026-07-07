@@ -1,1 +1,6 @@
-export { persistCartItemConfiguration, persistCartItemPreview, persistCartItemSnapshot } from './persistCartItemSnapshot';
+export {
+  cancelPendingPreviewPersist,
+  persistCartItemConfiguration,
+  persistCartItemPreview,
+  persistCartItemSnapshot,
+} from './persistCartItemSnapshot';
