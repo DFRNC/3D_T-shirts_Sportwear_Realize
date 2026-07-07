@@ -9,3 +9,5 @@ export { resolveHomeCollectionByHandle } from './resolveHomeCollectionByHandle';
 export { resolveHomeCollectionSummaries } from './resolveHomeCollectionSummaries';
 export { resolveHomeCollections } from './resolveHomeCollections';
 export { mapHomePageProductBusiness } from './mapHomePageProductBusiness';
+export { mapSizeChartContent } from './mapSizeChartContent';
+export type { sizeChartMetafieldsNodeType } from './mapSizeChartContent';

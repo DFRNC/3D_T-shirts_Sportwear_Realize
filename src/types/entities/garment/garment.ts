@@ -1,4 +1,5 @@
 import type { configuratorStepValueType } from '@configurator/types';
+import type { modalInfoTabType } from '@types';
 
 interface uvPointType {
   x: number;
@@ -175,6 +176,8 @@ interface garmentBusinessType {
   bonusCount: number;
   bonusDiscount: number;
   minimumCount: number;
+  /** Per-product "Tabella taglie" content sourced from Shopify metafields; falls back to the static default when unset. */
+  sizeChart?: modalInfoTabType;
 }
 
 export type {
