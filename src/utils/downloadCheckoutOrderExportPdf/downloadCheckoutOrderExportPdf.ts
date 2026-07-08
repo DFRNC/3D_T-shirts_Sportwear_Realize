@@ -90,7 +90,7 @@ const addPdfPageNumbers = (pdf: jsPDF) => {
   }
 };
 
-const downloadCheckoutOrderExportPdf = async (documentElement: HTMLElement, filename: string) => {
+const buildCheckoutOrderExportPdfBlob = async (documentElement: HTMLElement): Promise<Blob> => {
   const captureRoot = paginateOrderExportDocument(documentElement);
 
   await waitForDocumentImages(captureRoot);
@@ -104,7 +104,19 @@ const downloadCheckoutOrderExportPdf = async (documentElement: HTMLElement, file
   }
 
   addPdfPageNumbers(pdf);
-  pdf.save(filename);
+  return pdf.output('blob');
 };
 
-export { downloadCheckoutOrderExportPdf };
+const downloadCheckoutOrderExportPdf = async (documentElement: HTMLElement, filename: string) => {
+  const blob = await buildCheckoutOrderExportPdfBlob(documentElement);
+  const objectUrl = URL.createObjectURL(blob);
+
+  const anchor = document.createElement('a');
+  anchor.href = objectUrl;
+  anchor.download = filename;
+  anchor.click();
+
+  URL.revokeObjectURL(objectUrl);
+};
+
+export { buildCheckoutOrderExportPdfBlob, downloadCheckoutOrderExportPdf };

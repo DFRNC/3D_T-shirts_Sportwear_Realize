@@ -335,10 +335,16 @@ Shopify Storefront / Admin GraphQL, collection and product resolution, checkout 
 | `createCheckoutCart`             | Server-side Storefront `cartCreate` (used by `/api/checkout`) |
 | `frameAncestors`                 | `frame-ancestors` CSP for Shopify Theme Editor embeds         |
 | `checkoutPayload`                | Wire types between client checkout UI and `/api/checkout`     |
+| `uploadShopifyFile`              | Admin API staged upload + `fileCreate` (Shopify Files)        |
+| `setOrderMetafields`             | Admin API `metafieldsSet` on an order (`configurator.*`)      |
+| `verifyShopifyWebhookSignature`  | HMAC verification for inbound Shopify webhooks                |
+| `resolveShopifyAdminAccessToken` | Admin API token resolution; self-refreshes via `client_credentials` when short-lived |
 
-**Env:** `SHOPIFY_ENABLED`, `SHOPIFY_STORE_DOMAIN`, `SHOPIFY_STOREFRONT_ACCESS_TOKEN` (production). Optional `SHOPIFY_API_MODE=admin` + `SHOPIFY_ADMIN_ACCESS_TOKEN` for dev. See `.env.example`.
+**Env:** `SHOPIFY_ENABLED`, `SHOPIFY_STORE_DOMAIN`, `SHOPIFY_STOREFRONT_ACCESS_TOKEN` (production). Optional `SHOPIFY_API_MODE=admin` + `SHOPIFY_ADMIN_ACCESS_TOKEN` for dev. See `.env.example`. The order-asset upload flow below needs Admin API access (scopes `write_files`, `write_orders`) — either `SHOPIFY_ADMIN_CLIENT_ID` + `SHOPIFY_ADMIN_CLIENT_SECRET` (Dev Dashboard app; tokens expire ~24h and are auto-refreshed by `resolveShopifyAdminAccessToken`) or a static `SHOPIFY_ADMIN_ACCESS_TOKEN` (classic custom app, no expiry). `SHOPIFY_ADMIN_CLIENT_SECRET` doubles as the `orders/create` webhook HMAC secret (Dev Dashboard apps sign webhooks with the same client secret used for `client_credentials` — one value, no separate `SHOPIFY_WEBHOOK_SECRET`).
 
 **Checkout:** `useSubmitCheckout` → `POST /api/checkout` → `createCheckoutCart` → Shopify `checkoutUrl`. Storefront token stays on the server.
+
+**Order PDF/UV asset upload:** the order-confirmation PDF, cutting-pattern PDF, and UV texture PNGs are generated client-side only (no server-safe renderer exists for the `html2canvas`/canvas-based export documents). `useSubmitCheckout` captures the already-mounted hidden export documents (`CheckoutOrderExport`, `OrderCuttingExport`), builds PDF blobs (`buildCheckoutOrderExportPdfBlob`, `buildOrderCuttingExportPdfBlob`) and UV blobs (`collectOrderCuttingExportUvBlobs`), and posts them to `POST /api/checkout/assets`, which uploads each via `uploadShopifyFile` and returns their Shopify CDN URLs. Those URLs ride along as cart-level `attributes` (`_order_pdf_url`, `_cutting_pdf_url`, `_uv_image_urls`) through `cartCreate`, which Shopify carries onto the resulting order's `note_attributes`. A thin `POST /api/webhooks/orders-create` webhook (HMAC-verified via `verifyShopifyWebhookSignature`) reads those attributes off the real order and calls `setOrderMetafields` to persist them as `configurator.order_pdf_url` / `configurator.cutting_pdf_url` / `configurator.uv_image_urls` metafields on the order. Asset upload failures never block checkout.
 
 **Embedded:** `proxy.ts` sets CSP `frame-ancestors`; `useEmbeddedUrlSync` + cart subscription mirror in-app paths to the host theme (`/checkout` is excluded — internal summary only).
 
@@ -378,6 +384,8 @@ app/
 ├── layout.tsx                          # Root: fonts, EmbeddedProvider, console suppression side-effect
 ├── proxy.ts                            # CSP frame-ancestors for Shopify iframe embeds
 ├── api/checkout/route.ts               # POST → createCheckoutCart (Storefront API)
+├── api/checkout/assets/route.ts        # POST → uploadShopifyFile (order/cutting PDFs + UV PNGs)
+├── api/webhooks/orders-create/route.ts # POST → Shopify `orders/create` webhook → setOrderMetafields
 ├── (shop)/                             # Scrollable shop shell — URL: /, /checkout, /:collectionHandle
 │   ├── layout.tsx                      # Header + main
 │   ├── (default)/
@@ -399,6 +407,8 @@ app/
 | `/:collectionHandle/:slug` | `ConfiguratorPage`                        | Layout resolves product; catalog shell for add-product popover |
 | `/checkout`                | `CheckoutPage`                            | Static route under `(shop)`; wins over `[collectionHandle]`    |
 | `POST /api/checkout`       | API route                                 | Creates Shopify cart; redirects via `checkoutUrl`              |
+| `POST /api/checkout/assets` | API route                                | Uploads order/cutting PDFs + UV PNGs to Shopify Files           |
+| `POST /api/webhooks/orders-create` | API route                         | Shopify `orders/create` webhook → order metafields              |
 
 **Thin routes:** `page.tsx` files import from `@pages` only. Layouts may use `@templates`, `@shopify`, `@providers` for shells and data loading.
 

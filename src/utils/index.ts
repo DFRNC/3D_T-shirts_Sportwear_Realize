@@ -5,8 +5,10 @@ export { buildCollectionPath, buildConfiguratorPath, isConfiguratorPath, isInter
 export { buildOrderPreset } from './buildOrderPreset';
 export { buildCheckoutOrderExport, formatCheckoutOrderDate } from './buildCheckoutOrderExport';
 export { buildOrderCuttingExport } from './buildOrderCuttingExport';
-export { downloadCheckoutOrderExportPdf } from './downloadCheckoutOrderExportPdf';
-export { downloadOrderCuttingExportPdf } from './downloadOrderCuttingExportPdf';
+export { buildCheckoutOrderExportPdfBlob, downloadCheckoutOrderExportPdf } from './downloadCheckoutOrderExportPdf';
+export { buildOrderCuttingExportPdfBlob, downloadOrderCuttingExportPdf } from './downloadOrderCuttingExportPdf';
+export { collectOrderCuttingExportUvBlobs } from './collectOrderCuttingExportUvBlobs';
+export type { uvExportBlobType } from './collectOrderCuttingExportUvBlobs';
 export { hasOrderCuttingExportDownloadTarget, openOrderCuttingExportDownloadTarget, resolveOrderCuttingExportDownloadHref } from './resolveOrderCuttingExportDownloadHref';
 export { resolveAbsoluteAssetUrl } from './resolveAbsoluteAssetUrl';
 export { canvasToPngBlobUrl } from './logoFile/canvasToBlobUrl';

@@ -1,1 +1,1 @@
-export { downloadCheckoutOrderExportPdf } from './downloadCheckoutOrderExportPdf';
+export { buildCheckoutOrderExportPdfBlob, downloadCheckoutOrderExportPdf } from './downloadCheckoutOrderExportPdf';

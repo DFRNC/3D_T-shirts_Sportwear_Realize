@@ -135,7 +135,7 @@ const getCapturePages = (captureRoot: HTMLElement) => {
   return [captureRoot];
 };
 
-const downloadOrderCuttingExportPdf = async (documentElement: HTMLElement, filename: string) => {
+const buildOrderCuttingExportPdfBlob = async (documentElement: HTMLElement): Promise<Blob> => {
   await waitForDocumentImages(documentElement);
 
   const captureRoot = paginateOrderCuttingExportDocument(documentElement);
@@ -159,7 +159,7 @@ const downloadOrderCuttingExportPdf = async (documentElement: HTMLElement, filen
     }
 
     addPdfPageNumbers(pdf);
-    pdf.save(filename);
+    return pdf.output('blob');
   } finally {
     if (captureRoot !== documentElement) {
       captureRoot.remove();
@@ -168,4 +168,16 @@ const downloadOrderCuttingExportPdf = async (documentElement: HTMLElement, filen
   }
 };
 
-export { downloadOrderCuttingExportPdf };
+const downloadOrderCuttingExportPdf = async (documentElement: HTMLElement, filename: string) => {
+  const blob = await buildOrderCuttingExportPdfBlob(documentElement);
+  const objectUrl = URL.createObjectURL(blob);
+
+  const anchor = document.createElement('a');
+  anchor.href = objectUrl;
+  anchor.download = filename;
+  anchor.click();
+
+  URL.revokeObjectURL(objectUrl);
+};
+
+export { buildOrderCuttingExportPdfBlob, downloadOrderCuttingExportPdf };

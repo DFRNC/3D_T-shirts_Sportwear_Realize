@@ -1,1 +1,1 @@
-export { downloadOrderCuttingExportPdf } from './downloadOrderCuttingExportPdf';
+export { buildOrderCuttingExportPdfBlob, downloadOrderCuttingExportPdf } from './downloadOrderCuttingExportPdf';

@@ -74,7 +74,7 @@ const createCheckoutCart = async (payload: createCheckoutPayloadType): Promise<c
       cart?: { id: string; checkoutUrl: string } | null;
       userErrors?: { field?: string[] | null; message: string }[];
     };
-  }>(CART_CREATE_MUTATION, { input: { lines } });
+  }>(CART_CREATE_MUTATION, { input: { lines, attributes: payload.attributes ?? [] } });
 
   const userErrors = data.cartCreate?.userErrors ?? [];
   if (userErrors.length) {
