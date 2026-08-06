@@ -1,3 +1,4 @@
+import { resolveEmbeddedParentOrigin } from '@utils/embeddedParentOrigin';
 import { isEmbeddedSession } from '@utils/embeddedSession';
 
 const EMBEDDED_URL_SYNC_SOURCE_APP = 'realize-configurator' as const;
@@ -29,8 +30,25 @@ const isEmbeddedUrlSyncMessage = (data: unknown): data is embeddedUrlSyncMessage
 
 const EMBEDDED_CHECKOUT_REDIRECT_TYPE = 'checkout-redirect' as const;
 
-const postEmbeddedUrlToParent = (pathname: string): void => {
+/**
+ * Resolves the one origin we may address, or null when the embedder cannot be identified.
+ *
+ * Never widen this back to `'*'`: `postEmbeddedCheckoutRedirect` carries the Shopify `checkoutUrl`,
+ * whose cart token grants access to the buyer's cart, and a wildcard hands it to whatever frame
+ * happens to be embedding us.
+ */
+const resolveOutboundTarget = (): string | null => {
   if (!isEmbeddedSession() || window.parent === window) {
+    return null;
+  }
+
+  return resolveEmbeddedParentOrigin();
+};
+
+const postEmbeddedUrlToParent = (pathname: string): void => {
+  const targetOrigin = resolveOutboundTarget();
+
+  if (!targetOrigin) {
     return;
   }
 
@@ -40,12 +58,14 @@ const postEmbeddedUrlToParent = (pathname: string): void => {
       type: EMBEDDED_URL_SYNC_TYPE,
       pathname,
     },
-    '*',
+    targetOrigin,
   );
 };
 
 const postEmbeddedCheckoutRedirect = (url: string): void => {
-  if (!isEmbeddedSession() || window.parent === window) {
+  const targetOrigin = resolveOutboundTarget();
+
+  if (!targetOrigin) {
     return;
   }
 
@@ -55,7 +75,7 @@ const postEmbeddedCheckoutRedirect = (url: string): void => {
       type: EMBEDDED_CHECKOUT_REDIRECT_TYPE,
       url,
     },
-    '*',
+    targetOrigin,
   );
 };
 

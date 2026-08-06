@@ -5,10 +5,11 @@ import { useEffect, useRef } from 'react';
 
 import { useEmbedded } from '@providers';
 import { buildAppPath, isInternalAppPath } from '@utils';
+import { isAllowedParentOrigin } from '@utils/embeddedParentOrigin';
 import { EMBEDDED_URL_SYNC_SOURCE_SHOPIFY, isEmbeddedUrlSyncMessage, postEmbeddedUrlToParent } from '@utils/embeddedUrlSync';
 
 const useEmbeddedUrlSync = (): void => {
-  const { embedded, shop } = useEmbedded();
+  const { embedded } = useEmbedded();
   const pathname = usePathname();
   const router = useRouter();
   const lastPostedRef = useRef<string | null>(null);
@@ -50,12 +51,10 @@ const useEmbeddedUrlSync = (): void => {
         return;
       }
 
-      if (shop) {
-        const expectedOrigin = `https://${shop}`;
-
-        if (event.origin !== expectedOrigin && event.origin !== `http://${shop}`) {
-          return;
-        }
+      // Unconditional: previously the check was skipped whenever `shop` was absent from the URL,
+      // which let any embedder drive the app's navigation just by omitting the parameter.
+      if (!isAllowedParentOrigin(event.origin)) {
+        return;
       }
 
       const nextPath = event.data.pathname;
@@ -71,7 +70,7 @@ const useEmbeddedUrlSync = (): void => {
     window.addEventListener('message', onMessage);
 
     return () => window.removeEventListener('message', onMessage);
-  }, [embedded, pathname, router, shop]);
+  }, [embedded, pathname, router]);
 };
 
 export { useEmbeddedUrlSync };

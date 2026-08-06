@@ -1,7 +1,11 @@
 import { registerShopifyFiles } from '@shopify/registerShopifyFiles';
 import type { shopifyFileContentType } from '@shopify/stagedUpload';
+import { validateRegisterRequest } from '@utils/checkoutAssetUploadPolicy';
+import { allowRequest } from '@utils/requestRateLimit';
 
 export const dynamic = 'force-dynamic';
+
+const RATE_LIMIT = { scope: 'assets-register', limit: 30, windowMs: 60_000 };
 
 type registerRequestFileType = {
   id: string;
@@ -10,6 +14,10 @@ type registerRequestFileType = {
 };
 
 export async function POST(request: Request): Promise<Response> {
+  if (!allowRequest(request, RATE_LIMIT)) {
+    return Response.json({ error: 'Too many requests.' }, { status: 429 });
+  }
+
   let body: { files?: registerRequestFileType[] };
 
   try {
@@ -21,6 +29,11 @@ export async function POST(request: Request): Promise<Response> {
   const files = body.files ?? [];
   if (!files.length) {
     return Response.json({ error: 'Missing files.' }, { status: 400 });
+  }
+
+  const violation = validateRegisterRequest(files);
+  if (violation) {
+    return Response.json(violation, { status: 400 });
   }
 
   try {

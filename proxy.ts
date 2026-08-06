@@ -1,14 +1,13 @@
-import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 import { buildShopifyFrameAncestorsHeader } from '@shopify';
 
-export function proxy(request: NextRequest) {
-  const shop = request.nextUrl.searchParams.get('shop');
-  const host = request.nextUrl.searchParams.get('host');
+export function proxy() {
   const response = NextResponse.next();
 
-  response.headers.set('Content-Security-Policy', buildShopifyFrameAncestorsHeader(shop, host));
+  // Built from environment configuration only — never from the request's own query parameters.
+  // See @shopify/frameAncestors for why.
+  response.headers.set('Content-Security-Policy', buildShopifyFrameAncestorsHeader());
 
   return response;
 }

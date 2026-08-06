@@ -1,0 +1,1 @@
+export { allowRequest } from './requestRateLimit';

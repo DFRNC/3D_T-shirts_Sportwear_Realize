@@ -1,9 +1,6 @@
 const SHOPIFY_THEME_EDITOR_ORIGIN = 'https://admin.shopify.com';
 const SHOPIFY_THEME_PREVIEW_ORIGIN = 'https://online-store-web.shopifyapps.com';
 const SHOPIFY_DOMAIN_PATTERN = /^[a-z0-9][a-z0-9-]*\.myshopify\.com$/;
-const FRAME_ANCESTOR_WILDCARD_PATTERN = /\*/;
-
-const HOSTNAME_PATTERN = /^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}(:\d{1,5})?$/;
 
 const readEnv = (key: string): string | undefined => {
   const value = process.env[key]?.trim();
@@ -19,41 +16,44 @@ const normalizeShopDomain = (shop: string | null | undefined): string | null => 
   return SHOPIFY_DOMAIN_PATTERN.test(trimmed) ? trimmed : null;
 };
 
+/**
+ * Frame ancestors are a security boundary, so an entry only counts if it parses as a bare https
+ * origin: no wildcards, no path, no port-less scheme guessing. Anything else is dropped rather than
+ * coerced — a malformed entry must not silently widen who may frame the app.
+ */
 const normalizeFrameAncestor = (origin: string): string | null => {
   const trimmed = origin.trim();
 
-  if (!trimmed || trimmed === "'self'" || FRAME_ANCESTOR_WILDCARD_PATTERN.test(trimmed)) {
+  if (!trimmed || trimmed.includes('*')) {
     return null;
   }
 
-  if (trimmed.startsWith('http')) {
-    return trimmed;
-  }
+  const candidate = trimmed.startsWith('http') ? trimmed : `https://${trimmed}`;
 
-  return `https://${trimmed}`;
-};
+  try {
+    const url = new URL(candidate);
 
-const normalizeLiveHost = (host: string | null | undefined): string | null => {
-  if (!host) {
+    if (url.protocol !== 'https:' || url.pathname !== '/' || url.search || url.hash) {
+      return null;
+    }
+
+    return url.origin;
+  } catch {
     return null;
   }
-
-  const trimmed = host.trim().toLowerCase();
-  return HOSTNAME_PATTERN.test(trimmed) ? trimmed : null;
 };
 
-const buildShopifyFrameAncestors = (shop?: string | null, host?: string | null): string[] => {
+/**
+ * Built exclusively from server-side configuration.
+ *
+ * Earlier revisions folded the request's own `shop`/`host` query parameters into this list, which
+ * let any visitor append their own origin (`?host=evil.example`) and authorise themselves to frame
+ * the app — defeating the clickjacking protection the header exists to provide. The storefront that
+ * may embed the configurator is a deployment fact, so it belongs in the environment: set
+ * SHOPIFY_FRAME_ANCESTORS to the storefront's custom domain (comma-separated for several).
+ */
+const buildShopifyFrameAncestors = (): string[] => {
   const origins = new Set<string>(["'self'", SHOPIFY_THEME_EDITOR_ORIGIN, SHOPIFY_THEME_PREVIEW_ORIGIN]);
-
-  const shopFromRequest = normalizeShopDomain(shop);
-  if (shopFromRequest) {
-    origins.add(`https://${shopFromRequest}`);
-  }
-
-  const liveHost = normalizeLiveHost(host);
-  if (liveHost) {
-    origins.add(`https://${liveHost}`);
-  }
 
   const storeDomain = normalizeShopDomain(readEnv('SHOPIFY_STORE_DOMAIN'));
   if (storeDomain) {
@@ -73,14 +73,14 @@ const buildShopifyFrameAncestors = (shop?: string | null, host?: string | null):
   return [...origins];
 };
 
-const buildShopifyFrameAncestorsHeader = (shop?: string | null, host?: string | null): string => {
-  return `frame-ancestors ${buildShopifyFrameAncestors(shop, host).join(' ')};`;
+const buildShopifyFrameAncestorsHeader = (): string => {
+  return `frame-ancestors ${buildShopifyFrameAncestors().join(' ')};`;
 };
 
 export {
   buildShopifyFrameAncestors,
   buildShopifyFrameAncestorsHeader,
-  normalizeLiveHost,
+  normalizeFrameAncestor,
   normalizeShopDomain,
   SHOPIFY_THEME_EDITOR_ORIGIN,
   SHOPIFY_THEME_PREVIEW_ORIGIN,
