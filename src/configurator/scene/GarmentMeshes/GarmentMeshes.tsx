@@ -1,7 +1,13 @@
 'use client';
 
 import type { Object3D } from 'three';
-import { GarmentPartMesh, PreserveGltfMesh, resolvePreserveMeshes, StaticGltfMesh, useGltfScene, useStaggeredMeshMount } from '@configurator/scene';
+
+import { GarmentPartMesh } from '@configurator/scene/GarmentPartMesh';
+import { PreserveGltfMesh } from '@configurator/scene/PreserveGltfMesh';
+import { StaticGltfMesh } from '@configurator/scene/StaticGltfMesh';
+import { useGltfScene } from '@configurator/scene/GltfSceneProvider';
+import { resolvePreserveMeshes } from '@configurator/scene/meshHelpers';
+import { useStaggeredMeshMount } from '@configurator/scene/useStaggeredMeshMount';
 import { resolveModelUrl } from '@configurator/utils';
 import { useConfiguratorProduct } from '@store';
 import { useCallback, useMemo } from 'react';
@@ -11,6 +17,11 @@ type garmentMeshEntryType = {
   meshName: string;
   node: Object3D;
   renderOrder: number;
+};
+
+const collectMeshDescendants = (node: Object3D): Object3D[] => {
+  if ('isMesh' in node && (node as unknown as { isMesh?: boolean }).isMesh) return [node];
+  return node.children.flatMap(collectMeshDescendants);
 };
 
 const GarmentMeshes = () => {
@@ -27,15 +38,13 @@ const GarmentMeshes = () => {
         const node = resolveMeshNode(meshName);
         if (!node) return [];
 
-        return [
-          {
-            key: `${part.id}-${meshName}`,
-            registryKey: part.id,
-            meshName,
-            node,
-            renderOrder: part.renderOrder ?? 0,
-          },
-        ];
+        return collectMeshDescendants(node).map((meshNode, index) => ({
+          key: `${part.id}-${meshName}-${index}`,
+          registryKey: part.id,
+          meshName: meshNode.name || meshName,
+          node: meshNode,
+          renderOrder: part.renderOrder ?? 0,
+        }));
       }),
     );
   }, [product.parts, resolveMeshNode]);

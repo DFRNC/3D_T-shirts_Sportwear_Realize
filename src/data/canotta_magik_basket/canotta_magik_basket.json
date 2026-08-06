@@ -101,7 +101,125 @@
       "colorOnly": true
     }
   ],
-  "patterns": [],
+  "patterns": [
+    {
+      "name": "Design 1",
+      "parts": [
+        {
+          "path_name": "design_1_color_1.webp"
+        },
+        {
+          "path_name": "design_1_color_2.webp"
+        }
+      ],
+      "designId": "design_01"
+    },
+    {
+      "name": "Design 2",
+      "parts": [
+        {
+          "path_name": "design_2_color_1.webp"
+        },
+        {
+          "path_name": "design_2_color_2.webp"
+        }
+      ],
+      "designId": "design_02"
+    },
+    {
+      "name": "Design 3",
+      "parts": [
+        {
+          "path_name": "design_3_color_1.webp"
+        },
+        {
+          "path_name": "design_3_color_2.webp"
+        }
+      ],
+      "designId": "design_03"
+    },
+    {
+      "name": "Design 4",
+      "parts": [
+        {
+          "path_name": "design_4_color_2.webp"
+        },
+        {
+          "path_name": "design_4_color_1.webp"
+        }
+      ],
+      "designId": "design_04"
+    },
+    {
+      "name": "Design 5",
+      "parts": [
+        {
+          "path_name": "design_5.webp"
+        }
+      ],
+      "designId": "design_05"
+    },
+    {
+      "name": "Design 6",
+      "parts": [
+        {
+          "path_name": "design_6_color_1.webp"
+        },
+        {
+          "path_name": "design_6_color_2.webp"
+        }
+      ],
+      "designId": "design_06"
+    },
+    {
+      "name": "Design 7",
+      "parts": [
+        {
+          "path_name": "design_7.webp"
+        }
+      ],
+      "designId": "design_07"
+    },
+    {
+      "name": "Design 8",
+      "parts": [
+        {
+          "path_name": "design_8_color_1.webp"
+        },
+        {
+          "path_name": "design_8_color_2.webp"
+        },
+        {
+          "path_name": "design_8_color_3.webp"
+        }
+      ],
+      "designId": "design_08"
+    },
+    {
+      "name": "Design 9",
+      "parts": [
+        {
+          "path_name": "design_9_color_1.webp"
+        },
+        {
+          "path_name": "design_9_color_2.webp"
+        }
+      ],
+      "designId": "design_09"
+    },
+    {
+      "name": "Design 10",
+      "parts": [
+        {
+          "path_name": "design_10_color_1.webp"
+        },
+        {
+          "path_name": "design_10_color_2.webp"
+        }
+      ],
+      "designId": "design_10"
+    }
+  ],
   "default_pattern": [
     {
       "name": "Logos",
@@ -114,48 +232,43 @@
   ],
   "nameDefaults": {
     "text": "PLAYER",
-    "font": "Oswald",
+    "font": "Russo One",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
     "strokeWidth": 0,
     "maxLength": 20,
-    "fontSizeMin": 50,
-    "fontSizeMax": 400,
-    "strokeWidthMax": 20
+    "title": "Dove desideri inserire il nome?",
+    "description": "Scegli una posizione standard o fai clic sul <b>prodotto</b> per scegliere una posizione individuale"
   },
   "numberDefaults": {
     "text": "10",
-    "font": "Oswald",
+    "font": "Russo One",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
     "strokeWidth": 0,
     "maxLength": 2,
-    "fontSizeMin": 50,
-    "fontSizeMax": 600,
-    "strokeWidthMax": 20,
     "lineHeight": 1.5,
     "lineHeightMin": 0.5,
     "lineHeightMax": 2,
-    "line_height_show": false
+    "line_height_show": false,
+    "title": "Dove desideri inserire il numero?",
+    "description": "Scegli una posizione standard o fai clic sul <b>prodotto</b> per scegliere una posizione individuale"
   },
   "testoDefaults": {
     "text": "TEAM",
-    "font": "Oswald",
+    "font": "Russo One",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
     "strokeWidth": 0,
     "maxLength": 20,
-    "fontSizeMin": 50,
-    "fontSizeMax": 400,
-    "strokeWidthMax": 20,
     "lineHeight": 1,
     "lineHeightMin": 1,
     "lineHeightMax": 2,
     "line_height_show": true,
     "letterSpacing": 0,
-    "letterSpacingMin": -10,
-    "letterSpacingMax": 40,
-    "letter_spacing_show": true
+    "letter_spacing_show": true,
+    "title": "Dove desideri inserire il testo?",
+    "description": "Scegli una posizione standard o fai clic sul <b>prodotto</b> per scegliere una posizione individuale"
   },
   "namePositions": [
     {
@@ -169,7 +282,12 @@
       "fontSize": 100,
       "show_frame": true,
       "show_gizmo": true,
-      "id": "top_back"
+      "id": "top_back",
+      "src": "/png/text_areas/t_shirt_basket/name/top.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 6,
+      "widthMinCm": 1,
+      "widthMaxCm": 35
     },
     {
       "label": "Nome schiena inferiore",
@@ -185,12 +303,17 @@
       "id": "bottom_back",
       "conflicts": {
         "testo": ["bottom_back"]
-      }
+      },
+      "src": "/png/text_areas/t_shirt_basket/name/bottom.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 6,
+      "widthMinCm": 1,
+      "widthMaxCm": 35
     }
   ],
   "numberPositions": [
     {
-      "label": "Davanti",
+      "label": "Numero davanti centrale",
       "partId": "canotta_magik_basket_front",
       "uv": {
         "x": 0.365,
@@ -203,10 +326,15 @@
       "id": "front_center",
       "conflicts": {
         "testo": ["front_center"]
-      }
+      },
+      "src": "/png/text_areas/t_shirt_basket/number/front_center.png",
+      "heightMaxCm": 10,
+      "heightMinCm": 1,
+      "widthMinCm": 1,
+      "widthMaxCm": 200
     },
     {
-      "label": "Davanti sulla DX",
+      "label": "Numero lato cuore",
       "partId": "canotta_magik_basket_front",
       "uv": {
         "x": 0.31,
@@ -216,10 +344,15 @@
       "fontSize": 80,
       "show_frame": true,
       "show_gizmo": true,
-      "id": "front_right"
+      "id": "front_right",
+      "src": "/png/text_areas/t_shirt_basket/number/front_right.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 27,
+      "widthMinCm": 1,
+      "widthMaxCm": 200
     },
     {
-      "label": "Dietro",
+      "label": "Numero schiena",
       "partId": "canotta_magik_basket_back",
       "uv": {
         "x": 0.578,
@@ -229,7 +362,12 @@
       "fontSize": 240,
       "show_frame": true,
       "show_gizmo": true,
-      "id": "back"
+      "id": "back",
+      "src": "/png/text_areas/t_shirt_basket/number/back.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 27,
+      "widthMinCm": 1,
+      "widthMaxCm": 200
     }
   ],
   "testoPositions": [
@@ -247,7 +385,12 @@
       "id": "front_center",
       "conflicts": {
         "number": ["front_center"]
-      }
+      },
+      "src": "/png/text_areas/t_shirt_basket/text/front.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 2,
+      "widthMinCm": 1,
+      "widthMaxCm": 25
     },
     {
       "label": "Nome schiena inferiore",
@@ -263,7 +406,12 @@
       "id": "bottom_back",
       "conflicts": {
         "name": ["bottom_back"]
-      }
+      },
+      "src": "/png/text_areas/t_shirt_basket/text/back_bottom.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 2,
+      "widthMinCm": 1,
+      "widthMaxCm": 25
     },
     {
       "label": "Nome schiena superiore",
@@ -276,7 +424,19 @@
       "fontSize": 50,
       "show_frame": true,
       "show_gizmo": true,
-      "id": "top_back"
+      "id": "top_back",
+      "src": "/png/text_areas/t_shirt_basket/text/back_top.png",
+      "relation": {
+        "x": "center",
+        "y": "top",
+        "items": {
+          "name": ["top_back"]
+        }
+      },
+      "heightMinCm": 1,
+      "heightMaxCm": 2,
+      "widthMinCm": 1,
+      "widthMaxCm": 25
     }
   ]
 }

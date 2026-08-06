@@ -1,5 +1,6 @@
 export { ConfigurationLogo } from '../ConfigurationSteps';
 export { ColorTabControl } from './ColorTabControl';
+export { ConfigurationPositionPickerModal } from './ConfigurationPositionPickerModal';
 export { ConfigurationPositionSelect } from './ConfigurationPositionSelect';
 export { DefaultBrandLogoPlaceholder } from './DefaultBrandLogoPlaceholder';
 export { PartColorSwitch } from './PartColorSwitch';
@@ -11,5 +12,7 @@ export { LogoListRow } from './LogoListRow';
 export { LogoUploadedFilesSection } from './LogoUploadedFilesSection';
 export { HiddenLogoFileInput, LogoUpload } from './LogoUpload';
 export { ColorControl } from './ColorControl';
+export { ColorPaletteCarousel } from './ColorPaletteCarousel';
 export { PatternLayerColorControl } from './PatternLayerColorControl';
 export { RangeControl } from './RangeControl';
+export { TextSizeControl } from './TextSizeControl';

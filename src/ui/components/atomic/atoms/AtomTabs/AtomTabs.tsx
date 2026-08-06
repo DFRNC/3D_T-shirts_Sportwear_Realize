@@ -19,7 +19,7 @@ const atomTabsRootVariants = cva('', {
     variant: {
       default: '',
       line: '',
-      configurator: 'gap-0',
+      configurator: 'gap-0 min-w-0 max-w-full',
       modal: 'flex min-h-0 w-full flex-1 flex-col overflow-hidden gap-4',
     },
   },
@@ -55,7 +55,7 @@ const atomTabsTriggerVariants = cva('', {
       ),
       modal: cn(
         'flex-none text-gray-30 text-[14px] font-[500] inline-flex items-center justify-center gap-2 bg-transparent',
-        'px-6.5 pb-3 [&_svg]:size-5',
+        'px-3 pb-3 whitespace-nowrap sm:px-6.5 [&_svg]:size-5',
         'data-active:text-default transition-colors duration-200',
       ),
     },

@@ -7,7 +7,7 @@
     "height": 729
   },
   "hiddenSteps": ["name"],
-  "preserveGltfMeshes": ["model_inside", "womans_shorts_laces"],
+  "preserveGltfMeshes": ["model_inside"],
   "parts": [
     {
       "name": "Davanti",
@@ -50,6 +50,15 @@
         "softness": 0.5,
         "opacity": 1
       }
+    },
+    {
+      "name": "Lacci",
+      "label": "Lacci",
+      "id": "picci_pallavolo_laces",
+      "meshNames": ["womans_shorts_laces"],
+      "renderOrder": 1,
+      "colorOnly": true,
+      "restrictedColors": ["#FFFFFF", "#000000", "#0027F8", "#03094D", "#F6FF00", "#FFCF00", "#D0021B"]
     }
   ],
   "patterns": [
@@ -180,48 +189,43 @@
   ],
   "nameDefaults": {
     "text": "PLAYER",
-    "font": "Oswald",
+    "font": "Russo One",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
     "strokeWidth": 0,
     "maxLength": 20,
-    "fontSizeMin": 50,
-    "fontSizeMax": 400,
-    "strokeWidthMax": 20
+    "title": "",
+    "description": ""
   },
   "numberDefaults": {
     "text": "10",
-    "font": "Oswald",
+    "font": "Russo One",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
     "strokeWidth": 0,
     "maxLength": 2,
-    "fontSizeMin": 50,
-    "fontSizeMax": 600,
-    "strokeWidthMax": 20,
     "lineHeight": 1.5,
     "lineHeightMin": 0.5,
     "lineHeightMax": 2,
-    "line_height_show": false
+    "line_height_show": false,
+    "title": "Dove desideri inserire il numero?",
+    "description": "Scegli una posizione standard o fai clic sul <b>prodotto</b> per scegliere una posizione individuale"
   },
   "testoDefaults": {
     "text": "TEAM",
-    "font": "Oswald",
+    "font": "Russo One",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
     "strokeWidth": 0,
     "maxLength": 20,
-    "fontSizeMin": 50,
-    "fontSizeMax": 400,
-    "strokeWidthMax": 20,
     "lineHeight": 1,
     "lineHeightMin": 1,
     "lineHeightMax": 2,
     "line_height_show": true,
     "letterSpacing": 0,
-    "letterSpacingMin": -10,
-    "letterSpacingMax": 40,
-    "letter_spacing_show": true
+    "letter_spacing_show": true,
+    "title": "Dove desideri inserire il testo?",
+    "description": "Scegli una posizione standard o fai clic sul <b>prodotto</b> per scegliere una posizione individuale"
   },
   "namePositions": [],
   "numberPositions": [
@@ -229,34 +233,44 @@
       "label": "Destra inferiore",
       "partId": "picci_pallavolo_back",
       "uv": {
-        "x": 0.606,
-        "y": 0.724
+        "x": 0.7,
+        "y": 0.775
       },
       "rotation": 0,
       "fontSize": 90,
       "show_frame": true,
       "show_gizmo": true,
-      "id": "right-bottom"
+      "id": "right-bottom",
+      "src": "/png/text_areas/shorts_wooman/number/left_bottom.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 27,
+      "widthMinCm": 1,
+      "widthMaxCm": 200
     },
     {
       "label": "Destra superiore",
       "partId": "picci_pallavolo_back",
       "uv": {
-        "x": 0.606,
-        "y": 0.539
+        "x": 0.7,
+        "y": 0.606
       },
       "rotation": 0,
       "fontSize": 90,
       "show_frame": true,
       "show_gizmo": true,
-      "id": "right-top"
+      "id": "right-top",
+      "src": "/png/text_areas/shorts_wooman/number/left_top.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 27,
+      "widthMinCm": 1,
+      "widthMaxCm": 200
     },
     {
-      "label": "Dietro",
+      "label": "Laterale",
       "partId": "picci_pallavolo_back",
       "uv": {
-        "x": 0.5,
-        "y": 0.65
+        "x": 0.575,
+        "y": 0.677
       },
       "rotation": 0,
       "fontSize": 90,
@@ -265,20 +279,30 @@
       "id": "right-center",
       "conflicts": {
         "testo": ["right"]
-      }
+      },
+      "src": "/png/text_areas/shorts_wooman/number/left_center.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 27,
+      "widthMinCm": 1,
+      "widthMaxCm": 200
     },
     {
       "label": "Davanti",
       "partId": "picci_pallavolo_front",
       "uv": {
-        "x": 0.394,
-        "y": 0.539
+        "x": 0.333,
+        "y":0.606
       },
       "rotation": 0,
       "fontSize": 90,
       "show_frame": true,
       "show_gizmo": true,
-      "id": "left-top"
+      "id": "left-top",
+      "src": "/png/text_areas/shorts_wooman/number/right.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 27,
+      "widthMinCm": 1,
+      "widthMaxCm": 200
     }
   ],
   "testoPositions": [
@@ -296,7 +320,12 @@
       "conflicts": {
         "number": ["right-center"]
       },
-      "id": "right"
+      "id": "right",
+      "src": "/png/text_areas/shorts_wooman/text/left.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 2,
+      "widthMinCm": 1,
+      "widthMaxCm": 25
     },
     {
       "label": "Sinistra",
@@ -309,7 +338,12 @@
       "fontSize": 120,
       "show_frame": true,
       "show_gizmo": true,
-      "id": "left"
+      "id": "left",
+      "src": "/png/text_areas/shorts_wooman/text/right.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 2,
+      "widthMinCm": 1,
+      "widthMaxCm": 25
     }
   ]
 }

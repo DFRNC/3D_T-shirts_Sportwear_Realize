@@ -18,6 +18,18 @@ interface printAtlasConfigType {
   height: number;
 }
 
+interface printReferenceCmType {
+
+  heightCm: number;
+
+  widthCm: number;
+}
+
+interface printCmScaleType {
+  cmPerPxHorizontal: number;
+  cmPerPxVertical: number;
+}
+
 interface partGradientConfigType {
   reversed: boolean;
   rotation: number;
@@ -35,8 +47,9 @@ interface garmentPartConfigType {
   uvBounds?: uvBoundsType;
   printRotation?: number;
   gradient?: partGradientConfigType;
-  /** Solid color only — excluded from design, gradient, and pattern layers. */
+
   colorOnly?: boolean;
+  restrictedColors?: string[];
 }
 
 interface patternPartConfigType {
@@ -53,8 +66,23 @@ interface printPositionConflictsConfigType {
   name?: string[];
   number?: string[];
   testo?: string[];
-  /** @deprecated Legacy JSON key — use `testo`. */
+
   text?: string[];
+}
+
+type printPositionRelationAxisXType = 'left' | 'center' | 'right';
+type printPositionRelationAxisYType = 'top' | 'center' | 'bottom';
+
+interface printPositionRelationItemsConfigType {
+  name?: string[];
+  number?: string[];
+  testo?: string[];
+}
+
+interface printPositionRelationConfigType {
+  x: printPositionRelationAxisXType;
+  y: printPositionRelationAxisYType;
+  items: printPositionRelationItemsConfigType;
 }
 
 interface textPositionConfigType {
@@ -69,6 +97,13 @@ interface textPositionConfigType {
   show_gizmo?: boolean;
   id?: string;
   conflicts?: printPositionConflictsConfigType;
+  relation?: printPositionRelationConfigType;
+
+  src?: string;
+  heightMinCm?: number;
+  heightMaxCm?: number;
+  widthMinCm?: number;
+  widthMaxCm?: number;
 }
 
 interface textDefaultsConfigType {
@@ -78,9 +113,8 @@ interface textDefaultsConfigType {
   strokeColor: string;
   strokeWidth: number;
   maxLength?: number;
-  fontSizeMin?: number;
-  fontSizeMax?: number;
   strokeWidthMax?: number;
+  strokeWidthMaxCm?: number;
   lineHeight?: number;
   lineHeightMin?: number;
   lineHeightMax?: number;
@@ -88,7 +122,13 @@ interface textDefaultsConfigType {
   letterSpacing?: number;
   letterSpacingMin?: number;
   letterSpacingMax?: number;
+  letterSpacingMinCm?: number;
+  letterSpacingMaxCm?: number;
   letter_spacing_show?: boolean;
+
+  title?: string;
+
+  description?: string;
 }
 
 interface namePositionConfigType extends textPositionConfigType {
@@ -125,13 +165,13 @@ interface preserveGltfMeshEntryConfigType {
 type preserveGltfMeshConfigType = string | preserveGltfMeshEntryConfigType;
 
 interface garmentConfigType {
-  /** Geometry id — matches the data folder name and the Shopify `custom.id` metafield. */
+
   id?: string;
-  /** @deprecated Business data (name/price/bonus) now comes from Shopify via `garmentBusinessType`. */
+
   name?: string;
   type?: string;
   previewImage?: string;
-  /** @deprecated Use the Shopify-sourced `garmentBusinessType.price`. Optional for geometry-only JSON. */
+
   price?: number;
   bonus_count?: number;
   bonus_discount?: number;
@@ -161,14 +201,12 @@ interface styleConfigType {
   products: garmentConfigType[];
 }
 
-/** Identifier of a local geometry model — equals the data folder name / JSON `id`. */
 type modelIdType = string;
 
-/** Business data sourced from the Shopify product (price, bonuses, name). */
 interface garmentBusinessType {
-  /** Shopify product GID. */
+
   shopifyProductId: string;
-  /** Shopify product handle (== URL slug). */
+
   handle: string;
   name: string;
   price: number;
@@ -176,8 +214,10 @@ interface garmentBusinessType {
   bonusCount: number;
   bonusDiscount: number;
   minimumCount: number;
-  /** Per-product "Tabella taglie" content sourced from Shopify metafields; falls back to the static default when unset. */
+
   sizeChart?: modalInfoTabType;
+
+  printReferenceCm?: printReferenceCmType;
 }
 
 export type {
@@ -189,9 +229,15 @@ export type {
   partGradientConfigType,
   patternConfigType,
   printPositionConflictsConfigType,
+  printPositionRelationAxisXType,
+  printPositionRelationAxisYType,
+  printPositionRelationConfigType,
+  printPositionRelationItemsConfigType,
   preserveGltfMeshConfigType,
   preserveGltfMeshEntryConfigType,
   printAtlasConfigType,
+  printCmScaleType,
+  printReferenceCmType,
   styleConfigType,
   textDefaultsConfigType,
   textPositionConfigType,

@@ -1,3 +1,5 @@
-'use client';
-
-export { GarmentMaterialRegistryProvider, useGarmentMaterialRegistry, useMaterialRegistryRevision } from './garmentMaterialRegistry';
+export {
+  GarmentMaterialRegistryProvider,
+  useGarmentMaterialRegistry,
+  useMaterialRegistryRevision,
+} from './garmentMaterialRegistry';

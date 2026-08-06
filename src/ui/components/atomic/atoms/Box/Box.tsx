@@ -11,12 +11,18 @@ const variantBox = cva('block', {
   variants: {
     variant: {
       default: '',
-      header: 'bg-white py-5',
+      header: cn('bg-white py-5', 'max-sm:py-3'),
       footer: 'bg-white py-15',
       toggle_handle: cn(
         'absolute left-0 top-[1px] w-4 h-4 bg-white rounded-full shadow transition-transform translate-x-0.5',
-        'data-[active=true]:translate-x-5',
+        'max-xl:w-3 max-xl:h-3',
+        'data-[active=true]:translate-x-5 max-xl:data-[active=true]:translate-x-4.5',
         'transition-all duration-200 ease-in',
+      ),
+      aside_configuration: cn(
+        'relative h-full min-h-0 overflow-visible p-4 pl-16',
+        'max-xl:p-3 max-xl:pl-16',
+        'max-sm:col-start-1 max-sm:col-span-3 max-sm:row-start-2 max-sm:flex max-sm:min-h-0 max-sm:w-full max-sm:flex-col max-sm:p-4 max-sm:pl-4 max-sm:pb-0',
       ),
     },
   },

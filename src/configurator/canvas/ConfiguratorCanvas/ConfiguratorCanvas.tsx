@@ -1,10 +1,15 @@
 'use client';
 
-import { CanvasControl, SceneModel } from '@configurator/canvas';
+import { CanvasControl } from '@configurator/canvas/CanvasControl';
+import { SceneModel } from '@configurator/canvas/SceneModel';
 import { Canvas } from '@react-three/fiber';
 import { ACESFilmicToneMapping } from 'three';
 import { useConfiguratorSceneLoad } from '@store';
 import { Suspense, useState } from 'react';
+
+const clearTextSelection = () => {
+  window.getSelection()?.removeAllRanges();
+};
 
 const ConfiguratorCanvas = () => {
   const [canvasKey, setCanvasKey] = useState(0);
@@ -17,8 +22,10 @@ const ConfiguratorCanvas = () => {
     <Canvas
       key={`${sceneRouteKey}:${canvasKey}`}
       camera={{ position: [0, 0, 3], fov: 45 }}
-      style={{ width: '100%', height: '100%' }}
+      style={{ width: '100%', height: '100%', touchAction: 'none' }}
       frameloop={useContinuousFrameLoop ? 'always' : 'demand'}
+      onPointerEnter={clearTextSelection}
+      onPointerDown={clearTextSelection}
       gl={{
         alpha: true,
         antialias: true,

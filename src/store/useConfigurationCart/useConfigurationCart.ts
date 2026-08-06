@@ -6,18 +6,18 @@ import { areGarmentPrintStoresSynced } from '@store/useConfigurationCart/areGarm
 import { captureGarmentConfiguration, cloneCartItemConfiguration, createDefaultCartItemConfiguration } from '@store/useConfigurationCart/cartItemConfiguration';
 import { inheritCartItemConfiguration } from '@store/useConfigurationCart/inheritCartItemConfiguration';
 import { createCartItem, createDefaultCartItem } from '@store/useConfigurationCart/mapCartItems';
+import { enrichCartItemBusiness } from '@store/useConfigurationCart/enrichCartItemBusiness';
 import { persistCartItemSnapshot } from '@store/useConfigurationCart/persistCartItemSnapshot';
+import { syncActiveCartItemToEmbeddedUrl } from '@store/useConfigurationCart/syncActiveCartItemToEmbeddedUrl';
 import type { cartItemConfigurationType, cartItemType, configuratorCatalogProductPickType, garmentBusinessType, modelIdType } from '@types';
-import { buildConfiguratorPath, getModel } from '@utils';
-import { postEmbeddedUrlToParent } from '@utils/embeddedUrlSync';
-import { create } from 'zustand';
+import { getModel } from '@utils';
+import { createSingletonStore } from '@store/createSingletonStore';
 interface ConfigurationCartState {
   items: cartItemType[];
   activeItemId: string;
   configurations: Record<string, cartItemConfigurationType>;
   previews: Record<string, string>;
   addItem: (product: configuratorCatalogProductPickType, options?: { inheritDesign?: boolean }) => void;
-  /** Stamp a Shopify product (from the slug route loader) onto the active cart item. */
   setActiveItemProduct: (product: { collectionHandle: string; slug: string; modelId: modelIdType; business: garmentBusinessType }) => void;
   duplicateActiveItem: () => void;
   selectItem: (id: string) => void;
@@ -32,7 +32,7 @@ interface ConfigurationCartState {
 
 const initialItem = createDefaultCartItem();
 
-const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
+const useConfigurationCart = createSingletonStore<ConfigurationCartState>('useConfigurationCart', (set, get) => ({
   items: [initialItem],
   activeItemId: initialItem.id,
   configurations: {},
@@ -72,6 +72,8 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     });
 
     void activateCartItem(get, item.id);
+
+    void enrichCartItemBusiness(get, set, item.id);
   },
 
   setActiveItemProduct: ({ collectionHandle, slug, modelId, business }) => {
@@ -79,14 +81,9 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
     const activeItem = items.find((item) => item.id === activeItemId);
     if (!activeItem) return;
     if (!getModel(modelId)) return;
-
-    // The geometry (modelId) is what drives the heavy 3D rebuild. The default cart item
-    // is already initialised with the default model, so when the loaded product maps to the
-    // SAME model we must NOT reset/reactivate — that would rebuild the whole scene a second
-    // time on every open. Only the slug + business need refreshing in that case.
     if (activeItem.modelId === modelId) {
       set({
-        items: items.map((item) => (item.id === activeItemId ? { ...item, collectionHandle, slug, business } : item)),
+        items: items.map((item) => (item.id === activeItemId ? { ...item, collectionHandle, slug, business, isPlaceholder: false } : item)),
       });
       useConfiguratorProduct.getState().initFromLoader(modelId, business);
 
@@ -98,11 +95,10 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
       return;
     }
 
-    // Different model: reset this item's configuration so it rebuilds from the new model defaults.
     const nextConfigurations = Object.fromEntries(Object.entries(configurations).filter(([itemId]) => itemId !== activeItemId));
 
     set({
-      items: items.map((item) => (item.id === activeItemId ? { ...item, collectionHandle, slug, modelId, business } : item)),
+      items: items.map((item) => (item.id === activeItemId ? { ...item, collectionHandle, slug, modelId, business, isPlaceholder: false } : item)),
       configurations: nextConfigurations,
     });
 
@@ -204,34 +200,6 @@ const useConfigurationCart = create<ConfigurationCartState>((set, get) => ({
   },
 }));
 
-/**
- * Mirror the *active* session item into the host (Shopify) URL + SEO when embedded.
- * Switching/adding products only mutates this store (no Next.js route change), so the
- * route-based {@link useEmbeddedUrlSync} never fires. We post a `navigate` message here
- * instead; the theme updates the address bar and refetches product metadata.
- *
- * Lives at the store module level (already part of the configurator chunk) on purpose —
- * wiring this through a provider/React hook pulled the 3D bundle into a second chunk and
- * produced duplicate `@react-three/fiber` instances ("Hooks can only be used within the
- * Canvas component").
- */
-let lastPostedActiveProductPath: string | null = null;
-
-useConfigurationCart.subscribe((state) => {
-  const activeItem = state.items.find((item) => item.id === state.activeItemId);
-
-  if (!activeItem || !activeItem.collectionHandle || !activeItem.slug) {
-    return;
-  }
-
-  const pathname = buildConfiguratorPath(activeItem.collectionHandle, activeItem.slug);
-
-  if (lastPostedActiveProductPath === pathname) {
-    return;
-  }
-
-  lastPostedActiveProductPath = pathname;
-  postEmbeddedUrlToParent(pathname);
-});
+syncActiveCartItemToEmbeddedUrl(useConfigurationCart.subscribe);
 
 export { useConfigurationCart };

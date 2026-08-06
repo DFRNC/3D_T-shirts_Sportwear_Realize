@@ -9,6 +9,31 @@ body {
   color: var(--color-default);
 }
 
+/* The configurator fills exactly the height it is given and must never grow the page:
+   embedded in Shopify a taller document scrolls the host instead, pushing the footer
+   under the browser chrome with no way to reach it. Long content scrolls in its own
+   column inside the shell. Scoped to the configurator so the catalog and checkout
+   pages keep their normal page scroll. */
+html:has(.configurator-shell),
+html:has(.configurator-shell) body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* Standalone the shell spans the viewport. Inside Shopify it must span the iframe
+   instead: the host already subtracts its own header from the frame's height, but dvh
+   inside an iframe still resolves to the full window, so the shell would overhang the
+   frame by exactly the header height and bury the footer. */
+.configurator-shell {
+  height: var(--configurator-shell-height, 100dvh);
+  max-height: var(--configurator-shell-height, 100dvh);
+}
+
+html[data-embedded='1'] {
+  --configurator-shell-height: 100%;
+}
+
 @theme {
   --font-inter: var(--font-inter);
 

@@ -65,6 +65,7 @@ export type {
   colorTabVariantType,
   colorTabControlPropsType,
   configurationPositionOptionType,
+  configurationPositionPickerModalPropsType,
   configurationPositionSelectPropsType,
   fontSelectRowPropsType,
   hiddenLogoFileInputPropsType,
@@ -74,6 +75,7 @@ export type {
   partColorSwitchPropsType,
   rangeControlPropsType,
   shadingControlPropsType,
+  textSizeControlPropsType,
   toggleControlPropsType,
 } from './configurationToolsProps';
 export type {
@@ -104,6 +106,7 @@ export type {
   checkoutConfigurationTablePropsType,
   checkoutProductCardPropsType,
   checkoutQuantityStepperPropsType,
+  checkoutRowEditModalPropsType,
   checkoutSizePopoverPropsType,
   checkoutTableEditableCellPropsType,
   checkoutTablePlaceholderPropsType,

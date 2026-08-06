@@ -1,7 +1,7 @@
 import type { logoInstanceType } from '@types';
 import { LOGO_ATLAS_REF_WIDTH, LOGO_MARK_REF_WIDTH } from '@configurator/constants';
 
-const resolveLogoDrawSize = (instance: logoInstanceType, naturalWidth: number, naturalHeight: number, atlasWidth: number) => {
+const resolveLogoDrawSize = (instance: Pick<logoInstanceType, 'scale'>, naturalWidth: number, naturalHeight: number, atlasWidth: number) => {
   const aspect = naturalWidth / naturalHeight || 1;
   const scale = instance.scale;
   const baseWidth = Math.round((LOGO_MARK_REF_WIDTH / LOGO_ATLAS_REF_WIDTH) * atlasWidth) * scale;
@@ -9,7 +9,6 @@ const resolveLogoDrawSize = (instance: logoInstanceType, naturalWidth: number, n
   return { width: baseWidth, height: baseWidth / aspect };
 };
 
-// High-resolution stamp space (like NAME_REFERENCE_FONT_SIZE for text). Decoupled from the runtime print atlas.
 const resolveLogoReferenceDrawSize = (instance: logoInstanceType, naturalWidth: number, naturalHeight: number) =>
   resolveLogoDrawSize({ ...instance, scale: 1 }, naturalWidth, naturalHeight, LOGO_ATLAS_REF_WIDTH);
 

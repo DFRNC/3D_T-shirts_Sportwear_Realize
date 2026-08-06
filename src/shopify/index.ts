@@ -1,4 +1,7 @@
 export { assertShopifyConfigured, getShopifyAdminClientSecret, getShopifyFrameAncestors, isShopifyEnabled } from './config';
+export { shopifyAdminGraphql } from './adminClient';
+export { fetchLatestOrderExportAssets } from './fetchLatestOrderExportAssets';
+export type { latestOrderExportAssetsType, shopifyOrderNodeType, uvImageEntryType } from './fetchLatestOrderExportAssets';
 export { createCheckoutCart } from './createCheckoutCart';
 export type { checkoutLineAttributeType, createCheckoutPayloadType, createCheckoutResultType } from './checkoutPayload';
 export { buildShopifyFrameAncestors, buildShopifyFrameAncestorsHeader } from './frameAncestors';
@@ -12,6 +15,9 @@ export { mapHomePageProductBusiness } from './mapHomePageProductBusiness';
 export { mapSizeChartContent } from './mapSizeChartContent';
 export type { sizeChartMetafieldsNodeType } from './mapSizeChartContent';
 export { uploadShopifyFile } from './uploadShopifyFile';
+export { createStagedUploadTargets } from './createStagedUploadTargets';
+export { registerShopifyFiles } from './registerShopifyFiles';
+export type { registerShopifyFileInputType, shopifyFileContentType, stagedUploadFileInputType, stagedUploadTargetType } from './stagedUpload';
 export { ORDER_METAFIELD_NAMESPACE, setOrderMetafields } from './setOrderMetafields';
 export type { orderMetafieldInputType } from './setOrderMetafields';
 export { verifyShopifyWebhookSignature } from './verifyShopifyWebhookSignature';

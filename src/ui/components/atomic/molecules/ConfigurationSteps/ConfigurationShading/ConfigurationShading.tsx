@@ -20,6 +20,7 @@ const ConfigurationShadingAccordion = ({ parts, partIds }: configurationShadingA
   const { openItems, handleItemActivate, handleOpenItemsChange } = usePartAccordionCameraFocus({
     partIds,
     defaultOpenPartIds: partIds[0] ? [partIds[0]] : [],
+    enableCameraFocus: false,
   });
 
   const getShadingPreview = useCallback(
@@ -53,16 +54,7 @@ const ConfigurationShadingAccordion = ({ parts, partIds }: configurationShadingA
     [getShadingPreview, gradientsByPart, parts],
   );
 
-  return (
-    <AccordionAtom
-      items={items}
-      value={openItems}
-      onValueChange={handleOpenItemsChange}
-      onItemActivate={handleItemActivate}
-      multiple
-      className="gap-3"
-    />
-  );
+  return <AccordionAtom items={items} value={openItems} onValueChange={handleOpenItemsChange} onItemActivate={handleItemActivate} multiple className="gap-3" />;
 };
 
 const ConfigurationShading = () => {

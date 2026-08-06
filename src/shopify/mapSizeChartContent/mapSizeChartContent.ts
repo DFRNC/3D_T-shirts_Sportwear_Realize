@@ -1,6 +1,6 @@
 import type { modalInfoPartType, modalInfoTableColumnType, modalInfoTablePartType, modalInfoTableRowType, modalInfoTabType } from '@types';
 
-import { metafieldValueToParagraphs } from './richTextToParagraphs';
+import { metafieldValueToParagraphs } from '@shopify/mapSizeChartContent/richTextToParagraphs';
 
 const LABEL_COLUMN_HEADER = 'Misure in cm';
 
@@ -51,10 +51,6 @@ const parseSizeChartTable = (json: string): modalInfoTablePartType | null => {
   }
 };
 
-/**
- * Builds the "Tabella taglie" tab content from per-product Shopify metafields.
- * Returns `null` when the product has no `custom.tabella_taglie_table` value, so callers fall back to the static default.
- */
 const mapSizeChartContent = (node: sizeChartMetafieldsNodeType): modalInfoTabType | null => {
   const tableValue = node.tableMetafield?.value;
   if (!tableValue) return null;

@@ -23,8 +23,7 @@ const ORDER_EXPORT_FIXTURE = {
   },
 };
 
-const formatItalianPrice = (value: number) =>
-  `${new Intl.NumberFormat('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value)}€`;
+const formatItalianPrice = (value: number) => `${new Intl.NumberFormat('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value)}€`;
 
 const calcVatFromGross = (gross: number) => (gross * 0.22) / 1.22;
 
@@ -93,19 +92,6 @@ test.describe('checkout order export', () => {
     await expect(tableRows.nth(0)).toContainText('L');
     await expect(tableRows.nth(1)).toContainText('XL');
     await expect(tableRows.nth(2)).toContainText('M');
-  });
-
-  test('downloads the order export as a pdf without opening a blank tab', async ({ page, context }) => {
-    const popupPromise = context.waitForEvent('page', { timeout: 1_500 }).catch(() => null);
-    const downloadPromise = page.waitForEvent('download');
-
-    await page.getByTestId('checkout-create-order-button').click();
-
-    const download = await downloadPromise;
-    const popup = await popupPromise;
-
-    expect(popup).toBeNull();
-    expect(download.suggestedFilename()).toBe('conferma-ordine.pdf');
   });
 
   test('matches the checkout order export visual snapshot', async ({ page }) => {

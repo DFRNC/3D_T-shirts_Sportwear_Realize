@@ -44,11 +44,6 @@ const postEmbeddedUrlToParent = (pathname: string): void => {
   );
 };
 
-/**
- * Asks the host (theme) to navigate the TOP window to an absolute Shopify checkout URL.
- * The configurator runs in a cross-origin iframe and cannot drive `window.top` directly,
- * so the redirect goes through the embed bridge in the theme.
- */
 const postEmbeddedCheckoutRedirect = (url: string): void => {
   if (!isEmbeddedSession() || window.parent === window) {
     return;
@@ -64,6 +59,21 @@ const postEmbeddedCheckoutRedirect = (url: string): void => {
   );
 };
 
+const redirectToShopifyCheckout = (checkoutUrl: string): void => {
+  if (isEmbeddedSession() && window.parent !== window) {
+    postEmbeddedCheckoutRedirect(checkoutUrl);
+  }
+
+  const anchor = document.createElement('a');
+  anchor.href = checkoutUrl;
+  anchor.target = '_top';
+  anchor.rel = 'noopener noreferrer';
+  anchor.style.display = 'none';
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+};
+
 export {
   EMBEDDED_CHECKOUT_REDIRECT_TYPE,
   EMBEDDED_URL_SYNC_SOURCE_APP,
@@ -72,5 +82,6 @@ export {
   isEmbeddedUrlSyncMessage,
   postEmbeddedCheckoutRedirect,
   postEmbeddedUrlToParent,
+  redirectToShopifyCheckout,
 };
 export type { embeddedUrlSyncMessage };

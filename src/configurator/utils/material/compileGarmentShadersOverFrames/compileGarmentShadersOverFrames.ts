@@ -1,16 +1,46 @@
 import type { garmentConfigType } from '@types';
-import type { MeshStandardMaterial } from 'three';
-import { compileGarmentShader, yieldToMain } from '@configurator/utils';
+import type { Camera, MeshStandardMaterial, Object3D, WebGLRenderer } from 'three';
+import { compileGarmentShader, resolveGarmentPrintFeatureFlags } from '@configurator/utils';
+import { RGBAFormat, SRGBColorSpace, WebGLRenderTarget } from 'three';
 
 type CompileGarmentShadersOverFramesOptions = {
+  product: garmentConfigType;
   parts: garmentConfigType['parts'];
   getMaterials: (partId: string) => readonly MeshStandardMaterial[];
+  gl: WebGLRenderer;
+  scene: Object3D;
+  camera: Camera;
   invalidate: () => void;
   onComplete: () => void;
 };
 
-/** Compiles full garment print shaders one material per animation frame. */
-const compileGarmentShadersOverFrames = ({ parts, getMaterials, invalidate, onComplete }: CompileGarmentShadersOverFramesOptions) => {
+let variantWarmupTarget: WebGLRenderTarget | null = null;
+
+const compileRenderTargetVariants = (gl: WebGLRenderer, scene: Object3D, camera: Camera): Promise<unknown> => {
+  if (!variantWarmupTarget) {
+    variantWarmupTarget = new WebGLRenderTarget(4, 4, { format: RGBAFormat, depthBuffer: true, stencilBuffer: false });
+    variantWarmupTarget.texture.colorSpace = SRGBColorSpace;
+  }
+
+  const previousTarget = gl.getRenderTarget();
+  gl.setRenderTarget(variantWarmupTarget);
+
+  const warmup = gl.compileAsync(scene, camera);
+  gl.setRenderTarget(previousTarget);
+
+  return warmup;
+};
+
+const compileGarmentShadersOverFrames = ({
+  product,
+  parts,
+  getMaterials,
+  gl,
+  scene,
+  camera,
+  invalidate,
+  onComplete,
+}: CompileGarmentShadersOverFramesOptions) => {
   const materialQueue = [...new Set(parts.flatMap((part) => [...getMaterials(part.id)]))];
 
   if (materialQueue.length === 0) {
@@ -19,24 +49,21 @@ const compileGarmentShadersOverFrames = ({ parts, getMaterials, invalidate, onCo
   }
 
   let cancelled = false;
-  let queueIndex = 0;
+  const features = resolveGarmentPrintFeatureFlags(product);
 
-  const configureNext = async () => {
-    if (cancelled) return;
+  materialQueue.forEach((material) => compileGarmentShader(material, features));
 
-    if (queueIndex >= materialQueue.length) {
+  void gl
+    .compileAsync(scene, camera)
+    .then(() => {
+      if (cancelled) return;
+      return compileRenderTargetVariants(gl, scene, camera);
+    })
+    .then(() => {
+      if (cancelled) return;
+      invalidate();
       onComplete();
-      return;
-    }
-
-    compileGarmentShader(materialQueue[queueIndex]);
-    queueIndex += 1;
-    invalidate();
-    await yieldToMain();
-    if (!cancelled) void configureNext();
-  };
-
-  void configureNext();
+    });
 
   return () => {
     cancelled = true;

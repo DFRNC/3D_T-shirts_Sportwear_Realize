@@ -8,7 +8,7 @@ import { useGarmentMaterialRegistry, useMaterialRegistryRevision } from '@config
 import { useFrame, useThree } from '@react-three/fiber';
 import { useConfigurationCart, useConfiguratorSceneLoad, useGarmentDesign } from '@store';
 import { useCallback, useEffect, useLayoutEffect } from 'react';
-/** Syncs store colors, design, and textures onto garment materials (R3F side-effect hook). */
+
 const useSyncGarmentMaterials = () => {
   const refs = useSyncGarmentMaterialsRefs();
   const { pendingFrameReapplyRef, lastPendingReapplyRef, sceneLoadRefs } = refs;
@@ -21,6 +21,9 @@ const useSyncGarmentMaterials = () => {
   const loaderSession = useConfiguratorSceneLoad((state) => state.loaderSession);
   const transitionSession = useConfiguratorSceneLoad((state) => state.transitionSession);
   const invalidate = useThree((state) => state.invalidate);
+  const gl = useThree((state) => state.gl);
+  const scene = useThree((state) => state.scene);
+  const camera = useThree((state) => state.camera);
   const textureAnisotropy = useThree((state) => state.gl.capabilities.getMaxAnisotropy());
   const { bumpRevision, getMaterials, hasMaterialsForParts } = useGarmentMaterialRegistry();
   const materialRevision = useMaterialRegistryRevision();
@@ -40,6 +43,9 @@ const useSyncGarmentMaterials = () => {
     defaultPattern,
     hasMaterialsForParts,
     getMaterials,
+    gl,
+    scene,
+    camera,
     bumpRevision,
     invalidate,
     isSceneTransitionLoading,

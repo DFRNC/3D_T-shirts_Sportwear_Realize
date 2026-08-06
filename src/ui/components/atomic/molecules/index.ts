@@ -1,3 +1,4 @@
+export { CanvasButtons } from './CanvasButtons';
 export { ProductFlipCard } from './ProductFlipCard';
 export { AtomTabsSlidingList, atomTabsSlidingListVariants } from './AtomTabsSlidingList';
 export { ConfiguratorStepTabs } from './ConfiguratorStepTabs';
@@ -12,6 +13,7 @@ export { ProductSessionAddButton } from './ProductSessionAddButton';
 export { ProductSessionRow } from './ProductSessionRow';
 export { CheckoutConfigurationTable } from './CheckoutConfigurationTable';
 export { CheckoutQuantityStepper } from './CheckoutQuantityStepper';
+export { CheckoutRowEditModal } from './CheckoutRowEditModal';
 export { CheckoutSizePopover } from './CheckoutSizePopover';
 export { CheckoutProductCard } from './CheckoutProductCard';
 export { CheckoutOrderExport } from './CheckoutOrderExport';

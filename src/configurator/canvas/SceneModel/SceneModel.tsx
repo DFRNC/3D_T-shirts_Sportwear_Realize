@@ -1,9 +1,10 @@
 'use client';
 
 import { SceneFrameSync } from '@configurator/canvas/SceneFrameSync';
+
+import { GarmentRuntime } from '@configurator/runtime/GarmentRuntime';
+import { GarmentModel } from '@configurator/scene/GarmentModel';
 import { resolveModelUrl } from '@configurator/utils';
-import { GarmentModel } from '@configurator/scene';
-import { GarmentRuntime } from '@configurator/runtime';
 import { Center } from '@react-three/drei';
 import { useConfiguratorProduct } from '@store';
 

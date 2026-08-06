@@ -1,6 +1,6 @@
 import type { configuratorStepValueType } from '@configurator/types';
 import { buildPatternColors } from '@configurator/hooks/useSyncGarmentMaterials/buildPatternColors';
-import { mapProductDesigns, resolveGradientColors, resolvePartUvBounds } from '@configurator/mappers';
+import { createPrintUnit, mapProductDesigns, resolveGradientColors, resolvePartUvBounds, resolvePrintCmScale } from '@configurator/mappers';
 import { PRINT_UPLOAD_ROTATION_DEG } from '@configurator/constants';
 import { CONFIGURATOR_STEP_META, ORDER_CUTTING_EXPORT_DATA_NOT_SPECIFIED } from '@constants';
 import type {
@@ -14,6 +14,8 @@ import type {
   orderCuttingExportStepDetailParamType,
   orderCuttingExportStepDetailType,
   orderCuttingExportTextLayerSpecType,
+  printCmScaleType,
+  printReferenceCmType,
   testoInstanceType,
   uvPointType,
 } from '@types';
@@ -29,8 +31,7 @@ const resolvePartLabel = (model: garmentConfigType, partId: string): string => {
   return part ? part.label || part.name : partId;
 };
 
-const resolvePartPrintRotation = (part: garmentConfigType['parts'][number]): number =>
-  part.printRotation ?? part.gradient?.rotation ?? 0;
+const resolvePartPrintRotation = (part: garmentConfigType['parts'][number]): number => part.printRotation ?? part.gradient?.rotation ?? 0;
 
 const resolvePatternIndex = (activePatternKey: string | null): number => {
   if (!activePatternKey) return 0;
@@ -38,10 +39,7 @@ const resolvePatternIndex = (activePatternKey: string | null): number => {
   return match ? Number(match[1]) : 0;
 };
 
-const buildColorStepDetails = (
-  configuration: cartItemConfigurationType,
-  model: garmentConfigType,
-): orderCuttingExportStepDetailType[] =>
+const buildColorStepDetails = (configuration: cartItemConfigurationType, model: garmentConfigType): orderCuttingExportStepDetailType[] =>
   model.parts.map((part) => ({
     label: part.label || part.name,
     value: configuration.color.byPart[part.id] ?? configuration.color.byPart[part.name] ?? '—',
@@ -50,10 +48,7 @@ const buildColorStepDetails = (
 const hasEnabledGradient = (configuration: cartItemConfigurationType): boolean =>
   Object.values(configuration.color.gradientsByPart).some((gradient) => gradient.enabled);
 
-const buildGradientStepDetails = (
-  configuration: cartItemConfigurationType,
-  model: garmentConfigType,
-): orderCuttingExportStepDetailType[] =>
+const buildGradientStepDetails = (configuration: cartItemConfigurationType, model: garmentConfigType): orderCuttingExportStepDetailType[] =>
   model.parts
     .filter((part) => !part.colorOnly)
     .map((part) => {
@@ -81,20 +76,23 @@ const buildGradientStepDetails = (
 const buildTextInstancesDetails = (
   instances: garmentTextRenderInstanceType[],
   model: garmentConfigType,
+  cmScale: printCmScaleType | null,
 ): orderCuttingExportStepDetailType[] =>
   instances
     .filter((instance) => instance.text.trim())
     .map((instance) => {
       const lineHeight = (instance as numberInstanceType).lineHeight;
       const letterSpacing = (instance as testoInstanceType).letterSpacing;
+      const unitX = createPrintUnit(cmScale?.cmPerPxHorizontal);
+      const unitY = createPrintUnit(cmScale?.cmPerPxVertical);
       const params = [
         { label: 'Testo', value: instance.text.trim() },
         { label: 'Font', value: instance.font },
         { label: 'Colore testo', value: instance.textColor },
-        { label: 'Corpo', value: `${Math.round(instance.fontSize)}px` },
-        instance.strokeWidth > 0 ? { label: 'Contorno', value: `${instance.strokeColor} · ${instance.strokeWidth}px` } : null,
+        { label: 'Corpo', value: unitY.formatPx(instance.fontSize) },
+        instance.strokeWidth > 0 ? { label: 'Contorno', value: `${instance.strokeColor} · ${unitY.formatPx(instance.strokeWidth)}` } : null,
         typeof lineHeight === 'number' ? { label: 'Interlinea', value: `${lineHeight}` } : null,
-        typeof letterSpacing === 'number' ? { label: 'Spaziatura', value: `${letterSpacing}` } : null,
+        typeof letterSpacing === 'number' ? { label: 'Spaziatura', value: unitX.formatPx(letterSpacing) } : null,
         { label: 'Parte', value: resolvePartLabel(model, instance.partId) },
         { label: 'Posizione', value: formatUv(instance.uv) },
         { label: 'Rotazione', value: formatDegrees(instance.rotation + (instance.placementRotation ?? 0)) },
@@ -110,10 +108,7 @@ const buildTextInstancesDetails = (
 const resolvePartColor = (configuration: cartItemConfigurationType, partId: string, partName: string): string =>
   configuration.color.byPart[partId] ?? configuration.color.byPart[partName] ?? '#FFFFFF';
 
-const buildColorDownloadFiles = (
-  configuration: cartItemConfigurationType,
-  model: garmentConfigType,
-): orderCuttingExportDownloadFileType[] => {
+const buildColorDownloadFiles = (configuration: cartItemConfigurationType, model: garmentConfigType): orderCuttingExportDownloadFileType[] => {
   const parts = model.parts;
   const atlasWidth = model.printAtlas?.width ?? 2048;
   const atlasHeight = model.printAtlas?.height ?? 2048;
@@ -140,10 +135,7 @@ const buildColorDownloadFiles = (
   ];
 };
 
-const buildGradientDownloadFiles = (
-  configuration: cartItemConfigurationType,
-  model: garmentConfigType,
-): orderCuttingExportDownloadFileType[] => {
+const buildGradientDownloadFiles = (configuration: cartItemConfigurationType, model: garmentConfigType): orderCuttingExportDownloadFileType[] => {
   if (model.parts.length === 0) return [];
 
   return [
@@ -158,9 +150,7 @@ const buildGradientDownloadFiles = (
       atlasHeight: model.printAtlas?.height ?? 2048,
       colorParts: model.parts.map((part) => {
         const baseColor = resolvePartColor(configuration, part.id, part.name);
-        const gradient = part.colorOnly
-          ? undefined
-          : (configuration.color.gradientsByPart[part.id] ?? configuration.color.gradientsByPart[part.name]);
+        const gradient = part.colorOnly ? undefined : (configuration.color.gradientsByPart[part.id] ?? configuration.color.gradientsByPart[part.name]);
 
         if (!gradient?.enabled) {
           return { label: part.label || part.name, color: baseColor, meshNames: part.meshNames };
@@ -188,8 +178,7 @@ const buildGradientDownloadFiles = (
 
 const resolveTextTotalRotation = (instance: garmentTextRenderInstanceType, model: garmentConfigType): number => {
   const part = model.parts.find((item) => item.id === instance.partId || item.name === instance.partId);
-  const instanceRotation =
-    instance.placementRotation !== undefined ? instance.rotation + instance.placementRotation : instance.rotation;
+  const instanceRotation = instance.placementRotation !== undefined ? instance.rotation + instance.placementRotation : instance.rotation;
 
   return instanceRotation + PRINT_UPLOAD_ROTATION_DEG + (part ? resolvePartPrintRotation(part) : 0);
 };
@@ -236,10 +225,7 @@ const buildColoredDesignFileName = (pathName: string, color: string): string => 
   return `${baseName}_uv_${colorSlug}.png`;
 };
 
-const buildDesignDownloadFiles = (
-  configuration: cartItemConfigurationType,
-  model: garmentConfigType,
-): orderCuttingExportDownloadFileType[] => {
+const buildDesignDownloadFiles = (configuration: cartItemConfigurationType, model: garmentConfigType): orderCuttingExportDownloadFileType[] => {
   const patternIndex = resolvePatternIndex(configuration.design.activePatternKey);
   const pattern = model.patterns[patternIndex];
   if (!pattern) return [];
@@ -293,10 +279,7 @@ const buildLogoDownloadFiles = (configuration: cartItemConfigurationType): order
       previewSrc: instance.src,
     }));
 
-const buildDesignStepDetails = (
-  configuration: cartItemConfigurationType,
-  model: garmentConfigType,
-): orderCuttingExportStepDetailType[] => {
+const buildDesignStepDetails = (configuration: cartItemConfigurationType, model: garmentConfigType): orderCuttingExportStepDetailType[] => {
   const patternIndex = resolvePatternIndex(configuration.design.activePatternKey);
   const pattern = model.patterns[patternIndex];
   if (!pattern) return [];
@@ -317,6 +300,7 @@ const buildStep = (
   key: configuratorStepValueType,
   configuration: cartItemConfigurationType,
   model: garmentConfigType,
+  cmScale: printCmScaleType | null,
 ): orderCuttingExportConfigurationStepType => {
   const meta = CONFIGURATOR_STEP_META.find((item) => item.value === key);
   const title = meta?.label ?? key;
@@ -361,7 +345,7 @@ const buildStep = (
       };
     }
     case 'name': {
-      const details = buildTextInstancesDetails(configuration.name.instances, model);
+      const details = buildTextInstancesDetails(configuration.name.instances, model, cmScale);
       return {
         step,
         key,
@@ -373,7 +357,7 @@ const buildStep = (
       };
     }
     case 'number': {
-      const details = buildTextInstancesDetails(configuration.number.instances, model);
+      const details = buildTextInstancesDetails(configuration.number.instances, model, cmScale);
       return {
         step,
         key,
@@ -385,7 +369,7 @@ const buildStep = (
       };
     }
     case 'testo': {
-      const details = buildTextInstancesDetails(configuration.testo.instances, model);
+      const details = buildTextInstancesDetails(configuration.testo.instances, model, cmScale);
       return {
         step,
         key,
@@ -406,9 +390,7 @@ const buildStep = (
           { label: 'Scala', value: formatPercent(instance.scale) },
           { label: 'Rotazione', value: formatDegrees(instance.rotation + instance.uploadRotation) },
           { label: 'Opacità', value: formatPercent(instance.opacity) },
-          instance.naturalWidth > 0
-            ? { label: 'File originale', value: `${instance.naturalWidth}×${instance.naturalHeight}px` }
-            : null,
+          instance.naturalWidth > 0 ? { label: 'File originale', value: `${createPrintUnit(cmScale?.cmPerPxHorizontal).formatPx(instance.naturalWidth)} × ${createPrintUnit(cmScale?.cmPerPxVertical).formatPx(instance.naturalHeight)}` } : null,
         ].filter((param): param is orderCuttingExportStepDetailParamType => param !== null);
 
         return {
@@ -443,9 +425,11 @@ const buildStep = (
 const buildOrderCuttingExportSteps = (
   configuration: cartItemConfigurationType,
   model: garmentConfigType,
-): orderCuttingExportConfigurationStepType[] =>
-  CONFIGURATOR_STEP_META.filter((meta) => !model.hiddenSteps?.includes(meta.value)).map((meta) =>
-    buildStep(meta.value, configuration, model),
-  );
+  printReferenceCm?: printReferenceCmType | null,
+): orderCuttingExportConfigurationStepType[] => {
+  const cmScale = resolvePrintCmScale(model, printReferenceCm);
+
+  return CONFIGURATOR_STEP_META.filter((meta) => !model.hiddenSteps?.includes(meta.value)).map((meta) => buildStep(meta.value, configuration, model, cmScale));
+};
 
 export { buildOrderCuttingExportSteps };

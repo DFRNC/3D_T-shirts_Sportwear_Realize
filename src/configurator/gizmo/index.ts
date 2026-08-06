@@ -13,7 +13,16 @@ export {
   subscribeGizmoButtonHover,
 } from './gizmoButtonHover';
 export { getGizmoButtonReveal, getGizmoButtonsRevealUniforms, setGizmoButtonsRevealTarget, subscribeGizmoButtonReveal } from './gizmoButtonReveal';
+export {
+  GIZMO_BTN_DESKTOP_SCALE,
+  GIZMO_BTN_MOBILE_MEDIA_QUERY,
+  GIZMO_BTN_MOBILE_SCALE,
+  getGizmoButtonScale,
+  setGizmoButtonScale,
+  subscribeGizmoButtonScale,
+  syncGizmoButtonScaleFromViewport,
+} from './gizmoButtonScale';
 export { GIZMO_CORNERS, getGizmoHoverCursor, hitTestGizmoButton, hitTestGizmoFrame } from './hitTestGizmoButton';
 export { buildPrintablePartMeshes, raycastGizmoUv, raycastPrintUv, resolveGizmoPointerTarget, toLocalPx } from './resolveGizmoPointerTarget';
 export { resolvePrintDragMove } from './printDragMove';
-export { toPrintLocalPx } from './printLocalSpace';
+export { fromPrintLocalPx, toPrintLocalPx } from './printLocalSpace';

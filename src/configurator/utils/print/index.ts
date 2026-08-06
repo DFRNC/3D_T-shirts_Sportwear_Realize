@@ -10,6 +10,10 @@ export { composeNameMaskAtlas, resolveNameStampSize } from './composeNameAtlas/c
 export { mergeMaskChannel } from './composeNameAtlas/mergeMaskChannel';
 export { applyTextCanvasDrawOptions } from './drawNameOnAtlas/applyTextCanvasDrawOptions';
 export { measureNameGizmoHalf, measureNameStampPixelSize, unionStampPixelSize } from './drawNameOnAtlas/measureNameStampBounds';
+export { resolvePrintRelationUv } from './resolvePrintRelationUv';
+export type { resolvePrintRelationUvInputType } from './resolvePrintRelationUv';
+export { measureTextWidthAtFontSize, resolveFontSizeForWidth, resolveTextFitFromHeight, resolveTextFitFromWidth } from './drawNameOnAtlas/resolveTextFit';
+export type { textFitLimitsType, textFitSizeType } from './drawNameOnAtlas/resolveTextFit';
 export { buildLineHeightStyleUniforms, DEFAULT_LINE_HEIGHT } from './garmentPrint/buildLineHeightStyleUniforms';
 export { buildNameStyleUniforms } from './garmentPrint/buildNameStyleUniforms';
 export { buildNumberStyleUniforms } from './garmentPrint/buildNumberStyleUniforms';

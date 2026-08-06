@@ -11,7 +11,7 @@ import { resolveCheckoutPrintAvailability } from '@store/useCheckout/resolveChec
 import type { checkoutLineRowPatchType, checkoutLineRowType, checkoutProductType } from '@types';
 import { clampCheckoutRowQuantity } from '@constants';
 import { getModel } from '@utils';
-import { create } from 'zustand';
+import { createSingletonStore } from '@store/createSingletonStore';
 interface CheckoutState {
   products: checkoutProductType[];
   initializeFromCart: () => void;
@@ -40,7 +40,7 @@ const maybeSyncFirstRowPreview = (cartItemId: string, rowId: string, rows: check
   scheduleCheckoutPreviewCapture(cartItemId);
 };
 
-const useCheckout = create<CheckoutState>((set, get) => ({
+const useCheckout = createSingletonStore<CheckoutState>('useCheckout', (set, get) => ({
   products: [],
 
   initializeFromCart: () => {
@@ -51,17 +51,19 @@ const useCheckout = create<CheckoutState>((set, get) => ({
       [cartState.activeItemId]: activeConfiguration,
     };
 
-    const products = cartState.items.map((item) => {
-      const rowPreset = extractCheckoutRowPreset(configurations[item.id]);
+    const products = cartState.items
+      .filter((item) => !item.isPlaceholder)
+      .map((item) => {
+        const rowPreset = extractCheckoutRowPreset(configurations[item.id]);
 
-      return {
-        cartItemId: item.id,
-        modelId: item.modelId,
-        business: item.business,
-        rowPreset,
-        rows: buildCheckoutRows(configurations[item.id]),
-      };
-    });
+        return {
+          cartItemId: item.id,
+          modelId: item.modelId,
+          business: item.business,
+          rowPreset,
+          rows: buildCheckoutRows(configurations[item.id]),
+        };
+      });
 
     set({ products });
   },

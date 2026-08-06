@@ -13,7 +13,6 @@ const buildPreviewConfiguration = (modelId: modelIdType, patternIndex: number): 
 
   const partIds = model.parts.map((part) => part.id);
   const primaryPartId = partIds[0] ?? 'body';
-  const secondaryPartId = partIds[1] ?? primaryPartId;
 
   const gradientsByPart = Object.fromEntries(
     model.parts.map((part) => [
@@ -50,7 +49,7 @@ const buildPreviewConfiguration = (modelId: modelIdType, patternIndex: number): 
           label: 'Nome dorsale',
           partId: primaryPartId,
           text: 'ROSSI',
-          font: model.nameDefaults?.font ?? 'Oswald',
+          font: model.nameDefaults?.font ?? 'Russo One',
           textColor: model.nameDefaults?.textColor ?? '#000000',
           strokeColor: model.nameDefaults?.strokeColor ?? '#FFFFFF',
           strokeWidth: model.nameDefaults?.strokeWidth ?? 2,
@@ -71,7 +70,7 @@ const buildPreviewConfiguration = (modelId: modelIdType, patternIndex: number): 
           label: 'Numero dorsale',
           partId: primaryPartId,
           text: '10',
-          font: model.numberDefaults?.font ?? 'Oswald',
+          font: model.numberDefaults?.font ?? 'Russo One',
           textColor: model.numberDefaults?.textColor ?? '#000000',
           strokeColor: model.numberDefaults?.strokeColor ?? '#FFFFFF',
           strokeWidth: model.numberDefaults?.strokeWidth ?? 2,
@@ -112,10 +111,7 @@ const buildPreviewProduct = (modelId: modelIdType): checkoutProductType => {
   };
 };
 
-const buildOrderCuttingExportPreview = ({
-  modelId = PREVIEW_MODEL_ID,
-  patternIndex = 0,
-}: buildOrderCuttingExportPreviewParamsType = {}) => {
+const buildOrderCuttingExportPreview = ({ modelId = PREVIEW_MODEL_ID, patternIndex = 0 }: buildOrderCuttingExportPreviewParamsType = {}) => {
   const resolvedModelId = modelId ?? PREVIEW_MODEL_ID;
   const configuration = buildPreviewConfiguration(resolvedModelId, patternIndex);
 

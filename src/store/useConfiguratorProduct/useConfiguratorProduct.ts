@@ -3,17 +3,19 @@
 import type { garmentBusinessType, garmentConfigType, modelIdType } from '@types';
 import { DEFAULT_MODEL_ID, deriveLocalBusiness, getModel } from '@utils';
 
-import { create } from 'zustand';
+import { createSingletonStore } from '@store/createSingletonStore';
 
 interface ConfiguratorProductState {
   modelId: modelIdType;
-  /** Local 3D geometry/design config. */
+
   product: garmentConfigType;
-  /** Business data (price, bonuses, name) sourced from the Shopify product. */
+
   business: garmentBusinessType;
-  /** Switch the active model; business defaults to the local fallback unless provided. */
+
   setProduct: (modelId: modelIdType, business?: garmentBusinessType) => void;
-  /** Hydrate from a route loader (Shopify product → model id + business). */
+
+  setBusiness: (business: garmentBusinessType) => void;
+
   initFromLoader: (modelId: modelIdType, business: garmentBusinessType) => void;
 }
 
@@ -23,7 +25,7 @@ const resolveModel = (modelId: modelIdType): garmentConfigType => {
   return product;
 };
 
-const useConfiguratorProduct = create<ConfiguratorProductState>((set) => ({
+const useConfiguratorProduct = createSingletonStore<ConfiguratorProductState>('useConfiguratorProduct', (set) => ({
   modelId: DEFAULT_MODEL_ID,
   product: resolveModel(DEFAULT_MODEL_ID),
   business: deriveLocalBusiness(DEFAULT_MODEL_ID),
@@ -33,6 +35,9 @@ const useConfiguratorProduct = create<ConfiguratorProductState>((set) => ({
       product: resolveModel(modelId),
       business: business ?? deriveLocalBusiness(modelId),
     });
+  },
+  setBusiness: (business) => {
+    set({ business });
   },
   initFromLoader: (modelId, business) => {
     set({

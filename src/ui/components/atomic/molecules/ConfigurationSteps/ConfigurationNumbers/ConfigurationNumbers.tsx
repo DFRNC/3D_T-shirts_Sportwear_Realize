@@ -3,13 +3,13 @@
 import type { configurationPositionPickerInstanceType, numberPartFormPropsType, numberPositionType } from '@types';
 import { AccordionAtom, Button, Flex, SvgIcon, Text } from '@atoms';
 import { CONFIGURATOR_NUMBER_POSITION_SELECT_LABEL } from '@constants';
-import { useConfigurationPositionPicker } from '@hooks';
-import { ColorTabControl, ConfigurationPositionSelect, FontSelectRow, PartColorSwitch, RangeControl } from '@molecules/ConfigurationTools';
+import { useConfigurationPositionPicker, usePrintCmScale, usePrintUnits } from '@hooks';
+import { ColorTabControl, ConfigurationPositionSelect, FontSelectRow, PartColorSwitch, RangeControl, TextSizeControl } from '@molecules/ConfigurationTools';
 import {
   createNumberInstance,
   resolveNumberDefaults,
-  resolveNumberLimits,
   resolveNumberLineHeightShow,
+  resolveNumberPositionLimits,
   sanitizeNumberText,
   useConfiguratorProduct,
   useGarmentNumber,
@@ -32,6 +32,8 @@ const NumberPartForm = ({ instanceId, limits, placeholder, lineHeightShow }: num
   const previewFontSize = previewPatch?.fontSize;
   const previewStrokeWidth = previewPatch?.strokeWidth;
   const previewLineHeight = previewPatch?.lineHeight;
+
+  const { y: unitY } = usePrintUnits();
 
   const commit = useCallback(
     (patch: Parameters<typeof updateInstance>[1]) => {
@@ -57,7 +59,7 @@ const NumberPartForm = ({ instanceId, limits, placeholder, lineHeightShow }: num
   if (!instance) return null;
 
   return (
-    <Flex variant="configurator_part" className="gap-5 pt-2">
+    <Flex variant="configurator_part" className="gap-5 max-xl:gap-4 pt-2">
       <Flex variant="configurator_part">
         <Text variant="configurator_control_label">Numero</Text>
         <input
@@ -68,7 +70,7 @@ const NumberPartForm = ({ instanceId, limits, placeholder, lineHeightShow }: num
           maxLength={limits.maxLength}
           onChange={(e) => setPreview(instanceId, { text: sanitizeNumberText(e.target.value) })}
           onBlur={commitFromPreview}
-          className="w-full h-10 bg-white border border-input-border rounded-[8px] px-3 text-sm font-inter text-default outline-none focus:border-active transition-colors"
+          className="w-full h-10 max-xl:h-8 bg-white border border-input-border rounded-[8px] max-xl:rounded-[6.5px] px-3 max-xl:px-2.5 text-sm max-xl:text-[13px] font-inter text-default outline-none focus:border-active transition-colors"
           placeholder={placeholder}
         />
       </Flex>
@@ -84,14 +86,16 @@ const NumberPartForm = ({ instanceId, limits, placeholder, lineHeightShow }: num
         onPreviewStrokeColor={(strokeColor) => setPreview(instanceId, { strokeColor })}
       />
 
-      <RangeControl
-        label="Dimensione testo"
-        value={previewFontSize ?? instance.fontSize}
-        onChange={(fontSize) => setPreview(instanceId, { fontSize })}
-        onCommit={commitFromPreview}
-        min={limits.fontSizeMin}
-        max={limits.fontSizeMax}
-        unit="px"
+      <TextSizeControl
+        text={sharedPreviewText ?? previewText ?? instance.text}
+        font={instance.font}
+        fontSize={previewFontSize ?? instance.fontSize}
+        heightMin={limits.heightMin}
+        heightMax={limits.heightMax}
+        widthMin={limits.widthMin}
+        widthMax={limits.widthMax}
+        onPreviewFontSize={(fontSize) => setPreview(instanceId, { fontSize })}
+        onCommitFontSize={commitFromPreview}
       />
 
       {lineHeightShow && (
@@ -108,16 +112,17 @@ const NumberPartForm = ({ instanceId, limits, placeholder, lineHeightShow }: num
 
       <RangeControl
         label="Spessore contorno"
-        value={previewStrokeWidth ?? instance.strokeWidth}
-        onChange={(strokeWidth) => setPreview(instanceId, { strokeWidth })}
+        value={unitY.toUnit(previewStrokeWidth ?? instance.strokeWidth)}
+        onChange={(strokeWidth) => setPreview(instanceId, { strokeWidth: unitY.toPx(strokeWidth) })}
         onCommit={commitFromPreview}
         min={0}
-        max={limits.strokeWidthMax}
-        unit="px"
+        max={unitY.toUnit(limits.strokeWidthMax)}
+        step={unitY.step}
+        formatValue={unitY.formatUnit}
       />
 
       <Button variant="delete" size="delete" onClick={() => removeInstance(instanceId)}>
-        <SvgIcon name="delete" className="w-[14px] h-[15.75px]" />
+        <SvgIcon name="delete" className="w-[14px] h-[15.75px] max-xl:w-2.75 max-xl:h-[12.5px]" />
         Eliminare
       </Button>
     </Flex>
@@ -126,13 +131,17 @@ const NumberPartForm = ({ instanceId, limits, placeholder, lineHeightShow }: num
 
 const ConfigurationNumbers = () => {
   const product = useConfiguratorProduct((state) => state.product);
+  const cmScale = usePrintCmScale();
   const positions = useGarmentNumber((state) => state.positions);
   const instances = useGarmentNumber((state) => state.instances);
   const addInstance = useGarmentNumber((state) => state.addInstance);
   const removeInstance = useGarmentNumber((state) => state.removeInstance);
 
   const numberDefaults = useMemo(() => (positions.length > 0 ? resolveNumberDefaults(product) : null), [positions.length, product]);
-  const limits = useMemo(() => (positions.length > 0 ? resolveNumberLimits(product) : null), [positions.length, product]);
+  const limitsByPositionKey = useMemo(() => {
+    if (positions.length === 0) return null;
+    return new Map(positions.map((position) => [position.key, resolveNumberPositionLimits(product, position, cmScale)]));
+  }, [cmScale, positions, product]);
   const lineHeightShow = useMemo(() => (positions.length > 0 ? resolveNumberLineHeightShow(product) : false), [positions.length, product]);
 
   const handleAddInstance = useCallback(
@@ -142,17 +151,14 @@ const ConfigurationNumbers = () => {
     [addInstance, product],
   );
 
-  const resolveFocusFromPosition = useCallback(
-    (position: numberPositionType) => ({ partId: position.partId, uv: position.uv }),
-    [],
-  );
+  const resolveFocusFromPosition = useCallback((position: numberPositionType) => ({ partId: position.partId, uv: position.uv }), []);
 
   const resolveFocusFromInstance = useCallback((instance: configurationPositionPickerInstanceType) => {
     const item = useGarmentNumber.getState().instances.find((entry) => entry.id === instance.id);
     return item ? { partId: item.partId, uv: item.uv } : null;
   }, []);
 
-  const { availablePositions, openItems, handleItemActivate, handleOpenItemsChange, handlePositionSelect } = useConfigurationPositionPicker({
+  const { openItems, handleItemActivate, handleOpenItemsChange, handlePositionSelect } = useConfigurationPositionPicker({
     positions,
     instances,
     onAddInstance: handleAddInstance,
@@ -160,22 +166,42 @@ const ConfigurationNumbers = () => {
     resolveFocusFromInstance,
   });
 
-  const items = useMemo(
-    () =>
-      instances.map((instance) => ({
-        value: instance.id,
-        trigger: <PartColorSwitch color={instance.textColor} label={instance.label} />,
-        content: <NumberPartForm instanceId={instance.id} limits={limits!} placeholder={numberDefaults?.text ?? '00'} lineHeightShow={lineHeightShow} />,
-        onDelete: () => removeInstance(instance.id),
-      })),
-    [instances, limits, lineHeightShow, numberDefaults?.text, removeInstance],
-  );
+  const pickerPositions = useMemo(() => {
+    const usedKeys = new Set(instances.map((instance) => instance.positionKey));
+    return positions
+      .filter((position) => position.interactive)
+      .map((position) => ({ key: position.key, label: position.label, src: position.src, disabled: usedKeys.has(position.key) }));
+  }, [instances, positions]);
 
-  if (positions.length === 0 || !limits || !numberDefaults) return null;
+  const items = useMemo(() => {
+    if (!limitsByPositionKey) return [];
+
+    return instances.flatMap((instance) => {
+      const limits = limitsByPositionKey.get(instance.positionKey);
+      if (!limits) return [];
+
+      return [
+        {
+          value: instance.id,
+          trigger: <PartColorSwitch color={instance.textColor} label={instance.label} />,
+          content: <NumberPartForm instanceId={instance.id} limits={limits} placeholder={numberDefaults?.text ?? '00'} lineHeightShow={lineHeightShow} />,
+          onDelete: () => removeInstance(instance.id),
+        },
+      ];
+    });
+  }, [instances, limitsByPositionKey, lineHeightShow, numberDefaults?.text, removeInstance]);
+
+  if (positions.length === 0 || !limitsByPositionKey || !numberDefaults) return null;
 
   return (
-    <Flex key={product.path} variant="step_design" className="gap-3">
-      <ConfigurationPositionSelect label={CONFIGURATOR_NUMBER_POSITION_SELECT_LABEL} positions={availablePositions} onSelect={handlePositionSelect} />
+    <Flex key={product.path} variant="step_design" className="gap-3 max-xl:gap-2.5">
+      <ConfigurationPositionSelect
+        label={CONFIGURATOR_NUMBER_POSITION_SELECT_LABEL}
+        title={numberDefaults.title}
+        description={numberDefaults.description}
+        positions={pickerPositions}
+        onSelect={handlePositionSelect}
+      />
 
       {instances.length > 0 && (
         <AccordionAtom
@@ -184,7 +210,7 @@ const ConfigurationNumbers = () => {
           onValueChange={handleOpenItemsChange}
           onItemActivate={handleItemActivate}
           multiple
-          className="gap-2"
+          className="gap-2 max-xl:gap-1.5"
         />
       )}
     </Flex>

@@ -4,10 +4,12 @@ interface cartItemType {
   id: string;
   collectionHandle: string;
   slug: string;
-  /** Local geometry model id (== Shopify `custom.id`). */
+
   modelId: modelIdType;
-  /** Snapshot of Shopify business data (price/bonus/name) at the time the item was added. */
+
   business: garmentBusinessType;
+
+  isPlaceholder?: boolean;
 }
 
 interface garmentColorSnapshotType {

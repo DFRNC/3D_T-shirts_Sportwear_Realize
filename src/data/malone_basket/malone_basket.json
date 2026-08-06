@@ -7,18 +7,13 @@
     "height": 806
   },
   "hiddenSteps": ["name"],
-  "preserveGltfMeshes": [
-    "model_inside",
-    "model_laces"
-  ],
+  "preserveGltfMeshes": ["model_inside"],
   "parts": [
     {
       "name": "Davanti",
       "label": "Davanti",
       "id": "malone_basket_front",
-      "meshNames": [
-        "model_left"
-      ],
+      "meshNames": ["model_left"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.5128,
@@ -39,9 +34,7 @@
       "name": "Retro",
       "label": "Retro",
       "id": "malone_basket_back",
-      "meshNames": [
-        "model_right"
-      ],
+      "meshNames": ["model_right"],
       "renderOrder": 1,
       "uvBounds": {
         "minX": 0.001,
@@ -57,6 +50,15 @@
         "softness": 0.5,
         "opacity": 1
       }
+    },
+    {
+      "name": "Lacci",
+      "label": "Lacci",
+      "id": "malone_basket_laces",
+      "meshNames": ["model_laces"],
+      "renderOrder": 1,
+      "colorOnly": true,
+      "restrictedColors": ["#FFFFFF", "#000000", "#0027F8", "#03094D", "#F6FF00", "#FFCF00", "#D0021B"]
     }
   ],
   "patterns": [
@@ -112,10 +114,7 @@
       "name": "Design 5",
       "parts": [
         {
-          "path_name": "design_5_color_1.webp"
-        },
-        {
-          "path_name": "design_5_color_2.webp"
+          "path_name": "design_5.webp"
         }
       ],
       "designId": "design_05"
@@ -124,7 +123,10 @@
       "name": "Design 6",
       "parts": [
         {
-          "path_name": "design_6.webp"
+          "path_name": "design_6_color_1.webp"
+        },
+        {
+          "path_name": "design_6_color_2.webp"
         }
       ],
       "designId": "design_06"
@@ -133,10 +135,7 @@
       "name": "Design 7",
       "parts": [
         {
-          "path_name": "design_7_color_1.webp"
-        },
-        {
-          "path_name": "design_7_color_2.webp"
+          "path_name": "design_7.webp"
         }
       ],
       "designId": "design_07"
@@ -149,6 +148,9 @@
         },
         {
           "path_name": "design_8_color_2.webp"
+        },
+        {
+          "path_name": "design_8_color_3.webp"
         }
       ],
       "designId": "design_08"
@@ -169,7 +171,10 @@
       "name": "Design 10",
       "parts": [
         {
-          "path_name": "design_10.webp"
+          "path_name": "design_10_color_1.webp"
+        },
+        {
+          "path_name": "design_10_color_2.webp"
         }
       ],
       "designId": "design_10"
@@ -187,48 +192,41 @@
   ],
   "nameDefaults": {
     "text": "PLAYER",
-    "font": "Oswald",
+    "font": "Russo One",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
     "strokeWidth": 0,
-    "maxLength": 20,
-    "fontSizeMin": 50,
-    "fontSizeMax": 400,
-    "strokeWidthMax": 20
+    "maxLength": 20
   },
   "numberDefaults": {
     "text": "10",
-    "font": "Oswald",
+    "font": "Russo One",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
     "strokeWidth": 0,
     "maxLength": 2,
-    "fontSizeMin": 50,
-    "fontSizeMax": 600,
-    "strokeWidthMax": 20,
     "lineHeight": 1.5,
     "lineHeightMin": 0.5,
     "lineHeightMax": 2,
-    "line_height_show": false
+    "line_height_show": false,
+    "title": "Dove desideri inserire il numero?",
+    "description": "Scegli una posizione standard o fai clic sul <b>prodotto</b> per scegliere una posizione individuale"
   },
   "testoDefaults": {
     "text": "TEAM",
-    "font": "Oswald",
+    "font": "Russo One",
     "textColor": "#000000",
     "strokeColor": "#ffffff",
     "strokeWidth": 0,
     "maxLength": 20,
-    "fontSizeMin": 50,
-    "fontSizeMax": 400,
-    "strokeWidthMax": 20,
     "lineHeight": 1,
     "lineHeightMin": 1,
     "lineHeightMax": 2,
     "line_height_show": true,
     "letterSpacing": 0,
-    "letterSpacingMin": -10,
-    "letterSpacingMax": 40,
-    "letter_spacing_show": true
+    "letter_spacing_show": true,
+    "title": "Dove desideri inserire il testo?",
+    "description": "Scegli una posizione standard o fai clic sul <b>prodotto</b> per scegliere una posizione individuale"
   },
   "namePositions": [],
   "numberPositions": [
@@ -236,56 +234,76 @@
       "label": "Destra inferiore",
       "partId": "malone_basket_back",
       "uv": {
-        "x": 0.609,
-        "y": 0.748
+        "x": 0.7,
+        "y": 0.768
       },
       "rotation": 0,
       "fontSize": 100,
       "show_frame": true,
       "show_gizmo": true,
-      "id": "right-bottom"
+      "id": "right-bottom",
+      "src": "/png/text_areas/shorts/number/left_bottom.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 27,
+      "widthMinCm": 1,
+      "widthMaxCm": 200
     },
     {
       "label": "Destra superiore",
       "partId": "malone_basket_back",
       "uv": {
-        "x": 0.609,
-        "y": 0.561
+        "x": 0.7,
+        "y": 0.6
       },
       "rotation": 0,
       "fontSize": 100,
       "show_frame": true,
       "show_gizmo": true,
-      "id": "right-top"
+      "id": "right-top",
+      "src": "/png/text_areas/shorts/number/left_top.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 27,
+      "widthMinCm": 1,
+      "widthMaxCm": 200
     },
     {
-      "label": "Dietro",
+      "label": "Laterale",
       "partId": "malone_basket_back",
       "uv": {
-        "x": 0.5,
-        "y": 0.65
+        "x": 0.571,
+        "y": 0.675
       },
       "rotation": 0,
       "fontSize": 100,
       "show_frame": true,
       "show_gizmo": true,
       "id": "right-center",
+      "src": "/png/text_areas/shorts/number/left_center.png",
       "conflicts": {
         "testo": ["right"]
-      }
+      },
+      "heightMinCm": 1,
+      "heightMaxCm": 27,
+      "widthMinCm": 1,
+      "widthMaxCm": 200
     },
     {
       "label": "Davanti",
       "partId": "malone_basket_front",
       "uv": {
-        "x": 0.391,
-        "y": 0.561
+        "x": 0.377,
+        "y": 0.6
       },
       "rotation": 0,
       "fontSize": 100,
       "show_frame": true,
       "show_gizmo": true,
-      "id": "left-top"
+      "id": "left-top",
+      "src": "/png/text_areas/shorts/number/right.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 27,
+      "widthMinCm": 1,
+      "widthMaxCm": 200
     }
   ],
   "testoPositions": [
@@ -303,7 +321,12 @@
       "conflicts": {
         "number": ["right-center"]
       },
-      "id": "right"
+      "id": "right",
+      "src": "/png/text_areas/shorts/text/left.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 2,
+      "widthMinCm": 1,
+      "widthMaxCm": 25
     },
     {
       "label": "Sinistra",
@@ -316,7 +339,12 @@
       "fontSize": 120,
       "show_frame": true,
       "show_gizmo": true,
-      "id": "left"
+      "id": "left",
+      "src": "/png/text_areas/shorts/text/right.png",
+      "heightMinCm": 1,
+      "heightMaxCm": 2,
+      "widthMinCm": 1,
+      "widthMaxCm": 25
     }
   ]
 }

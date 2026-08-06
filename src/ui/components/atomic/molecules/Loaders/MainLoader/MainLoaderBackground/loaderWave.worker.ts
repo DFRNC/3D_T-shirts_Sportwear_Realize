@@ -5,6 +5,7 @@ type InitMessage = {
   width: number;
   height: number;
   devicePixelRatio: number;
+  waveEpochMs: number;
 };
 
 type ResizeMessage = {
@@ -92,7 +93,8 @@ self.onmessage = (event: MessageEvent<WorkerMessage>) => {
   if (!context) return;
 
   applyCanvasSize(message.width, message.height, message.devicePixelRatio);
-  animationStart = performance.now();
+
+  animationStart = performance.now() - Math.max(0, Date.now() - message.waveEpochMs);
   cancelAnimationFrame(frameId);
   frameId = requestAnimationFrame(tick);
 };

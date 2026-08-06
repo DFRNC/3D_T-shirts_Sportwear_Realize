@@ -2,107 +2,116 @@
 
 import { useCallback, useState } from 'react';
 
-import { CHECKOUT_CUTTING_EXPORT_FILENAME, CHECKOUT_ORDER_EXPORT_FILENAME } from '@constants';
+import { CHECKOUT_CONFIG_EXPORT_FILENAME } from '@constants';
 import { useCheckout, useConfigurationCart } from '@store';
 import {
-  buildCheckoutOrderExportPdfBlob,
+  buildCheckoutConfigExport,
   buildOrderCuttingExport,
-  buildOrderCuttingExportPdfBlob,
   buildOrderPreset,
   collectOrderCuttingExportUvBlobs,
-  isEmbeddedSession,
-  resolveAbsoluteAssetUrl,
+  formatCheckoutOrderDate,
+  uploadCheckoutAssetsDirect,
+  withTimeout,
 } from '@utils';
-import { postEmbeddedCheckoutRedirect } from '@utils/embeddedUrlSync';
+import type { checkoutAssetUploadItemType } from '@utils';
+import { redirectToShopifyCheckout } from '@utils/embeddedUrlSync';
 import type { checkoutLineAttributeType, createCheckoutPayloadType, createCheckoutResultType } from '@shopify';
-import type { uvExportBlobType } from '@utils';
 
 const CHECKOUT_ENDPOINT = '/api/checkout';
-const CHECKOUT_ASSETS_ENDPOINT = '/api/checkout/assets';
+const CHECKOUT_ASSET_COLLECTION_TIMEOUT_MS = 120_000;
 
-type checkoutAssetsResponseType = {
-  orderPdfUrl: string | null;
-  cuttingPdfUrl: string | null;
-  uvImages: { cartItemId: string; label: string; url: string }[];
-  error?: string;
-};
+const createCheckoutOrderNumber = () => `#${Math.floor(1_000_000_000 + Math.random() * 9_000_000_000)}`;
 
-/** Clones an already-mounted hidden export document into an offscreen capture host, resolving relative image URLs. */
-const cloneDocumentForCapture = (testId: string): { element: HTMLElement; dispose: () => void } | null => {
-  const source = document.querySelector(`[data-testid="${testId}"]`);
-  if (!(source instanceof HTMLElement)) return null;
-
-  const styleElement = source.parentElement?.querySelector('style') ?? null;
-
-  const captureHost = document.createElement('div');
-  captureHost.style.cssText = `position:fixed;left:-10000px;top:0;z-index:-1;pointer-events:none;background:#fff;width:${source.scrollWidth}px;`;
-  if (styleElement) captureHost.appendChild(styleElement.cloneNode(true));
-  captureHost.appendChild(source.cloneNode(true));
-  document.body.appendChild(captureHost);
-
-  const cloned = captureHost.querySelector(`[data-testid="${testId}"]`);
-  if (!(cloned instanceof HTMLElement)) {
-    captureHost.remove();
+const dataUrlToBlob = async (dataUrl: string): Promise<Blob | null> => {
+  if (!dataUrl.startsWith('data:')) return null;
+  try {
+    return await (await fetch(dataUrl)).blob();
+  } catch {
     return null;
   }
-
-  cloned.querySelectorAll('img').forEach((image) => {
-    if (!(image instanceof HTMLImageElement)) return;
-    const src = image.getAttribute('src');
-    if (!src || /^(?:https?:|blob:|data:)/.test(src)) return;
-    image.src = resolveAbsoluteAssetUrl(src);
-  });
-
-  return { element: cloned, dispose: () => captureHost.remove() };
 };
 
-const buildAssetsFormData = (orderPdfBlob: Blob | null, cuttingPdfBlob: Blob | null, uvBlobs: uvExportBlobType[]): FormData => {
-  const formData = new FormData();
+const uploadProductPreviews = async (previews: Record<string, string>): Promise<Record<string, string>> => {
+  const items: checkoutAssetUploadItemType[] = [];
 
-  if (orderPdfBlob) formData.append('orderPdf', orderPdfBlob, CHECKOUT_ORDER_EXPORT_FILENAME);
-  if (cuttingPdfBlob) formData.append('cuttingPdf', cuttingPdfBlob, CHECKOUT_CUTTING_EXPORT_FILENAME);
+  for (const [cartItemId, dataUrl] of Object.entries(previews)) {
+    const blob = await dataUrlToBlob(dataUrl);
+    if (blob) {
+      items.push({ id: `preview:${cartItemId}`, blob, filename: `preview-${cartItemId}.png`, mimeType: blob.type || 'image/png' });
+    }
+  }
 
-  uvBlobs.forEach((uv) => {
-    formData.append('uvImage', uv.blob, uv.fileName);
-    formData.append('uvImageCartItemId', uv.cartItemId);
-    formData.append('uvImageLabel', uv.label);
-  });
+  if (!items.length) return {};
 
-  return formData;
+  const urlById = await uploadCheckoutAssetsDirect(items);
+  const previewUrls: Record<string, string> = {};
+  for (const [cartItemId] of Object.entries(previews)) {
+    const url = urlById.get(`preview:${cartItemId}`);
+    if (url) previewUrls[cartItemId] = url;
+  }
+  return previewUrls;
 };
 
-/** Renders/captures the order + cutting PDFs and UV textures, uploads them to Shopify Files, and returns cart attributes carrying their URLs. Never throws: a failed upload must not block checkout. */
 const collectCheckoutAssetAttributes = async (): Promise<checkoutLineAttributeType[]> => {
   try {
-    const { products } = useCheckout.getState();
-    const { configurations } = useConfigurationCart.getState();
+    const checkoutStore = useCheckout.getState();
+    const cartStore = useConfigurationCart.getState();
+    const { products } = checkoutStore;
+    const { configurations } = cartStore;
 
-    const cuttingExportData = buildOrderCuttingExport({ products, configurations });
+    const orderMeta = window.__checkoutE2e?.orderMeta ?? {
+      orderNumber: createCheckoutOrderNumber(),
+      orderDate: formatCheckoutOrderDate(),
+    };
 
-    const orderCapture = cloneDocumentForCapture('checkout-order-export-document');
-    const cuttingCapture = cloneDocumentForCapture('order-cutting-export-document');
-
-    const [orderPdfBlob, cuttingPdfBlob, uvBlobs] = await Promise.all([
-      orderCapture ? buildCheckoutOrderExportPdfBlob(orderCapture.element).finally(orderCapture.dispose) : Promise.resolve(null),
-      cuttingCapture ? buildOrderCuttingExportPdfBlob(cuttingCapture.element).finally(cuttingCapture.dispose) : Promise.resolve(null),
-      collectOrderCuttingExportUvBlobs(cuttingExportData),
-    ]);
-
-    if (!orderPdfBlob && !cuttingPdfBlob && !uvBlobs.length) return [];
-
-    const response = await fetch(CHECKOUT_ASSETS_ENDPOINT, {
-      method: 'POST',
-      body: buildAssetsFormData(orderPdfBlob, cuttingPdfBlob, uvBlobs),
+    const cuttingExportData = buildOrderCuttingExport({
+      products,
+      configurations,
+      orderNumber: orderMeta.orderNumber,
+      orderDate: orderMeta.orderDate,
     });
 
-    if (!response.ok) return [];
+    const uvBlobs = await collectOrderCuttingExportUvBlobs(cuttingExportData);
 
-    const data = (await response.json()) as checkoutAssetsResponseType;
+    const uvUrlById = await uploadCheckoutAssetsDirect(
+      uvBlobs.map((uv) => ({
+        id: `uv:${uv.cartItemId}:${uv.label}`,
+        blob: uv.blob,
+        filename: uv.fileName,
+        mimeType: uv.blob.type || 'image/png',
+      })),
+    );
+
+    const uvImages = uvBlobs.flatMap((uv) => {
+      const url = uvUrlById.get(`uv:${uv.cartItemId}:${uv.label}`);
+      return url ? [{ cartItemId: uv.cartItemId, label: uv.label, url }] : [];
+    });
+
+    const previewUrls = await uploadProductPreviews(cartStore.previews);
+
+    const configExport = buildCheckoutConfigExport({
+      products,
+      configurations,
+      uvImages,
+      previewUrls,
+      orderNumber: orderMeta.orderNumber,
+      orderDate: orderMeta.orderDate,
+    });
+
+    const configUrlById = await uploadCheckoutAssetsDirect([
+      {
+        id: 'config-json',
+        blob: new Blob([JSON.stringify(configExport)], { type: 'application/json' }),
+        filename: CHECKOUT_CONFIG_EXPORT_FILENAME,
+        mimeType: 'application/json',
+      },
+    ]);
+
     const attributes: checkoutLineAttributeType[] = [];
+    const configUrl = configUrlById.get('config-json');
 
-    if (data.orderPdfUrl) attributes.push({ key: '_order_pdf_url', value: data.orderPdfUrl });
-    if (data.cuttingPdfUrl) attributes.push({ key: '_cutting_pdf_url', value: data.cuttingPdfUrl });
-    if (data.uvImages?.length) attributes.push({ key: '_uv_image_urls', value: JSON.stringify(data.uvImages) });
+    if (uvImages.length) attributes.push({ key: '_uv_image_urls', value: JSON.stringify(uvImages) });
+    if (configUrl) attributes.push({ key: '_config_url', value: configUrl });
 
     return attributes;
   } catch (error) {
@@ -111,14 +120,9 @@ const collectCheckoutAssetAttributes = async (): Promise<checkoutLineAttributeTy
   }
 };
 
-/**
- * Submits the configured session as a Shopify cart and redirects to checkout. The cart is
- * created server-side (`/api/checkout`) to keep Storefront tokens off the client; when
- * embedded the redirect is delegated to the theme (cross-origin top-window navigation).
- */
 const useSubmitCheckout = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null as string | null);
 
   const submitCheckout = useCallback(async () => {
     setIsSubmitting(true);
@@ -126,14 +130,18 @@ const useSubmitCheckout = () => {
 
     try {
       const { products } = useCheckout.getState();
-      const { configurations } = useConfigurationCart.getState();
-      const payload: createCheckoutPayloadType = buildOrderPreset(products, configurations);
+      const payload: createCheckoutPayloadType = buildOrderPreset(products);
 
       if (!payload.lines.length) {
         throw new Error('Nessun prodotto da ordinare.');
       }
 
-      payload.attributes = await collectCheckoutAssetAttributes();
+      payload.attributes = await withTimeout(collectCheckoutAssetAttributes(), CHECKOUT_ASSET_COLLECTION_TIMEOUT_MS, 'Checkout asset collection').catch(
+        (assetError: unknown) => {
+          console.error('Checkout asset collection failed', assetError);
+          return [];
+        },
+      );
 
       const response = await fetch(CHECKOUT_ENDPOINT, {
         method: 'POST',
@@ -147,11 +155,7 @@ const useSubmitCheckout = () => {
         throw new Error(data.error ?? 'Impossibile creare il checkout.');
       }
 
-      if (isEmbeddedSession()) {
-        postEmbeddedCheckoutRedirect(data.checkoutUrl);
-      } else {
-        window.location.assign(data.checkoutUrl);
-      }
+      redirectToShopifyCheckout(data.checkoutUrl);
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Errore sconosciuto.');
       setIsSubmitting(false);

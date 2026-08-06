@@ -5,6 +5,7 @@ interface colorControlPropsType {
   label?: string;
   onSelect?: (color: string) => void;
   onPreviewSelect?: (color: string) => void;
+  restrictedColors?: string[];
 }
 
 type colorTabType = 'colori' | 'contorno';
@@ -64,7 +65,24 @@ interface rangeControlPropsType {
   onCommit?: (value: number) => void;
   min?: number;
   max?: number;
+  step?: number;
   unit?: string;
+
+  formatValue?: (value: number) => string;
+}
+
+interface textSizeControlPropsType {
+  text: string;
+  font: string;
+  letterSpacing?: number;
+  lineHeight?: number;
+  fontSize: number;
+  heightMin: number;
+  heightMax: number;
+  widthMin: number;
+  widthMax: number;
+  onPreviewFontSize: (fontSize: number) => void;
+  onCommitFontSize: () => void;
 }
 
 interface shadingControlPropsType {
@@ -80,13 +98,26 @@ interface toggleControlPropsType {
 interface configurationPositionOptionType {
   key: string;
   label: string;
+  src?: string;
+  disabled?: boolean;
 }
 
 interface configurationPositionSelectPropsType {
   label: string;
+  title?: string;
+  description?: string;
   positions: configurationPositionOptionType[];
   onSelect: (positionKey: string) => void;
   placeholder?: string;
+}
+
+interface configurationPositionPickerModalPropsType {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: string;
+  description?: string;
+  positions: configurationPositionOptionType[];
+  onSelect: (positionKey: string) => void;
 }
 
 export type {
@@ -95,6 +126,7 @@ export type {
   colorTabVariantType,
   colorTabControlPropsType,
   configurationPositionOptionType,
+  configurationPositionPickerModalPropsType,
   configurationPositionSelectPropsType,
   fontSelectRowPropsType,
   hiddenLogoFileInputPropsType,
@@ -104,5 +136,6 @@ export type {
   partColorSwitchPropsType,
   rangeControlPropsType,
   shadingControlPropsType,
+  textSizeControlPropsType,
   toggleControlPropsType,
 };

@@ -9,6 +9,7 @@ import {
   PRINT_ATLAS_HEIGHT,
   PRINT_ATLAS_WIDTH,
 } from '@configurator/constants';
+import { getGizmoButtonScale } from '@configurator/gizmo/gizmoButtonScale';
 import { hydrateGarmentLogoUniforms, hydrateGarmentNameUniforms, hydrateGarmentNumberUniforms, hydrateGarmentTestoUniforms } from '@configurator/utils';
 import { Color, MeshStandardMaterial, Vector2, Vector4 } from 'three';
 type GarmentGradientState = {
@@ -20,7 +21,6 @@ type GarmentGradientState = {
   enabled: boolean;
 };
 
-/** Registers print/gizmo shader uniforms and links them on material.userData for runtime updates. */
 const bindGarmentPrintShaderUniforms = (
   material: MeshStandardMaterial,
   shader: WebGLProgramParametersWithUniforms,
@@ -73,6 +73,7 @@ const bindGarmentPrintShaderUniforms = (
   shader.uniforms.uNameGizmoHoverSlot = { value: -1 };
   shader.uniforms.uNameGizmoHoverCorner = { value: -1 };
   shader.uniforms.uNameGizmoHoverScale = { value: 1 };
+  shader.uniforms.uNameGizmoBtnScale = { value: getGizmoButtonScale() };
   shader.uniforms.uNameGizmoBtnFill = { value: new Color(NAME_GIZMO_BTN_FILL_COLOR) };
   shader.uniforms.uNameGizmoBtnFillActive = { value: new Color(NAME_GIZMO_BTN_ACTIVE_COLOR) };
   shader.uniforms.uNameGizmoIconColor = { value: new Color(NAME_GIZMO_ICON_COLOR) };
@@ -156,6 +157,7 @@ const bindGarmentPrintShaderUniforms = (
   material.userData.uNameGizmoHoverSlotUniform = shader.uniforms.uNameGizmoHoverSlot;
   material.userData.uNameGizmoHoverCornerUniform = shader.uniforms.uNameGizmoHoverCorner;
   material.userData.uNameGizmoHoverScaleUniform = shader.uniforms.uNameGizmoHoverScale;
+  material.userData.uNameGizmoBtnScaleUniform = shader.uniforms.uNameGizmoBtnScale;
   material.userData.uTestoMaskUniform = shader.uniforms.uTestoMask;
   material.userData.uTestoStampSizeUniform = shader.uniforms.uTestoStampSize;
   material.userData.uTestoAnchorUvUniform = shader.uniforms.uTestoAnchorUv;

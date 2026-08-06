@@ -5,8 +5,6 @@ const DEFAULT_CONFIGURATOR_MODEL_ID: modelIdType = 'federer_pallavolo';
 const DEFAULT_CONFIGURATOR_SLUG = 'federer_pallavolo';
 const DEFAULT_CONFIGURATOR_COLLECTION_HANDLE = '';
 
-// --- Configurator copy ---
-
 const CONFIGURATOR_PRODUCT_DESCRIPTION = "Eventuali liste dei giocatori, quantità e taglie da inserire dopo in 'Completa config.'";
 const CONFIGURATOR_DEFAULT_MINIMUM_COUNT = 5;
 
@@ -31,8 +29,7 @@ const resolveShopifyCollectionVolumeDiscount = (collectionHandle: string): colle
 };
 
 const buildMinimumQuantityLabel = (minimumCount: number) => `Minimo ${minimumCount} pz`;
-const buildVolumeDiscountLabel = (bonusCount: number, bonusDiscount: number) =>
-  `>${bonusCount} pezzi +${bonusDiscount}% di sconto`;
+const buildVolumeDiscountLabel = (bonusCount: number, bonusDiscount: number) => `>${bonusCount} pezzi +${bonusDiscount}% di sconto`;
 const CONFIGURATOR_GRADIENT_ACTIVE_LABEL = 'Sfumatura attiva';
 const CONFIGURATOR_NAME_POSITION_SELECT_LABEL = 'Dove desideri inserire il nome?';
 const CONFIGURATOR_NUMBER_POSITION_SELECT_LABEL = 'Dove desideri inserire il numero?';
@@ -63,16 +60,15 @@ const CONFIGURATOR_STEP_META: configuratorStepMetaItemType[] = [
   { value: 'logo', label: 'Logo', step: 7 },
 ];
 
-// --- Checkout ---
-
 const CHECKOUT_MIN_ROW_QUANTITY = 1;
 const CHECKOUT_MAX_ROW_QUANTITY = 999;
 const CHECKOUT_DEFAULT_SIZE = 'M';
 
 const clampCheckoutRowQuantity = (quantity: number) => Math.min(CHECKOUT_MAX_ROW_QUANTITY, Math.max(CHECKOUT_MIN_ROW_QUANTITY, quantity));
 
-const CHECKOUT_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'] as const;
-const CHECKOUT_SHIPPING_DAYS_LABEL = 'Spedizione entro 15-20 giorni lavorativi.';
+const CHECKOUT_SIZES = ['5XS', '4XS', '3XS', 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'] as const;
+const CHECKOUT_SHIPPING_DAYS_LABEL = 'Spedizione entro 19-21 giorni lavorativi.';
+const CHECKOUT_DISCOUNT_INFO_LABEL = '% Scontistica applicata direttamente alla somma finale nel carrello';
 
 const CHECKOUT_CONFIGURATION_TABLE_COLUMNS = [
   { id: 'row', header: 'Riga', size: 60, minSize: 60, maxSize: 60 },
@@ -85,6 +81,9 @@ const CHECKOUT_CONFIGURATION_TABLE_COLUMNS = [
 
 const CHECKOUT_SIZE_SELECT_OPTIONS = CHECKOUT_SIZES.map((size) => ({ label: size, value: size }));
 const CHECKOUT_TABLE_ADD_ROW_LABEL = 'Aggiungi riga';
+const CHECKOUT_ADD_MORE_PRODUCTS_LABEL = 'Aggiungi altri prodotti';
+const CHECKOUT_EMPTY_CART_LABEL = 'Il tuo carrello è vuoto.';
+const CHECKOUT_COMPLETE_CONFIG_LABEL = 'Completa Config.';
 
 const CHECKOUT_SUMMARY_TITLE = 'Riepilogo';
 const CHECKOUT_SUMMARY_PROCEED_LABEL = 'Prosegui';
@@ -94,10 +93,10 @@ const CHECKOUT_SUMMARY_TOTAL_LABEL = 'Importo Totale:';
 const CHECKOUT_SUMMARY_VAT_LABEL = 'IVA 22% inclusa';
 
 const CHECKOUT_SUMMARY_TRUST_ITEMS = [
-  { icon: 'shirt', label: 'Prodotti 100% Made in Italy' },
-  { icon: 'shieldCheck', label: 'Sicurezza Checkout' },
-  { icon: 'truck', label: 'Consegna sicura e veloce' },
-  { icon: 'star', label: 'Recensioni Trustpilot 4,8/5' },
+  { icon: 'order_0', label: 'Prodotti 100% Made in Italy' },
+  { icon: 'order_1', label: 'Sicurezza Checkout' },
+  { icon: 'order_2', label: 'Consegna sicura e veloce' },
+  { icon: 'order_3', label: 'Siamo anche su Trustpilot' },
 ] as const;
 
 const CHECKOUT_SUMMARY_TIMELINE_STEPS = [
@@ -106,11 +105,9 @@ const CHECKOUT_SUMMARY_TIMELINE_STEPS = [
   { icon: 'home', label: 'Consegnato', dateKey: 'delivered' },
 ] as const;
 
-const CHECKOUT_CREATE_ORDER_LABEL = 'Crea ordine';
-const CHECKOUT_CUTTING_EXPORT_LABEL = 'Modulo tessitura';
-const CHECKOUT_CUTTING_EXPORT_LOADING_LABEL = 'Generazione PDF…';
 const CHECKOUT_CUTTING_EXPORT_PATH = '/dev/order-cutting-export';
 const CHECKOUT_CUTTING_EXPORT_FILENAME = 'modulo-tessitura.pdf';
+const CHECKOUT_CONFIG_EXPORT_FILENAME = 'config.json';
 const CHECKOUT_ORDER_EXPORT_TITLE = "Conferma d'ordine";
 const CHECKOUT_ORDER_EXPORT_FILENAME = 'conferma-ordine.pdf';
 const CHECKOUT_ORDER_EXPORT_WEBSITE = 'www.realize.com';
@@ -127,8 +124,6 @@ const CHECKOUT_ORDER_EXPORT_COPYRIGHT_PREFIX = 'All Rights Reserved';
 
 const ORDER_CUTTING_EXPORT_DATA_NOT_SPECIFIED = 'Dati non indicati';
 const ORDER_CUTTING_EXPORT_DOWNLOAD_PLACEHOLDER_HREF = 'about:blank';
-
-// --- UI palette ---
 
 const PALETTE_COLORS = [
   '#FFFFFF',
@@ -153,8 +148,6 @@ const PALETTE_COLORS = [
   '#8D0FB4',
 ] as const;
 
-// --- Logo upload (UI constraints) ---
-
 const LOGO_MAX_FILE_SIZE = 10 * 1024 * 1024;
 const LOGO_ACCEPTED_INPUT = '.eps,.ps,.pdf,.ai,.svg,.png,.jpg,.jpeg,.bmp,.tiff,.tif,.webp';
 const LOGO_SUPPORTED_LABEL = 'eps, ps, pdf, ai, svg, png, jpg, jpeg, bmp, tiff, tif';
@@ -172,8 +165,6 @@ const LOGO_ACCEPTED_MIMES = new Set([
   'image/webp',
   '',
 ]);
-
-// --- Media ---
 
 const TUTORIAL_VIDEO_URL = 'https://youtu.be/dQw4w9WgXcQ?si=uL2ObwuN8FpWsScY';
 const VIDEO_PLAYER_DEFAULT_VOLUME = 0.2;
@@ -193,6 +184,7 @@ export type { configuratorStepMetaItemType };
 export {
   CHECKOUT_CONFIGURATION_TABLE_COLUMNS,
   CHECKOUT_DEFAULT_SIZE,
+  CHECKOUT_DISCOUNT_INFO_LABEL,
   CHECKOUT_MAX_ROW_QUANTITY,
   CHECKOUT_MIN_ROW_QUANTITY,
   CHECKOUT_SHIPPING_DAYS_LABEL,
@@ -205,9 +197,7 @@ export {
   CHECKOUT_SUMMARY_TOTAL_LABEL,
   CHECKOUT_SUMMARY_TRUST_ITEMS,
   CHECKOUT_SUMMARY_VAT_LABEL,
-  CHECKOUT_CREATE_ORDER_LABEL,
-  CHECKOUT_CUTTING_EXPORT_LABEL,
-  CHECKOUT_CUTTING_EXPORT_LOADING_LABEL,
+  CHECKOUT_CONFIG_EXPORT_FILENAME,
   CHECKOUT_CUTTING_EXPORT_FILENAME,
   CHECKOUT_CUTTING_EXPORT_PATH,
   CHECKOUT_ORDER_EXPORT_BILLING_TITLE,
@@ -226,6 +216,9 @@ export {
   ORDER_CUTTING_EXPORT_DATA_NOT_SPECIFIED,
   ORDER_CUTTING_EXPORT_DOWNLOAD_PLACEHOLDER_HREF,
   CHECKOUT_TABLE_ADD_ROW_LABEL,
+  CHECKOUT_ADD_MORE_PRODUCTS_LABEL,
+  CHECKOUT_COMPLETE_CONFIG_LABEL,
+  CHECKOUT_EMPTY_CART_LABEL,
   ADD_PRODUCT_DESIGN_MODAL_CONFIRM_LABEL,
   ADD_PRODUCT_DESIGN_MODAL_DECLINE_LABEL,
   buildAddProductDesignModalTitle,

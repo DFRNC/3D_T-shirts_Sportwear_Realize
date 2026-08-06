@@ -19,7 +19,14 @@ type svgIconNameType =
   | 'edit'
   | 'question'
   | 'three_dots'
-  | 'arrow_right';
+  | 'arrow_right'
+  | 'checkout_0'
+  | 'checkout_1'
+  | 'checkout_2'
+  | 'order_0'
+  | 'order_1'
+  | 'order_2'
+  | 'order_3';
 
 interface svgIconPropsType {
   name: svgIconNameType;
@@ -62,6 +69,8 @@ interface scrollAreaPropsType {
   children: ReactNode;
   className?: string;
   fadeEdges?: boolean;
+  edgeShadows?: boolean;
+  orientation?: 'vertical' | 'horizontal';
 }
 
 interface logoPropsType {

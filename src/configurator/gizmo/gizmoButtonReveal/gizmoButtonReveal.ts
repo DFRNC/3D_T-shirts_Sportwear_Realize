@@ -1,6 +1,6 @@
 import { NAME_SLOT_COUNT } from '@configurator/constants';
 
-const REVEAL_LERP = 0.42;
+const REVEAL_LERP = 0.35;
 const REVEAL_EPSILON = 0.001;
 
 const revealTarget = Array.from({ length: NAME_SLOT_COUNT }, () => 0);
@@ -46,6 +46,7 @@ const ensureRevealAnimation = () => {
 
 const setGizmoButtonsRevealTarget = (slotIndex: number, snap = false) => {
   let changed = false;
+  let needsAnimation = false;
 
   for (let index = 0; index < NAME_SLOT_COUNT; index += 1) {
     const next = index === slotIndex && slotIndex >= 0 ? 1 : 0;
@@ -53,20 +54,23 @@ const setGizmoButtonsRevealTarget = (slotIndex: number, snap = false) => {
       revealTarget[index] = next;
       changed = true;
     }
-    if (snap && revealCurrent[index] !== next) {
+
+    if ((snap || next === 1) && revealCurrent[index] !== next) {
       revealCurrent[index] = next;
       changed = true;
+    }
+    if (Math.abs(revealCurrent[index] - revealTarget[index]) > REVEAL_EPSILON) {
+      needsAnimation = true;
     }
   }
 
   if (!changed) return;
 
-  if (snap) {
-    notify();
-    return;
-  }
+  notify();
 
-  ensureRevealAnimation();
+  if (needsAnimation) {
+    ensureRevealAnimation();
+  }
 };
 
 const getGizmoButtonReveal = (slotIndex: number) => revealCurrent[slotIndex] ?? 0;
