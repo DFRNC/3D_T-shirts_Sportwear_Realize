@@ -50,12 +50,7 @@ const AsideConfigurationUtility = () => {
         </Grid>
         <Flex className="flex-col gap-3 p-4 rounded-md border-2 border-input-border max-xl:w-8 max-xl:p-0 max-xl:border-0 max-xl:gap-0 max-sm:w-9">
           <Text className="text-[16px] text-base-black font-medium max-xl:hidden">Hai bisogno di aiuto?</Text>
-          <Button
-            size="sm"
-            variant="center"
-            className="w-full max-xl:h-auto max-xl:flex-col max-xl:gap-1 max-xl:p-1.5 max-sm:h-20"
-            onClick={handleTutorial}
-          >
+          <Button size="sm" variant="center" className="w-full max-xl:h-auto max-xl:flex-col max-xl:gap-1 max-xl:p-1.5 max-sm:h-20" onClick={handleTutorial}>
             <SvgIcon name="question" />
             <span className="max-xl:[writing-mode:vertical-rl] max-xl:text-[14px] max-sm:text-[11px]">Tutorial</span>
           </Button>

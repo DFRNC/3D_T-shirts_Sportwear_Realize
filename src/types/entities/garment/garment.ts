@@ -19,7 +19,6 @@ interface printAtlasConfigType {
 }
 
 interface printReferenceCmType {
-
   heightCm: number;
 
   widthCm: number;
@@ -165,7 +164,6 @@ interface preserveGltfMeshEntryConfigType {
 type preserveGltfMeshConfigType = string | preserveGltfMeshEntryConfigType;
 
 interface garmentConfigType {
-
   id?: string;
 
   name?: string;
@@ -204,7 +202,6 @@ interface styleConfigType {
 type modelIdType = string;
 
 interface garmentBusinessType {
-
   shopifyProductId: string;
 
   handle: string;

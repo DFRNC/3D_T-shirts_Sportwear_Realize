@@ -58,10 +58,7 @@ const useSlidingIndicator = (activeIndex: number, options?: { scrollIntoView?: b
     const containerRect = scrollContainer.getBoundingClientRect();
     const elementRect = element.getBoundingClientRect();
     const elementCenterOffset = elementRect.left - containerRect.left + elementRect.width / 2 - containerRect.width / 2;
-    const targetScrollLeft = Math.max(
-      0,
-      Math.min(scrollContainer.scrollLeft + elementCenterOffset, scrollContainer.scrollWidth - scrollContainer.clientWidth),
-    );
+    const targetScrollLeft = Math.max(0, Math.min(scrollContainer.scrollLeft + elementCenterOffset, scrollContainer.scrollWidth - scrollContainer.clientWidth));
 
     scrollContainer.scrollTo({ left: targetScrollLeft, behavior: isFirstScrollRef.current ? 'auto' : 'smooth' });
     isFirstScrollRef.current = false;

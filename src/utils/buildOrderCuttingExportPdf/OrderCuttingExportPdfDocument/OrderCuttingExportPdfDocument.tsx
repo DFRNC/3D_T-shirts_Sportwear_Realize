@@ -11,7 +11,6 @@ import { PDF_FONT_FAMILY, registerPdfFont } from '@utils/registerPdfFont';
 registerPdfFont();
 
 type orderCuttingExportPdfImagesType = {
-
   downloadPreviewByKey: Map<string, string | null>;
 
   downloadLinkByKey: Map<string, string>;
@@ -48,7 +47,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.75,
     borderColor: COLOR_BORDER,
     padding: 5,
-    fontFamily: PDF_FONT_FAMILY, fontWeight: 700,
+    fontFamily: PDF_FONT_FAMILY,
+    fontWeight: 700,
     fontSize: 8,
   },
   customerTd: { width: '28%', borderWidth: 0.75, borderColor: COLOR_BORDER, padding: 5, fontSize: 8 },
@@ -57,7 +57,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.75,
     borderColor: COLOR_BORDER,
     padding: 5,
-    fontFamily: PDF_FONT_FAMILY, fontWeight: 700,
+    fontFamily: PDF_FONT_FAMILY,
+    fontWeight: 700,
     fontSize: 9,
     textAlign: 'center',
   },
@@ -67,7 +68,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.75,
     borderColor: COLOR_BORDER,
     padding: 5,
-    fontFamily: PDF_FONT_FAMILY, fontWeight: 700,
+    fontFamily: PDF_FONT_FAMILY,
+    fontWeight: 700,
     fontSize: 8,
     textAlign: 'center',
   },
@@ -94,7 +96,8 @@ const styles = StyleSheet.create({
     borderColor: COLOR_BORDER,
     padding: 4,
     fontSize: 7.5,
-    fontFamily: PDF_FONT_FAMILY, fontWeight: 700,
+    fontFamily: PDF_FONT_FAMILY,
+    fontWeight: 700,
   },
   paramTd: { width: '65%', borderWidth: 0.75, borderColor: COLOR_BORDER, padding: 4, fontSize: 7.5 },
   downloads: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 6 },

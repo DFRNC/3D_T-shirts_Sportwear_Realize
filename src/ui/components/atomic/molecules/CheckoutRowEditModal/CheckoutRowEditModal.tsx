@@ -81,7 +81,12 @@ const CheckoutRowEditModal = ({ open, onOpenChange, row, printAvailability, onPa
         <Flex className="w-full flex-col items-stretch gap-4">
           <Flex className="w-full flex-col items-start gap-1.5">
             <Text className={fieldLabelClassName}>Taglia</Text>
-            <div className={cn(fieldShellClassName, '[&_button]:relative [&_button]:h-[35px] [&_button]:min-h-[35px] [&_button]:justify-center [&_button]:px-3 [&_button]:py-0 [&_svg]:absolute [&_svg]:right-3')}>
+            <div
+              className={cn(
+                fieldShellClassName,
+                '[&_button]:relative [&_button]:h-[35px] [&_button]:min-h-[35px] [&_button]:justify-center [&_button]:px-3 [&_button]:py-0 [&_svg]:absolute [&_svg]:right-3',
+              )}
+            >
               <CheckoutSizePopover value={row.size} onChange={(size) => onPatchRow(row.id, { size })} />
             </div>
           </Flex>
@@ -151,12 +156,7 @@ const CheckoutRowEditModal = ({ open, onOpenChange, row, printAvailability, onPa
             <Plus className="size-4 shrink-0" aria-hidden />
             Salva le modifiche
           </Button>
-          <Button
-            type="button"
-            variant="delete"
-            className="h-9 w-full justify-center gap-2 rounded-lg px-4 text-[14px] font-semibold"
-            onClick={handleRemove}
-          >
+          <Button type="button" variant="delete" className="h-9 w-full justify-center gap-2 rounded-lg px-4 text-[14px] font-semibold" onClick={handleRemove}>
             <SvgIcon name="delete" className="h-4 w-3.5 shrink-0 text-white" />
             Elimina prodotto
           </Button>

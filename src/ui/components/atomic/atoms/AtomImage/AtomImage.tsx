@@ -42,7 +42,6 @@ const AtomImage = ({
   const imageStyle: CSSProperties = useFill ? { ...style, position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: fit } : (style ?? {});
 
   const imageElement = (
-
     <img
       src={src || EMPTY_IMAGE_SRC}
       alt={alt || 'image'}

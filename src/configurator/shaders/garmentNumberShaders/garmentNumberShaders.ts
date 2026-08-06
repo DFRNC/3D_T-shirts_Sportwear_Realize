@@ -1,4 +1,4 @@
-const garmentNumberMapFragment =  `
+const garmentNumberMapFragment = `
   for ( int numberSlot = 0; numberSlot < 4; numberSlot ++ ) {
     float numberChannel = float( numberSlot );
     vec2 numberStampUv = garmentNumberToStampUv( vPrintUv, uNumberAnchorUv[ numberSlot ], uNumberRotation[ numberSlot ], uNumberPlacementRotation[ numberSlot ], uNumberUploadRotation[ numberSlot ], uNumberPartRotation[ numberSlot ], uNumberScale[ numberSlot ], uNumberLineHeight[ numberSlot ] );

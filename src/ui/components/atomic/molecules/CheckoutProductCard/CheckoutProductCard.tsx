@@ -76,10 +76,7 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
                 </Text>
               </Box>
             </Flex>
-            <ChevronDown
-              className={cn('hidden max-sm:block size-4.5 shrink-0 text-[#4B5563] transition-transform', isOpen && 'rotate-180')}
-              aria-hidden
-            />
+            <ChevronDown className={cn('hidden max-sm:block size-4.5 shrink-0 text-[#4B5563] transition-transform', isOpen && 'rotate-180')} aria-hidden />
           </Flex>
         </Flex>
         <Flex className="flex-col items-end gap-3 max-sm:hidden">

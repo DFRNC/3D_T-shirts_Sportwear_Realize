@@ -3,19 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import type { PointerEvent as ReactPointerEvent } from 'react';
 
-import {
-  AtomBadge,
-  AtomCard,
-  AtomCardContent,
-  AtomCardHeader,
-  AtomCardTitle,
-  AtomSeparator,
-  Button,
-  Flex,
-  ScrollArea,
-  SvgIcon,
-  Text,
-} from '@atoms';
+import { AtomBadge, AtomCard, AtomCardContent, AtomCardHeader, AtomCardTitle, AtomSeparator, Button, Flex, ScrollArea, SvgIcon, Text } from '@atoms';
 
 import {
   CHECKOUT_SUMMARY_PROCEED_LABEL,
@@ -39,8 +27,7 @@ const clamp = (value: number, min: number, max: number) => Math.min(max, Math.ma
 
 const getMaxSheetHeight = () => Math.round(typeof window === 'undefined' ? 700 : window.innerHeight * FULL_HEIGHT_RATIO);
 
-const getScrollViewport = (root: HTMLElement | null) =>
-  root?.querySelector<HTMLElement>('[data-overlayscrollbars-viewport]') ?? null;
+const getScrollViewport = (root: HTMLElement | null) => root?.querySelector<HTMLElement>('[data-overlayscrollbars-viewport]') ?? null;
 
 const canElementScroll = (el: HTMLElement | null) => Boolean(el && el.scrollHeight > el.clientHeight + 1);
 
@@ -56,15 +43,7 @@ type CheckoutSummarySharedProps = {
   onSubmit: () => void;
 };
 
-const CheckoutDiscountBanner = ({
-  discountPercent,
-  discountAmount,
-  className,
-}: {
-  discountPercent: number;
-  discountAmount: number;
-  className?: string;
-}) => (
+const CheckoutDiscountBanner = ({ discountPercent, discountAmount, className }: { discountPercent: number; discountAmount: number; className?: string }) => (
   <div
     className={cn(
       'flex w-full flex-col items-center justify-center gap-0.5 rounded-lg bg-linear-to-r from-[#E9CC76] via-[#DC2C6F] to-black px-4 py-2',
@@ -96,27 +75,15 @@ const CheckoutSummaryLineItems = ({
             {item.quantity} pz
           </AtomBadge>
         </Flex>
-        <Text
-          className={cn(
-            'shrink-0 font-semibold tracking-[-1px] text-[#0A0A0A]',
-            compact ? 'text-[18px] leading-none' : 'text-[24px] leading-4',
-          )}
-        >
+        <Text className={cn('shrink-0 font-semibold tracking-[-1px] text-[#0A0A0A]', compact ? 'text-[18px] leading-none' : 'text-[24px] leading-4')}>
           {priceFormat(item.amount)}
         </Text>
       </Flex>
     ))}
     <Flex className={cn('w-full flex-col', compact ? 'gap-3' : 'gap-5')}>
       <Flex className="w-full flex-wrap items-center justify-between gap-2">
-        <Text className={cn('font-medium text-[#0A0A0A]', compact ? 'text-[14px] leading-4' : 'text-[16px] leading-4')}>
-          {CHECKOUT_SUMMARY_SHIPPING_LABEL}
-        </Text>
-        <Text
-          className={cn(
-            'shrink-0 font-semibold tracking-[-1px] text-[#0A0A0A]',
-            compact ? 'text-[18px] leading-none' : 'text-[24px] leading-4',
-          )}
-        >
+        <Text className={cn('font-medium text-[#0A0A0A]', compact ? 'text-[14px] leading-4' : 'text-[16px] leading-4')}>{CHECKOUT_SUMMARY_SHIPPING_LABEL}</Text>
+        <Text className={cn('shrink-0 font-semibold tracking-[-1px] text-[#0A0A0A]', compact ? 'text-[18px] leading-none' : 'text-[24px] leading-4')}>
           {priceFormat(shippingCost)}
         </Text>
       </Flex>
@@ -128,12 +95,7 @@ const CheckoutSummaryLineItems = ({
           </Text>
           <Text className="text-[12px] font-medium leading-3.5 text-[#71717A]">{CHECKOUT_SUMMARY_VAT_LABEL}</Text>
         </Flex>
-        <Text
-          className={cn(
-            'shrink-0 font-semibold tracking-[-1px] text-[#0A0A0A]',
-            compact ? 'text-[18px] leading-none' : 'text-[24px] leading-4',
-          )}
-        >
+        <Text className={cn('shrink-0 font-semibold tracking-[-1px] text-[#0A0A0A]', compact ? 'text-[18px] leading-none' : 'text-[24px] leading-4')}>
           {priceFormat(grandTotal)}
         </Text>
       </Flex>
@@ -141,10 +103,7 @@ const CheckoutSummaryLineItems = ({
   </Flex>
 );
 
-const CheckoutSummaryMeta = ({
-  deliveryTimeline,
-  compact,
-}: Pick<CheckoutSummarySharedProps, 'deliveryTimeline'> & { compact?: boolean }) => (
+const CheckoutSummaryMeta = ({ deliveryTimeline, compact }: Pick<CheckoutSummarySharedProps, 'deliveryTimeline'> & { compact?: boolean }) => (
   <Flex className={cn('w-full flex-col', compact ? 'gap-4' : 'gap-8')}>
     <Flex className="w-full flex-col items-start gap-3">
       <Text className="text-[14px] font-medium leading-4 text-[#0A0A0A]">{CHECKOUT_SUMMARY_TIMELINE_TITLE}</Text>
@@ -162,9 +121,7 @@ const CheckoutSummaryMeta = ({
                 <Text className="text-center text-[12px] leading-3 text-black">{step.label}</Text>
                 <Text className="text-center text-[11px] leading-3.5 text-[#71717A]">{date}</Text>
               </Flex>
-              {index < CHECKOUT_SUMMARY_TIMELINE_STEPS.length - 1 && (
-                <AtomSeparator className="mt-3 w-full max-w-16 shrink bg-[#9CA3AF]" />
-              )}
+              {index < CHECKOUT_SUMMARY_TIMELINE_STEPS.length - 1 && <AtomSeparator className="mt-3 w-full max-w-16 shrink bg-[#9CA3AF]" />}
             </Fragment>
           );
         })}
@@ -442,8 +399,7 @@ const CheckoutSummaryPanel = () => {
     document.body.style.overflow = 'hidden';
     document.body.style.overscrollBehavior = 'none';
 
-    const isInsideDrawerScroll = (target: EventTarget | null) =>
-      target instanceof Element && Boolean(target.closest('[data-checkout-drawer-scroll]'));
+    const isInsideDrawerScroll = (target: EventTarget | null) => target instanceof Element && Boolean(target.closest('[data-checkout-drawer-scroll]'));
 
     const preventBackgroundScroll = (event: TouchEvent) => {
       if (isInsideDrawerScroll(event.target)) return;
@@ -504,12 +460,7 @@ const CheckoutSummaryPanel = () => {
           onPointerCancel={handleDragPointerUp}
         >
           <div className="absolute inset-x-0 top-0 flex flex-col overflow-hidden" style={{ bottom: FOOTER_HEIGHT_PX }}>
-            <div
-              data-checkout-drawer-handle
-              className="flex shrink-0 touch-none items-center justify-center"
-              style={{ height: HANDLE_HEIGHT_PX }}
-              aria-hidden
-            >
+            <div data-checkout-drawer-handle className="flex shrink-0 touch-none items-center justify-center" style={{ height: HANDLE_HEIGHT_PX }} aria-hidden>
               <span className="h-1 w-8 rounded-full bg-[#CDCDCD]" />
             </div>
 
@@ -526,9 +477,7 @@ const CheckoutSummaryPanel = () => {
             >
               <ScrollArea className="h-full min-h-0 w-full overscroll-contain" fadeEdges>
                 <div ref={contentRef}>
-                  <Text className="mb-4 text-[24px] font-semibold leading-none tracking-[-1px] text-[#0A0A0A]">
-                    {CHECKOUT_SUMMARY_TITLE}
-                  </Text>
+                  <Text className="mb-4 text-[24px] font-semibold leading-none tracking-[-1px] text-[#0A0A0A]">{CHECKOUT_SUMMARY_TITLE}</Text>
                   <div className="flex flex-col gap-4">
                     <CheckoutSummaryLineItems lineItems={lineItems} shippingCost={shippingCost} grandTotal={grandTotal} compact />
                     <CheckoutSummaryMeta deliveryTimeline={deliveryTimeline} compact />

@@ -11,7 +11,6 @@ interface orderCuttingExportDesignLayerSpecType {
 }
 
 interface orderCuttingExportGradientSpecType {
-
   color2: string;
 
   rotation: number;

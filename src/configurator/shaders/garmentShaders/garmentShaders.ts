@@ -1,4 +1,4 @@
-const garmentFragmentUvPars =  `
+const garmentFragmentUvPars = `
 #include <uv_pars_fragment>
 varying vec2 vPrintUv;
 #ifdef USE_GRADIENT
@@ -387,7 +387,7 @@ vec4 garmentGizmoButtons( vec2 worldUv, vec2 anchor, float scale, vec2 halfPx, f
 #endif
 `;
 
-const garmentGizmoLightsFragment =  `
+const garmentGizmoLightsFragment = `
 #ifdef USE_PRINT
   if ( garmentGizmoUiColor.a > 0.001 ) {
     vec3 fabricShaded = garmentBaseAlbedo * garmentPbrShade;

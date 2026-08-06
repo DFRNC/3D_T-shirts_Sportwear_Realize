@@ -8,13 +8,7 @@ import { CHECKOUT_MAX_ROW_QUANTITY, CHECKOUT_MIN_ROW_QUANTITY } from '@constants
 import type { checkoutQuantityStepperPropsType } from '@types';
 import { cn } from '@utils';
 
-const CheckoutQuantityStepper = ({
-  quantity,
-  onDecrease,
-  onIncrease,
-  decreaseIconClassName,
-  increaseIconClassName,
-}: checkoutQuantityStepperPropsType) => {
+const CheckoutQuantityStepper = ({ quantity, onDecrease, onIncrease, decreaseIconClassName, increaseIconClassName }: checkoutQuantityStepperPropsType) => {
   return (
     <Flex className="mx-auto items-center justify-center">
       <Button type="button" variant="ghost" size="icon" onClick={onDecrease} disabled={quantity <= CHECKOUT_MIN_ROW_QUANTITY} aria-label="Diminuisci quantità">

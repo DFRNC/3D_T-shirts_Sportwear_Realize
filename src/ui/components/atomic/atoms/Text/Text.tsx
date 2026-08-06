@@ -13,7 +13,11 @@ const variantText = cva('font-inter font-[400] leading-none', {
       default: cn('text-[16px] text-default', 'max-xl:text-[13px]'),
       whatsapp_badge: 'text-[14px] leading-[24px] text-white font-medium',
       product_name: cn('text-[32px] leading-[1] font-[600] tracking-[-1px]', 'max-xl:text-[20px]', 'max-sm:text-[20px]'),
-      product_price: cn('text-[32px] leading-[39px] font-semibold tracking-[-1px]', 'max-xl:text-[24px] max-xl:leading-[31px]', 'max-sm:text-[26px] max-sm:leading-[100%]'),
+      product_price: cn(
+        'text-[32px] leading-[39px] font-semibold tracking-[-1px]',
+        'max-xl:text-[24px] max-xl:leading-[31px]',
+        'max-sm:text-[26px] max-sm:leading-[100%]',
+      ),
       menu_step_buy: cn(
         'relative text-[22px] text-gray-10 leading-[27px] font-semibold uppercase overflow-hidden cursor-pointer',
         'max-xl:text-[18px] max-xl:leading-[22px]',
