@@ -5,13 +5,13 @@ import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const withAnalyzer = withBundleAnalyzer({ enabled: process.env.ANALYZE === 'true' });
 
-/** Single ESM entry — prevents CJS + ESM duplicates that trigger window.__THREE__ warning. */
 const threeModulePath = './node_modules/three/build/three.module.js';
 const threeExamplesPath = './node_modules/three/examples/jsm';
 const threeWebpackAlias = path.join(process.cwd(), 'node_modules/three/build/three.module.js');
 const threeExamplesWebpackAlias = path.join(process.cwd(), 'node_modules/three/examples/jsm');
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
   reactStrictMode: false,
   reactCompiler: true,
   transpilePackages: ['three', '@react-three/fiber', '@react-three/drei', 'three-stdlib'],
@@ -54,8 +54,6 @@ const nextConfig: NextConfig = {
   },
   allowedDevOrigins: ['127.0.0.1'],
   async headers() {
-    // Content-hashed by build (GLB/WASM/design assets don't change without a filename change) —
-    // safe to cache for a year at the edge/browser instead of relying on default static-file headers.
     const immutableCacheControl = { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' };
 
     return [
