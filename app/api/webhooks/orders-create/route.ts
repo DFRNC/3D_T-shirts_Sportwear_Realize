@@ -1,6 +1,9 @@
+import { after } from 'next/server';
+
 import { getShopifyAdminClientSecret, ORDER_METAFIELD_NAMESPACE, setOrderMetafields, verifyShopifyWebhookSignature } from '@shopify';
 import type { orderMetafieldInputType } from '@shopify';
 import { formatCheckoutOrderDate } from '@utils/buildCheckoutOrderExport';
+import { markWebhookHandled } from '@utils/webhookDeduplication';
 
 import { generateOrderPdfs } from './generateOrderPdfs';
 import type { orderPdfContextType } from './generateOrderPdfs';
@@ -88,6 +91,12 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ error: 'Invalid webhook signature.' }, { status: 401 });
   }
 
+  // Claimed only after the signature check, so an unauthenticated caller cannot burn the id and
+  // suppress the genuine delivery that follows.
+  if (!markWebhookHandled(request.headers.get('X-Shopify-Webhook-Id'))) {
+    return Response.json({ ok: true, duplicate: true });
+  }
+
   let order: shopifyOrderPayloadType;
 
   try {
@@ -105,41 +114,94 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ skipped: true });
   }
 
+  const appOrigin = resolveAppOrigin(request);
+
+  // Shopify aborts a webhook that has not responded within ~5s and counts it as a failed delivery.
+  // Rendering two PDFs (fetch the config, download and rasterize every UV image, upload both
+  // documents) does not fit in that budget, so the previous inline `await` guaranteed a timeout:
+  // Shopify retried while the first attempt was still running, producing duplicate uploads, and
+  // after 19 failures it removes the subscription outright.
+  //
+  // We acknowledge immediately and run the work in `after()`, which Next keeps alive past the
+  // response. The trade-off is that Shopify will not retry what fails here — hence the explicit
+  // retry and the loud logging in `processOrderExports`.
+  after(async () => {
+    await processOrderExports(order, configUrl, uvImageUrls, appOrigin);
+  });
+
+  return Response.json({ ok: true, queued: true });
+}
+
+/**
+ * The public origin used to build the download links embedded in the generated PDFs.
+ *
+ * Behind nginx/Coolify `request.url` is the internal upstream address (http://0.0.0.0:3000), which
+ * would bake unreachable links into every order PDF — so an explicitly configured public origin
+ * wins, and forwarded headers are the fallback.
+ */
+const resolveAppOrigin = (request: Request): string => {
+  const configured = process.env.APP_PUBLIC_ORIGIN?.trim();
+  if (configured) {
+    return configured.replace(/\/$/, '');
+  }
+
+  const forwardedHost = request.headers.get('X-Forwarded-Host');
+  if (forwardedHost) {
+    const protocol = request.headers.get('X-Forwarded-Proto') ?? 'https';
+    return `${protocol}://${forwardedHost}`;
+  }
+
+  return new URL(request.url).origin;
+};
+
+const PDF_GENERATION_ATTEMPTS = 3;
+const PDF_RETRY_BASE_DELAY_MS = 2_000;
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const processOrderExports = async (order: shopifyOrderPayloadType, configUrl: string, uvImageUrls: string | undefined, appOrigin: string): Promise<void> => {
   const fields: orderMetafieldInputType[] = [];
   fields.push({ key: 'config_url', type: 'url', value: configUrl });
   if (uvImageUrls) fields.push({ key: 'uv_image_urls', type: 'json', value: uvImageUrls });
 
-  try {
-    const { orderPdfUrl, cuttingPdfUrl } = await generateOrderPdfs({
-      configUrl,
-      appOrigin: new URL(request.url).origin,
-      orderNumber: order.name ?? `#${order.id}`,
-      orderDate: formatCheckoutOrderDate(order.created_at ? new Date(order.created_at) : new Date()),
-      recipient: buildRecipient(order),
-      shippingAddress: buildShippingAddress(order),
-      billingNote: "Corrisponde all'indirizzo di spedizione",
-      money: {
-        subtotal: toNumber(order.subtotal_price),
-        discountAmount: toNumber(order.total_discounts),
-        shippingCost: toNumber(order.total_shipping_price_set?.shop_money?.amount),
-        grandTotal: toNumber(order.total_price),
-      },
-    });
+  for (let attempt = 1; attempt <= PDF_GENERATION_ATTEMPTS; attempt += 1) {
+    try {
+      const { orderPdfUrl, cuttingPdfUrl } = await generateOrderPdfs({
+        configUrl,
+        appOrigin,
+        orderNumber: order.name ?? `#${order.id}`,
+        orderDate: formatCheckoutOrderDate(order.created_at ? new Date(order.created_at) : new Date()),
+        recipient: buildRecipient(order),
+        shippingAddress: buildShippingAddress(order),
+        billingNote: "Corrisponde all'indirizzo di spedizione",
+        money: {
+          subtotal: toNumber(order.subtotal_price),
+          discountAmount: toNumber(order.total_discounts),
+          shippingCost: toNumber(order.total_shipping_price_set?.shop_money?.amount),
+          grandTotal: toNumber(order.total_price),
+        },
+      });
 
-    fields.push({ key: 'order_pdf_url', type: 'url', value: orderPdfUrl });
-    fields.push({ key: 'cutting_pdf_url', type: 'url', value: cuttingPdfUrl });
-  } catch (error) {
-    console.error(`[shopify webhook] Failed to generate order PDFs for order ${order.id}:`, error);
-    // Non-2xx makes Shopify redeliver the webhook; uploads/metafieldsSet are idempotent upserts.
-    return Response.json({ error: 'Failed to generate order PDFs.' }, { status: 500 });
+      fields.push({ key: 'order_pdf_url', type: 'url', value: orderPdfUrl });
+      fields.push({ key: 'cutting_pdf_url', type: 'url', value: cuttingPdfUrl });
+      break;
+    } catch (error) {
+      console.error(`[shopify webhook] PDF generation attempt ${attempt}/${PDF_GENERATION_ATTEMPTS} failed for order ${order.id}:`, error);
+
+      if (attempt === PDF_GENERATION_ATTEMPTS) {
+        // Shopify already got its 200, so nothing will redeliver this. Persist what we have — the
+        // config URL alone still lets an operator regenerate the documents from /dev or by hand.
+        console.error(`[shopify webhook] Giving up on PDFs for order ${order.id}; persisting config_url only.`);
+        break;
+      }
+
+      await delay(PDF_RETRY_BASE_DELAY_MS * attempt);
+    }
   }
 
   try {
     await setOrderMetafields(`gid://shopify/Order/${order.id}`, fields);
   } catch (error) {
     console.error(`[shopify webhook] Failed to set ${ORDER_METAFIELD_NAMESPACE} metafields for order ${order.id}:`, error);
-    return Response.json({ error: 'Failed to persist order metafields.' }, { status: 500 });
   }
-
-  return Response.json({ ok: true });
-}
+};
