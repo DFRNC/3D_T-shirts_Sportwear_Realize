@@ -31,35 +31,41 @@ const withDefaultMinimumOrder = (product: configuratorProductHydrationType): con
   };
 };
 
+/**
+ * Applies the business rules every resolved product must carry, whatever the source.
+ *
+ * These used to run only on the Shopify branch, so the local-catalog fallback silently shipped
+ * different minimum-order counts and no volume discounts — meaning a Shopify outage quietly changed
+ * the terms shown to the customer instead of just the product copy.
+ */
+const applyBusinessRules = (product: configuratorProductHydrationType, collectionHandle?: string): configuratorProductHydrationType => {
+  const withVolumeTerms = collectionHandle?.trim() ? { ...product, business: mergeCollectionVolumeTerms(product.business, collectionHandle) } : product;
+
+  return withDefaultMinimumOrder(withVolumeTerms);
+};
+
 const resolveConfiguratorProduct = cache(async (slug: string, collectionHandle?: string): Promise<configuratorProductHydrationType | null> => {
   const localProduct = resolveConfiguratorProductBySlug(slug);
+  const localFallback = localProduct ? applyBusinessRules(localProduct, collectionHandle) : null;
 
   if (!isShopifyEnabled()) {
-    return localProduct;
+    return localFallback;
   }
 
   try {
     const shopifyProduct = await fetchConfiguratorProductByHandle(slug);
-    let product = shopifyProduct ?? localProduct;
 
-    if (!product) {
+    if (!shopifyProduct) {
       console.warn(`[shopify] Product "${slug}" not found by handle or custom.id; falling back to local catalog.`);
-      return localProduct;
+      return localFallback;
     }
 
-    if (collectionHandle?.trim()) {
-      product = {
-        ...product,
-        business: mergeCollectionVolumeTerms(product.business, collectionHandle),
-      };
-    }
-
-    return withDefaultMinimumOrder(product);
+    return applyBusinessRules(shopifyProduct, collectionHandle);
   } catch (error) {
     console.warn(`[shopify] Failed to fetch product "${slug}"; falling back to local catalog.`, error);
   }
 
-  return localProduct;
+  return localFallback;
 });
 
 export { resolveConfiguratorProduct };

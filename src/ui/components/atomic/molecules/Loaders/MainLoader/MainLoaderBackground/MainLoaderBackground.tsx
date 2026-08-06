@@ -115,7 +115,13 @@ const MainLoaderBackground = () => {
 
       <div ref={hostRef} className="absolute inset-[-12%]">
         <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
-          <path ref={pathRef} d={buildLoaderWavePath(0)} fill="#d2d2d2" />
+          {/*
+            `buildLoaderWavePath` is deterministic, so server and client agree on the initial value —
+            but the rAF loop above starts rewriting `d` as soon as this subtree mounts, which can beat
+            React to the attribute and surface as a hydration mismatch. The attribute is animation
+            state we own imperatively from the first frame, so React should not reconcile it.
+          */}
+          <path ref={pathRef} d={buildLoaderWavePath(0)} fill="#d2d2d2" suppressHydrationWarning />
         </svg>
       </div>
 

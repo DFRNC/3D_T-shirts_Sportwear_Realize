@@ -18,6 +18,12 @@ export async function GET(request: Request): Promise<Response> {
 
   try {
     const product = await resolveConfiguratorProduct(slug, collectionHandle);
+
+    if (!product) {
+      // Previously served as `200 null`, which the client could not distinguish from a real payload.
+      return Response.json({ error: `Product "${slug}" not found.` }, { status: 404 });
+    }
+
     return Response.json(product);
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error.';
