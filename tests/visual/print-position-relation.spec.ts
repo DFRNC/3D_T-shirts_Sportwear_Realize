@@ -1,20 +1,8 @@
 import { expect, type Page, test } from '@playwright/test';
 
-declare global {
-  interface Window {
-    __printRelationE2e?: {
-      getTopBackPair: () => {
-        name: { fontSize: number; uv: { x: number; y: number } };
-        testo: { uv: { x: number; y: number } };
-        error: number;
-      } | null;
-      setNameFontSize: (fontSize: number) => boolean;
-      setTestoFontSize: (fontSize: number) => boolean;
-      previewNameFontSize: (fontSize: number) => boolean;
-      previewTestoFontSize: (fontSize: number) => boolean;
-    };
-  }
-}
+// `Window.__printRelationE2e` is declared globally by @configurator/hooks/registerPrintRelationE2eDebug,
+// which owns the shape. Re-declaring it here made the two structurally identical but nominally
+// distinct, which TypeScript rejects (TS2717).
 
 const CONFIGURATOR_ROUTE = '/completo-gara-calcio/baggio_calcio';
 const TOP_BACK_LABEL = 'Nome schiena superiore';
@@ -54,8 +42,7 @@ const addPrintPosition = async (page: Page, label: string) => {
   await page.waitForTimeout(500);
 };
 
-const readTopBackPair = async (page: Page) =>
-  page.evaluate(() => window.__printRelationE2e?.getTopBackPair() ?? null);
+const readTopBackPair = async (page: Page) => page.evaluate(() => window.__printRelationE2e?.getTopBackPair() ?? null);
 
 test.describe('print position relation', () => {
   test('keeps testo glued to top-center of nomo when nomo size changes', async ({ page }) => {
