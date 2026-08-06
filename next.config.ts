@@ -12,6 +12,9 @@ const threeWebpackAlias = path.join(process.cwd(), 'node_modules/three/build/thr
 const threeExamplesWebpackAlias = path.join(process.cwd(), 'node_modules/three/examples/jsm');
 
 const nextConfig: NextConfig = {
+  // Self-contained server bundle for the Docker image. Note that `public/` is NOT fully copied into
+  // .next/standalone — the Dockerfile has to copy it explicitly, or every GLB and WASM asset 404s.
+  output: 'standalone',
   reactStrictMode: false,
   reactCompiler: true,
   transpilePackages: ['three', '@react-three/fiber', '@react-three/drei', 'three-stdlib'],

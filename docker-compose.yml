@@ -1,0 +1,70 @@
+# Coolify: choose the "Docker Compose" build pack and point it at this file.
+#
+# Coolify supplies the environment from its own UI — the ${VAR} references below are read from
+# there, so nothing secret lives in this file or in the image.
+
+services:
+  configurator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Build-time only. See the Dockerfile for why each of these cannot wait until runtime.
+        NEXT_PUBLIC_SHOPIFY_PARENT_ORIGINS: ${NEXT_PUBLIC_SHOPIFY_PARENT_ORIGINS}
+        NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN: ${NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN}
+        SHOPIFY_ENABLED: ${SHOPIFY_ENABLED}
+        SHOPIFY_STORE_DOMAIN: ${SHOPIFY_STORE_DOMAIN}
+        SHOPIFY_API_VERSION: ${SHOPIFY_API_VERSION}
+        SHOPIFY_API_MODE: ${SHOPIFY_API_MODE}
+        SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${SHOPIFY_STOREFRONT_ACCESS_TOKEN}
+        SHOPIFY_HOME_COLLECTION_HANDLES: ${SHOPIFY_HOME_COLLECTION_HANDLES}
+
+    restart: unless-stopped
+
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+
+      SHOPIFY_ENABLED: ${SHOPIFY_ENABLED}
+      SHOPIFY_STORE_DOMAIN: ${SHOPIFY_STORE_DOMAIN}
+      SHOPIFY_API_VERSION: ${SHOPIFY_API_VERSION}
+      SHOPIFY_API_MODE: ${SHOPIFY_API_MODE}
+      SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${SHOPIFY_STOREFRONT_ACCESS_TOKEN}
+      SHOPIFY_HOME_COLLECTION_HANDLES: ${SHOPIFY_HOME_COLLECTION_HANDLES}
+
+      # Runtime only — never build args. Also the HMAC key for the orders/create webhook.
+      SHOPIFY_ADMIN_ACCESS_TOKEN: ${SHOPIFY_ADMIN_ACCESS_TOKEN}
+      SHOPIFY_ADMIN_CLIENT_ID: ${SHOPIFY_ADMIN_CLIENT_ID}
+      SHOPIFY_ADMIN_CLIENT_SECRET: ${SHOPIFY_ADMIN_CLIENT_SECRET}
+
+      # Who may frame the configurator. Must mirror NEXT_PUBLIC_SHOPIFY_PARENT_ORIGINS.
+      SHOPIFY_FRAME_ANCESTORS: ${SHOPIFY_FRAME_ANCESTORS}
+
+      # Public origin, used for the download links embedded in the order PDFs.
+      APP_PUBLIC_ORIGIN: ${APP_PUBLIC_ORIGIN}
+
+      # Leave unset in production — see .env.example.
+      DEV_ROUTES_ENABLED: ${DEV_ROUTES_ENABLED:-}
+
+    volumes:
+      # Survives redeploys, so revalidated pages are not regenerated from cold on every release.
+      - isr-cache:/app/.next/cache
+
+    healthcheck:
+      test: ['CMD', 'node', '-e', "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+
+    deploy:
+      resources:
+        limits:
+          # Steady state is ~170 MB; the ceiling exists for the order-PDF path, which decodes
+          # 2048×2048 UV atlases through sharp and buffers two rendered documents.
+          memory: 2G
+        reservations:
+          memory: 512M
+
+volumes:
+  isr-cache:
