@@ -1,10 +1,13 @@
-import { cache } from 'react';
-
 import { isShopifyEnabled } from '@shopify/config';
 import { fetchConfiguratorCollections } from '@shopify/fetchConfiguratorCollections';
 import type { homePageCollectionType } from '@types';
 
-const resolveHomeCollections = cache(async (): Promise<homePageCollectionType[]> => {
+let resolveHomeCollectionsCache: Promise<homePageCollectionType[]> | null = null;
+
+const resolveHomeCollections = async (): Promise<homePageCollectionType[]> => {
+  if (resolveHomeCollectionsCache) return resolveHomeCollectionsCache;
+
+  const resolver = (async (): Promise<homePageCollectionType[]> => {
   if (!isShopifyEnabled()) {
     console.warn('[shopify] Shopify is disabled; no home collections available.');
     return [];
@@ -23,6 +26,10 @@ const resolveHomeCollections = cache(async (): Promise<homePageCollectionType[]>
   }
 
   return [];
-});
+  })();
+
+  resolveHomeCollectionsCache = resolver;
+  return resolver;
+};
 
 export { resolveHomeCollections };

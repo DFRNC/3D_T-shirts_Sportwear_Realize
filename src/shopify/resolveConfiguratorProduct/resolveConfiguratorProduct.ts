@@ -1,11 +1,11 @@
-import { cache } from 'react';
-
 import { CONFIGURATOR_DEFAULT_MINIMUM_COUNT, resolveShopifyCollectionVolumeDiscount } from '@constants';
 import { isShopifyEnabled } from '@shopify/config';
 import { fetchConfiguratorProductByHandle } from '@shopify/fetchConfiguratorProductByHandle';
 import type { configuratorProductHydrationType } from '@configurator/types';
 import type { garmentBusinessType } from '@types';
 import { resolveConfiguratorProductBySlug } from '@utils';
+
+const resolveConfiguratorProductCache = new Map<string, Promise<configuratorProductHydrationType | null>>();
 
 const mergeCollectionVolumeTerms = (business: garmentBusinessType, collectionHandle: string): garmentBusinessType => {
   const terms = resolveShopifyCollectionVolumeDiscount(collectionHandle);
@@ -31,7 +31,15 @@ const withDefaultMinimumOrder = (product: configuratorProductHydrationType): con
   };
 };
 
-const resolveConfiguratorProduct = cache(async (slug: string, collectionHandle?: string): Promise<configuratorProductHydrationType | null> => {
+const resolveConfiguratorProduct = async (
+  slug: string,
+  collectionHandle?: string,
+): Promise<configuratorProductHydrationType | null> => {
+  const cacheKey = `${slug}::${collectionHandle ?? ''}`;
+  const cached = resolveConfiguratorProductCache.get(cacheKey);
+  if (cached) return cached;
+
+  const resolver = (async (): Promise<configuratorProductHydrationType | null> => {
   const localProduct = resolveConfiguratorProductBySlug(slug);
 
   if (!isShopifyEnabled()) {
@@ -59,7 +67,11 @@ const resolveConfiguratorProduct = cache(async (slug: string, collectionHandle?:
     console.warn(`[shopify] Failed to fetch product "${slug}"; falling back to local catalog.`, error);
   }
 
-  return localProduct;
-});
+    return localProduct;
+  })();
+
+  resolveConfiguratorProductCache.set(cacheKey, resolver);
+  return resolver;
+};
 
 export { resolveConfiguratorProduct };

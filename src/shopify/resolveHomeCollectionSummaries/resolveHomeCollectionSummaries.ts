@@ -1,10 +1,13 @@
-import { cache } from 'react';
-
 import { isShopifyEnabled } from '@shopify/config';
 import { fetchConfiguratorCollectionSummaries } from '@shopify/fetchConfiguratorCollections';
 import type { homePageCollectionSummaryType } from '@types';
 
-const resolveHomeCollectionSummaries = cache(async (): Promise<homePageCollectionSummaryType[]> => {
+let resolveHomeCollectionSummariesCache: Promise<homePageCollectionSummaryType[]> | null = null;
+
+const resolveHomeCollectionSummaries = async (): Promise<homePageCollectionSummaryType[]> => {
+  if (resolveHomeCollectionSummariesCache) return resolveHomeCollectionSummariesCache;
+
+  const resolver = (async (): Promise<homePageCollectionSummaryType[]> => {
   if (!isShopifyEnabled()) {
     console.warn('[shopify] Shopify is disabled; no home collections available.');
     return [];
@@ -23,6 +26,10 @@ const resolveHomeCollectionSummaries = cache(async (): Promise<homePageCollectio
   }
 
   return [];
-});
+  })();
+
+  resolveHomeCollectionSummariesCache = resolver;
+  return resolver;
+};
 
 export { resolveHomeCollectionSummaries };
