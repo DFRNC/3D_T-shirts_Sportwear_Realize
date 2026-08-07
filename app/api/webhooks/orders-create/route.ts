@@ -1,6 +1,8 @@
 import { getShopifyAdminClientSecret, setOrderMetafields, verifyShopifyWebhookSignature } from '@shopify';
 import type { orderMetafieldInputType } from '@shopify';
 import { formatCheckoutOrderDate } from '@utils/buildCheckoutOrderExport';
+import { Queue, Worker } from 'bullmq';
+import IORedis from 'ioredis';
 
 import { generateOrderPdfs } from './generateOrderPdfs';
 import type { orderPdfContextType } from './generateOrderPdfs';
@@ -10,6 +12,33 @@ export const dynamic = 'force-dynamic';
 const ORDER_WEBHOOK_MAX_CONCURRENCY = 3;
 const ORDER_WEBHOOK_MAX_QUEUE_SIZE = 200;
 const ORDER_WEBHOOK_COMPLETED_TTL_MS = 6 * 60 * 60 * 1000;
+const ORDER_WEBHOOK_QUEUE_NAME = 'shopify-orders-create';
+const ORDER_WEBHOOK_JOB_TTL_SECONDS = 6 * 60 * 60;
+
+type orderWebhookJobDataType = {
+  order: shopifyOrderPayloadType;
+  configUrl: string;
+  uvImageUrls?: string;
+  appOrigin: string;
+};
+
+type orderWebhookRedisQueueStateType = {
+  queue: Queue<orderWebhookJobDataType> | null;
+  worker: Worker<orderWebhookJobDataType> | null;
+  connection: IORedis | null;
+};
+
+const redisQueueStateKey = '__orderCreateWebhookRedisQueueState__';
+const globalRedisQueueState = globalThis as typeof globalThis & {
+  [redisQueueStateKey]?: orderWebhookRedisQueueStateType;
+};
+
+const orderWebhookRedisQueueState: orderWebhookRedisQueueStateType = globalRedisQueueState[redisQueueStateKey] ?? {
+  queue: null,
+  worker: null,
+  connection: null,
+};
+globalRedisQueueState[redisQueueStateKey] = orderWebhookRedisQueueState;
 
 type orderWebhookQueueItemType = {
   key: string;
@@ -105,6 +134,47 @@ const markWebhookCompleted = (key: string): void => {
 
 const markWebhookFailed = (key: string): void => {
   orderWebhookQueueState.inFlight.delete(key);
+};
+
+const getRedisUrl = (): string | null => {
+  const url = process.env.REDIS_URL?.trim();
+  return url ? url : null;
+};
+
+const hasRedisQueueEnabled = (): boolean => Boolean(getRedisUrl());
+
+const ensureRedisQueue = (): Queue<orderWebhookJobDataType> | null => {
+  const redisUrl = getRedisUrl();
+  if (!redisUrl) return null;
+
+  if (orderWebhookRedisQueueState.queue) return orderWebhookRedisQueueState.queue;
+
+  const connection = new IORedis(redisUrl, {
+    maxRetriesPerRequest: null,
+    enableReadyCheck: true,
+  });
+  const queue = new Queue<orderWebhookJobDataType>(ORDER_WEBHOOK_QUEUE_NAME, {
+    connection,
+    defaultJobOptions: {
+      attempts: 5,
+      backoff: {
+        type: 'exponential',
+        delay: 1500,
+      },
+      removeOnComplete: {
+        age: ORDER_WEBHOOK_JOB_TTL_SECONDS,
+        count: 2000,
+      },
+      removeOnFail: {
+        age: ORDER_WEBHOOK_JOB_TTL_SECONDS,
+        count: 1000,
+      },
+    },
+  });
+
+  orderWebhookRedisQueueState.connection = connection;
+  orderWebhookRedisQueueState.queue = queue;
+  return queue;
 };
 
 const sleep = (ms: number): Promise<void> =>
@@ -205,6 +275,60 @@ const processOrderWebhook = async (order: shopifyOrderPayloadType, configUrl: st
   await setOrderMetafields(`gid://shopify/Order/${order.id}`, fields);
 };
 
+const ensureRedisWorker = (): Worker<orderWebhookJobDataType> | null => {
+  const queue = ensureRedisQueue();
+  const connection = orderWebhookRedisQueueState.connection;
+  if (!queue || !connection) return null;
+
+  if (orderWebhookRedisQueueState.worker) return orderWebhookRedisQueueState.worker;
+
+  const worker = new Worker<orderWebhookJobDataType>(
+    ORDER_WEBHOOK_QUEUE_NAME,
+    async (job) => {
+      const { order, configUrl, uvImageUrls, appOrigin } = job.data;
+      await processOrderWebhook(order, configUrl, uvImageUrls, appOrigin);
+    },
+    {
+      connection,
+      concurrency: ORDER_WEBHOOK_MAX_CONCURRENCY,
+    },
+  );
+
+  worker.on('failed', (job, error) => {
+    const orderId = job?.data.order.id ?? 'unknown';
+    console.error(`[shopify webhook] Redis worker failed for order ${orderId}:`, error);
+  });
+
+  worker.on('error', (error) => {
+    console.error('[shopify webhook] Redis worker error:', error);
+  });
+
+  orderWebhookRedisQueueState.worker = worker;
+  return worker;
+};
+
+const enqueueOrderWebhookRedis = async (payload: orderWebhookJobDataType): Promise<'queued' | 'deduplicated' | 'queue-full'> => {
+  const queue = ensureRedisQueue();
+  if (!queue) {
+    throw new Error('Redis queue is not configured.');
+  }
+
+  const counts = await queue.getJobCounts('waiting', 'delayed');
+  const pendingCount = (counts.waiting ?? 0) + (counts.delayed ?? 0);
+  if (pendingCount >= ORDER_WEBHOOK_MAX_QUEUE_SIZE) {
+    return 'queue-full';
+  }
+
+  const orderKey = String(payload.order.id);
+  const existingJob = await queue.getJob(orderKey);
+  if (existingJob) {
+    return 'deduplicated';
+  }
+
+  await queue.add('orders-create', payload, { jobId: orderKey });
+  return 'queued';
+};
+
 export async function POST(request: Request): Promise<Response> {
   const secret = getShopifyAdminClientSecret();
   if (!secret) {
@@ -236,15 +360,41 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const orderKey = String(order.id);
+  const appOrigin = new URL(request.url).origin;
+
+  if (hasRedisQueueEnabled()) {
+    try {
+      ensureRedisWorker();
+      const redisResult = await enqueueOrderWebhookRedis({
+        order,
+        configUrl,
+        uvImageUrls,
+        appOrigin,
+      });
+
+      if (redisResult === 'deduplicated') {
+        return Response.json({ ok: true, deduplicated: true, queue: 'redis' });
+      }
+
+      if (redisResult === 'queue-full') {
+        return Response.json({ error: 'Webhook queue is busy. Retry later.' }, { status: 503 });
+      }
+
+      return Response.json({ accepted: true, queued: true, queue: 'redis' });
+    } catch (error) {
+      console.error(`[shopify webhook] Redis queue fallback to memory for order ${order.id}:`, error);
+    }
+  }
+
   if (isWebhookAlreadyCompleted(orderKey) || isWebhookInFlight(orderKey)) {
-    return Response.json({ ok: true, deduplicated: true });
+    return Response.json({ ok: true, deduplicated: true, queue: 'memory' });
   }
 
   const enqueued = enqueueOrderWebhook({
     key: orderKey,
     run: async () => {
       try {
-        await processOrderWebhook(order, configUrl, uvImageUrls, new URL(request.url).origin);
+        await processOrderWebhook(order, configUrl, uvImageUrls, appOrigin);
       } catch (error) {
         console.error(`[shopify webhook] Failed to process order ${order.id} in background:`, error);
         throw error;
@@ -260,6 +410,7 @@ export async function POST(request: Request): Promise<Response> {
   return Response.json({
     accepted: true,
     queued: true,
+    queue: 'memory',
     queueSize: orderWebhookQueueState.pending.length,
     activeWorkers: orderWebhookQueueState.activeCount,
   });
