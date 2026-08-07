@@ -1,5 +1,5 @@
 import { garmentLogoMapFragment, garmentNameMapFragment, garmentNumberMapFragment, garmentTestoMapFragment } from '@configurator/shaders';
-const garmentPrintMapFragment =  `
+const garmentPrintMapFragment = `
 #ifdef USE_PRINT
   vec4 printColor = vec4( 0.0 );
   garmentGizmoUiColor = vec4( 0.0 );
@@ -38,7 +38,7 @@ ${garmentNumberMapFragment}
 #endif
 `;
 
-const garmentPbrShadeCaptureFragment =  `
+const garmentPbrShadeCaptureFragment = `
 #ifdef USE_PRINT
 
   float diffuseLuma = max( max( totalDiffuse.r, totalDiffuse.g ), totalDiffuse.b );
@@ -52,7 +52,7 @@ const garmentPbrShadeCaptureFragment =  `
 #endif
 `;
 
-const garmentPrintLightsFragment =  `
+const garmentPrintLightsFragment = `
 #ifdef USE_PRINT
   vec3 flatBase = diffuseColor.rgb;
   vec3 flatComposite = garmentPrintColor.rgb * garmentPrintColor.a + flatBase * ( 1.0 - garmentPrintColor.a );

@@ -38,7 +38,6 @@ const fetchClientCredentialsToken = async (storeDomain: string, clientId: string
 };
 
 type resolveShopifyAdminAccessTokenOptionsType = {
-
   forceRefresh?: boolean;
 };
 

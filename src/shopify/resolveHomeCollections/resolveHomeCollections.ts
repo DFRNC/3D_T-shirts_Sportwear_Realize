@@ -8,24 +8,24 @@ const resolveHomeCollections = async (): Promise<homePageCollectionType[]> => {
   if (resolveHomeCollectionsCache) return resolveHomeCollectionsCache;
 
   const resolver = (async (): Promise<homePageCollectionType[]> => {
-  if (!isShopifyEnabled()) {
-    console.warn('[shopify] Shopify is disabled; no home collections available.');
-    return [];
-  }
-
-  try {
-    const collections = await fetchConfiguratorCollections();
-
-    if (collections.length > 0) {
-      return collections;
+    if (!isShopifyEnabled()) {
+      console.warn('[shopify] Shopify is disabled; no home collections available.');
+      return [];
     }
 
-    console.warn('[shopify] No configurator collections returned.');
-  } catch (error) {
-    console.warn('[shopify] Failed to fetch collections.', error);
-  }
+    try {
+      const collections = await fetchConfiguratorCollections();
 
-  return [];
+      if (collections.length > 0) {
+        return collections;
+      }
+
+      console.warn('[shopify] No configurator collections returned.');
+    } catch (error) {
+      console.warn('[shopify] Failed to fetch collections.', error);
+    }
+
+    return [];
   })();
 
   resolveHomeCollectionsCache = resolver;

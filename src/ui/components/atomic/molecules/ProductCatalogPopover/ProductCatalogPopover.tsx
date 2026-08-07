@@ -144,9 +144,7 @@ const ProductCatalogPopover = ({
         <AtomPopover open={popoverOpen} onOpenChange={handlePopoverOpenChange}>
           <AtomPopoverTrigger asChild>{children}</AtomPopoverTrigger>
           <AtomPopoverContent side={contentSide} align={contentAlign} className="flex flex-col gap-1 p-3" style={{ width: popoverWidthPx }}>
-            <Text className="text-[16px] font-semibold uppercase text-default">
-              {view === 'collections' ? 'Seleziona collezione' : 'Seleziona prodotto'}
-            </Text>
+            <Text className="text-[16px] font-semibold uppercase text-default">{view === 'collections' ? 'Seleziona collezione' : 'Seleziona prodotto'}</Text>
             {catalogBackButton}
             <Grid
               style={{

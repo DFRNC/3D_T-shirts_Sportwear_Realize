@@ -90,9 +90,7 @@ const composeLogoStampAtlas = async ({ instances, canvas }: composeLogoStampAtla
       const column = slotIndex % LOGO_STAMP_GRID;
       const row = Math.floor(slotIndex / LOGO_STAMP_GRID);
       ctx.drawImage(scratch, column * cellSize.width, row * cellSize.height);
-    } catch {
-
-    }
+    } catch {}
   }
 
   return { canvas, cellSize };

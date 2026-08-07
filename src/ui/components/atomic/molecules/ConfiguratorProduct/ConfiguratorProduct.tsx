@@ -34,14 +34,18 @@ const ConfiguratorProduct = memo(({ className }: { className?: string }) => {
         <Flex className="flex-col items-start px-3 py-2 rounded-sm bg-primary hover:bg-primary/90 transition-colors max-xl:px-2.5 max-xl:py-1.5 max-sm:flex-row max-sm:items-center max-sm:gap-1 max-sm:px-2 max-sm:py-1">
           <Text className="font-semibold max-xl:text-[13px] max-sm:text-[12px] max-sm:leading-4">Prodotto {numberProduct}</Text>
           {showMinimumQuantity ? (
-            <Text className="text-[14px] text-gray max-xl:text-[11px] max-sm:text-[12px] max-sm:leading-3.75 max-sm:text-[#6B7280]">{buildMinimumQuantityLabel(minimumCount)}</Text>
+            <Text className="text-[14px] text-gray max-xl:text-[11px] max-sm:text-[12px] max-sm:leading-3.75 max-sm:text-[#6B7280]">
+              {buildMinimumQuantityLabel(minimumCount)}
+            </Text>
           ) : null}
         </Flex>
       </Grid>
       <Grid variant="configurator_price">
         <Text variant="product_price">{priceFormat(price)}</Text>
         {showVolumeDiscount ? (
-          <Text className="text-[#6B7280] font-medium max-xl:text-[11px] max-sm:text-[12px] max-sm:leading-3.75 max-sm:font-normal">{buildVolumeDiscountLabel(bonusCount, bonusDiscount)}</Text>
+          <Text className="text-[#6B7280] font-medium max-xl:text-[11px] max-sm:text-[12px] max-sm:leading-3.75 max-sm:font-normal">
+            {buildVolumeDiscountLabel(bonusCount, bonusDiscount)}
+          </Text>
         ) : null}
       </Grid>
     </Flex>

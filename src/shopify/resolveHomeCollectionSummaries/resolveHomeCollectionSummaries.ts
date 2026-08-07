@@ -8,24 +8,24 @@ const resolveHomeCollectionSummaries = async (): Promise<homePageCollectionSumma
   if (resolveHomeCollectionSummariesCache) return resolveHomeCollectionSummariesCache;
 
   const resolver = (async (): Promise<homePageCollectionSummaryType[]> => {
-  if (!isShopifyEnabled()) {
-    console.warn('[shopify] Shopify is disabled; no home collections available.');
-    return [];
-  }
-
-  try {
-    const collections = await fetchConfiguratorCollectionSummaries();
-
-    if (collections.length > 0) {
-      return collections;
+    if (!isShopifyEnabled()) {
+      console.warn('[shopify] Shopify is disabled; no home collections available.');
+      return [];
     }
 
-    console.warn('[shopify] No configurator collection summaries returned.');
-  } catch (error) {
-    console.warn('[shopify] Failed to fetch collection summaries.', error);
-  }
+    try {
+      const collections = await fetchConfiguratorCollectionSummaries();
 
-  return [];
+      if (collections.length > 0) {
+        return collections;
+      }
+
+      console.warn('[shopify] No configurator collection summaries returned.');
+    } catch (error) {
+      console.warn('[shopify] Failed to fetch collection summaries.', error);
+    }
+
+    return [];
   })();
 
   resolveHomeCollectionSummariesCache = resolver;

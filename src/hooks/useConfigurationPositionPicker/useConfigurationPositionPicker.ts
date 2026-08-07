@@ -4,10 +4,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { requestConfiguratorCameraFocus } from '@configurator';
 import type { configuratorCameraFocusTargetType } from '@configurator';
-import {
-  syncPrintPositionRelationsForFollower,
-  syncPrintPositionRelationsForLeader,
-} from '@configurator/hooks/syncPrintPositionRelations';
+import { syncPrintPositionRelationsForFollower, syncPrintPositionRelationsForLeader } from '@configurator/hooks/syncPrintPositionRelations';
 import type { configurationPositionPickerInstanceType, configurationPositionPickerPositionType } from '@types';
 import { resolvePrintPositionConflicts } from '@store/resolvePrintPositionConflicts';
 import { useGarmentName, useGarmentNumber, useGarmentTesto } from '@store';

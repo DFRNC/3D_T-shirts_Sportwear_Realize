@@ -7,7 +7,6 @@ import type { productSessionRowPropsType } from '@types';
 import { cn } from '@utils';
 
 type productSessionRowCardPropsType = Pick<productSessionRowPropsType, 'name' | 'previewSrc' | 'active' | 'onSelect' | 'onRemove'> & {
-
   variant: 'anchor' | 'portal';
   isExpanded: boolean;
   isPreviewLoaded: boolean;

@@ -59,8 +59,16 @@ const Carousel = ({ orientation = 'horizontal', opts, setApi, plugins, className
     [api],
   );
 
-  const canScrollPrev = useSyncExternalStore(subscribe, () => api?.canScrollPrev() ?? false, () => false);
-  const canScrollNext = useSyncExternalStore(subscribe, () => api?.canScrollNext() ?? false, () => false);
+  const canScrollPrev = useSyncExternalStore(
+    subscribe,
+    () => api?.canScrollPrev() ?? false,
+    () => false,
+  );
+  const canScrollNext = useSyncExternalStore(
+    subscribe,
+    () => api?.canScrollNext() ?? false,
+    () => false,
+  );
 
   const scrollPrev = useCallback(() => {
     api?.scrollPrev();
@@ -119,12 +127,7 @@ const CarouselContent = ({ className, ...props }: React.ComponentProps<'div'>) =
   const { carouselRef, orientation } = useCarousel();
 
   return (
-    <div
-      ref={carouselRef}
-      className="overflow-hidden"
-      data-slot="carousel-content"
-      style={{ touchAction: orientation === 'horizontal' ? 'pan-y' : 'pan-x' }}
-    >
+    <div ref={carouselRef} className="overflow-hidden" data-slot="carousel-content" style={{ touchAction: orientation === 'horizontal' ? 'pan-y' : 'pan-x' }}>
       <div className={cn('flex', orientation === 'horizontal' ? '-ml-2' : '-mt-2 flex-col', className)} {...props} />
     </div>
   );

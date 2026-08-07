@@ -1,4 +1,4 @@
-const garmentLogoMapFragment =  `
+const garmentLogoMapFragment = `
   for ( int logoSlot = 0; logoSlot < 4; logoSlot ++ ) {
     float logoCell = float( logoSlot );
     float logoInside = garmentNameInsidePart( vPrintUv, uLogoPartBounds[ logoSlot ] ) * uLogoSlotActive[ logoSlot ];

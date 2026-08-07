@@ -72,7 +72,6 @@ const CheckoutTableEditableCell = ({
 
   return (
     <AtomInput
-
       autoFocus
       aria-label={placeholder}
       variant="checkout"

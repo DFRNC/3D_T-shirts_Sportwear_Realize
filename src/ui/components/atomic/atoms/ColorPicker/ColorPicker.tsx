@@ -82,13 +82,7 @@ const ColorPicker = ({ color, onChange, onPreviewChange, trigger }: colorPickerP
   return (
     <AtomPopover>
       <AtomPopoverTrigger asChild>{trigger}</AtomPopoverTrigger>
-      <AtomPopoverContent
-        variant="color_picker"
-        align="center"
-        collisionPadding={16}
-        onPointerUp={handlePointerUp}
-        onPointerLeave={handlePointerUp}
-      >
+      <AtomPopoverContent variant="color_picker" align="center" collisionPadding={16} onPointerUp={handlePointerUp} onPointerLeave={handlePointerUp}>
         <style>
           {`
             .w-color-wheel-fill { width: 25px!important; height: 25px!important; border: 2px solid #fff!important;}

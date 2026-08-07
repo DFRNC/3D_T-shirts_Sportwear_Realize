@@ -390,7 +390,12 @@ const buildStep = (
           { label: 'Scala', value: formatPercent(instance.scale) },
           { label: 'Rotazione', value: formatDegrees(instance.rotation + instance.uploadRotation) },
           { label: 'Opacità', value: formatPercent(instance.opacity) },
-          instance.naturalWidth > 0 ? { label: 'File originale', value: `${createPrintUnit(cmScale?.cmPerPxHorizontal).formatPx(instance.naturalWidth)} × ${createPrintUnit(cmScale?.cmPerPxVertical).formatPx(instance.naturalHeight)}` } : null,
+          instance.naturalWidth > 0
+            ? {
+                label: 'File originale',
+                value: `${createPrintUnit(cmScale?.cmPerPxHorizontal).formatPx(instance.naturalWidth)} × ${createPrintUnit(cmScale?.cmPerPxVertical).formatPx(instance.naturalHeight)}`,
+              }
+            : null,
         ].filter((param): param is orderCuttingExportStepDetailParamType => param !== null);
 
         return {

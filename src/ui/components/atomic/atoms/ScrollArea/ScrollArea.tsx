@@ -124,16 +124,10 @@ const ScrollArea = ({ children, className, fadeEdges = false, edgeShadows = fals
   }, [refresh, updateFade]);
 
   return (
-    <div
-      ref={targetRef}
-      className={cn('relative w-full', isHorizontal ? 'pb-2' : 'h-full pr-2', className)}
-    >
+    <div ref={targetRef} className={cn('relative w-full', isHorizontal ? 'pb-2' : 'h-full pr-2', className)}>
       <div
         ref={viewportRef}
-        className={cn(
-          'w-full scrollbar-none',
-          isHorizontal ? 'overflow-x-scroll overflow-y-hidden' : 'h-full overflow-y-scroll overflow-x-hidden',
-        )}
+        className={cn('w-full scrollbar-none', isHorizontal ? 'overflow-x-scroll overflow-y-hidden' : 'h-full overflow-y-scroll overflow-x-hidden')}
         style={{
           WebkitMaskImage: maskImage,
           maskImage,
@@ -150,9 +144,7 @@ const ScrollArea = ({ children, className, fadeEdges = false, edgeShadows = fals
             aria-hidden
             className={cn(
               'pointer-events-none absolute z-10 transition-opacity duration-150',
-              isHorizontal
-                ? 'inset-y-0 left-0 bg-linear-to-r from-white to-transparent'
-                : 'inset-x-0 top-0 bg-linear-to-b from-white to-transparent',
+              isHorizontal ? 'inset-y-0 left-0 bg-linear-to-r from-white to-transparent' : 'inset-x-0 top-0 bg-linear-to-b from-white to-transparent',
               showTopFade ? 'opacity-100' : 'opacity-0',
             )}
             style={isHorizontal ? { width: EDGE_SHADOW_SIZE } : { height: EDGE_SHADOW_SIZE }}
@@ -161,9 +153,7 @@ const ScrollArea = ({ children, className, fadeEdges = false, edgeShadows = fals
             aria-hidden
             className={cn(
               'pointer-events-none absolute z-10 transition-opacity duration-150',
-              isHorizontal
-                ? 'inset-y-0 right-0 bg-linear-to-l from-white to-transparent'
-                : 'inset-x-0 bottom-0 bg-linear-to-t from-white to-transparent',
+              isHorizontal ? 'inset-y-0 right-0 bg-linear-to-l from-white to-transparent' : 'inset-x-0 bottom-0 bg-linear-to-t from-white to-transparent',
               showBottomFade ? 'opacity-100' : 'opacity-0',
             )}
             style={isHorizontal ? { width: EDGE_SHADOW_SIZE } : { height: EDGE_SHADOW_SIZE }}

@@ -1,4 +1,4 @@
-const garmentTestoMapFragment =  `
+const garmentTestoMapFragment = `
   for ( int testoSlot = 0; testoSlot < 4; testoSlot ++ ) {
     float testoChannel = float( testoSlot );
     vec2 testoStampUv = garmentTestoToStampUv( vPrintUv, uTestoAnchorUv[ testoSlot ], uTestoRotation[ testoSlot ], uTestoPlacementRotation[ testoSlot ], uTestoUploadRotation[ testoSlot ], uTestoPartRotation[ testoSlot ], uTestoScale[ testoSlot ], uTestoLineHeight[ testoSlot ] );

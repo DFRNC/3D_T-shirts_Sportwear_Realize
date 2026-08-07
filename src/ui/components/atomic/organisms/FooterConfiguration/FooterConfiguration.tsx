@@ -94,7 +94,12 @@ const FooterConfiguration = () => {
             Info Ordine
           </Button>
         </Flex>
-        <Button variant="primary" size="sm" onClick={navigateToCheckout} className="max-sm:w-full max-sm:h-8 max-sm:text-[14px] max-sm:leading-4.75 max-sm:font-bold max-sm:[&_svg]:size-3.5">
+        <Button
+          variant="primary"
+          size="sm"
+          onClick={navigateToCheckout}
+          className="max-sm:w-full max-sm:h-8 max-sm:text-[14px] max-sm:leading-4.75 max-sm:font-bold max-sm:[&_svg]:size-3.5"
+        >
           <SvgIcon name="cart" />
           Completa Config.
         </Button>
