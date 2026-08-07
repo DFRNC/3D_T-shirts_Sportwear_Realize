@@ -50,7 +50,7 @@ const NamePartForm = ({ instanceId, limits, placeholder }: namePartFormPropsType
   if (!instance) return null;
 
   return (
-    <Flex variant="configurator_part" className="gap-5 max-xl:gap-4 pt-2">
+    <Flex variant="configurator_part_spaced">
       <Flex variant="configurator_part">
         <Text variant="configurator_control_label">Testo</Text>
         <input
@@ -171,7 +171,7 @@ const ConfigurationNaming = () => {
   if (positions.length === 0 || !limitsByPositionKey || !nameDefaults) return null;
 
   return (
-    <Flex key={product.path} variant="step_design" className="gap-3 max-xl:gap-2.5">
+    <Flex key={product.path} variant="step_design_compact">
       <ConfigurationPositionSelect
         label={CONFIGURATOR_NAME_POSITION_SELECT_LABEL}
         title={nameDefaults.title}

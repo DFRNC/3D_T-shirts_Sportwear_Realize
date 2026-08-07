@@ -56,9 +56,9 @@ const AccordionContent = ({ className, children, onClick, ...props }: AccordionP
       )}
       {...props}
     >
-      <div className={cn('p-1', className)} onClick={onClick}>
+      <section className={cn('p-1', className)} onClick={onClick}>
         {children}
-      </div>
+      </section>
     </AccordionPrimitive.Panel>
   );
 };

@@ -48,13 +48,13 @@ const ModalAddProductDesign = () => {
         closeButtonClassName="max-sm:top-4 max-sm:right-4"
       >
         <AtomDialogTitle className="text-center max-sm:pr-6 max-sm:text-[15px] max-sm:leading-5">{title}</AtomDialogTitle>
-        <Flex className="items-center justify-center gap-1 mx-auto">
+        <Flex variant="modal_add_product_preview_row">
           <AtomImage src={sourcePreview} alt="prev" className="h-[120px] w-[110px] max-sm:h-20 max-sm:w-18" />
           <SvgIcon name="arrow_right" className="size-7 shrink-0 text-gray-10 max-sm:size-5" aria-hidden />
           <AtomImage src={targetPreview} alt="new" className="h-[120px] w-[110px] max-sm:h-20 max-sm:w-18" />
         </Flex>
 
-        <Flex className="flex-col gap-3 w-full">
+        <Flex variant="modal_add_product_actions">
           <Button
             type="button"
             variant="default"

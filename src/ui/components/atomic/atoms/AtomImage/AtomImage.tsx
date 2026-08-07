@@ -63,9 +63,9 @@ const AtomImage = ({
 
   if (useFill) {
     return (
-      <div data-active={dataActive} className={cn('relative', variantAtomImage({ variant }), className)}>
+      <section data-active={dataActive} className={cn('relative', variantAtomImage({ variant }), className)}>
         {imageElement}
-      </div>
+      </section>
     );
   }
 

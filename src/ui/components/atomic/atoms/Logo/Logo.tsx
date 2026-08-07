@@ -7,7 +7,7 @@ import type { logoPropsType } from '@types';
 
 const Logo = ({ href = '/' }: logoPropsType) => {
   return (
-    <Flex className="w-full">
+    <Flex variant="full_width">
       <Link href={href}>
         <AtomImage src="/svg/logo_full.svg" alt="Logo" variant="logo_full" priority />
       </Link>

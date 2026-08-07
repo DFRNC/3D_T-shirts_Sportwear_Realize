@@ -39,7 +39,7 @@ const FooterConfiguration = () => {
 
   return (
     <Container>
-      <Flex className="gap-2 items-center justify-center w-full pb-12 pt-2 max-sm:hidden">
+      <Flex variant="footer_desktop_row">
         <Button size="sm">
           <SvgIcon name="share" />
           Condividi
@@ -73,8 +73,8 @@ const FooterConfiguration = () => {
         </Button>
       </Flex>
 
-      <Flex className="hidden max-sm:flex max-sm:w-full max-sm:flex-col max-sm:gap-4 max-sm:pt-3 max-sm:pb-6">
-        <Flex className="max-sm:grid max-sm:w-full max-sm:grid-cols-4 max-sm:gap-0.5">
+      <Flex variant="footer_mobile_column">
+        <Flex variant="footer_mobile_grid">
           <Button size="sm" className={smallButtonClass}>
             <SvgIcon name="share" />
             Condividi

@@ -6,7 +6,7 @@ import { PatternLayerColorControl } from '@molecules/ConfigurationTools/PatternL
 import { RangeControl } from '@molecules/ConfigurationTools/RangeControl';
 import { DesignPatternCarousel } from '@molecules/ConfigurationSteps/DesignPatternCarousel';
 import type { designPatternItemType } from '@types';
-import { AtomImage, Button, Flex, Grid, SvgIcon } from '@atoms';
+import { AtomImage, Box, Button, Flex, Grid, SvgIcon } from '@atoms';
 import { PALETTE_COLORS } from '@constants';
 import { useTintedDesignSvgSrc } from '@hooks';
 import { PatternPreviewSkeleton } from '@skeletons';
@@ -20,7 +20,7 @@ const DesignCardPreview = ({ src, layerColors, eager }: { src: string; layerColo
   const displaySrc = useTintedDesignSvgSrc(src, layerColors);
 
   return (
-    <div key={displaySrc} className="relative h-full w-full">
+    <Box key={displaySrc} variant="relative_fill">
       {!isLoaded && <PatternPreviewSkeleton />}
       <AtomImage
         src={displaySrc}
@@ -32,7 +32,7 @@ const DesignCardPreview = ({ src, layerColors, eager }: { src: string; layerColo
         draggable={false}
         onLoad={() => setIsLoaded(true)}
       />
-    </div>
+    </Box>
   );
 };
 
@@ -62,7 +62,7 @@ const ConfigurationDesign = () => {
 
   return (
     <Flex key={product.path} variant="step_design">
-      <Grid variant="select_parts" className="max-sm:hidden">
+      <Grid variant="select_parts_mobile_hidden">
         <Button variant="select_none" title="Nessuno" data-active={activePattern === null} onClick={() => setActivePattern(null)}>
           <SvgIcon name="none" />
           Nessuno
@@ -81,7 +81,7 @@ const ConfigurationDesign = () => {
           </Button>
         ))}
       </Grid>
-      <div className="hidden w-full min-w-0 max-sm:block">
+      <Box variant="palette_carousel_mobile">
         <DesignPatternCarousel
           patterns={patterns}
           activePatternKey={activePattern?.key ?? null}
@@ -90,7 +90,7 @@ const ConfigurationDesign = () => {
             <DesignCardPreview src={pattern.cardPreviewSrc} layerColors={resolvePatternLayerColors(pattern, activePattern, getPartColor)} eager={index < 2} />
           )}
         />
-      </div>
+      </Box>
 
       {activePattern && activePattern.parts.length === 1 && (
         <ColorControl

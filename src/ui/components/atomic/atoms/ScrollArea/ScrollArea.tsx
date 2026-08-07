@@ -13,9 +13,9 @@ const EDGE_SHADOW_SIZE = 24;
 
 const ScrollArea = ({ children, className, fadeEdges = false, edgeShadows = false, orientation = 'vertical' }: scrollAreaPropsType) => {
   const isHorizontal = orientation === 'horizontal';
-  const targetRef = useRef<HTMLDivElement>(null);
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const targetRef = useRef<HTMLElement>(null);
+  const viewportRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLElement>(null);
   const instanceRef = useRef<OverlayScrollbars | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const frameIdRef = useRef<number | null>(null);
@@ -124,8 +124,8 @@ const ScrollArea = ({ children, className, fadeEdges = false, edgeShadows = fals
   }, [refresh, updateFade]);
 
   return (
-    <div ref={targetRef} className={cn('relative w-full', isHorizontal ? 'pb-2' : 'h-full pr-2', className)}>
-      <div
+    <section ref={targetRef} className={cn('relative w-full', isHorizontal ? 'pb-2' : 'h-full pr-2', className)}>
+      <section
         ref={viewportRef}
         className={cn('w-full scrollbar-none', isHorizontal ? 'overflow-x-scroll overflow-y-hidden' : 'h-full overflow-y-scroll overflow-x-hidden')}
         style={{
@@ -133,14 +133,14 @@ const ScrollArea = ({ children, className, fadeEdges = false, edgeShadows = fals
           maskImage,
         }}
       >
-        <div ref={contentRef} className={cn(isHorizontal && 'w-fit')}>
+        <section ref={contentRef} className={cn(isHorizontal && 'w-fit')}>
           {children}
-        </div>
-      </div>
+        </section>
+      </section>
 
       {edgeShadows && (
         <>
-          <div
+          <section
             aria-hidden
             className={cn(
               'pointer-events-none absolute z-10 transition-opacity duration-150',
@@ -149,7 +149,7 @@ const ScrollArea = ({ children, className, fadeEdges = false, edgeShadows = fals
             )}
             style={isHorizontal ? { width: EDGE_SHADOW_SIZE } : { height: EDGE_SHADOW_SIZE }}
           />
-          <div
+          <section
             aria-hidden
             className={cn(
               'pointer-events-none absolute z-10 transition-opacity duration-150',
@@ -160,7 +160,7 @@ const ScrollArea = ({ children, className, fadeEdges = false, edgeShadows = fals
           />
         </>
       )}
-    </div>
+    </section>
   );
 };
 

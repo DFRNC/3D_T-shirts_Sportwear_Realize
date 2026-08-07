@@ -7,7 +7,7 @@ import { composeGarmentColorUvAtlas } from '@utils/composeGarmentColorUvAtlas';
 import { composeDesignUvLayerPreview, composeDesignUvMixPreview } from '@utils/composeDesignUvPreview';
 import { composeTextUvLayer } from '@utils/composeTextUvLayer';
 import { openOrderCuttingExportDownloadTarget, resolveOrderCuttingExportDownloadHref } from '@utils/resolveOrderCuttingExportDownloadHref';
-import { AtomImage } from '@atoms';
+import { AtomImage, Box } from '@atoms';
 
 const DOWNLOAD_PREVIEW_SIZE_PX = 60;
 
@@ -110,7 +110,7 @@ const OrderCuttingExportDownloadCard = ({ cartItemId, file }: orderCuttingExport
         openOrderCuttingExportDownloadTarget(href, showLoading);
       }}
     >
-      <div className="cutting-export__download-preview-frame">
+      <Box variant="cutting_export_download_preview_frame">
         {showLoading ? <span className="cutting-export__download-loading">Composizione UV…</span> : null}
         {!showLoading && previewUrl ? (
           <AtomImage
@@ -123,7 +123,7 @@ const OrderCuttingExportDownloadCard = ({ cartItemId, file }: orderCuttingExport
           />
         ) : null}
         {!showLoading && !previewUrl ? <span className="cutting-export__download-placeholder">{file.label}</span> : null}
-      </div>
+      </Box>
       <span className="cutting-export__download-label">{file.label}</span>
       <span className="cutting-export__download-file">{file.fileName}</span>
     </a>

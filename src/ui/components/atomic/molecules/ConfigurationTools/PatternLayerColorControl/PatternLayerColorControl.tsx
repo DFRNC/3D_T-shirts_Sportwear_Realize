@@ -15,7 +15,7 @@ const PatternLayerColorControl = ({ layers, colors, onColorChange, onPreviewColo
   return (
     <Flex variant="configurator_part">
       <Text variant="configurator_control_label">{label}</Text>
-      <div className="flex w-full border-b border-gray-200">
+      <Flex variant="tab_control_header">
         {layers.map((layer) => (
           <button
             key={layer.key}
@@ -31,7 +31,7 @@ const PatternLayerColorControl = ({ layers, colors, onColorChange, onPreviewColo
             {layer.label}
           </button>
         ))}
-      </div>
+      </Flex>
       {activeLayer && (
         <ColorControl
           color={colors[activeLayer.key] ?? '#000000'}

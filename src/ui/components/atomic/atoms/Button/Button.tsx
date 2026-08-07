@@ -38,6 +38,7 @@ const buttonVariants = cva(
           'data-[active=true]:border-active hover:border-active data-[active=true]:shadow-md hover:shadow-md',
           'transition-all duration-200 ease-in',
         ),
+        catalog_option: cn('h-full w-full flex-col gap-0 overflow-hidden p-0 whitespace-normal', 'max-xl:h-full'),
         select_part_short: cn(
           'w-full h-[60px] rounded-[8px] border-[1px] border-transparent shadow-sm',
           'max-xl:h-12',
