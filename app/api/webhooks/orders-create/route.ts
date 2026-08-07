@@ -1,4 +1,4 @@
-import { getShopifyAdminClientSecret, ORDER_METAFIELD_NAMESPACE, setOrderMetafields, verifyShopifyWebhookSignature } from '@shopify';
+import { getShopifyAdminClientSecret, setOrderMetafields, verifyShopifyWebhookSignature } from '@shopify';
 import type { orderMetafieldInputType } from '@shopify';
 import { formatCheckoutOrderDate } from '@utils/buildCheckoutOrderExport';
 
@@ -6,6 +6,35 @@ import { generateOrderPdfs } from './generateOrderPdfs';
 import type { orderPdfContextType } from './generateOrderPdfs';
 
 export const dynamic = 'force-dynamic';
+
+const ORDER_WEBHOOK_MAX_CONCURRENCY = 3;
+const ORDER_WEBHOOK_MAX_QUEUE_SIZE = 200;
+const ORDER_WEBHOOK_COMPLETED_TTL_MS = 6 * 60 * 60 * 1000;
+
+type orderWebhookQueueItemType = {
+  key: string;
+  run: () => Promise<void>;
+};
+
+type orderWebhookQueueStateType = {
+  pending: orderWebhookQueueItemType[];
+  activeCount: number;
+  inFlight: Set<string>;
+  completedAtByKey: Map<string, number>;
+};
+
+const queueStateKey = '__orderCreateWebhookQueueState__';
+const globalQueueState = globalThis as typeof globalThis & {
+  [queueStateKey]?: orderWebhookQueueStateType;
+};
+
+const orderWebhookQueueState: orderWebhookQueueStateType = globalQueueState[queueStateKey] ?? {
+  pending: [],
+  activeCount: 0,
+  inFlight: new Set<string>(),
+  completedAtByKey: new Map<string, number>(),
+};
+globalQueueState[queueStateKey] = orderWebhookQueueState;
 
 type shopifyOrderNoteAttributeType = {
   name: string;
@@ -53,6 +82,82 @@ const toNumber = (value: string | null | undefined): number => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
+const clearExpiredCompletedWebhookKeys = (): void => {
+  const now = Date.now();
+  orderWebhookQueueState.completedAtByKey.forEach((completedAt, key) => {
+    if (now - completedAt > ORDER_WEBHOOK_COMPLETED_TTL_MS) {
+      orderWebhookQueueState.completedAtByKey.delete(key);
+    }
+  });
+};
+
+const isWebhookAlreadyCompleted = (key: string): boolean => {
+  clearExpiredCompletedWebhookKeys();
+  return orderWebhookQueueState.completedAtByKey.has(key);
+};
+
+const isWebhookInFlight = (key: string): boolean => orderWebhookQueueState.inFlight.has(key);
+
+const markWebhookCompleted = (key: string): void => {
+  orderWebhookQueueState.inFlight.delete(key);
+  orderWebhookQueueState.completedAtByKey.set(key, Date.now());
+};
+
+const markWebhookFailed = (key: string): void => {
+  orderWebhookQueueState.inFlight.delete(key);
+};
+
+const sleep = (ms: number): Promise<void> =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+
+const runWebhookJobWithRetry = async (job: () => Promise<void>, maxAttempts = 3): Promise<void> => {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      await job();
+      return;
+    } catch (error) {
+      lastError = error;
+      if (attempt < maxAttempts) {
+        await sleep(750 * attempt);
+      }
+    }
+  }
+  throw lastError;
+};
+
+const drainOrderWebhookQueue = (): void => {
+  while (orderWebhookQueueState.activeCount < ORDER_WEBHOOK_MAX_CONCURRENCY && orderWebhookQueueState.pending.length > 0) {
+    const item = orderWebhookQueueState.pending.shift();
+    if (!item) break;
+
+    orderWebhookQueueState.activeCount += 1;
+    void runWebhookJobWithRetry(item.run)
+      .then(() => markWebhookCompleted(item.key))
+      .catch((error) => {
+        markWebhookFailed(item.key);
+        console.error(`[shopify webhook] Background processing failed for order ${item.key}:`, error);
+      })
+      .finally(() => {
+        orderWebhookQueueState.activeCount -= 1;
+        drainOrderWebhookQueue();
+      });
+  }
+};
+
+const enqueueOrderWebhook = (item: orderWebhookQueueItemType): boolean => {
+  if (orderWebhookQueueState.pending.length >= ORDER_WEBHOOK_MAX_QUEUE_SIZE) {
+    return false;
+  }
+
+  orderWebhookQueueState.pending.push(item);
+  orderWebhookQueueState.inFlight.add(item.key);
+  drainOrderWebhookQueue();
+  return true;
+};
+
 const buildRecipient = (order: shopifyOrderPayloadType): orderPdfContextType['recipient'] => {
   const shipping = order.shipping_address;
   const name = [order.customer?.first_name, order.customer?.last_name].filter(Boolean).join(' ') || shipping?.name?.trim() || '';
@@ -72,6 +177,32 @@ const buildShippingAddress = (order: shopifyOrderPayloadType): orderPdfContextTy
     city: [shipping?.city, shipping?.province].filter(Boolean).join(' '),
     country: shipping?.country ?? '',
   };
+};
+
+const processOrderWebhook = async (order: shopifyOrderPayloadType, configUrl: string, uvImageUrls: string | undefined, appOrigin: string): Promise<void> => {
+  const fields: orderMetafieldInputType[] = [];
+  fields.push({ key: 'config_url', type: 'url', value: configUrl });
+  if (uvImageUrls) fields.push({ key: 'uv_image_urls', type: 'json', value: uvImageUrls });
+
+  const { orderPdfUrl, cuttingPdfUrl } = await generateOrderPdfs({
+    configUrl,
+    appOrigin,
+    orderNumber: order.name ?? `#${order.id}`,
+    orderDate: formatCheckoutOrderDate(order.created_at ? new Date(order.created_at) : new Date()),
+    recipient: buildRecipient(order),
+    shippingAddress: buildShippingAddress(order),
+    billingNote: "Corrisponde all'indirizzo di spedizione",
+    money: {
+      subtotal: toNumber(order.subtotal_price),
+      discountAmount: toNumber(order.total_discounts),
+      shippingCost: toNumber(order.total_shipping_price_set?.shop_money?.amount),
+      grandTotal: toNumber(order.total_price),
+    },
+  });
+
+  fields.push({ key: 'order_pdf_url', type: 'url', value: orderPdfUrl });
+  fields.push({ key: 'cutting_pdf_url', type: 'url', value: cuttingPdfUrl });
+  await setOrderMetafields(`gid://shopify/Order/${order.id}`, fields);
 };
 
 export async function POST(request: Request): Promise<Response> {
@@ -104,40 +235,32 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ skipped: true });
   }
 
-  const fields: orderMetafieldInputType[] = [];
-  fields.push({ key: 'config_url', type: 'url', value: configUrl });
-  if (uvImageUrls) fields.push({ key: 'uv_image_urls', type: 'json', value: uvImageUrls });
-
-  try {
-    const { orderPdfUrl, cuttingPdfUrl } = await generateOrderPdfs({
-      configUrl,
-      appOrigin: new URL(request.url).origin,
-      orderNumber: order.name ?? `#${order.id}`,
-      orderDate: formatCheckoutOrderDate(order.created_at ? new Date(order.created_at) : new Date()),
-      recipient: buildRecipient(order),
-      shippingAddress: buildShippingAddress(order),
-      billingNote: "Corrisponde all'indirizzo di spedizione",
-      money: {
-        subtotal: toNumber(order.subtotal_price),
-        discountAmount: toNumber(order.total_discounts),
-        shippingCost: toNumber(order.total_shipping_price_set?.shop_money?.amount),
-        grandTotal: toNumber(order.total_price),
-      },
-    });
-
-    fields.push({ key: 'order_pdf_url', type: 'url', value: orderPdfUrl });
-    fields.push({ key: 'cutting_pdf_url', type: 'url', value: cuttingPdfUrl });
-  } catch (error) {
-    console.error(`[shopify webhook] Failed to generate order PDFs for order ${order.id}:`, error);
-    return Response.json({ error: 'Failed to generate order PDFs.' }, { status: 500 });
+  const orderKey = String(order.id);
+  if (isWebhookAlreadyCompleted(orderKey) || isWebhookInFlight(orderKey)) {
+    return Response.json({ ok: true, deduplicated: true });
   }
 
-  try {
-    await setOrderMetafields(`gid://shopify/Order/${order.id}`, fields);
-  } catch (error) {
-    console.error(`[shopify webhook] Failed to set ${ORDER_METAFIELD_NAMESPACE} metafields for order ${order.id}:`, error);
-    return Response.json({ error: 'Failed to persist order metafields.' }, { status: 500 });
+  const enqueued = enqueueOrderWebhook({
+    key: orderKey,
+    run: async () => {
+      try {
+        await processOrderWebhook(order, configUrl, uvImageUrls, new URL(request.url).origin);
+      } catch (error) {
+        console.error(`[shopify webhook] Failed to process order ${order.id} in background:`, error);
+        throw error;
+      }
+    },
+  });
+
+  if (!enqueued) {
+    console.error(`[shopify webhook] Queue is full. Unable to enqueue order ${order.id}.`);
+    return Response.json({ error: 'Webhook queue is busy. Retry later.' }, { status: 503 });
   }
 
-  return Response.json({ ok: true });
+  return Response.json({
+    accepted: true,
+    queued: true,
+    queueSize: orderWebhookQueueState.pending.length,
+    activeWorkers: orderWebhookQueueState.activeCount,
+  });
 }
