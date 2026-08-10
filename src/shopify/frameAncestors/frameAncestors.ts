@@ -38,7 +38,11 @@ const normalizeLiveHost = (host: string | null | undefined): string | null => {
     return null;
   }
 
-  const trimmed = host.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+  const trimmed = host
+    .trim()
+    .toLowerCase()
+    .replace(/^https?:\/\//, '')
+    .replace(/\/.*$/, '');
   return HOSTNAME_PATTERN.test(trimmed) ? trimmed : null;
 };
 
@@ -73,7 +77,11 @@ const addConfiguredStoreHosts = (origins: Set<string>): void => {
   const shops = readEnv('SHOPIFY_SHOPS');
   if (shops) {
     for (const shop of shops.split(',')) {
-      const key = shop.trim().toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_|_$/g, '');
+      const key = shop
+        .trim()
+        .toUpperCase()
+        .replace(/[^A-Z0-9]+/g, '_')
+        .replace(/^_|_$/g, '');
       if (!key) {
         continue;
       }
