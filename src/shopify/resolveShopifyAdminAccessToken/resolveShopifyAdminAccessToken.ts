@@ -23,7 +23,8 @@ const fetchClientCredentialsToken = async (storeDomain: string, clientId: string
   });
 
   if (!response.ok) {
-    throw new Error(`[shopify] Failed to mint Admin API access token: HTTP ${response.status}`);
+    const details = await response.text().catch(() => '');
+    throw new Error(`[shopify] Failed to mint Admin API access token: HTTP ${response.status}${details ? ` — ${details}` : ''}`);
   }
 
   const data = (await response.json()) as clientCredentialsResponseType;
@@ -64,8 +65,16 @@ const resolveShopifyAdminAccessToken = async (options: resolveShopifyAdminAccess
     return cachedToken.accessToken;
   }
 
-  cachedToken = await fetchClientCredentialsToken(storeDomain, clientId, clientSecret);
-  return cachedToken.accessToken;
+  try {
+    cachedToken = await fetchClientCredentialsToken(storeDomain, clientId, clientSecret);
+    return cachedToken.accessToken;
+  } catch (error) {
+    const staticToken = getShopifyAdminAccessToken();
+    if (!staticToken) throw error;
+
+    console.warn(`${error instanceof Error ? error.message : String(error)} Falling back to SHOPIFY_ADMIN_ACCESS_TOKEN.`);
+    return staticToken;
+  }
 };
 
 export { resolveShopifyAdminAccessToken };
