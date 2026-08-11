@@ -1,4 +1,4 @@
-import { getShopifyAdminAccessToken, getShopifyAdminClientId, getShopifyAdminClientSecret, getShopifyStoreDomain } from '@shopify/config';
+import { getShopifyAdminAccessToken, getShopifyAdminClientId, getShopifyAdminClientSecret, getShopifyAdminStoreDomain } from '@shopify/config';
 
 type cachedAdminTokenType = {
   accessToken: string;
@@ -56,9 +56,9 @@ const resolveShopifyAdminAccessToken = async (options: resolveShopifyAdminAccess
     return staticToken;
   }
 
-  const storeDomain = getShopifyStoreDomain();
+  const storeDomain = getShopifyAdminStoreDomain();
   if (!storeDomain) {
-    throw new Error('[shopify] Missing SHOPIFY_STORE_DOMAIN for Admin API.');
+    throw new Error('[shopify] Missing SHOPIFY_ADMIN_STORE_DOMAIN (or SHOPIFY_STORE_DOMAIN) for Admin API.');
   }
 
   if (!options.forceRefresh && cachedToken && cachedToken.expiresAt - TOKEN_REFRESH_MARGIN_MS > Date.now()) {
