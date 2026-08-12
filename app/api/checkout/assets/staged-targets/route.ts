@@ -97,7 +97,12 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ error: 'Too many files in one request.' }, { status: 400 });
   }
 
-  if (!files.every(isValidFileInput)) {
+  const rejected = files.filter((file) => !isValidFileInput(file));
+  if (rejected.length) {
+    console.error(
+      '[checkout/assets/staged-targets] Rejected file payload:',
+      rejected.map((file) => ({ id: file.id, filename: file.filename, mimeType: file.mimeType, fileSize: file.fileSize })),
+    );
     return Response.json({ error: 'Invalid file payload.' }, { status: 400 });
   }
 

@@ -356,7 +356,12 @@ export async function POST(request: Request): Promise<Response> {
   const uvImageUrls = readNoteAttribute(attributes, NOTE_ATTRIBUTE_KEYS.uvImageUrls);
 
   if (!configUrl) {
-    return Response.json({ skipped: true });
+    console.warn(
+      `[shopify webhook] Order ${order.name ?? order.id} has no "${NOTE_ATTRIBUTE_KEYS.configUrl}" note attribute — skipping PDF generation. Present attributes: ${
+        attributes.map((attribute) => attribute.name).join(', ') || '(none)'
+      }`,
+    );
+    return Response.json({ skipped: true, reason: 'missing-config-url' });
   }
 
   const orderKey = String(order.id);
