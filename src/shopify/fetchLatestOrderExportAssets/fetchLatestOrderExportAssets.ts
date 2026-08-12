@@ -19,7 +19,7 @@ const LAST_ORDER_EXPORT_ASSETS_QUERY = `
               currencyCode
             }
           }
-          metafields(first: 100) {
+          metafields(first: 100, namespace: "${ORDER_METAFIELD_NAMESPACE}") {
             edges {
               node {
                 id
