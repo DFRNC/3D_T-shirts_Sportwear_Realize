@@ -37,7 +37,7 @@ const getShopifyHomeCollectionHandles = (): string[] => {
   return handles;
 };
 
-const getShopifyApiVersion = (): string => readEnv('SHOPIFY_API_VERSION') ?? '2025-01';
+const getShopifyApiVersion = (): string => readEnv('SHOPIFY_API_VERSION') ?? '2025-10';
 
 const getShopifyApiMode = (): shopifyApiModeType => {
   const mode = readEnv('SHOPIFY_API_MODE');
