@@ -6,7 +6,7 @@ import { AiOutlineBorderOuter } from 'react-icons/ai';
 import { Button, Container, Flex, SvgIcon } from '@atoms';
 
 import { ProductCatalogPopover } from '@molecules';
-import { useNavigateToCheckout, useRequestAddProduct } from '@hooks';
+import { useNavigateToCheckout, useRequestAddProduct, useShareConfiguration } from '@hooks';
 import { useConfigurationCart, useConfigurationControl, useInfoDialog } from '@store';
 import { cn } from '@utils';
 
@@ -19,8 +19,13 @@ const FooterConfiguration = () => {
   const duplicateActiveItem = useConfigurationCart((state) => state.duplicateActiveItem);
   const setIsOpen = useInfoDialog((state) => state.setIsOpen);
   const { navigateToCheckout } = useNavigateToCheckout();
+  const { shareConfiguration } = useShareConfiguration();
 
   const activeItem = items.find((item) => item.id === activeItemId) ?? items[0];
+
+  const handleShare = useCallback(() => {
+    void shareConfiguration();
+  }, [shareConfiguration]);
 
   const handleDuplicate = useCallback(() => {
     duplicateActiveItem();
@@ -40,7 +45,7 @@ const FooterConfiguration = () => {
   return (
     <Container>
       <Flex variant="footer_desktop_row">
-        <Button size="sm">
+        <Button size="sm" onClick={handleShare}>
           <SvgIcon name="share" />
           Condividi
         </Button>
@@ -75,7 +80,7 @@ const FooterConfiguration = () => {
 
       <Flex variant="footer_mobile_column">
         <Flex variant="footer_mobile_grid">
-          <Button size="sm" className={smallButtonClass}>
+          <Button size="sm" onClick={handleShare} className={smallButtonClass}>
             <SvgIcon name="share" />
             Condividi
           </Button>

@@ -17,6 +17,8 @@ export type { sizeChartMetafieldsNodeType } from './mapSizeChartContent';
 export { uploadShopifyFile } from './uploadShopifyFile';
 export { createStagedUploadTargets } from './createStagedUploadTargets';
 export { registerShopifyFiles } from './registerShopifyFiles';
+export { isValidShareId, resolveShareConfigFileUrl } from './resolveShareConfigFileUrl';
+export { fetchSharedConfiguration } from './fetchSharedConfiguration';
 export type { registerShopifyFileInputType, shopifyFileContentType, stagedUploadFileInputType, stagedUploadTargetType } from './stagedUpload';
 export { ORDER_METAFIELD_NAMESPACE, setOrderMetafields } from './setOrderMetafields';
 export type { orderMetafieldInputType } from './setOrderMetafields';

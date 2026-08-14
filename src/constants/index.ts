@@ -108,6 +108,9 @@ const CHECKOUT_SUMMARY_TIMELINE_STEPS = [
 const CHECKOUT_CUTTING_EXPORT_PATH = '/dev/order-cutting-export';
 const CHECKOUT_CUTTING_EXPORT_FILENAME = 'modulo-tessitura.pdf';
 const CHECKOUT_CONFIG_EXPORT_FILENAME = 'config.json';
+const SHARE_CONFIG_EXPORT_FILENAME_PREFIX = 'configurator-share';
+const SHARE_CONFIG_QUERY_PARAM = 'share';
+const SHARE_CONFIG_ROUTE_BASE = '/configurator/share';
 const CHECKOUT_ORDER_EXPORT_TITLE = "Conferma d'ordine";
 const CHECKOUT_ORDER_EXPORT_FILENAME = 'conferma-ordine.pdf';
 const CHECKOUT_ORDER_EXPORT_WEBSITE = 'www.realize.com';
@@ -246,6 +249,9 @@ export {
   LOGO_SUPPORTED_LABEL,
   PALETTE_COLORS,
   resolveShopifyCollectionVolumeDiscount,
+  SHARE_CONFIG_EXPORT_FILENAME_PREFIX,
+  SHARE_CONFIG_QUERY_PARAM,
+  SHARE_CONFIG_ROUTE_BASE,
   TUTORIAL_VIDEO_URL,
   VIDEO_PLAYER_DEFAULT_VOLUME,
   VIDEO_PLAYER_YOUTUBE_CONFIG,

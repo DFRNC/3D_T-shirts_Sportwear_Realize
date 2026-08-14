@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX_REQUESTS = 30;
 const MAX_FILES_PER_REQUEST = 50;
-const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024; 
+const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024;
 const ALLOWED_MIME_TYPE_PREFIXES = ['image/', 'application/pdf', 'application/json'];
 
 type rateLimitEntryType = {

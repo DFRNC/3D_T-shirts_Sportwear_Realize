@@ -15,6 +15,8 @@ export { useOrderCuttingExport } from './useOrderCuttingExport';
 export { useNavigateToCheckout } from './useNavigateToCheckout';
 export { useSubmitCheckout } from './useSubmitCheckout';
 export { useRequestAddProduct } from './useRequestAddProduct';
+export { useRestoreSharedConfiguration } from './useRestoreSharedConfiguration';
+export { useShareConfiguration } from './useShareConfiguration';
 export { useNavigateToConfigurator } from './useNavigateToConfigurator';
 export { useConfigurationCartSync } from './useConfigurationCartSync';
 export { useGarmentLogoCameraFocus } from './useGarmentLogoCameraFocus';

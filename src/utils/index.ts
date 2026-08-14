@@ -5,6 +5,8 @@ export { buildCollectionPath, buildConfiguratorPath, isConfiguratorPath, isInter
 export { buildOrderPreset } from './buildOrderPreset';
 export { buildCheckoutConfigExport, CHECKOUT_CONFIG_EXPORT_VERSION } from './buildCheckoutConfigExport';
 export type { checkoutConfigExportType, checkoutConfigProductExportType } from './buildCheckoutConfigExport';
+export { buildShareConfigExport, parseShareConfigExport, SHARE_CONFIG_EXPORT_KIND, SHARE_CONFIG_EXPORT_VERSION } from './buildShareConfigExport';
+export type { shareConfigExportType } from './buildShareConfigExport';
 export { buildCheckoutOrderExport, formatCheckoutOrderDate } from './buildCheckoutOrderExport';
 export { buildOrderCuttingExport } from './buildOrderCuttingExport';
 export { buildCheckoutOrderExportPdfBlob } from './buildCheckoutOrderExportPdf';
