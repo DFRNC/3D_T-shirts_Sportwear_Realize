@@ -68,7 +68,13 @@ const resolveConfiguratorProduct = async (slug: string, collectionHandle?: strin
   })();
 
   resolveConfiguratorProductCache.set(cacheKey, resolver);
-  return resolver;
+
+  const product = await resolver;
+  if (!product) {
+    resolveConfiguratorProductCache.delete(cacheKey);
+  }
+
+  return product;
 };
 
 export { resolveConfiguratorProduct };

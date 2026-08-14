@@ -23,7 +23,13 @@ const resolveHomeCollectionByHandle = async (handle: string): Promise<homePageCo
   })();
 
   resolveHomeCollectionByHandleCache.set(handle, resolver);
-  return resolver;
+
+  const collection = await resolver;
+  if (!collection) {
+    resolveHomeCollectionByHandleCache.delete(handle);
+  }
+
+  return collection;
 };
 
 export { resolveHomeCollectionByHandle };

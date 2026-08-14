@@ -29,7 +29,13 @@ const resolveHomeCollectionSummaries = async (): Promise<homePageCollectionSumma
   })();
 
   resolveHomeCollectionSummariesCache = resolver;
-  return resolver;
+
+  const collections = await resolver;
+  if (collections.length === 0) {
+    resolveHomeCollectionSummariesCache = null;
+  }
+
+  return collections;
 };
 
 export { resolveHomeCollectionSummaries };

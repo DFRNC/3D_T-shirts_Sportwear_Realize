@@ -29,7 +29,13 @@ const resolveHomeCollections = async (): Promise<homePageCollectionType[]> => {
   })();
 
   resolveHomeCollectionsCache = resolver;
-  return resolver;
+
+  const collections = await resolver;
+  if (collections.length === 0) {
+    resolveHomeCollectionsCache = null;
+  }
+
+  return collections;
 };
 
 export { resolveHomeCollections };
