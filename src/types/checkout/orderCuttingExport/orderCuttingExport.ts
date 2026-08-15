@@ -159,3 +159,15 @@ export type {
   orderCuttingExportTextLayerSpecType,
   orderCuttingExportType,
 };
+
+type shopifyAddressType = {
+  name?: string | null;
+  company?: string | null;
+  address1?: string | null;
+  address2?: string | null;
+  zip?: string | null;
+  city?: string | null;
+  province?: string | null;
+  country?: string | null;
+  phone?: string | null;
+};

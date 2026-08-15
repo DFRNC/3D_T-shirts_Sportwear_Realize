@@ -72,6 +72,7 @@ type shopifyOrderNoteAttributeType = {
 
 type shopifyAddressType = {
   name?: string | null;
+  company?: string | null;
   address1?: string | null;
   address2?: string | null;
   zip?: string | null;
@@ -239,13 +240,15 @@ const buildRecipient = (order: shopifyOrderPayloadType): orderPdfContextType['re
 };
 
 const buildShippingAddress = (order: shopifyOrderPayloadType): orderPdfContextType['shippingAddress'] => {
-  const shipping = order.shipping_address;
-  const street = [shipping?.address1, shipping?.address2].filter(Boolean).join(', ');
+  const address = order.shipping_address ?? order.billing_address;
+  const street = [address?.address1, address?.address2].filter(Boolean).join(', ');
   return {
+    company: address?.company ?? '',
     street,
-    postalCode: shipping?.zip ?? '',
-    city: [shipping?.city, shipping?.province].filter(Boolean).join(' '),
-    country: shipping?.country ?? '',
+    postalCode: address?.zip ?? '',
+    city: address?.city ?? '',
+    province: address?.province ?? '',
+    country: address?.country ?? '',
   };
 };
 

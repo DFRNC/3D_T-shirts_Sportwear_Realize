@@ -23,3 +23,6 @@ export type { registerShopifyFileInputType, shopifyFileContentType, stagedUpload
 export { ORDER_METAFIELD_NAMESPACE, setOrderMetafields } from './setOrderMetafields';
 export type { orderMetafieldInputType } from './setOrderMetafields';
 export { verifyShopifyWebhookSignature } from './verifyShopifyWebhookSignature';
+
+
+export { fetchOrderById } from './fetchOrderById';

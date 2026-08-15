@@ -19,8 +19,7 @@ type orderPdfContextType = {
   orderNumber: string;
   orderDate: string;
   recipient: { name: string; email: string; phone: string };
-  shippingAddress: { street: string; postalCode: string; city: string; country: string };
-  billingNote: string;
+  shippingAddress: { company: string; street: string; postalCode: string; city: string; province: string; country: string };  billingNote: string;
   money: { subtotal: number; discountAmount: number; shippingCost: number; grandTotal: number };
 };
 
