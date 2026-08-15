@@ -146,8 +146,10 @@ const generateOrderPdfs = async (context: orderPdfContextType): Promise<orderPdf
     customer: {
       firstName: firstName ?? '',
       lastName: lastNameParts.join(' '),
+      company: context.shippingAddress.company,
       address: context.shippingAddress.street,
       city: context.shippingAddress.city,
+      province: context.shippingAddress.province,
       postalCode: context.shippingAddress.postalCode,
       email: context.recipient.email,
     },
