@@ -49,11 +49,10 @@ const ProductFlipCard = ({ collection, slug, alt, previewSrc, activePreviewSrc, 
   }, [warmProductAssets]);
 
   return (
-    <a
+    <Link
       ref={cardRef}
       href={toAppPath(buildConfiguratorPath(collection, slug))}
-      // prefetch={false}
-      target="_top"
+      prefetch={false}
       tabIndex={0}
       onPointerEnter={warmProductAssets}
       onFocus={warmProductAssets}
@@ -73,7 +72,7 @@ const ProductFlipCard = ({ collection, slug, alt, previewSrc, activePreviewSrc, 
           <AtomImage src={backSrc} alt={alt} loading="eager" className="size-full rounded-[8px] bg-gray-20 backface-hidden" />
         </Box>
       </Box>
-    </a>
+    </Link>
   );
 };
 
