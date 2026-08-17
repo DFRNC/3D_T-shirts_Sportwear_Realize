@@ -1,3 +1,4 @@
+import { sendOrderEmails } from '@mail';
 import { getShopifyAdminClientSecret, setOrderMetafields, verifyShopifyWebhookSignature } from '@shopify';
 import type { orderMetafieldInputType } from '@shopify';
 import { formatCheckoutOrderDate } from '@utils/buildCheckoutOrderExport';
@@ -252,18 +253,26 @@ const buildShippingAddress = (order: shopifyOrderPayloadType): orderPdfContextTy
   };
 };
 
+const buildShippingSummary = (address: orderPdfContextType['shippingAddress']): string =>
+  [address.company, address.street, [address.postalCode, address.city].filter(Boolean).join(' '), address.province, address.country].filter(Boolean).join(', ');
+
 const processOrderWebhook = async (order: shopifyOrderPayloadType, configUrl: string, uvImageUrls: string | undefined, appOrigin: string): Promise<void> => {
   const fields: orderMetafieldInputType[] = [];
   fields.push({ key: 'config_url', type: 'url', value: configUrl });
   if (uvImageUrls) fields.push({ key: 'uv_image_urls', type: 'json', value: uvImageUrls });
 
-  const { orderPdfUrl, cuttingPdfUrl } = await generateOrderPdfs({
+  const orderNumber = order.name ?? `#${order.id}`;
+  const orderDate = formatCheckoutOrderDate(order.created_at ? new Date(order.created_at) : new Date());
+  const recipient = buildRecipient(order);
+  const shippingAddress = buildShippingAddress(order);
+
+  const { orderPdfUrl, cuttingPdfUrl, orderPdfBuffer, cuttingPdfBuffer } = await generateOrderPdfs({
     configUrl,
     appOrigin,
-    orderNumber: order.name ?? `#${order.id}`,
-    orderDate: formatCheckoutOrderDate(order.created_at ? new Date(order.created_at) : new Date()),
-    recipient: buildRecipient(order),
-    shippingAddress: buildShippingAddress(order),
+    orderNumber,
+    orderDate,
+    recipient,
+    shippingAddress,
     billingNote: "Corrisponde all'indirizzo di spedizione",
     money: {
       subtotal: toNumber(order.subtotal_price),
@@ -276,6 +285,22 @@ const processOrderWebhook = async (order: shopifyOrderPayloadType, configUrl: st
   fields.push({ key: 'order_pdf_url', type: 'url', value: orderPdfUrl });
   fields.push({ key: 'cutting_pdf_url', type: 'url', value: cuttingPdfUrl });
   await setOrderMetafields(`gid://shopify/Order/${order.id}`, fields);
+
+  try {
+    const emailResult = await sendOrderEmails({
+      orderNumber,
+      orderDate,
+      customer: recipient,
+      shippingSummary: buildShippingSummary(shippingAddress),
+      orderPdfUrl,
+      cuttingPdfUrl,
+      orderPdfBuffer,
+      cuttingPdfBuffer,
+    });
+    console.info(`[shopify webhook] Order ${orderNumber} emails — customer: ${emailResult.customer}, owner: ${emailResult.owner}.`);
+  } catch (error) {
+    console.error(`[shopify webhook] Failed to send order emails for ${orderNumber}:`, error);
+  }
 };
 
 const ensureRedisWorker = (): Worker<orderWebhookJobDataType> | null => {

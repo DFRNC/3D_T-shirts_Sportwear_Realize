@@ -19,13 +19,16 @@ type orderPdfContextType = {
   orderNumber: string;
   orderDate: string;
   recipient: { name: string; email: string; phone: string };
-  shippingAddress: { company: string; street: string; postalCode: string; city: string; province: string; country: string };  billingNote: string;
+  shippingAddress: { company: string; street: string; postalCode: string; city: string; province: string; country: string };
+  billingNote: string;
   money: { subtotal: number; discountAmount: number; shippingCost: number; grandTotal: number };
 };
 
 type orderPdfUrlsType = {
   orderPdfUrl: string;
   cuttingPdfUrl: string;
+  orderPdfBuffer: Buffer;
+  cuttingPdfBuffer: Buffer;
 };
 
 const isHttpUrl = (value: string | null | undefined): value is string => !!value && /^https?:/i.test(value);
@@ -179,7 +182,7 @@ const generateOrderPdfs = async (context: orderPdfContextType): Promise<orderPdf
     uploadShopifyFile(new Blob([Uint8Array.from(cuttingPdfBuffer)], { type: 'application/pdf' }), CHECKOUT_CUTTING_EXPORT_FILENAME, 'application/pdf'),
   ]);
 
-  return { orderPdfUrl, cuttingPdfUrl };
+  return { orderPdfUrl, cuttingPdfUrl, orderPdfBuffer, cuttingPdfBuffer };
 };
 
 export { generateOrderPdfs };
