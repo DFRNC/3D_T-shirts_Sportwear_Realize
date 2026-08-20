@@ -5,8 +5,6 @@ import type { configuratorProductHydrationType } from '@configurator/types';
 import type { garmentBusinessType } from '@types';
 import { resolveConfiguratorProductBySlug } from '@utils';
 
-const resolveConfiguratorProductCache = new Map<string, Promise<configuratorProductHydrationType | null>>();
-
 const mergeCollectionVolumeTerms = (business: garmentBusinessType, collectionHandle: string): garmentBusinessType => {
   const terms = resolveShopifyCollectionVolumeDiscount(collectionHandle);
   if (!terms) return business;
@@ -32,49 +30,34 @@ const withDefaultMinimumOrder = (product: configuratorProductHydrationType): con
 };
 
 const resolveConfiguratorProduct = async (slug: string, collectionHandle?: string): Promise<configuratorProductHydrationType | null> => {
-  const cacheKey = `${slug}::${collectionHandle ?? ''}`;
-  const cached = resolveConfiguratorProductCache.get(cacheKey);
-  if (cached) return cached;
+  const localProduct = resolveConfiguratorProductBySlug(slug);
 
-  const resolver = (async (): Promise<configuratorProductHydrationType | null> => {
-    const localProduct = resolveConfiguratorProductBySlug(slug);
+  if (!isShopifyEnabled()) {
+    return localProduct;
+  }
 
-    if (!isShopifyEnabled()) {
+  try {
+    const shopifyProduct = await fetchConfiguratorProductByHandle(slug);
+    let product = shopifyProduct ?? localProduct;
+
+    if (!product) {
+      console.warn(`[shopify] Product "${slug}" not found by handle or custom.id; falling back to local catalog.`);
       return localProduct;
     }
 
-    try {
-      const shopifyProduct = await fetchConfiguratorProductByHandle(slug);
-      let product = shopifyProduct ?? localProduct;
-
-      if (!product) {
-        console.warn(`[shopify] Product "${slug}" not found by handle or custom.id; falling back to local catalog.`);
-        return localProduct;
-      }
-
-      if (collectionHandle?.trim()) {
-        product = {
-          ...product,
-          business: mergeCollectionVolumeTerms(product.business, collectionHandle),
-        };
-      }
-
-      return withDefaultMinimumOrder(product);
-    } catch (error) {
-      console.warn(`[shopify] Failed to fetch product "${slug}"; falling back to local catalog.`, error);
+    if (collectionHandle?.trim()) {
+      product = {
+        ...product,
+        business: mergeCollectionVolumeTerms(product.business, collectionHandle),
+      };
     }
 
-    return localProduct;
-  })();
-
-  resolveConfiguratorProductCache.set(cacheKey, resolver);
-
-  const product = await resolver;
-  if (!product) {
-    resolveConfiguratorProductCache.delete(cacheKey);
+    return withDefaultMinimumOrder(product);
+  } catch (error) {
+    console.warn(`[shopify] Failed to fetch product "${slug}"; falling back to local catalog.`, error);
   }
 
-  return product;
+  return localProduct;
 };
 
 export { resolveConfiguratorProduct };
