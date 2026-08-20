@@ -16,7 +16,7 @@ type collectionVolumeDiscountConfigType = {
 
 const CONFIGURATOR_COLLECTION_VOLUME_DISCOUNTS: Record<string, collectionVolumeDiscountConfigType> = {
   'completo-gara-calcio': { minimumOrderCount: 5, bonusCount: 25, bonusDiscount: 20 },
-  'completo-gara-pallavolo': { minimumOrderCount: 5, bonusCount: 25, bonusDiscount: 20 },
+  'completo-gara-pallavolo-config': { minimumOrderCount: 5, bonusCount: 25, bonusDiscount: 20 },
   'completo-gara-basket': { minimumOrderCount: 5, bonusCount: 25, bonusDiscount: 20 },
   completo: { minimumOrderCount: 5, bonusCount: 25, bonusDiscount: 20 },
 };

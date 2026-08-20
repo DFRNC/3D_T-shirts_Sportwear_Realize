@@ -23,7 +23,7 @@ const getShopifyAdminClientSecret = (): string | undefined => readEnv('SHOPIFY_A
 
 const getShopifyStorefrontAccessToken = (): string | undefined => readEnv('SHOPIFY_STOREFRONT_ACCESS_TOKEN');
 
-const DEFAULT_SHOPIFY_HOME_COLLECTION_HANDLES = ['completo-gara-calcio', 'completo-gara-pallavolo', 'completo-gara-basket', 'completo'] as const;
+const DEFAULT_SHOPIFY_HOME_COLLECTION_HANDLES = ['completo-gara-calcio', 'completo-gara-pallavolo-config', 'completo-gara-basket', 'completo'] as const;
 
 const getShopifyHomeCollectionHandles = (): string[] => {
   const raw = readEnv('SHOPIFY_HOME_COLLECTION_HANDLES');
