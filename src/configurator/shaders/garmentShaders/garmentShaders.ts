@@ -117,8 +117,10 @@ uniform vec3 uNameGizmoIconColor;
 #endif
 uniform sampler2D uPatternMask0;
 uniform sampler2D uPatternMask1;
+uniform sampler2D uPatternMask2;
 uniform vec3 uPatternColor0;
 uniform vec3 uPatternColor1;
+uniform vec3 uPatternColor2;
 uniform float uPatternOpacity;
 
 vec4 garmentGizmoUiColor;

@@ -66,7 +66,6 @@ const NamePartForm = ({ instanceId, limits, placeholder }: namePartFormPropsType
       <FontSelectRow font={instance.font} onChange={(font) => commit({ font })} />
 
       <ColorTabControl
-        tabVariant="text"
         textColor={previewTextColor ?? instance.textColor}
         strokeColor={previewStrokeColor ?? instance.strokeColor}
         onTextColor={(textColor) => commit({ textColor })}

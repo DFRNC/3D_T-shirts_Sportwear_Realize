@@ -1,7 +1,7 @@
 import type { stampPixelSizeType } from '@configurator/types';
 import type { Texture } from 'three';
-type patternColorPairType = [string, string];
-type patternMaskPairType = [Texture, Texture];
+type patternColorPairType = [string, string, string];
+type patternMaskPairType = [Texture, Texture, Texture];
 
 interface garmentPrintStateType {
   defaultLogos: Texture;

@@ -6,6 +6,7 @@ import {
   NAME_GIZMO_BTN_FILL_COLOR,
   NAME_GIZMO_ICON_COLOR,
   NAME_SLOT_COUNT,
+  PATTERN_LAYER_COUNT,
   PRINT_ATLAS_HEIGHT,
   PRINT_ATLAS_WIDTH,
 } from '@configurator/constants';
@@ -127,10 +128,10 @@ const bindGarmentPrintShaderUniforms = (
   shader.uniforms.uLogoGizmoButtonsActive = { value: Array.from({ length: LOGO_SLOT_COUNT }, () => 0) };
   shader.uniforms.uLogoGizmoButtonsReveal = { value: Array.from({ length: LOGO_SLOT_COUNT }, () => 0) };
   shader.uniforms.uLogoGizmoHalf = { value: Array.from({ length: LOGO_SLOT_COUNT }, () => new Vector2(0, 0)) };
-  shader.uniforms.uPatternMask0 = { value: printState?.patternMasks[0] ?? emptyPrint };
-  shader.uniforms.uPatternMask1 = { value: printState?.patternMasks[1] ?? emptyPrint };
-  shader.uniforms.uPatternColor0 = { value: new Color(printState?.patternColors[0] ?? '#000000') };
-  shader.uniforms.uPatternColor1 = { value: new Color(printState?.patternColors[1] ?? '#000000') };
+  for (let layerIndex = 0; layerIndex < PATTERN_LAYER_COUNT; layerIndex += 1) {
+    shader.uniforms[`uPatternMask${layerIndex}`] = { value: printState?.patternMasks[layerIndex] ?? emptyPrint };
+    shader.uniforms[`uPatternColor${layerIndex}`] = { value: new Color(printState?.patternColors[layerIndex] ?? '#000000') };
+  }
   shader.uniforms.uPatternOpacity = { value: printState?.patternOpacity ?? 1 };
 
   material.userData.uDefaultLogosUniform = shader.uniforms.uDefaultLogos;
@@ -208,10 +209,10 @@ const bindGarmentPrintShaderUniforms = (
   material.userData.uLogoGizmoButtonsActiveUniform = shader.uniforms.uLogoGizmoButtonsActive;
   material.userData.uLogoGizmoButtonsRevealUniform = shader.uniforms.uLogoGizmoButtonsReveal;
   material.userData.uLogoGizmoHalfUniform = shader.uniforms.uLogoGizmoHalf;
-  material.userData.uPatternMask0Uniform = shader.uniforms.uPatternMask0;
-  material.userData.uPatternMask1Uniform = shader.uniforms.uPatternMask1;
-  material.userData.uPatternColor0Uniform = shader.uniforms.uPatternColor0;
-  material.userData.uPatternColor1Uniform = shader.uniforms.uPatternColor1;
+  for (let layerIndex = 0; layerIndex < PATTERN_LAYER_COUNT; layerIndex += 1) {
+    material.userData[`uPatternMask${layerIndex}Uniform`] = shader.uniforms[`uPatternMask${layerIndex}`];
+    material.userData[`uPatternColor${layerIndex}Uniform`] = shader.uniforms[`uPatternColor${layerIndex}`];
+  }
   material.userData.uPatternOpacityUniform = shader.uniforms.uPatternOpacity;
 
   hydrateGarmentNameUniforms(material, {

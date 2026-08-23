@@ -53,6 +53,7 @@ interface garmentPartConfigType {
 
 interface patternPartConfigType {
   path_name: string;
+  colorIndex?: number;
 }
 
 interface patternConfigType {

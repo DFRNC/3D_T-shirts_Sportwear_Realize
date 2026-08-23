@@ -1,7 +1,5 @@
 'use client';
 
-import { ColorControl } from '@molecules/ConfigurationTools/ColorControl';
-import { ColorTabControl } from '@molecules/ConfigurationTools/ColorTabControl';
 import { PatternLayerColorControl } from '@molecules/ConfigurationTools/PatternLayerColorControl';
 import { RangeControl } from '@molecules/ConfigurationTools/RangeControl';
 import { DesignPatternCarousel } from '@molecules/ConfigurationSteps/DesignPatternCarousel';
@@ -13,6 +11,7 @@ import { PatternPreviewSkeleton } from '@skeletons';
 import { useConfiguratorProduct, useGarmentDesign } from '@store';
 import { cn } from '@utils';
 import { useCallback, useState } from 'react';
+
 const DEFAULT_PART_COLOR = PALETTE_COLORS[1];
 
 const DesignCardPreview = ({ src, layerColors, eager }: { src: string; layerColors?: string[]; eager?: boolean }) => {
@@ -36,15 +35,11 @@ const DesignCardPreview = ({ src, layerColors, eager }: { src: string; layerColo
   );
 };
 
-const resolvePatternLayerColors = (
+const resolvePreviewLayerColors = (
   pattern: designPatternItemType,
   activePattern: designPatternItemType | null,
   getPartColor: (partKey: string) => string,
-): string[] | undefined => {
-  if (activePattern?.key !== pattern.key) return undefined;
-
-  return pattern.parts.map((part) => getPartColor(part.key));
-};
+) => (activePattern?.key === pattern.key ? pattern.colorParts.map((part) => getPartColor(part.key)) : undefined);
 
 const ConfigurationDesign = () => {
   const product = useConfiguratorProduct((state) => state.product);
@@ -77,7 +72,7 @@ const ConfigurationDesign = () => {
             onClick={() => setActivePattern(pattern)}
             style={{ contentVisibility: 'auto', contain: 'layout paint style' }}
           >
-            <DesignCardPreview src={pattern.cardPreviewSrc} layerColors={resolvePatternLayerColors(pattern, activePattern, getPartColor)} eager={index < 2} />
+            <DesignCardPreview src={pattern.cardPreviewSrc} layerColors={resolvePreviewLayerColors(pattern, activePattern, getPartColor)} eager={index < 2} />
           </Button>
         ))}
       </Grid>
@@ -87,41 +82,21 @@ const ConfigurationDesign = () => {
           activePatternKey={activePattern?.key ?? null}
           onSelect={setActivePattern}
           renderPreview={(pattern, index) => (
-            <DesignCardPreview src={pattern.cardPreviewSrc} layerColors={resolvePatternLayerColors(pattern, activePattern, getPartColor)} eager={index < 2} />
+            <DesignCardPreview src={pattern.cardPreviewSrc} layerColors={resolvePreviewLayerColors(pattern, activePattern, getPartColor)} eager={index < 2} />
           )}
         />
       </Box>
 
-      {activePattern && activePattern.parts.length === 1 && (
-        <ColorControl
-          color={getPartColor(activePattern.parts[0].key)}
-          onSelect={(color) => setPartColor(activePattern.parts[0].key, color)}
-          onPreviewSelect={(color) => setPartColor(activePattern.parts[0].key, color)}
-          label="Colore design"
-        />
-      )}
-
-      {activePattern && activePattern.parts.length === 2 && (
-        <ColorTabControl
-          textColor={getPartColor(activePattern.parts[0].key)}
-          strokeColor={getPartColor(activePattern.parts[1].key)}
-          onTextColor={(color) => setPartColor(activePattern.parts[0].key, color)}
-          onStrokeColor={(color) => setPartColor(activePattern.parts[1].key, color)}
-          onPreviewTextColor={(color) => setPartColor(activePattern.parts[0].key, color)}
-          onPreviewStrokeColor={(color) => setPartColor(activePattern.parts[1].key, color)}
-          label="Colore design"
-        />
-      )}
-
-      {activePattern && activePattern.parts.length > 2 && (
+      {activePattern && (
         <PatternLayerColorControl
-          layers={activePattern.parts.map((part, index) => ({
+          key={activePattern.key}
+          layers={activePattern.colorParts.map((part, index) => ({
             key: part.key,
             label: `Colore ${index + 1}`,
           }))}
-          colors={Object.fromEntries(activePattern.parts.map((part) => [part.key, getPartColor(part.key)]))}
-          onColorChange={(partKey, color) => setPartColor(partKey, color)}
-          onPreviewColorChange={(partKey, color) => setPartColor(partKey, color)}
+          colors={Object.fromEntries(activePattern.colorParts.map((part) => [part.key, getPartColor(part.key)]))}
+          onColorChange={setPartColor}
+          onPreviewColorChange={setPartColor}
           label="Colore design"
         />
       )}

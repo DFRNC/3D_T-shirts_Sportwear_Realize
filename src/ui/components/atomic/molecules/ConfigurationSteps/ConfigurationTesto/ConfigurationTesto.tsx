@@ -72,7 +72,6 @@ const TestoPartForm = ({ instanceId, limits, placeholder, lineHeightShow, letter
       <FontSelectRow font={instance.font} onChange={(font) => commit({ font })} />
 
       <ColorTabControl
-        tabVariant="text"
         textColor={previewTextColor ?? instance.textColor}
         strokeColor={previewStrokeColor ?? instance.strokeColor}
         onTextColor={(textColor) => commit({ textColor })}

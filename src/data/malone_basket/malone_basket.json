@@ -171,10 +171,12 @@
       "name": "Design 10",
       "parts": [
         {
-          "path_name": "design_10_color_1.webp"
+          "path_name": "design_10_color_1.webp",
+          "colorIndex": 2
         },
         {
-          "path_name": "design_10_color_2.webp"
+          "path_name": "design_10_color_2.webp",
+          "colorIndex": 1
         }
       ],
       "designId": "design_10"

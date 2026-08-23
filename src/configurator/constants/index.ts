@@ -4,7 +4,7 @@ const FULL_UV_BOUNDS: uvBoundsType = { minX: 0, maxX: 1, minY: 0, maxY: 1 };
 const DEFAULT_PART_TEXTURE_SIZE = 2048;
 const PRINT_ATLAS_WIDTH = 2048;
 const PRINT_ATLAS_HEIGHT = Math.round((4900 / 9331) * PRINT_ATLAS_WIDTH);
-const PATTERN_LAYER_COUNT = 2;
+const PATTERN_LAYER_COUNT = 3;
 const NAME_SLOT_COUNT = 4;
 const LOGO_SLOT_COUNT = 4;
 

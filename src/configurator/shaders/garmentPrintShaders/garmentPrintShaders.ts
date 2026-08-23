@@ -6,13 +6,18 @@ const garmentPrintMapFragment = `
 
   float mask0 = texture2D( uPatternMask0, vPrintUv ).a;
   float mask1 = texture2D( uPatternMask1, vPrintUv ).a;
+  float mask2 = texture2D( uPatternMask2, vPrintUv ).a;
 
   float rim = max( mask0 - mask1, 0.0 );
-
-  float coverage = max( mask0, mask1 );
+  float coverage01 = max( mask0, mask1 );
   float blend1 = mask1 / max( rim + mask1, 0.001 );
+  vec3 mixed01 = mix( uPatternColor0, uPatternColor1, blend1 );
 
-  printColor = vec4( mix( uPatternColor0, uPatternColor1, blend1 ), min( coverage, 1.0 ) * uPatternOpacity );
+  float rim2 = max( coverage01 - mask2, 0.0 );
+  float coverage = max( coverage01, mask2 );
+  float blend2 = mask2 / max( rim2 + mask2, 0.001 );
+
+  printColor = vec4( mix( mixed01, uPatternColor2, blend2 ), min( coverage, 1.0 ) * uPatternOpacity );
 
 #ifdef USE_GARMENT_LOGO
 ${garmentLogoMapFragment}
