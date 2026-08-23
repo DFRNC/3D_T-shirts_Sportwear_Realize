@@ -12,7 +12,7 @@ const buttonVariants = cva(
     'border border-transparent',
     'focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-active',
     'active:not-aria-[haspopup]:translate-y-px',
-    'disabled:pointer-events-none disabled:opacity-50',
+    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
     'aria-invalid:border-red aria-invalid:ring-1 aria-invalid:ring-active',
     'transition-all duration-200 ease-in',
   ),

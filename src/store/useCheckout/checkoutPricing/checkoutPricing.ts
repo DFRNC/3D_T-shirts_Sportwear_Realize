@@ -1,8 +1,16 @@
 'use client';
 
+import { CONFIGURATOR_DEFAULT_MINIMUM_COUNT } from '@constants';
 import type { checkoutProductType } from '@types';
 
 const getProductRowQuantity = (product: checkoutProductType) => product.rows.reduce((sum, row) => sum + row.quantity, 0);
+
+const getCheckoutTotalQuantity = (products: checkoutProductType[]) => products.reduce((sum, product) => sum + getProductRowQuantity(product), 0);
+
+const getCheckoutMinimumQuantity = (products: checkoutProductType[]) =>
+  products.reduce((minimum, product) => Math.max(minimum, product.business.minimumCount || 0), CONFIGURATOR_DEFAULT_MINIMUM_COUNT);
+
+const isCheckoutMinimumQuantityMet = (products: checkoutProductType[]) => getCheckoutTotalQuantity(products) >= getCheckoutMinimumQuantity(products);
 
 const getCheckoutDiscountPercent = (totalQuantity: number): number => {
   if (totalQuantity >= 110) return 10;
@@ -21,4 +29,12 @@ const getProductsSubtotal = (products: checkoutProductType[]) =>
     return sum + unitPrice * quantity;
   }, 0);
 
-export { getCheckoutDiscountPercent, getProductRowQuantity, getProductUnitPrice, getProductsSubtotal };
+export {
+  getCheckoutDiscountPercent,
+  getCheckoutMinimumQuantity,
+  getCheckoutTotalQuantity,
+  getProductRowQuantity,
+  getProductUnitPrice,
+  getProductsSubtotal,
+  isCheckoutMinimumQuantityMet,
+};

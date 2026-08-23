@@ -65,7 +65,7 @@ const TestoPartForm = ({ instanceId, limits, placeholder, lineHeightShow, letter
           maxLength={limits.maxLength}
           onChange={(e) => setPreview(instanceId, { text: e.target.value })}
           onBlur={commitFromPreview}
-          className="w-full h-10 max-xl:h-8 max-sm:h-8.75 bg-white border border-input-border rounded-[8px] max-xl:rounded-[6.5px] max-sm:rounded-[7.5px] px-3 max-xl:px-2.5 text-sm max-xl:text-[13px] font-inter text-default outline-none focus:border-active transition-colors"
+          className="w-full h-10 max-xl:h-8 max-sm:h-8.75 bg-white border border-input-border rounded-lg max-xl:rounded-[6.5px] max-sm:rounded-[7.5px] px-3 max-xl:px-2.5 text-sm max-xl:text-[13px] font-inter text-default outline-none focus:border-active transition-colors"
           placeholder={placeholder}
         />
       </Flex>
@@ -131,7 +131,7 @@ const TestoPartForm = ({ instanceId, limits, placeholder, lineHeightShow, letter
       />
 
       <Button variant="delete" size="delete" onClick={() => removeInstance(instanceId)}>
-        <SvgIcon name="delete" className="w-[14px] h-[15.75px] max-xl:w-2.75 max-xl:h-[12.5px]" />
+        <SvgIcon name="delete" className="w-3.5 h-[15.75px] max-xl:w-2.75 max-xl:h-[12.5px]" />
         Eliminare
       </Button>
     </Flex>

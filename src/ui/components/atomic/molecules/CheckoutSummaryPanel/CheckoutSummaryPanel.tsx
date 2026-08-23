@@ -1,11 +1,25 @@
 'use client';
 
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
-import type { PointerEvent as ReactPointerEvent } from 'react';
-
-import { AtomBadge, AtomCard, AtomCardContent, AtomCardHeader, AtomCardTitle, AtomSeparator, Button, Flex, ScrollArea, SvgIcon, Text } from '@atoms';
+import type { ReactNode, PointerEvent as ReactPointerEvent } from 'react';
 
 import {
+  AtomBadge,
+  AtomCard,
+  AtomCardContent,
+  AtomCardHeader,
+  AtomCardTitle,
+  AtomSeparator,
+  AtomTooltip,
+  Button,
+  Flex,
+  ScrollArea,
+  SvgIcon,
+  Text,
+} from '@atoms';
+
+import {
+  buildMinimumQuantityLabel,
   CHECKOUT_SUMMARY_PROCEED_LABEL,
   CHECKOUT_SUMMARY_SHIPPING_LABEL,
   CHECKOUT_SUMMARY_TIMELINE_STEPS,
@@ -39,9 +53,27 @@ type CheckoutSummarySharedProps = {
   grandTotal: number;
   deliveryTimeline: ReturnType<typeof getCheckoutDeliveryTimeline>;
   isSubmitting: boolean;
+  canProceed: boolean;
+  minimumQuantity: number;
   error: string | null;
   onSubmit: () => void;
 };
+
+const CheckoutProceedTooltip = ({
+  canProceed,
+  minimumQuantity,
+  className,
+  children,
+}: {
+  canProceed: boolean;
+  minimumQuantity: number;
+  className?: string;
+  children: ReactNode;
+}) => (
+  <AtomTooltip content={!canProceed ? buildMinimumQuantityLabel(minimumQuantity) : undefined} className={className}>
+    {children}
+  </AtomTooltip>
+);
 
 const CheckoutDiscountBanner = ({ discountPercent, discountAmount, className }: { discountPercent: number; discountAmount: number; className?: string }) => (
   <div
@@ -138,6 +170,8 @@ const CheckoutSummaryBody = ({
   grandTotal,
   deliveryTimeline,
   isSubmitting,
+  canProceed,
+  minimumQuantity,
   error,
   onSubmit,
 }: CheckoutSummarySharedProps) => (
@@ -145,10 +179,12 @@ const CheckoutSummaryBody = ({
     <CheckoutSummaryLineItems lineItems={lineItems} shippingCost={shippingCost} grandTotal={grandTotal} />
     <Flex variant="checkout_summary_actions_column">
       <CheckoutDiscountBanner discountPercent={discountPercent} discountAmount={discountAmount} className="gap-2 px-6 py-2" />
-      <Button size="checkout" variant="checkout" disabled={isSubmitting} onClick={onSubmit}>
-        {isSubmitting ? 'Attendere…' : CHECKOUT_SUMMARY_PROCEED_LABEL}
-        {error && <p className="text-[12px] text-red-600">{error}</p>}
-      </Button>
+      <CheckoutProceedTooltip canProceed={canProceed} minimumQuantity={minimumQuantity} className="w-full cursor-not-allowed">
+        <Button size="checkout" variant="checkout" disabled={isSubmitting || !canProceed} onClick={onSubmit}>
+          {isSubmitting ? 'Attendere…' : CHECKOUT_SUMMARY_PROCEED_LABEL}
+        </Button>
+      </CheckoutProceedTooltip>
+      {error && <p className="text-[12px] text-red-600">{error}</p>}
     </Flex>
     <CheckoutSummaryMeta deliveryTimeline={deliveryTimeline} />
   </Flex>
@@ -159,9 +195,14 @@ const CheckoutSummaryMobileActions = ({
   discountAmount,
   grandTotal,
   isSubmitting,
+  canProceed,
+  minimumQuantity,
   error,
   onSubmit,
-}: Pick<CheckoutSummarySharedProps, 'discountPercent' | 'discountAmount' | 'grandTotal' | 'isSubmitting' | 'error' | 'onSubmit'>) => (
+}: Pick<
+  CheckoutSummarySharedProps,
+  'discountPercent' | 'discountAmount' | 'grandTotal' | 'isSubmitting' | 'canProceed' | 'minimumQuantity' | 'error' | 'onSubmit'
+>) => (
   <Flex variant="checkout_summary_mobile_actions">
     <Flex variant="checkout_summary_mobile_head">
       <Flex variant="checkout_summary_mobile_total">
@@ -171,15 +212,17 @@ const CheckoutSummaryMobileActions = ({
         </Flex>
         <Text variant="checkout_summary_mobile_total_amount">{priceFormat(grandTotal)}</Text>
       </Flex>
-      <Button
-        size="checkout"
-        variant="checkout"
-        className="h-9 w-37.25 shrink-0 rounded-lg p-0 text-[14px] font-semibold leading-4 hover:bg-[#0A0A0A] hover:text-white"
-        disabled={isSubmitting}
-        onClick={onSubmit}
-      >
-        {isSubmitting ? 'Attendere…' : CHECKOUT_SUMMARY_PROCEED_LABEL}
-      </Button>
+      <CheckoutProceedTooltip canProceed={canProceed} minimumQuantity={minimumQuantity} className="shrink-0 cursor-not-allowed">
+        <Button
+          size="checkout"
+          variant="checkout"
+          className="h-9 w-37.25 shrink-0 rounded-lg p-0 text-[14px] font-semibold leading-4 hover:bg-[#0A0A0A] hover:text-white"
+          disabled={isSubmitting || !canProceed}
+          onClick={onSubmit}
+        >
+          {isSubmitting ? 'Attendere…' : CHECKOUT_SUMMARY_PROCEED_LABEL}
+        </Button>
+      </CheckoutProceedTooltip>
     </Flex>
     <CheckoutDiscountBanner discountPercent={discountPercent} discountAmount={discountAmount} className="min-h-11.75 w-full" />
     {error && <p className="text-[12px] text-red-600">{error}</p>}
@@ -187,7 +230,7 @@ const CheckoutSummaryMobileActions = ({
 );
 
 const CheckoutSummaryPanel = () => {
-  const { lineItems, shippingCost, discountPercent, discountAmount, grandTotal } = useCheckoutSummary();
+  const { lineItems, shippingCost, discountPercent, discountAmount, grandTotal, canProceed, minimumQuantity } = useCheckoutSummary();
   const { submitCheckout, isSubmitting, error } = useSubmitCheckout();
   const deliveryTimeline = useMemo(() => getCheckoutDeliveryTimeline(), []);
   const [height, setHeight] = useState(PEEK_HEIGHT_PX);
@@ -246,6 +289,8 @@ const CheckoutSummaryPanel = () => {
     grandTotal,
     deliveryTimeline,
     isSubmitting,
+    canProceed,
+    minimumQuantity,
     error,
     onSubmit: submitCheckout,
   };
@@ -487,6 +532,8 @@ const CheckoutSummaryPanel = () => {
               discountAmount={discountAmount}
               grandTotal={grandTotal}
               isSubmitting={isSubmitting}
+              canProceed={canProceed}
+              minimumQuantity={minimumQuantity}
               error={error}
               onSubmit={submitCheckout}
             />
