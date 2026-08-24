@@ -18,19 +18,7 @@ html:has(.configurator-shell) body {
 
 :root {
   --viewport-height: 100dvh;
-  --dialog-safe-top: 75px;
-}
-
-@media (max-width: 1023px) {
-  :root {
-    --dialog-safe-top: 72px;
-  }
-}
-
-@media (max-width: 767px) {
-  :root {
-    --dialog-safe-top: 64px;
-  }
+  --embed-header-offset: 0px;
 }
 
 .configurator-shell {
@@ -41,6 +29,19 @@ html:has(.configurator-shell) body {
 html[data-embedded='1'] {
   --configurator-shell-height: 100%;
   --viewport-height: 100%;
+  --embed-header-offset: 75px;
+}
+
+@media (max-width: 1023px) {
+  html[data-embedded='1'] {
+    --embed-header-offset: 72px;
+  }
+}
+
+@media (max-width: 767px) {
+  html[data-embedded='1'] {
+    --embed-header-offset: 64px;
+  }
 }
 
 @theme {

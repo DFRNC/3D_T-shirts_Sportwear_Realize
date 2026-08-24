@@ -72,7 +72,7 @@ const ModalShare = () => {
 
   return (
     <AtomDialog open={isOpen} onOpenChange={handleOpenChange}>
-      <AtomDialogContent aria-label="Condividi configurazione" className="max-w-[560px]! h-auto! max-h-[calc((var(--viewport-height)-var(--dialog-safe-top))*0.8)]">
+      <AtomDialogContent aria-label="Condividi configurazione" className="max-w-[560px]! h-auto! max-h-[calc((var(--viewport-height)-var(--embed-header-offset))*0.8)]">
         <AtomDialogTitle className="text-[24px] leading-[1.2] font-semibold max-sm:text-[20px]">Condividi la tua configurazione</AtomDialogTitle>
         <AtomDialogDescription className="mt-2 text-gray-30">
           Chiunque abbia questo link potrà aprire e visualizzare la configurazione che hai creato.
