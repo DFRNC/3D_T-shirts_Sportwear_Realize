@@ -19,6 +19,12 @@ import { Spherical, Vector3 } from 'three';
 const FOCUS_DURATION_MS = 420;
 const FOCUS_RETRY_FRAMES = 90;
 
+const isFrontOrBackGarmentPart = (part: { id: string; label: string }) => {
+  const id = part.id.toLowerCase();
+  const label = part.label.trim().toLowerCase();
+  return id === 'front' || id === 'back' || id.endsWith('_front') || id.endsWith('_back') || label === 'davanti' || label === 'retro';
+};
+
 const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 
 interface focusAnimationType {
@@ -69,7 +75,7 @@ const useOrbitCameraFocus = () => {
         currentTarget: controls.target,
         minDistance: ORBIT_MIN_DISTANCE,
         maxDistance: ORBIT_MAX_DISTANCE,
-        viewMode,
+        viewMode: isFrontOrBackGarmentPart(part) ? 'part' : viewMode,
       },
       orbitTargetRef.current,
       orbitCameraRef.current,

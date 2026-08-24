@@ -46,6 +46,25 @@ const resolveShortestAngleDelta = (from: number, to: number) => {
   return delta;
 };
 
+const LEVEL_POLAR_ANGLE = Math.PI / 2;
+const FRONT_BACK_AZIMUTH_SNAP = 0.18;
+
+const applyCardinalHorizonDirection = (direction: Vector3) => {
+  direction.y = 0;
+  if (direction.lengthSq() < 1e-8) {
+    direction.set(0, 0, 1);
+    return direction;
+  }
+
+  if (Math.abs(direction.z) >= Math.abs(direction.x)) {
+    direction.set(0, 0, direction.z >= 0 ? 1 : -1);
+    return direction;
+  }
+
+  direction.set(direction.x >= 0 ? 1 : -1, 0, 0);
+  return direction;
+};
+
 interface ResolveCursorFocusPointInput {
   camera: Camera;
   controls: OrbitControlsImpl;
@@ -202,14 +221,15 @@ const resolveOrbitFocusPose = (
   target.copy(focusPoint);
 
   if (viewMode === 'part') {
+    target.copy(garmentCenter);
     viewDirection.copy(focusPoint).sub(garmentCenter);
+    if (viewDirection.lengthSq() < 1e-8) {
+      viewDirection.copy(surfaceNormal);
+    }
     if (viewDirection.lengthSq() < 1e-8) {
       viewDirection.copy(currentCamera).sub(currentTarget);
     }
-    if (viewDirection.lengthSq() < 1e-8) {
-      viewDirection.set(0, 0, 1);
-    }
-    viewDirection.normalize();
+    applyCardinalHorizonDirection(viewDirection);
   } else {
     viewDirection.copy(surfaceNormal);
     if (viewDirection.lengthSq() < 1e-8) {
@@ -237,10 +257,41 @@ const resolveOrbitFocusPose = (
   return true;
 };
 
+interface SnapOrbitToLevelFrontOrBackInput {
+  camera: Camera;
+  controls: OrbitControlsImpl;
+  scene: Object3D;
+}
+
+const snapOrbitToLevelFrontOrBack = ({ camera, controls, scene }: SnapOrbitToLevelFrontOrBackInput): boolean => {
+  if (!resolveGarmentCenter(scene, garmentCenter)) return false;
+
+  controls.update();
+  const theta = controls.getAzimuthalAngle();
+  const deltaFront = resolveShortestAngleDelta(theta, 0);
+  const deltaBack = resolveShortestAngleDelta(theta, Math.PI);
+  const snapToBack = Math.abs(deltaBack) < Math.abs(deltaFront);
+  const delta = snapToBack ? deltaBack : deltaFront;
+  if (Math.abs(delta) > FRONT_BACK_AZIMUTH_SNAP) return false;
+
+  const radius = camera.position.distanceTo(controls.target);
+  const thetaTarget = snapToBack ? Math.PI : 0;
+  controls.target.copy(garmentCenter);
+  targetOffset.set(
+    radius * Math.sin(LEVEL_POLAR_ANGLE) * Math.sin(thetaTarget),
+    radius * Math.cos(LEVEL_POLAR_ANGLE),
+    radius * Math.sin(LEVEL_POLAR_ANGLE) * Math.cos(thetaTarget),
+  );
+  camera.position.copy(controls.target).add(targetOffset);
+  controls.update();
+  return true;
+};
+
 export {
   ORBIT_SURFACE_CLEARANCE,
   ORBIT_MIN_DISTANCE,
   ORBIT_MAX_DISTANCE,
+  applyCardinalHorizonDirection,
   applyOrbitZoomAroundPoint,
   clampOrbitCameraOutsideGarment,
   clampOrbitTargetToGarment,
@@ -249,4 +300,5 @@ export {
   resolveGarmentCenter,
   resolveOrbitFocusPose,
   resolveShortestAngleDelta,
+  snapOrbitToLevelFrontOrBack,
 };
