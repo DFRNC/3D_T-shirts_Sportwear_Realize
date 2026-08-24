@@ -14,6 +14,7 @@ export { buildOrderCuttingExportPdfBlob } from './buildOrderCuttingExportPdf';
 export type { buildOrderCuttingExportPdfBlobOptionsType } from './buildOrderCuttingExportPdf';
 export { isPdfReadyImageSrc, rasterizeImageForPdf, rasterizeImagesForPdf } from './exportPdfAssets';
 export { buildAssetDownloadUrl } from './buildAssetDownloadUrl';
+export { parsePublicAppOrigin, resolvePublicAppOrigin } from './resolvePublicAppOrigin';
 export { triggerPdfDownload } from './triggerPdfDownload';
 export { withTimeout } from './withTimeout';
 export { collectOrderCuttingExportUvBlobs } from './collectOrderCuttingExportUvBlobs';

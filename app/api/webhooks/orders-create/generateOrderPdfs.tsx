@@ -11,11 +11,12 @@ import { buildCheckoutOrderExport } from '@utils/buildCheckoutOrderExport';
 import { CheckoutOrderExportPdfDocument } from '@utils/buildCheckoutOrderExportPdf/CheckoutOrderExportPdfDocument';
 import { buildOrderCuttingExport } from '@utils/buildOrderCuttingExport';
 import { buildDownloadPreviewKey, OrderCuttingExportPdfDocument } from '@utils/buildOrderCuttingExportPdf/OrderCuttingExportPdfDocument';
+import { parsePublicAppOrigin } from '@utils/resolvePublicAppOrigin';
 import type { checkoutConfigExportType } from '@utils/buildCheckoutConfigExport';
 
 type orderPdfContextType = {
   configUrl: string;
-  appOrigin: string;
+  appOrigin: string | null;
   orderNumber: string;
   orderDate: string;
   recipient: { name: string; email: string; phone: string };
@@ -33,8 +34,11 @@ type orderPdfUrlsType = {
 
 const isHttpUrl = (value: string | null | undefined): value is string => !!value && /^https?:/i.test(value);
 
-const buildDownloadUrl = (origin: string, fileUrl: string, filename: string): string => {
-  const url = new URL('/api/download', origin);
+const buildDownloadUrl = (origin: string | null, fileUrl: string, filename: string): string => {
+  const publicOrigin = parsePublicAppOrigin(origin);
+  if (!publicOrigin) return fileUrl;
+
+  const url = new URL('/api/download', publicOrigin);
   url.searchParams.set('url', fileUrl);
   url.searchParams.set('filename', filename);
   return url.toString();

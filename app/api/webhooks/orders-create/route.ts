@@ -2,6 +2,7 @@ import { sendOrderEmails } from '@mail';
 import { getShopifyAdminClientSecret, setOrderMetafields, verifyShopifyWebhookSignature } from '@shopify';
 import type { orderMetafieldInputType } from '@shopify';
 import { formatCheckoutOrderDate } from '@utils/buildCheckoutOrderExport';
+import { resolvePublicAppOrigin } from '@utils/resolvePublicAppOrigin';
 import { Queue, Worker } from 'bullmq';
 import IORedis from 'ioredis';
 
@@ -20,7 +21,7 @@ type orderWebhookJobDataType = {
   order: shopifyOrderPayloadType;
   configUrl: string;
   uvImageUrls?: string;
-  appOrigin: string;
+  appOrigin: string | null;
 };
 
 type orderWebhookRedisQueueStateType = {
@@ -256,7 +257,7 @@ const buildShippingAddress = (order: shopifyOrderPayloadType): orderPdfContextTy
 const buildShippingSummary = (address: orderPdfContextType['shippingAddress']): string =>
   [address.company, address.street, [address.postalCode, address.city].filter(Boolean).join(' '), address.province, address.country].filter(Boolean).join(', ');
 
-const processOrderWebhook = async (order: shopifyOrderPayloadType, configUrl: string, uvImageUrls: string | undefined, appOrigin: string): Promise<void> => {
+const processOrderWebhook = async (order: shopifyOrderPayloadType, configUrl: string, uvImageUrls: string | undefined, appOrigin: string | null): Promise<void> => {
   const fields: orderMetafieldInputType[] = [];
   fields.push({ key: 'config_url', type: 'url', value: configUrl });
   if (uvImageUrls) fields.push({ key: 'uv_image_urls', type: 'json', value: uvImageUrls });
@@ -393,7 +394,13 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const orderKey = String(order.id);
-  const appOrigin = new URL(request.url).origin;
+  const appOrigin = resolvePublicAppOrigin(request);
+
+  if (!appOrigin) {
+    console.warn(
+      `[shopify webhook] Public app origin is missing (request origin was ${new URL(request.url).origin}). PDF image links will use source file URLs. Set APP_ORIGIN.`,
+    );
+  }
 
   if (hasRedisQueueEnabled()) {
     try {
