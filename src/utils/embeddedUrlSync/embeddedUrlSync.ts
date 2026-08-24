@@ -27,6 +27,24 @@ const isEmbeddedUrlSyncMessage = (data: unknown): data is embeddedUrlSyncMessage
   );
 };
 
+const EMBEDDED_HEADER_HEIGHT_TYPE = 'header-height' as const;
+
+type embeddedHeaderHeightMessage = {
+  source: typeof EMBEDDED_URL_SYNC_SOURCE_SHOPIFY;
+  type: typeof EMBEDDED_HEADER_HEIGHT_TYPE;
+  height: number;
+};
+
+const isEmbeddedHeaderHeightMessage = (data: unknown): data is embeddedHeaderHeightMessage => {
+  if (!isRecord(data)) {
+    return false;
+  }
+
+  const { source, type, height } = data;
+
+  return source === EMBEDDED_URL_SYNC_SOURCE_SHOPIFY && type === EMBEDDED_HEADER_HEIGHT_TYPE && typeof height === 'number' && Number.isFinite(height) && height >= 0;
+};
+
 const EMBEDDED_CHECKOUT_REDIRECT_TYPE = 'checkout-redirect' as const;
 
 const postEmbeddedUrlToParent = (pathname: string): void => {
@@ -76,12 +94,14 @@ const redirectToShopifyCheckout = (checkoutUrl: string): void => {
 
 export {
   EMBEDDED_CHECKOUT_REDIRECT_TYPE,
+  EMBEDDED_HEADER_HEIGHT_TYPE,
   EMBEDDED_URL_SYNC_SOURCE_APP,
   EMBEDDED_URL_SYNC_SOURCE_SHOPIFY,
   EMBEDDED_URL_SYNC_TYPE,
+  isEmbeddedHeaderHeightMessage,
   isEmbeddedUrlSyncMessage,
   postEmbeddedCheckoutRedirect,
   postEmbeddedUrlToParent,
   redirectToShopifyCheckout,
 };
-export type { embeddedUrlSyncMessage };
+export type { embeddedHeaderHeightMessage, embeddedUrlSyncMessage };

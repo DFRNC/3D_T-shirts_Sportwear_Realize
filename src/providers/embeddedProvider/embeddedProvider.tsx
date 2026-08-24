@@ -7,6 +7,7 @@ import { resolveEmbeddedContext } from '@utils';
 
 import { ConfiguratorRouteResetBridge } from '@providers/embeddedProvider/ConfiguratorRouteResetBridge';
 import { EmbeddedFlagBridge } from '@providers/embeddedProvider/EmbeddedFlagBridge';
+import { EmbeddedHeaderHeightBridge } from '@providers/embeddedProvider/EmbeddedHeaderHeightBridge';
 import { EmbeddedUrlSyncBridge } from '@providers/embeddedProvider/EmbeddedUrlSyncBridge';
 
 const EmbeddedContext = createContext<embeddedContextType>({
@@ -47,6 +48,7 @@ const EmbeddedProvider = ({ children }: embeddedProviderPropsType) => {
     <EmbeddedContext.Provider value={value}>
       <EmbeddedUrlSyncBridge />
       <EmbeddedFlagBridge />
+      <EmbeddedHeaderHeightBridge />
       <ConfiguratorRouteResetBridge />
       {children}
     </EmbeddedContext.Provider>
