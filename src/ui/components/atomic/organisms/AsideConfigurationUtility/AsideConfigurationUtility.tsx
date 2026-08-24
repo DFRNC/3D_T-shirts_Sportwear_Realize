@@ -6,19 +6,16 @@ import { IoMdRedo, IoMdUndo } from 'react-icons/io';
 
 import { Box, Button, Flex, Grid, SvgIcon, Text } from '@atoms';
 
-import { useProductStepsConfiguration } from '@hooks';
-import { useConfigurationControl, useTutorialDialog } from '@store';
+import { redoConfiguration, undoConfiguration, useConfigurationCart, useConfigurationControl, useConfigurationHistory, useTutorialDialog } from '@store';
 
 const AsideConfigurationUtility = () => {
-  const activeStep = useConfigurationControl((state) => state.activeStep);
-  const goToPreviousStep = useConfigurationControl((state) => state.goToPreviousStep);
-  const goToNextStep = useConfigurationControl((state) => state.goToNextStep);
   const isGizmoVisible = useConfigurationControl((state) => state.isGizmoVisible);
   const toggleGizmoVisible = useConfigurationControl((state) => state.toggleGizmoVisible);
   const setTutorialOpen = useTutorialDialog((state) => state.setIsOpen);
-  const availableSteps = useProductStepsConfiguration();
-  const firstStep = availableSteps[0]?.step ?? 1;
-  const lastStep = availableSteps[availableSteps.length - 1]?.step ?? 1;
+  const activeItemId = useConfigurationCart((state) => state.activeItemId);
+  const historyStack = useConfigurationHistory((state) => state.stacks[activeItemId]);
+  const canUndo = Boolean(historyStack?.past.length);
+  const canRedo = Boolean(historyStack?.future.length);
 
   const handleTutorial = useCallback(() => {
     setTutorialOpen(true);
@@ -33,11 +30,17 @@ const AsideConfigurationUtility = () => {
       <aside>
         <Flex variant="aside_utility_column">
           <Grid variant="aside_utility_actions">
-            <Button size="sm" onClick={goToPreviousStep} disabled={activeStep === firstStep} className="max-xl:size-8 max-xl:p-0 max-sm:size-9">
+            <Button size="sm" onClick={undoConfiguration} disabled={!canUndo} title="Annulla (Ctrl+Z)" className="max-xl:size-8 max-xl:p-0 max-sm:size-9">
               <IoMdUndo className="size-4 max-sm:size-4" />
               <span className="max-xl:hidden">Annulla</span>
             </Button>
-            <Button size="sm" onClick={goToNextStep} disabled={activeStep === lastStep} className="max-xl:size-8 max-xl:p-0 max-sm:size-9">
+            <Button
+              size="sm"
+              onClick={redoConfiguration}
+              disabled={!canRedo}
+              title="Ripristina (Ctrl+Shift+Z)"
+              className="max-xl:size-8 max-xl:p-0 max-sm:size-9"
+            >
               <span className="max-xl:hidden">Ripristina</span>
               <IoMdRedo className="size-4 max-sm:size-4" />
             </Button>

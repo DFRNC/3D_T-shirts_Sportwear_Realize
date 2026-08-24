@@ -8,6 +8,13 @@ export {
   areGarmentPrintStoresSynced,
   useConfigurationCart,
 } from './useConfigurationCart';
+export {
+  applyConfigurationHistoryEntry,
+  redoConfiguration,
+  undoConfiguration,
+  useConfigurationHistory,
+} from './useConfigurationHistory';
+export type { configurationHistoryEntryType } from './useConfigurationHistory';
 export { useConfiguratorProduct } from './useConfiguratorProduct';
 export { useConfiguratorSceneLoad } from './useConfiguratorSceneLoad';
 export { buildDefaultGradients, DEFAULT_COLOR, DEFAULT_PART_GRADIENT, DISABLED_PART_GRADIENT, resolveGradientColors, useGarmentColor } from './useGarmentColor';

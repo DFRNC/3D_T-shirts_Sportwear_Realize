@@ -19,6 +19,8 @@ export { useRestoreSharedConfiguration } from './useRestoreSharedConfiguration';
 export { useShareConfiguration } from './useShareConfiguration';
 export { useNavigateToConfigurator } from './useNavigateToConfigurator';
 export { useConfigurationCartSync } from './useConfigurationCartSync';
+export { useConfigurationHistoryHotkeys } from './useConfigurationHistoryHotkeys';
+export { useConfigurationHistoryTracker } from './useConfigurationHistoryTracker';
 export { focusGarmentCamera } from './focusGarmentCamera';
 export { usePartAccordionCameraFocus } from './usePartAccordionCameraFocus';
 export { useConfigurationPositionPicker } from './useConfigurationPositionPicker';

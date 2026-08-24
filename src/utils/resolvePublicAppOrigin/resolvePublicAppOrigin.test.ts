@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { buildPublicAssetDownloadUrl, parsePublicAppOrigin, resolvePublicAppOrigin } from './resolvePublicAppOrigin';
+import { buildPublicAssetDownloadUrl, parsePublicAppOrigin, resolvePublicAppOrigin } from '@utils/resolvePublicAppOrigin/resolvePublicAppOrigin';
 
 const originalAppOrigin = process.env.APP_ORIGIN;
 const originalAppUrl = process.env.APP_URL;
