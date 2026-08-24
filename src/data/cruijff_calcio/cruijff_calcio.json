@@ -10,8 +10,8 @@
   "preserveGltfMeshes": ["model_inside"],
   "parts": [
     {
-      "name": "Davanti",
-      "label": "Davanti",
+      "name": "Gamba Sinistra",
+      "label": "Gamba Sinistra",
       "id": "cruijff_calcio_front",
       "meshNames": ["model_left"],
       "renderOrder": 1,
@@ -31,8 +31,8 @@
       }
     },
     {
-      "name": "Retro",
-      "label": "Retro",
+      "name": "Gamba Destra",
+      "label": "Gamba Destra",
       "id": "cruijff_calcio_back",
       "meshNames": ["model_right"],
       "renderOrder": 1,

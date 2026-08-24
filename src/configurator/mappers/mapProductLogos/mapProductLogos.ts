@@ -87,8 +87,8 @@ const SHORTS_LOGO_PART_FRACTION = { x: 0.685, y: 0.67 };
 const resolveLogoDefaults = (product: garmentConfigType) => {
   const shorts = isShortsProduct(product);
   const targetPart = shorts
-    ? (product.parts.find((part) => part.label === 'Retro') ?? product.parts[0])
-    : (product.parts.find((part) => part.label === 'Front') ?? product.parts[0]);
+    ? (product.parts.find((part) => part.id.endsWith('_back')) ?? product.parts[0])
+    : (product.parts.find((part) => part.id.endsWith('_front')) ?? product.parts[0]);
 
   if (!targetPart) {
     throw new Error(`Product "${product.path}" has no parts for logo defaults.`);

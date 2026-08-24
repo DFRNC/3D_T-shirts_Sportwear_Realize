@@ -36,7 +36,6 @@ const buildAliases = () => {
 };
 
 export default defineConfig({
-  esbuild: { jsx: 'automatic' },
   test: {
     include: ['scripts/regenerate-order-pdfs/**/*.test.tsx'],
     testTimeout: 300000,
