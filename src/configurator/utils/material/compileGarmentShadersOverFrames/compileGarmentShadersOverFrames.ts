@@ -49,9 +49,15 @@ const compileGarmentShadersOverFrames = ({
   }
 
   let cancelled = false;
-  const features = resolveGarmentPrintFeatureFlags(product);
 
-  materialQueue.forEach((material) => compileGarmentShader(material, features));
+  materialQueue.forEach((material) => {
+    const capacity = material.userData.garmentLogoSlotCapacity as number | undefined;
+    const features = capacity
+      ? resolveGarmentPrintFeatureFlags(product, capacity)
+      : resolveGarmentPrintFeatureFlags(product);
+    compileGarmentShader(material, features);
+    material.userData.garmentLogoSlotCapacity = features.logoSlotCount;
+  });
 
   void gl
     .compileAsync(scene, camera)

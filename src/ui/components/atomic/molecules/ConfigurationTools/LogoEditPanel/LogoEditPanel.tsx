@@ -38,7 +38,9 @@ const LogoEditPanel = ({ partId, onClose, onReplaceImage, replacing = false }: l
         aria-label="Sostituisci immagine"
         className="grid h-auto w-full min-w-0 grid-cols-[auto_1fr] items-center justify-start gap-2 max-xl:gap-1.5 bg-transparent"
       >
-        <AtomImage src={part.src} alt={part.fileName} width={24} height={24} className="object-contain shrink-0 max-xl:w-5 max-xl:h-5" />
+        <Grid className="relative size-6 shrink-0 max-xl:size-5">
+          <AtomImage src={part.src} alt={part.fileName} />
+        </Grid>
         <Text variant="logo_uploaded_file_name">{part.fileName}</Text>
       </Button>
       <RangeControl

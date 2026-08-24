@@ -27,9 +27,11 @@
     "validate:model-uv": "node scripts/validate-model-uv.mjs --all",
     "optimize:federer": "node scripts/optimize-gltf-model.mjs federer_calcio",
     "optimize:calcio": "node scripts/optimize-gltf-model.mjs federer_calcio baggio_calcio bernardi_calcio cruijff_calcio",
+    "test:unit": "vitest run",
     "test:visual": "playwright test",
     "test:visual:ui": "playwright test --ui",
-    "test:unit": "vitest run"
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

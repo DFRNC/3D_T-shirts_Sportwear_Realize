@@ -40,9 +40,10 @@ const ConfiguratorCanvas = () => {
       onCreated={({ gl, scene, invalidate }) => {
         scene.background = null;
         gl.setClearColor(0x000000, 0);
-        gl.debug.checkShaderErrors = false;
+        gl.debug.checkShaderErrors = Boolean(navigator.webdriver);
         requestAnimationFrame(() => invalidate());
         const canvas = gl.domElement;
+        canvas.setAttribute('data-testid', 'configurator-canvas');
 
         canvas.addEventListener('webglcontextlost', (event) => {
           event.preventDefault();

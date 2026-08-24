@@ -40,7 +40,7 @@ type stepLogoPositionStateType = Pick<logoPositionType, 'key' | 'label' | 'uv' |
 interface stepLogoStoreViewType {
   parts: stepLogoPartStateType[];
   positions: stepLogoPositionStateType[];
-  canAddUserLogo: () => boolean;
+  canAddUserLogo: boolean;
   removePart: (id: string) => void;
   updatePart: (id: string, patch: Partial<stepLogoPartStateType>) => void;
 }

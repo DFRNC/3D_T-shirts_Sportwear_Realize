@@ -1,7 +1,7 @@
 'use client';
 
 import type { garmentConfigType, garmentLogoSnapshotType, logoInstanceType, logoPositionType, logoPreviewType } from '@types';
-import { LOGO_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@configurator/constants';
+import { LOGO_MAX_USER_FILES, LOGO_SHADER_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@configurator/constants';
 import { createDefaultLogoInstances, createDynamicUserLogoPosition, createLogoInstance, mapProductLogoPositions } from '@store/useGarmentLogo/mapProductLogos';
 import { createSingletonStore } from '@store/createSingletonStore';
 interface GarmentLogoState {
@@ -29,9 +29,17 @@ interface GarmentLogoState {
 }
 
 const resolveLogoInstancesForRender = (instances: logoInstanceType[], preview: logoPreviewType | null): logoInstanceType[] => {
-  if (!preview) return instances;
+  const renderable = instances.filter((instance) => instance.src.trim());
+  if (!preview) return renderable;
 
-  return instances.map((instance) => (instance.id === preview.instanceId ? { ...instance, ...preview.patch } : instance));
+  return renderable.map((instance) => (instance.id === preview.instanceId ? { ...instance, ...preview.patch } : instance));
+};
+
+const resolveCanAddUserLogo = (instances: logoInstanceType[]): boolean => {
+  const userCount = instances.filter((instance) => !instance.isDefault).length;
+  const stampCount = instances.filter((instance) => instance.src.trim()).length;
+
+  return userCount < LOGO_MAX_USER_FILES && stampCount < LOGO_SHADER_SLOT_COUNT;
 };
 
 const buildPositionsKey = (product: garmentConfigType) => JSON.stringify(product.logoPositions ?? []);
@@ -90,7 +98,9 @@ const useGarmentLogo = createSingletonStore<GarmentLogoState>('useGarmentLogo', 
     });
   },
   addUserInstance: (position, src, fileName, naturalWidth, naturalHeight) => {
-    const instance = createLogoInstance(position, `${position.key}_user_${Date.now()}`, {
+    if (!get().canAddUserLogo()) return;
+
+    const instance = createLogoInstance(position, `${position.key}_user_${crypto.randomUUID()}`, {
       src,
       fileName,
       isDefault: false,
@@ -99,16 +109,26 @@ const useGarmentLogo = createSingletonStore<GarmentLogoState>('useGarmentLogo', 
       uploadRotation: LOGO_UPLOAD_ROTATION_DEG,
     });
 
-    set((state) => ({ instances: [...state.instances, instance] }));
+    set((state) => ({ instances: [...state.instances, instance], selectedInstanceId: instance.id }));
   },
   addFreeUserInstance: (product, src, fileName, naturalWidth, naturalHeight) => {
-    const { instances } = get();
-    const userCount = instances.filter((instance) => !instance.isDefault).length;
+    if (!get().canAddUserLogo()) return;
 
-    if (userCount >= LOGO_SLOT_COUNT) return;
+    const { instances, selectedInstanceId } = get();
+    const userInstances = instances.filter((instance) => !instance.isDefault);
+    const usedSlots = new Set(userInstances.map((instance) => instance.positionKey));
 
-    const position = createDynamicUserLogoPosition(product, userCount);
-    const instance = createLogoInstance(position, `${position.key}_${Date.now()}`, {
+    let freeSlot = 0;
+    while (usedSlots.has(`logo-user-${freeSlot}`)) freeSlot += 1;
+
+    const selected = selectedInstanceId ? instances.find((instance) => instance.id === selectedInstanceId) : undefined;
+    const anchorSource = selected ?? userInstances.at(-1);
+    const position = createDynamicUserLogoPosition(
+      product,
+      freeSlot,
+      anchorSource ? { partId: anchorSource.partId, uv: anchorSource.uv } : undefined,
+    );
+    const instance = createLogoInstance(position, `${position.key}_${crypto.randomUUID()}`, {
       src,
       fileName,
       isDefault: false,
@@ -117,7 +137,7 @@ const useGarmentLogo = createSingletonStore<GarmentLogoState>('useGarmentLogo', 
       uploadRotation: LOGO_UPLOAD_ROTATION_DEG,
     });
 
-    set((state) => ({ instances: [...state.instances, instance] }));
+    set((state) => ({ instances: [...state.instances, instance], selectedInstanceId: instance.id }));
   },
   replaceInstanceImage: (id, src, fileName, naturalWidth, naturalHeight) => {
     set((state) => ({
@@ -144,15 +164,14 @@ const useGarmentLogo = createSingletonStore<GarmentLogoState>('useGarmentLogo', 
   },
   duplicateInstance: (id) => {
     set((state) => {
+      if (!resolveCanAddUserLogo(state.instances)) return state;
+
       const source = state.instances.find((instance) => instance.id === id);
       if (!source) return state;
 
-      const userCount = state.instances.filter((instance) => !instance.isDefault).length;
-      if (userCount >= LOGO_SLOT_COUNT) return state;
-
       const copy: logoInstanceType = {
         ...source,
-        id: `${source.id}-copy-${Date.now()}`,
+        id: `${source.id}-copy-${crypto.randomUUID()}`,
         uv: { x: source.uv.x, y: Math.min(0.98, source.uv.y + 0.04) },
         isDefault: false,
         showFrame: true,
@@ -195,19 +214,8 @@ const useGarmentLogo = createSingletonStore<GarmentLogoState>('useGarmentLogo', 
   clearPreview: () => {
     set({ preview: null });
   },
-  canAddUserLogo: () => {
-    const { positions, instances } = get();
-    const userInstances = instances.filter((instance) => !instance.isDefault);
-
-    if (positions.length === 0) {
-      return userInstances.length < LOGO_SLOT_COUNT;
-    }
-
-    const usedKeys = new Set(userInstances.map((instance) => instance.positionKey));
-
-    return positions.some((position) => position.interactive && !usedKeys.has(position.key));
-  },
+  canAddUserLogo: () => resolveCanAddUserLogo(get().instances),
   getInstancesForRender: () => resolveLogoInstancesForRender(get().instances, get().preview),
 }));
 
-export { resolveLogoInstancesForRender, useGarmentLogo };
+export { resolveCanAddUserLogo, resolveLogoInstancesForRender, useGarmentLogo };

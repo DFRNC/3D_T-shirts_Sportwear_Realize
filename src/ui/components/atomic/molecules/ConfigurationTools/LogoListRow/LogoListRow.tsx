@@ -7,7 +7,9 @@ import type { logoListRowPropsType } from '@types';
 const LogoListRow = ({ part, onEdit, onDelete }: logoListRowPropsType) => (
   <Grid variant="logo_list_row">
     <Grid variant="logo_list_identity">
-      <AtomImage src={part.src} alt={part.fileName} width={16} height={16} className="object-contain shrink-0 max-xl:w-3.25 max-xl:h-3.25" />
+      <Grid className="relative size-4 shrink-0 max-xl:size-3.25">
+        <AtomImage src={part.src} alt={part.fileName} />
+      </Grid>
       <Text variant="configurator_brand_logo_title_clamped">{part.fileName}</Text>
     </Grid>
     {onEdit && onDelete && (

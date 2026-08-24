@@ -49,6 +49,17 @@ const resolveShortestAngleDelta = (from: number, to: number) => {
 const LEVEL_POLAR_ANGLE = Math.PI / 2;
 const FRONT_BACK_AZIMUTH_SNAP = 0.18;
 
+type garmentPartHorizonFacingType = 'front' | 'back';
+
+const resolveGarmentPartHorizonFacing = (part: { id: string; label: string }): garmentPartHorizonFacingType | null => {
+  const id = part.id.toLowerCase();
+  const label = part.label.trim().toLowerCase();
+
+  if (id === 'back' || id.endsWith('_back') || label === 'retro') return 'back';
+  if (id === 'front' || id.endsWith('_front') || label === 'davanti') return 'front';
+  return null;
+};
+
 const applyCardinalHorizonDirection = (direction: Vector3) => {
   direction.y = 0;
   if (direction.lengthSq() < 1e-8) {
@@ -62,6 +73,27 @@ const applyCardinalHorizonDirection = (direction: Vector3) => {
   }
 
   direction.set(direction.x >= 0 ? 1 : -1, 0, 0);
+  return direction;
+};
+
+const applyFrontOrBackHorizonDirection = (direction: Vector3, facing?: garmentPartHorizonFacingType) => {
+  if (facing === 'front') {
+    direction.set(0, 0, 1);
+    return direction;
+  }
+
+  if (facing === 'back') {
+    direction.set(0, 0, -1);
+    return direction;
+  }
+
+  direction.y = 0;
+  if (direction.lengthSq() < 1e-8) {
+    direction.set(0, 0, 1);
+    return direction;
+  }
+
+  direction.set(0, 0, direction.z >= 0 ? 1 : -1);
   return direction;
 };
 
@@ -199,6 +231,7 @@ interface ResolveOrbitFocusPoseInput {
   maxDistance: number;
   clearance?: number;
   viewMode?: 'part' | 'surface';
+  partFacing?: garmentPartHorizonFacingType;
 }
 
 const resolveOrbitFocusPose = (
@@ -212,6 +245,7 @@ const resolveOrbitFocusPose = (
     maxDistance,
     clearance = ORBIT_SURFACE_CLEARANCE,
     viewMode = 'surface',
+    partFacing,
   }: ResolveOrbitFocusPoseInput,
   target: Vector3,
   cameraPosition: Vector3,
@@ -229,7 +263,7 @@ const resolveOrbitFocusPose = (
     if (viewDirection.lengthSq() < 1e-8) {
       viewDirection.copy(currentCamera).sub(currentTarget);
     }
-    applyCardinalHorizonDirection(viewDirection);
+    applyFrontOrBackHorizonDirection(viewDirection, partFacing);
   } else {
     viewDirection.copy(surfaceNormal);
     if (viewDirection.lengthSq() < 1e-8) {
@@ -287,17 +321,20 @@ const snapOrbitToLevelFrontOrBack = ({ camera, controls, scene }: SnapOrbitToLev
   return true;
 };
 
+export type { garmentPartHorizonFacingType };
 export {
   ORBIT_SURFACE_CLEARANCE,
   ORBIT_MIN_DISTANCE,
   ORBIT_MAX_DISTANCE,
   applyCardinalHorizonDirection,
+  applyFrontOrBackHorizonDirection,
   applyOrbitZoomAroundPoint,
   clampOrbitCameraOutsideGarment,
   clampOrbitTargetToGarment,
   recenterOrbitTargetByZoom,
   resolveCursorFocusPoint,
   resolveGarmentCenter,
+  resolveGarmentPartHorizonFacing,
   resolveOrbitFocusPose,
   resolveShortestAngleDelta,
   snapOrbitToLevelFrontOrBack,

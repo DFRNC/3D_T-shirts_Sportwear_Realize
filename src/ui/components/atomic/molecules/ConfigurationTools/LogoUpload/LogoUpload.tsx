@@ -3,9 +3,8 @@
 import { useState } from 'react';
 
 import { Box, Button, Flex, Grid, SvgIcon, Text } from '@atoms';
-import { LogoUploadSkeleton } from '@skeletons';
 import type { logoUploadPropsType } from '@types';
-import { LOGO_MAX_FILE_SIZE, LOGO_SUPPORTED_LABEL } from '@constants';
+import { LOGO_MAX_FILE_SIZE, LOGO_MAX_USER_FILES, LOGO_SUPPORTED_LABEL } from '@constants';
 import { cn, warmupGhostscriptWorker } from '@utils';
 
 const LogoUpload = ({ canUpload, loading, error, onOpenFilePicker, onFileSelected }: logoUploadPropsType) => {
@@ -25,44 +24,70 @@ const LogoUpload = ({ canUpload, loading, error, onOpenFilePicker, onFileSelecte
     if (!loading && canUpload) warmupGhostscriptWorker();
   };
 
-  if (loading) {
-    return <LogoUploadSkeleton />;
-  }
+  const isDisabled = !canUpload || loading;
 
   return (
     <Flex variant="logo_upload_section">
       <Text variant="logo_uploaded_label_dark">Logo</Text>
       <div
         role="button"
-        tabIndex={!canUpload || loading ? -1 : 0}
-        onClick={openFilePicker}
-        onKeyDown={(e) => {
-          if (e.key !== 'Enter' && e.key !== ' ') return;
+        data-testid="logo-upload-dropzone"
+        tabIndex={isDisabled ? -1 : 0}
+        aria-busy={loading || undefined}
+        aria-disabled={isDisabled}
+        onClick={
+          isDisabled
+            ? (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }
+            : openFilePicker
+        }
+        onKeyDown={
+          isDisabled
+            ? undefined
+            : (e) => {
+                if (e.key !== 'Enter' && e.key !== ' ') return;
 
-          e.preventDefault();
-          openFilePicker();
-        }}
-        onMouseEnter={warmupOnIntent}
-        onFocus={warmupOnIntent}
-        onDragOver={(e) => {
-          e.preventDefault();
-          if (!loading && canUpload) setDragOver(true);
-          warmupOnIntent();
-        }}
-        onDragLeave={() => setDragOver(false)}
-        onDrop={(e) => {
-          e.preventDefault();
-          setDragOver(false);
-          void handleFile(e.dataTransfer.files[0]);
-        }}
-        className={cn('w-full cursor-pointer', !canUpload && 'cursor-not-allowed opacity-60', dragOver && 'ring-2 ring-active/30 rounded-[8px]')}
+                e.preventDefault();
+                openFilePicker();
+              }
+        }
+        onMouseEnter={isDisabled ? undefined : warmupOnIntent}
+        onFocus={isDisabled ? undefined : warmupOnIntent}
+        onDragOver={
+          isDisabled
+            ? (e) => e.preventDefault()
+            : (e) => {
+                e.preventDefault();
+                setDragOver(true);
+                warmupOnIntent();
+              }
+        }
+        onDragLeave={isDisabled ? undefined : () => setDragOver(false)}
+        onDrop={
+          isDisabled
+            ? (e) => e.preventDefault()
+            : (e) => {
+                e.preventDefault();
+                setDragOver(false);
+                void handleFile(e.dataTransfer.files[0]);
+              }
+        }
+        className={cn('w-full shrink-0', isDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer', dragOver && !isDisabled && 'ring-2 ring-active/30 rounded-[8px]')}
       >
-        <Button variant="upload" type="button" disabled={!canUpload} className="pointer-events-none whitespace-normal">
+        <Button
+          variant="upload"
+          type="button"
+          disabled={isDisabled}
+          data-testid="logo-upload-button"
+          className="pointer-events-none whitespace-normal disabled:opacity-100"
+        >
           <SvgIcon name="upload" />
           <Box>
             <Text variant="logo_upload_cta_primary">Trascina qui il tuo logo o fai click per caricare un elemento</Text>
             <Text variant="logo_upload_cta_secondary">
-              (Dimensione max {Math.round(LOGO_MAX_FILE_SIZE / (1024 * 1024))} MB — form. {LOGO_SUPPORTED_LABEL})
+              (Massimo {LOGO_MAX_USER_FILES} file — dimensione max {Math.round(LOGO_MAX_FILE_SIZE / (1024 * 1024))} MB — form. {LOGO_SUPPORTED_LABEL})
             </Text>
           </Box>
         </Button>

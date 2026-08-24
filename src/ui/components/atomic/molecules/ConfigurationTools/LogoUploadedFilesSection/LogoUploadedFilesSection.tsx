@@ -19,7 +19,7 @@ const LogoUploadedFilesSection = ({ userLogos, onEdit, onDelete }: logoUploadedF
             <DefaultBrandLogoPlaceholder />
           </li>
           {userLogos.map((part) => (
-            <li key={part.id} className="w-full">
+            <li key={part.id} className="w-full" data-testid="logo-list-item" data-filename={part.fileName}>
               <LogoListRow part={part} onEdit={() => onEdit(part.id)} onDelete={() => onDelete(part.id)} />
             </li>
           ))}

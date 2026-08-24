@@ -1,5 +1,6 @@
 import { isShopifyEnabled } from '@shopify/config';
 import { fetchConfiguratorCollections } from '@shopify/fetchConfiguratorCollections';
+import { formatShopifyRequestError } from '@shopify/fetchShopifyWithTimeout';
 import type { homePageCollectionType } from '@types';
 
 const resolveHomeCollections = async (): Promise<homePageCollectionType[]> => {
@@ -17,7 +18,7 @@ const resolveHomeCollections = async (): Promise<homePageCollectionType[]> => {
 
     console.warn('[shopify] No configurator collections returned.');
   } catch (error) {
-    console.warn('[shopify] Failed to fetch collections.', error);
+    console.warn(`[shopify] Failed to fetch collections (${formatShopifyRequestError(error)}).`);
   }
 
   return [];

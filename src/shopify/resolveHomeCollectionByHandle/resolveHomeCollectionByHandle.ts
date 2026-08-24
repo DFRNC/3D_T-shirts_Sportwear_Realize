@@ -1,5 +1,6 @@
 import { isShopifyEnabled } from '@shopify/config';
 import { fetchCollectionByHandle } from '@shopify/fetchConfiguratorCollections';
+import { formatShopifyRequestError } from '@shopify/fetchShopifyWithTimeout';
 import type { homePageCollectionType } from '@types';
 
 const resolveHomeCollectionByHandle = async (handle: string): Promise<homePageCollectionType | null> => {
@@ -11,7 +12,7 @@ const resolveHomeCollectionByHandle = async (handle: string): Promise<homePageCo
   try {
     return await fetchCollectionByHandle(handle);
   } catch (error) {
-    console.warn(`[shopify] Failed to fetch collection "${handle}".`, error);
+    console.warn(`[shopify] Failed to fetch collection "${handle}" (${formatShopifyRequestError(error)}).`);
     return null;
   }
 };

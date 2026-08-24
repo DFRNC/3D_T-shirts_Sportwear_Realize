@@ -1,5 +1,6 @@
 import { isShopifyEnabled } from '@shopify/config';
 import { fetchConfiguratorCollectionSummaries } from '@shopify/fetchConfiguratorCollections';
+import { formatShopifyRequestError } from '@shopify/fetchShopifyWithTimeout';
 import type { homePageCollectionSummaryType } from '@types';
 
 const resolveHomeCollectionSummaries = async (): Promise<homePageCollectionSummaryType[]> => {
@@ -17,7 +18,7 @@ const resolveHomeCollectionSummaries = async (): Promise<homePageCollectionSumma
 
     console.warn('[shopify] No configurator collection summaries returned.');
   } catch (error) {
-    console.warn('[shopify] Failed to fetch collection summaries.', error);
+    console.warn(`[shopify] Failed to fetch collection summaries (${formatShopifyRequestError(error)}).`);
   }
 
   return [];

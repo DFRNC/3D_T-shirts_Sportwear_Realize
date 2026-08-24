@@ -4,5 +4,6 @@ export {
   createLogoInstance,
   mapProductLogoPositions,
   resolveLogoDefaults,
+  resolveNextUserLogoUv,
   resolvePartIdForAtlasUv,
 } from '@configurator/mappers';

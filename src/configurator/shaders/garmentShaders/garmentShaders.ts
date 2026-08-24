@@ -92,18 +92,20 @@ uniform vec2 uNumberGizmoHalf[4];
 #ifdef USE_GARMENT_LOGO
 uniform sampler2D uLogoStamp;
 uniform vec2 uLogoStampCellSize;
-uniform vec2 uLogoAnchorUv[4];
-uniform float uLogoRotation[4];
-uniform float uLogoUploadRotation[4];
-uniform float uLogoPartRotation[4];
-uniform float uLogoScale[4];
-uniform float uLogoSlotActive[4];
-uniform vec4 uLogoPartBounds[4];
+uniform float uLogoStampGrid;
+uniform vec2 uLogoAnchorUv[LOGO_SLOT_COUNT];
+uniform float uLogoRotation[LOGO_SLOT_COUNT];
+uniform float uLogoUploadRotation[LOGO_SLOT_COUNT];
+uniform float uLogoPartRotation[LOGO_SLOT_COUNT];
+uniform float uLogoScale[LOGO_SLOT_COUNT];
+uniform float uLogoStampSlot[LOGO_SLOT_COUNT];
+uniform float uLogoSlotActive[LOGO_SLOT_COUNT];
+uniform vec4 uLogoPartBounds[LOGO_SLOT_COUNT];
 uniform float uLogoGizmoEnabled;
-uniform float uLogoGizmoFrameActive[4];
-uniform float uLogoGizmoButtonsActive[4];
-uniform float uLogoGizmoButtonsReveal[4];
-uniform vec2 uLogoGizmoHalf[4];
+uniform float uLogoGizmoFrameActive[LOGO_SLOT_COUNT];
+uniform float uLogoGizmoButtonsActive[LOGO_SLOT_COUNT];
+uniform float uLogoGizmoButtonsReveal[LOGO_SLOT_COUNT];
+uniform vec2 uLogoGizmoHalf[LOGO_SLOT_COUNT];
 #endif
 #ifdef USE_GARMENT_TEXT
 uniform sampler2D uNameGizmoIcons;
@@ -203,8 +205,9 @@ vec2 garmentLogoToStampUv( vec2 worldUv, vec2 anchor, float rotation, float uplo
 }
 
 vec2 garmentLogoStampAtlasUv( vec2 stampUv, float slotIndex ) {
-  vec2 cell = vec2( mod( slotIndex, 2.0 ), floor( slotIndex * 0.5 ) );
-  return ( cell + stampUv ) * 0.5;
+  float grid = max( uLogoStampGrid, 1.0 );
+  vec2 cell = vec2( mod( slotIndex, grid ), floor( slotIndex / grid ) );
+  return ( cell + stampUv ) / grid;
 }
 #endif
 

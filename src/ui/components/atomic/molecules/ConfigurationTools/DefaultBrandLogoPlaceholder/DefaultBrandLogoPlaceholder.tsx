@@ -9,13 +9,9 @@ const DefaultBrandLogoPlaceholder = () => {
     <Box variant="brand_logo_placeholder_shell">
       <Flex variant="brand_placeholder_column">
         <Flex variant="brand_placeholder_row">
-          <AtomImage
-            src={CONFIGURATOR_DEFAULT_BRAND_LOGO_SRC}
-            alt="logo"
-            width={16}
-            height={16}
-            className="object-contain shrink-0 max-xl:w-3.25 max-xl:h-3.25"
-          />
+          <Box className="relative size-4 shrink-0 max-xl:size-3.25">
+            <AtomImage src={CONFIGURATOR_DEFAULT_BRAND_LOGO_SRC} alt="logo" />
+          </Box>
           <Text variant="configurator_brand_logo_title">{CONFIGURATOR_DEFAULT_BRAND_LOGO_TITLE}</Text>
         </Flex>
         <Text variant="configurator_brand_logo_description">{CONFIGURATOR_DEFAULT_BRAND_LOGO_DESCRIPTION}</Text>

@@ -47,7 +47,7 @@ export {
   resolveTestoPositionLimits,
   useGarmentTesto,
 } from './useGarmentTesto';
-export { resolveLogoInstancesForRender, useGarmentLogo } from './useGarmentLogo';
+export { resolveCanAddUserLogo, resolveLogoInstancesForRender, useGarmentLogo } from './useGarmentLogo';
 export { resolvePrintPositionConflicts } from './resolvePrintPositionConflicts';
 export { useAddProductDesignDialog } from './useAddProductDesignDialog';
 export { useInfoDialog } from './useInfoDialog';

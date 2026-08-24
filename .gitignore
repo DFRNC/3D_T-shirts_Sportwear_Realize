@@ -19,6 +19,8 @@
 /blob-report/
 /tests/visual/test-results/
 /tests/visual/output/
+/playwright/test-results/
+/playwright-report/
 .vitest/
 
 # scratch / one-off scripts

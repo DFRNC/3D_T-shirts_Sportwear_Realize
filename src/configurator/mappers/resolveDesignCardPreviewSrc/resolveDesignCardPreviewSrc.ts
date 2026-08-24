@@ -44,10 +44,4 @@ const resolveDesignCardPreviewSrc = (patternName: string, designId?: string, pro
   return `${resolveDesignCardPreviewDir(productId)}/${id}.svg`;
 };
 
-export {
-  normalizeDesignId,
-  parseDesignIdFromPatternName,
-  resolveDesignCardPreviewDir,
-  resolveDesignCardPreviewSrc,
-  resolvePatternDesignId,
-};
+export { normalizeDesignId, parseDesignIdFromPatternName, resolveDesignCardPreviewDir, resolveDesignCardPreviewSrc, resolvePatternDesignId };

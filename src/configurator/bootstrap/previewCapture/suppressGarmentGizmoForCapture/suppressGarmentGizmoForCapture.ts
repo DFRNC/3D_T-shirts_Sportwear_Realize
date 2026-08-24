@@ -1,5 +1,5 @@
 import { type Mesh, MeshStandardMaterial, type Object3D, type Scene } from 'three';
-import { LOGO_SLOT_COUNT, NAME_SLOT_COUNT } from '@configurator/constants';
+import { LOGO_SHADER_SLOT_COUNT, NAME_SLOT_COUNT } from '@configurator/constants';
 
 type numberUniformType = { value: number };
 type numberArrayUniformType = { value: number[] };
@@ -105,17 +105,17 @@ const suppressGarmentGizmoUniforms = (material: MeshStandardMaterial) => {
   zeroArrayUniform(material.userData.uNameGizmoFrameActiveUniform as numberArrayUniformType | undefined, NAME_SLOT_COUNT);
   zeroArrayUniform(material.userData.uNumberGizmoFrameActiveUniform as numberArrayUniformType | undefined, NAME_SLOT_COUNT);
   zeroArrayUniform(material.userData.uTestoGizmoFrameActiveUniform as numberArrayUniformType | undefined, NAME_SLOT_COUNT);
-  zeroArrayUniform(material.userData.uLogoGizmoFrameActiveUniform as numberArrayUniformType | undefined, LOGO_SLOT_COUNT);
+  zeroArrayUniform(material.userData.uLogoGizmoFrameActiveUniform as numberArrayUniformType | undefined, LOGO_SHADER_SLOT_COUNT);
 
   zeroArrayUniform(material.userData.uNameGizmoButtonsActiveUniform as numberArrayUniformType | undefined, NAME_SLOT_COUNT);
   zeroArrayUniform(material.userData.uNumberGizmoButtonsActiveUniform as numberArrayUniformType | undefined, NAME_SLOT_COUNT);
   zeroArrayUniform(material.userData.uTestoGizmoButtonsActiveUniform as numberArrayUniformType | undefined, NAME_SLOT_COUNT);
-  zeroArrayUniform(material.userData.uLogoGizmoButtonsActiveUniform as numberArrayUniformType | undefined, LOGO_SLOT_COUNT);
+  zeroArrayUniform(material.userData.uLogoGizmoButtonsActiveUniform as numberArrayUniformType | undefined, LOGO_SHADER_SLOT_COUNT);
 
   zeroArrayUniform(material.userData.uNameGizmoButtonsRevealUniform as numberArrayUniformType | undefined, NAME_SLOT_COUNT);
   zeroArrayUniform(material.userData.uNumberGizmoButtonsRevealUniform as numberArrayUniformType | undefined, NAME_SLOT_COUNT);
   zeroArrayUniform(material.userData.uTestoGizmoButtonsRevealUniform as numberArrayUniformType | undefined, NAME_SLOT_COUNT);
-  zeroArrayUniform(material.userData.uLogoGizmoButtonsRevealUniform as numberArrayUniformType | undefined, LOGO_SLOT_COUNT);
+  zeroArrayUniform(material.userData.uLogoGizmoButtonsRevealUniform as numberArrayUniformType | undefined, LOGO_SHADER_SLOT_COUNT);
 
   writeNumberUniform(material.userData.uNameGizmoHoverSlotUniform as numberUniformType | undefined, -1);
   writeNumberUniform(material.userData.uNameGizmoHoverCornerUniform as numberUniformType | undefined, -1);

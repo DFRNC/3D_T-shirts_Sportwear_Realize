@@ -4,5 +4,7 @@ export {
   createLogoInstance,
   mapProductLogoPositions,
   resolveLogoDefaults,
+  resolveNextUserLogoUv,
   resolvePartIdForAtlasUv,
 } from './mapProductLogos';
+export type { logoPlacementAnchorType } from './mapProductLogos';

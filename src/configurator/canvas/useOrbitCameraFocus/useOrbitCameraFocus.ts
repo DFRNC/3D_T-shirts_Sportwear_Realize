@@ -8,6 +8,7 @@ import {
   clampOrbitCameraOutsideGarment,
   ORBIT_MAX_DISTANCE,
   ORBIT_MIN_DISTANCE,
+  resolveGarmentPartHorizonFacing,
   resolveOrbitFocusPose,
   resolvePrintUvWorldPoint,
   resolveShortestAngleDelta,
@@ -18,12 +19,6 @@ import { Spherical, Vector3 } from 'three';
 
 const FOCUS_DURATION_MS = 420;
 const FOCUS_RETRY_FRAMES = 90;
-
-const isFrontOrBackGarmentPart = (part: { id: string; label: string }) => {
-  const id = part.id.toLowerCase();
-  const label = part.label.trim().toLowerCase();
-  return id === 'front' || id === 'back' || id.endsWith('_front') || id.endsWith('_back') || label === 'davanti' || label === 'retro';
-};
 
 const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 
@@ -66,6 +61,7 @@ const useOrbitCameraFocus = () => {
     const resolved = resolvePrintUvWorldPoint({ scene, meshNames: part.meshNames, atlasUv }, focusPointRef.current, focusNormalRef.current);
     if (!resolved) return null;
 
+    const partFacing = resolveGarmentPartHorizonFacing(part);
     const poseResolved = resolveOrbitFocusPose(
       {
         scene,
@@ -75,7 +71,8 @@ const useOrbitCameraFocus = () => {
         currentTarget: controls.target,
         minDistance: ORBIT_MIN_DISTANCE,
         maxDistance: ORBIT_MAX_DISTANCE,
-        viewMode: isFrontOrBackGarmentPart(part) ? 'part' : viewMode,
+        viewMode: partFacing ? 'part' : viewMode,
+        partFacing: partFacing ?? undefined,
       },
       orbitTargetRef.current,
       orbitCameraRef.current,

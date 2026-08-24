@@ -43,7 +43,7 @@ const AtomImage = ({
   const isLocalStaticSrc = resolvedSrc.startsWith('/');
   const shouldDisableOptimization = !isLocalStaticSrc;
 
-  const imageStyle: CSSProperties = useFill ? { ...style, objectFit: fit } : (style ?? {});
+  const imageStyle: CSSProperties = useFill ? { ...style, objectFit: fit } : { width: 'auto', height: 'auto', ...style };
 
   const imageElement = (
     <Image

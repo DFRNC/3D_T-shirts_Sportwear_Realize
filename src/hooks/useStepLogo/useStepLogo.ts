@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo } from 'react';
 
-import { useGarmentLogo } from '@store';
+import { resolveCanAddUserLogo, useGarmentLogo } from '@store';
 import type { logoInstanceType, stepLogoPartStateType, stepLogoPositionStateType, stepLogoStoreViewType } from '@types';
 
 const mapInstanceToPart = (instance: logoInstanceType): stepLogoPartStateType => ({
@@ -46,12 +46,12 @@ const mapPositionToStep = (position: {
 const useStepLogo = <T>(selector: (state: stepLogoStoreViewType) => T): T => {
   const instances = useGarmentLogo((state) => state.instances);
   const positions = useGarmentLogo((state) => state.positions);
-  const canAddUserLogo = useGarmentLogo((state) => state.canAddUserLogo);
   const removeInstance = useGarmentLogo((state) => state.removeInstance);
   const updateInstance = useGarmentLogo((state) => state.updateInstance);
 
   const parts = useMemo(() => instances.map(mapInstanceToPart), [instances]);
   const stepPositions = useMemo(() => positions.map(mapPositionToStep), [positions]);
+  const canAddUserLogo = useMemo(() => resolveCanAddUserLogo(instances), [instances]);
 
   const removePart = useCallback((id: string) => removeInstance(id), [removeInstance]);
 
