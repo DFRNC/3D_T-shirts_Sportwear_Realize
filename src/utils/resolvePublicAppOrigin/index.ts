@@ -1,1 +1,1 @@
-export { parsePublicAppOrigin, resolvePublicAppOrigin } from './resolvePublicAppOrigin';
+export { buildPublicAssetDownloadUrl, parsePublicAppOrigin, resolvePublicAppOrigin } from './resolvePublicAppOrigin';

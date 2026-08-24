@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     padding: 6,
     alignItems: 'center',
+    overflow: 'hidden',
     textDecoration: 'none',
     color: COLOR_TEXT,
   },
@@ -122,10 +123,31 @@ const styles = StyleSheet.create({
   },
   downloadPreview: { width: 43, height: 43, objectFit: 'contain' },
   downloadPlaceholder: { fontSize: 7, color: COLOR_MUTED, textAlign: 'center' },
-  downloadLabel: { fontSize: 8, fontFamily: PDF_FONT_FAMILY, fontWeight: 700, textAlign: 'center' },
-  downloadFile: { fontSize: 7, color: COLOR_MUTED, textAlign: 'center', marginTop: 2 },
+  downloadLabel: {
+    width: '100%',
+    fontSize: 8,
+    fontFamily: PDF_FONT_FAMILY,
+    fontWeight: 700,
+    textAlign: 'center',
+    overflow: 'hidden',
+  },
+  downloadFileClip: {
+    width: '100%',
+    maxHeight: 17,
+    marginTop: 2,
+    overflow: 'hidden',
+  },
+  downloadFile: {
+    width: '100%',
+    fontSize: 7,
+    lineHeight: 1.2,
+    color: COLOR_MUTED,
+    textAlign: 'center',
+  },
   pageNumber: { position: 'absolute', right: 27, bottom: 14, fontSize: 7.5, color: COLOR_MUTED, textAlign: 'right' },
 });
+
+const wrapDownloadFileName = (fileName: string) => fileName.split('').join('\u200B');
 
 const buildDownloadPreviewKey = (cartItemId: string, label: string) => `${cartItemId}:${label}`;
 
@@ -149,8 +171,12 @@ const DownloadCard = ({
       <View style={styles.downloadPreviewFrame}>
         {previewSrc ? <Image src={previewSrc} style={styles.downloadPreview} /> : <Text style={styles.downloadPlaceholder}>{file.label}</Text>}
       </View>
-      <Text style={styles.downloadLabel}>{file.label}</Text>
-      <Text style={styles.downloadFile}>{file.fileName}</Text>
+      <Text style={styles.downloadLabel} wrap={false}>
+        {file.label}
+      </Text>
+      <View style={styles.downloadFileClip}>
+        <Text style={styles.downloadFile}>{wrapDownloadFileName(file.fileName)}</Text>
+      </View>
     </>
   );
 

@@ -54,4 +54,14 @@ const resolvePublicAppOrigin = (request: Request): string | null => {
   return parsePublicAppOrigin(requestUrl.origin);
 };
 
-export { parsePublicAppOrigin, resolvePublicAppOrigin };
+const buildPublicAssetDownloadUrl = (origin: string | null, fileUrl: string, filename: string): string => {
+  const publicOrigin = parsePublicAppOrigin(origin);
+  if (!publicOrigin) return fileUrl;
+
+  const url = new URL('/api/download', publicOrigin);
+  url.searchParams.set('url', fileUrl);
+  url.searchParams.set('filename', filename);
+  return url.toString();
+};
+
+export { buildPublicAssetDownloadUrl, parsePublicAppOrigin, resolvePublicAppOrigin };

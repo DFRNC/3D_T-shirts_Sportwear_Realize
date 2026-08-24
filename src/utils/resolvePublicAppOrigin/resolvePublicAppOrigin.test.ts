@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { parsePublicAppOrigin, resolvePublicAppOrigin } from './resolvePublicAppOrigin';
+import { buildPublicAssetDownloadUrl, parsePublicAppOrigin, resolvePublicAppOrigin } from './resolvePublicAppOrigin';
 
 const originalAppOrigin = process.env.APP_ORIGIN;
 const originalAppUrl = process.env.APP_URL;
@@ -57,5 +57,27 @@ describe('resolvePublicAppOrigin', () => {
     });
 
     expect(resolvePublicAppOrigin(request)).toBeNull();
+  });
+
+  it('builds a download URL on the public app origin, not 0.0.0.0', () => {
+    process.env.APP_ORIGIN = 'https://realize3d.unitry.io';
+
+    const request = new Request('https://0.0.0.0:80/api/webhooks/orders-create', {
+      headers: { host: '0.0.0.0:80' },
+    });
+    const fileUrl = 'https://cdn.shopify.com/s/files/1/0501/5840/3742/files/color_uv_atlas.png?v=1';
+    const downloadUrl = buildPublicAssetDownloadUrl(resolvePublicAppOrigin(request), fileUrl, 'UV Color.png');
+    const parsed = new URL(downloadUrl);
+
+    expect(parsed.origin).toBe('https://realize3d.unitry.io');
+    expect(parsed.pathname).toBe('/api/download');
+    expect(parsed.searchParams.get('url')).toBe(fileUrl);
+    expect(parsed.searchParams.get('filename')).toBe('UV Color.png');
+  });
+
+  it('falls back to the source file URL when origin is a Docker bind address', () => {
+    const fileUrl = 'https://cdn.shopify.com/s/files/1/0501/5840/3742/files/color_uv_atlas.png';
+
+    expect(buildPublicAssetDownloadUrl('https://0.0.0.0:80', fileUrl, 'UV Color.png')).toBe(fileUrl);
   });
 });

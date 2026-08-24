@@ -11,7 +11,7 @@ import { buildCheckoutOrderExport } from '@utils/buildCheckoutOrderExport';
 import { CheckoutOrderExportPdfDocument } from '@utils/buildCheckoutOrderExportPdf/CheckoutOrderExportPdfDocument';
 import { buildOrderCuttingExport } from '@utils/buildOrderCuttingExport';
 import { buildDownloadPreviewKey, OrderCuttingExportPdfDocument } from '@utils/buildOrderCuttingExportPdf/OrderCuttingExportPdfDocument';
-import { parsePublicAppOrigin } from '@utils/resolvePublicAppOrigin';
+import { buildPublicAssetDownloadUrl } from '@utils/resolvePublicAppOrigin';
 import type { checkoutConfigExportType } from '@utils/buildCheckoutConfigExport';
 
 type orderPdfContextType = {
@@ -33,16 +33,6 @@ type orderPdfUrlsType = {
 };
 
 const isHttpUrl = (value: string | null | undefined): value is string => !!value && /^https?:/i.test(value);
-
-const buildDownloadUrl = (origin: string | null, fileUrl: string, filename: string): string => {
-  const publicOrigin = parsePublicAppOrigin(origin);
-  if (!publicOrigin) return fileUrl;
-
-  const url = new URL('/api/download', publicOrigin);
-  url.searchParams.set('url', fileUrl);
-  url.searchParams.set('filename', filename);
-  return url.toString();
-};
 
 const isPdfEmbeddableMime = (mime: string) => /image\/(?:png|jpe?g)/i.test(mime);
 
@@ -171,7 +161,7 @@ const generateOrderPdfs = async (context: orderPdfContextType): Promise<orderPdf
         .map(async (uv) => {
           const key = buildDownloadPreviewKey(product.cartItemId, uv.label);
           downloadPreviewByKey.set(key, await fetchImageAsDataUrl(uv.url));
-          downloadLinkByKey.set(key, buildDownloadUrl(context.appOrigin, uv.url, `${uv.label}.${resolveDownloadFilenameExtension(uv.url)}`));
+          downloadLinkByKey.set(key, buildPublicAssetDownloadUrl(context.appOrigin, uv.url, `${uv.label}.${resolveDownloadFilenameExtension(uv.url)}`));
         }),
     ),
   );
