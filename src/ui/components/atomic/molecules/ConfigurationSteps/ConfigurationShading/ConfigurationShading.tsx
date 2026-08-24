@@ -20,7 +20,6 @@ const ConfigurationShadingAccordion = ({ parts, partIds }: configurationShadingA
   const { openItems, handleItemActivate, handleOpenItemsChange } = usePartAccordionCameraFocus({
     partIds,
     defaultOpenPartIds: partIds[0] ? [partIds[0]] : [],
-    enableCameraFocus: false,
   });
 
   const getShadingPreview = useCallback(

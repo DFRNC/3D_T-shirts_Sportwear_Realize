@@ -19,7 +19,7 @@ export { useRestoreSharedConfiguration } from './useRestoreSharedConfiguration';
 export { useShareConfiguration } from './useShareConfiguration';
 export { useNavigateToConfigurator } from './useNavigateToConfigurator';
 export { useConfigurationCartSync } from './useConfigurationCartSync';
-export { useGarmentLogoCameraFocus } from './useGarmentLogoCameraFocus';
+export { focusGarmentCamera } from './focusGarmentCamera';
 export { usePartAccordionCameraFocus } from './usePartAccordionCameraFocus';
 export { useConfigurationPositionPicker } from './useConfigurationPositionPicker';
 export { useControlledState } from './useControlledState';

@@ -8,6 +8,8 @@ import {
   applyOrbitZoomAroundPoint,
   clampOrbitCameraOutsideGarment,
   clampOrbitTargetToGarment,
+  ORBIT_MAX_DISTANCE,
+  ORBIT_MIN_DISTANCE,
   recenterOrbitTargetByZoom,
   resolveCursorFocusPoint,
   resolveGarmentCenter,
@@ -17,8 +19,6 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useConfiguratorProduct, useConfiguratorSceneLoad } from '@store';
 import { useCallback, useEffect, useRef } from 'react';
 import { Raycaster, TOUCH, Vector3 } from 'three';
-const ORBIT_MIN_DISTANCE = 0.05;
-const ORBIT_MAX_DISTANCE = 0.9;
 
 const PRODUCT_SWITCH_ZOOM_DISTANCE = ORBIT_MAX_DISTANCE;
 const ORBIT_MAX_POLAR_ANGLE = Math.PI / 1.5;

@@ -1,6 +1,6 @@
 'use client';
 
-import type { configurationPositionPickerInstanceType, numberPartFormPropsType, numberPositionType } from '@types';
+import type { numberPartFormPropsType, numberPositionType } from '@types';
 import { AccordionAtom, Button, Flex, SvgIcon, Text } from '@atoms';
 import { CONFIGURATOR_NUMBER_POSITION_SELECT_LABEL } from '@constants';
 import { useConfigurationPositionPicker, usePrintCmScale, usePrintUnits } from '@hooks';
@@ -150,19 +150,10 @@ const ConfigurationNumbers = () => {
     [addInstance, product],
   );
 
-  const resolveFocusFromPosition = useCallback((position: numberPositionType) => ({ partId: position.partId, uv: position.uv }), []);
-
-  const resolveFocusFromInstance = useCallback((instance: configurationPositionPickerInstanceType) => {
-    const item = useGarmentNumber.getState().instances.find((entry) => entry.id === instance.id);
-    return item ? { partId: item.partId, uv: item.uv } : null;
-  }, []);
-
   const { openItems, handleItemActivate, handleOpenItemsChange, handlePositionSelect } = useConfigurationPositionPicker({
     positions,
     instances,
     onAddInstance: handleAddInstance,
-    resolveFocusFromPosition,
-    resolveFocusFromInstance,
   });
 
   const pickerPositions = useMemo(() => {

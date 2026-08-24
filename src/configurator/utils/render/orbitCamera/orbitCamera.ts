@@ -3,6 +3,8 @@ import { Box3, Vector2, Vector3 } from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 const ORBIT_SURFACE_CLEARANCE = 0.12;
+const ORBIT_MIN_DISTANCE = 0.05;
+const ORBIT_MAX_DISTANCE = 0.9;
 
 const isGarmentMesh = (object: Object3D) => (object as { isMesh?: boolean }).isMesh === true && object.visible && object.userData?.configuratorGarment === true;
 
@@ -237,6 +239,8 @@ const resolveOrbitFocusPose = (
 
 export {
   ORBIT_SURFACE_CLEARANCE,
+  ORBIT_MIN_DISTANCE,
+  ORBIT_MAX_DISTANCE,
   applyOrbitZoomAroundPoint,
   clampOrbitCameraOutsideGarment,
   clampOrbitTargetToGarment,

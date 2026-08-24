@@ -38,7 +38,7 @@ const ConfiguratorProduct = memo(({ className }: { className?: string }) => {
       </Grid>
       <Grid variant="configurator_price">
         <Text variant="product_price">{priceFormat(price)}</Text>
-        {showVolumeDiscount ? <Text variant="configurator_product_volume_discount">{buildVolumeDiscountLabel(bonusCount, bonusDiscount)}</Text> : null}
+        {showVolumeDiscount ? <Text variant="configurator_product_volume_discount">{buildVolumeDiscountLabel(bonusCount)}</Text> : null}
       </Grid>
     </Flex>
   );

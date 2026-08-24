@@ -1,6 +1,6 @@
 'use client';
 
-import type { configurationPositionPickerInstanceType, testoPartFormPropsType, testoPositionType } from '@types';
+import type { testoPartFormPropsType, testoPositionType } from '@types';
 import { AccordionAtom, Button, Flex, SvgIcon, Text } from '@atoms';
 import { CONFIGURATOR_TESTO_POSITION_SELECT_LABEL } from '@constants';
 import { useConfigurationPositionPicker, usePrintCmScale, usePrintUnits } from '@hooks';
@@ -161,19 +161,10 @@ const ConfigurationTesto = () => {
     [addInstance, product],
   );
 
-  const resolveFocusFromPosition = useCallback((position: testoPositionType) => ({ partId: position.partId, uv: position.uv }), []);
-
-  const resolveFocusFromInstance = useCallback((instance: configurationPositionPickerInstanceType) => {
-    const item = useGarmentTesto.getState().instances.find((entry) => entry.id === instance.id);
-    return item ? { partId: item.partId, uv: item.uv } : null;
-  }, []);
-
   const { openItems, handleItemActivate, handleOpenItemsChange, handlePositionSelect } = useConfigurationPositionPicker({
     positions,
     instances,
     onAddInstance: handleAddInstance,
-    resolveFocusFromPosition,
-    resolveFocusFromInstance,
   });
 
   const pickerPositions = useMemo(() => {

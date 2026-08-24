@@ -4,15 +4,20 @@ import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useFrame, useThree } from '@react-three/fiber';
 import { getConfiguratorCameraFocusState, registerConfiguratorCameraDebug, subscribeConfiguratorCameraFocus } from '@configurator/canvas/cameraFocus';
 import { orbitControlsRef, syncOrbitControlsEnabled } from '@configurator/canvas/orbitGuard';
-import { clampOrbitCameraOutsideGarment, resolveOrbitFocusPose, resolvePrintUvWorldPoint, resolveShortestAngleDelta } from '@configurator/utils';
+import {
+  clampOrbitCameraOutsideGarment,
+  ORBIT_MAX_DISTANCE,
+  ORBIT_MIN_DISTANCE,
+  resolveOrbitFocusPose,
+  resolvePrintUvWorldPoint,
+  resolveShortestAngleDelta,
+} from '@configurator/utils';
 import { useConfiguratorProduct } from '@store';
 import { useEffect, useRef } from 'react';
 import { Spherical, Vector3 } from 'three';
 
 const FOCUS_DURATION_MS = 420;
 const FOCUS_RETRY_FRAMES = 90;
-const ORBIT_MIN_DISTANCE = 0.05;
-const ORBIT_MAX_DISTANCE = 0.9;
 
 const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 

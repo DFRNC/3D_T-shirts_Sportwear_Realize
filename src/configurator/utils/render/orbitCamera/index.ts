@@ -1,5 +1,7 @@
 export {
   ORBIT_SURFACE_CLEARANCE,
+  ORBIT_MIN_DISTANCE,
+  ORBIT_MAX_DISTANCE,
   applyOrbitZoomAroundPoint,
   clampOrbitCameraOutsideGarment,
   clampOrbitTargetToGarment,

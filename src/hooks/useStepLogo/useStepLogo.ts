@@ -9,6 +9,7 @@ const mapInstanceToPart = (instance: logoInstanceType): stepLogoPartStateType =>
   id: instance.id,
   positionKey: instance.positionKey,
   label: instance.label,
+  partId: instance.partId,
   uv: instance.uv,
   rotation: instance.rotation,
   opacity: instance.opacity,

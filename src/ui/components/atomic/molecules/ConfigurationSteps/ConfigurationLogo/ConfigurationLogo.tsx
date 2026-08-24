@@ -2,7 +2,7 @@
 
 import type { filePickContextType } from '@types';
 import { Flex } from '@atoms';
-import { useGarmentLogoCameraFocus, useLogoFileHandler, useStepLogo } from '@hooks';
+import { focusGarmentCamera, useLogoFileHandler, useStepLogo } from '@hooks';
 import { HiddenLogoFileInput, LogoEditPanel, LogoUpload, LogoUploadedFilesSection } from '@molecules/ConfigurationTools';
 import { type ChangeEvent, useCallback, useMemo, useRef, useState } from 'react';
 const ConfigurationLogo = () => {
@@ -11,7 +11,6 @@ const ConfigurationLogo = () => {
   const canAddUserLogo = useStepLogo((state) => state.canAddUserLogo);
   const removePart = useStepLogo((state) => state.removePart);
   const { uploadLogo, loading, error } = useLogoFileHandler();
-  const focusLogoInstance = useGarmentLogoCameraFocus();
 
   const [editingPartId, setEditingPartId] = useState<string | null>(null);
 
@@ -69,9 +68,11 @@ const ConfigurationLogo = () => {
   const handleEdit = useCallback(
     (partId: string) => {
       setEditingPartId(partId);
-      focusLogoInstance(partId);
+      const part = parts.find((item) => item.id === partId);
+      if (!part) return;
+      focusGarmentCamera({ partId: part.partId, uv: part.uv });
     },
-    [focusLogoInstance],
+    [parts],
   );
 
   if (editingPart) {
