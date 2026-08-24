@@ -114,20 +114,14 @@ const useGarmentLogo = createSingletonStore<GarmentLogoState>('useGarmentLogo', 
   addFreeUserInstance: (product, src, fileName, naturalWidth, naturalHeight) => {
     if (!get().canAddUserLogo()) return;
 
-    const { instances, selectedInstanceId } = get();
+    const { instances } = get();
     const userInstances = instances.filter((instance) => !instance.isDefault);
     const usedSlots = new Set(userInstances.map((instance) => instance.positionKey));
 
     let freeSlot = 0;
     while (usedSlots.has(`logo-user-${freeSlot}`)) freeSlot += 1;
 
-    const selected = selectedInstanceId ? instances.find((instance) => instance.id === selectedInstanceId) : undefined;
-    const anchorSource = selected ?? userInstances.at(-1);
-    const position = createDynamicUserLogoPosition(
-      product,
-      freeSlot,
-      anchorSource ? { partId: anchorSource.partId, uv: anchorSource.uv } : undefined,
-    );
+    const position = createDynamicUserLogoPosition(product, freeSlot);
     const instance = createLogoInstance(position, `${position.key}_${crypto.randomUUID()}`, {
       src,
       fileName,

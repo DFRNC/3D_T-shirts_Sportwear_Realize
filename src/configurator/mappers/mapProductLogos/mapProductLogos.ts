@@ -2,13 +2,7 @@ import type { garmentConfigType, logoInstanceType, logoPositionConfigType, logoP
 import { FULL_UV_BOUNDS, LOGO_UPLOAD_ROTATION_DEG } from '@configurator/constants';
 import { resolvePartUvBounds } from '@configurator/mappers';
 
-const LOGO_STACK_OFFSET = 0.03;
 const LOGO_STACK_INSET = 0.04;
-
-type logoPlacementAnchorType = {
-  partId: string;
-  uv: uvPointType;
-};
 
 const clampUvToPartBounds = (uv: uvPointType, bounds: uvBoundsType): uvPointType => {
   const minX = bounds.minX + LOGO_STACK_INSET;
@@ -22,8 +16,6 @@ const clampUvToPartBounds = (uv: uvPointType, bounds: uvBoundsType): uvPointType
   };
 };
 
-const resolveNextUserLogoUv = (origin: uvPointType, bounds: uvBoundsType): uvPointType =>
-  clampUvToPartBounds({ x: origin.x + LOGO_STACK_OFFSET, y: origin.y - LOGO_STACK_OFFSET }, bounds);
 const resolvePartIdForAtlasUv = (product: garmentConfigType, uv: uvPointType): string => {
   const match = product.parts.find((part) => {
     const bounds = resolvePartUvBounds(part);
@@ -131,13 +123,12 @@ const resolveLogoDefaults = (product: garmentConfigType) => {
   };
 };
 
-const createDynamicUserLogoPosition = (product: garmentConfigType, index: number, anchor?: logoPlacementAnchorType): logoPositionType => {
+const createDynamicUserLogoPosition = (product: garmentConfigType, index: number): logoPositionType => {
   const defaults = resolveLogoDefaults(product);
-  const part = product.parts.find((item) => item.id === (anchor?.partId ?? defaults.partId)) ?? product.parts[0];
+  const part = product.parts.find((item) => item.id === defaults.partId) ?? product.parts[0];
   const partId = part?.id ?? defaults.partId;
   const bounds = part ? resolvePartUvBounds(part) : FULL_UV_BOUNDS;
-  const origin = anchor?.uv ?? defaults.uv;
-  const uv = anchor ? resolveNextUserLogoUv(origin, bounds) : clampUvToPartBounds(origin, bounds);
+  const uv = clampUvToPartBounds(defaults.uv, bounds);
 
   return {
     key: `logo-user-${index}`,
@@ -153,5 +144,4 @@ const createDynamicUserLogoPosition = (product: garmentConfigType, index: number
   };
 };
 
-export { createDefaultLogoInstances, createDynamicUserLogoPosition, createLogoInstance, mapProductLogoPositions, resolveLogoDefaults, resolveNextUserLogoUv, resolvePartIdForAtlasUv };
-export type { logoPlacementAnchorType };
+export { createDefaultLogoInstances, createDynamicUserLogoPosition, createLogoInstance, mapProductLogoPositions, resolveLogoDefaults, resolvePartIdForAtlasUv };

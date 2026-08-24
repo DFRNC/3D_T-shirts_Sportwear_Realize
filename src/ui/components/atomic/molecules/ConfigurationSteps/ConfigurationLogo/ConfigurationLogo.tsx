@@ -9,11 +9,9 @@ import { useGarmentLogo } from '@store';
 import { type ChangeEvent, useCallback, useMemo, useRef, useState } from 'react';
 const ConfigurationLogo = () => {
   const parts = useStepLogo((state) => state.parts);
-  const positions = useStepLogo((state) => state.positions);
   const canAddUserLogo = useStepLogo((state) => state.canAddUserLogo);
   const removePart = useStepLogo((state) => state.removePart);
   const setSelectedInstance = useGarmentLogo((state) => state.setSelectedInstance);
-  const selectedInstanceId = useGarmentLogo((state) => state.selectedInstanceId);
   const { uploadLogo, loading, error } = useLogoFileHandler();
 
   const [editingPartId, setEditingPartId] = useState<string | null>(null);
@@ -24,19 +22,11 @@ const ConfigurationLogo = () => {
   const userLogos = useMemo(() => parts.filter((part) => !part.isDefault), [parts]);
   const editingPart = useMemo(() => (editingPartId ? parts.find((part) => part.id === editingPartId && !part.isDefault) : undefined), [editingPartId, parts]);
 
-  const freeInteractivePosition = useMemo(() => {
-    const interactive = positions.filter((position) => position.interactive);
-    const usedKeys = new Set(parts.filter((part) => !part.isDefault).map((part) => part.positionKey));
-    return interactive.find((position) => !usedKeys.has(position.key));
-  }, [parts, positions]);
-
   const canUpload = canAddUserLogo && userLogos.length < LOGO_MAX_USER_FILES;
 
   const handleUploadFile = async (file: File) => {
     if (!canUpload) return;
-
-    const shouldStackFromActive = Boolean(selectedInstanceId) || userLogos.length > 0;
-    await uploadLogo(file, !shouldStackFromActive && freeInteractivePosition ? { position: freeInteractivePosition } : undefined);
+    await uploadLogo(file);
   };
 
   const handleInputChange = async (file: File | undefined) => {

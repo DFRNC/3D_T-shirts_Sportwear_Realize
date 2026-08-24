@@ -41,7 +41,6 @@ export {
   createLogoInstance,
   mapProductLogoPositions,
   resolveLogoDefaults,
-  resolveNextUserLogoUv,
   resolvePartIdForAtlasUv,
 } from './mapProductLogos';
 export { mapDefaultPattern, mapProductDesigns } from './mapProductDesigns';
