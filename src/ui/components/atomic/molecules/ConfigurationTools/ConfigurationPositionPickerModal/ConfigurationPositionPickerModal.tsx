@@ -10,7 +10,7 @@ const ConfigurationPositionPickerModal = ({ open, onOpenChange, title, descripti
       <AtomDialogContent
         aria-describedby={undefined}
         aria-label={title}
-        className="h-auto max-h-[calc(100dvh-32px)] w-[calc(100%-32px)] min-w-0 max-w-155 gap-4 overflow-hidden p-4 pt-10 max-sm:gap-3"
+        className="h-auto max-h-[calc(var(--viewport-height)-32px)] w-[calc(100%-32px)] min-w-0 max-w-155 gap-4 overflow-hidden p-4 pt-10 max-sm:gap-3"
         closeButtonClassName="top-3 right-3 bg-transparent opacity-100"
       >
         <Flex variant="modal_info_text_part_left">

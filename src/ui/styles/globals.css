@@ -16,6 +16,10 @@ html:has(.configurator-shell) body {
   overscroll-behavior: none;
 }
 
+:root {
+  --viewport-height: 100dvh;
+}
+
 .configurator-shell {
   height: var(--configurator-shell-height, 100dvh);
   max-height: var(--configurator-shell-height, 100dvh);
@@ -23,6 +27,7 @@ html:has(.configurator-shell) body {
 
 html[data-embedded='1'] {
   --configurator-shell-height: 100%;
+  --viewport-height: 100%;
 }
 
 @theme {

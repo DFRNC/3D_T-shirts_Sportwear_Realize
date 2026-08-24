@@ -166,7 +166,7 @@ const ProductCatalogPopover = ({
           <AtomDialogTrigger asChild>{children}</AtomDialogTrigger>
           <AtomDialogContent
             aria-describedby={undefined}
-            className="h-auto max-h-[calc(100dvh-32px)] w-[calc(100%-32px)] min-w-0 max-w-140 gap-3 overflow-hidden p-4 pt-10"
+            className="h-auto max-h-[calc(var(--viewport-height)-32px)] w-[calc(100%-32px)] min-w-0 max-w-140 gap-3 overflow-hidden p-4 pt-10"
             closeButtonClassName="top-3 right-3 bg-transparent opacity-100"
           >
             <AtomDialogTitle className="text-[16px] font-semibold uppercase text-default">

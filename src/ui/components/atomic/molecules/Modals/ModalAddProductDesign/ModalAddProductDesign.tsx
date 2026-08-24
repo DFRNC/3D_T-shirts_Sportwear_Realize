@@ -44,7 +44,7 @@ const ModalAddProductDesign = () => {
       <AtomDialogContent
         aria-describedby={undefined}
         aria-label={title}
-        className="h-auto max-h-[calc(100dvh-32px)] w-full max-w-95 gap-5 max-sm:min-w-0 max-sm:max-w-[calc(100%-32px)] max-sm:gap-4 max-sm:p-5"
+        className="h-auto max-h-[calc(var(--viewport-height)-32px)] w-full max-w-95 gap-5 max-sm:min-w-0 max-sm:max-w-[calc(100%-32px)] max-sm:gap-4 max-sm:p-5"
         closeButtonClassName="max-sm:top-4 max-sm:right-4"
       >
         <AtomDialogTitle className="text-center max-sm:pr-6 max-sm:text-[15px] max-sm:leading-5">{title}</AtomDialogTitle>
