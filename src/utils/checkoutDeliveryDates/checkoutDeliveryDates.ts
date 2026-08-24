@@ -1,11 +1,13 @@
 const IT_WEEKDAYS_SHORT = ['dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab'] as const;
+const IT_MONTHS_SHORT = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'] as const;
 
 const CHECKOUT_TRANSPORT_WORKING_DAYS = 19;
 const CHECKOUT_DELIVERY_WORKING_DAYS = 21;
 
 const formatCheckoutDeliveryDate = (date: Date) => {
   const weekday = IT_WEEKDAYS_SHORT[date.getDay()];
-  return `${weekday}, ${date.getDate()}`;
+  const month = IT_MONTHS_SHORT[date.getMonth()];
+  return `${weekday} ${date.getDate()} ${month}`;
 };
 
 const isWorkingDay = (date: Date) => {
