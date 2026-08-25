@@ -97,7 +97,7 @@ const createDefaultLogoInstances = (positions: logoPositionType[]): logoInstance
 
 const isShortsProduct = (product: garmentConfigType) => product.parts.some((part) => part.label === 'Lacci');
 
-const SHORTS_LOGO_PART_FRACTION = { x: 0.685, y: 0.67 };
+const SHORTS_LOGO_PART_FRACTION = { x: 0.75, y: 0.67 };
 
 const resolveLogoDefaults = (product: garmentConfigType) => {
   const shorts = isShortsProduct(product);

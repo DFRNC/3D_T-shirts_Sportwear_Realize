@@ -34,4 +34,39 @@ describe('createDynamicUserLogoPosition', () => {
     expect(later.partId).toBe(first.partId);
     expect(later.uv).toEqual(first.uv);
   });
+
+  it('places shorts logos on the front of the right leg', () => {
+    const shorts = {
+      path: 'test-shorts',
+      parts: [
+        {
+          id: 'shorts_front',
+          name: 'Gamba Sinistra',
+          label: 'Gamba Sinistra',
+          meshNames: ['left'],
+          uvBounds: { minX: 0.5, minY: 0, maxX: 1, maxY: 1 },
+        },
+        {
+          id: 'shorts_back',
+          name: 'Gamba Destra',
+          label: 'Gamba Destra',
+          meshNames: ['right'],
+          uvBounds: { minX: 0, minY: 0, maxX: 0.5, maxY: 1 },
+        },
+        {
+          id: 'shorts_laces',
+          name: 'Lacci',
+          label: 'Lacci',
+          meshNames: ['laces'],
+        },
+      ],
+      patterns: [],
+    } as garmentConfigType;
+
+    const position = createDynamicUserLogoPosition(shorts, 0);
+
+    expect(position.partId).toBe('shorts_back');
+    expect(position.uv.x).toBeCloseTo(0.4);
+    expect(position.uv.y).toBeCloseTo(0.67);
+  });
 });
