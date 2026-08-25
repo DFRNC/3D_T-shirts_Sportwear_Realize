@@ -41,11 +41,11 @@ const DESIGN_CARD_PREVIEW_REVISION: Record<string, string> = {
   'basket/design_01': '4',
   'basket/design_02': '7',
   'basket/design_03': '5',
-  'basket/design_04': '4',
+  'basket/design_04': '7',
   'basket/design_05': '4',
   'basket/design_06': '4',
   'basket/design_07': '4',
-  'basket/design_08': '5',
+  'basket/design_08': '7',
   'basket/design_09': '5',
   'basket/design_10': '4',
 };
