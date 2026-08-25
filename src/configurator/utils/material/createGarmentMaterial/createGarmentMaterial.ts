@@ -16,7 +16,7 @@ import {
   getEmptyPrintTexture,
 } from '@configurator/utils';
 import { MeshStandardMaterial, Vector4 } from 'three';
-const GARMENT_SHADER_VERSION = 'garment-print-v99-sleeve-hem-uv-gradient';
+const GARMENT_SHADER_VERSION = 'garment-print-v100-print-over-coverage';
 
 const garmentPrintFragmentPars = garmentFragmentUvPars.replace('#include <uv_pars_fragment>\n', '');
 

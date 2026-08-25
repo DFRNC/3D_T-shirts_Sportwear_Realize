@@ -151,8 +151,6 @@ vec4 garmentCompositeUiLayer( vec4 base, vec4 layer ) {
 }
 
 vec4 garmentCompositePrintElement( vec4 printColor, vec4 layer ) {
-  printColor.rgb *= ( 1.0 - layer.a );
-  printColor.a *= ( 1.0 - layer.a );
   return garmentCompositeUiLayer( printColor, layer );
 }
 
@@ -225,12 +223,22 @@ vec2 garmentLogoStampAtlasUv( vec2 stampUv, float slotIndex ) {
 #endif
 
 #ifdef USE_GARMENT_TEXT
-vec2 garmentTextMaskFillUv( vec2 stampUv ) {
-  return vec2( stampUv.x, stampUv.y * 0.5 );
+vec2 garmentTextMaskFillUv( vec2 stampUv, vec2 stampSize ) {
+  float halfX = 0.5 / max( stampSize.x, 1.0 );
+  float halfY = 0.5 / max( stampSize.y * 2.0, 1.0 );
+  return vec2(
+    clamp( stampUv.x, halfX, 1.0 - halfX ),
+    clamp( stampUv.y * 0.5, halfY, 0.5 - halfY )
+  );
 }
 
-vec2 garmentTextMaskStrokeUv( vec2 stampUv ) {
-  return vec2( stampUv.x, stampUv.y * 0.5 + 0.5 );
+vec2 garmentTextMaskStrokeUv( vec2 stampUv, vec2 stampSize ) {
+  float halfX = 0.5 / max( stampSize.x, 1.0 );
+  float halfY = 0.5 / max( stampSize.y * 2.0, 1.0 );
+  return vec2(
+    clamp( stampUv.x, halfX, 1.0 - halfX ),
+    clamp( stampUv.y * 0.5 + 0.5, 0.5 + halfY, 1.0 - halfY )
+  );
 }
 
 float garmentNameInsideStamp( vec2 stampUv ) {
@@ -250,12 +258,12 @@ float garmentNameMaskAlphaAA( float alpha ) {
   return smoothstep( 0.5 - fw, 0.5 + fw, alpha );
 }
 
-float garmentNameSampleFillChannel( sampler2D tex, vec2 stampUv, float channel ) {
-  return garmentNameMaskAlphaAA( garmentNameFillChannel( tex, garmentTextMaskFillUv( stampUv ), channel ) ) * garmentNameInsideStamp( stampUv );
+float garmentNameSampleFillChannel( sampler2D tex, vec2 stampUv, float channel, vec2 stampSize ) {
+  return garmentNameMaskAlphaAA( garmentNameFillChannel( tex, garmentTextMaskFillUv( stampUv, stampSize ), channel ) ) * garmentNameInsideStamp( stampUv );
 }
 
-float garmentNameSampleStrokeChannel( sampler2D tex, vec2 stampUv, float channel ) {
-  return garmentNameMaskAlphaAA( garmentNameFillChannel( tex, garmentTextMaskStrokeUv( stampUv ), channel ) ) * garmentNameInsideStamp( stampUv );
+float garmentNameSampleStrokeChannel( sampler2D tex, vec2 stampUv, float channel, vec2 stampSize ) {
+  return garmentNameMaskAlphaAA( garmentNameFillChannel( tex, garmentTextMaskStrokeUv( stampUv, stampSize ), channel ) ) * garmentNameInsideStamp( stampUv );
 }
 
 float garmentNameInsidePart( vec2 worldUv, vec4 bounds ) {

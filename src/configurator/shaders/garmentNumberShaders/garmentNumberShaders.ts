@@ -5,8 +5,8 @@ const garmentNumberMapFragment = `
     float numberInside = garmentNameInsidePart( vPrintUv, uNumberPartBounds[ numberSlot ] ) * uNumberSlotActive[ numberSlot ];
 
     vec4 slotNumber = vec4( 0.0 );
-    slotNumber = garmentCompositeNameLayer( slotNumber, uNumberStrokeColors[ numberSlot ], garmentNameSampleStrokeChannel( uNumberMask, numberStampUv, numberChannel ) * numberInside );
-    slotNumber = garmentCompositeNameLayer( slotNumber, uNumberTextColors[ numberSlot ], garmentNameSampleFillChannel( uNumberMask, numberStampUv, numberChannel ) * numberInside );
+    slotNumber = garmentCompositeNameLayer( slotNumber, uNumberStrokeColors[ numberSlot ], garmentNameSampleStrokeChannel( uNumberMask, numberStampUv, numberChannel, uNumberStampSize ) * numberInside );
+    slotNumber = garmentCompositeNameLayer( slotNumber, uNumberTextColors[ numberSlot ], garmentNameSampleFillChannel( uNumberMask, numberStampUv, numberChannel, uNumberStampSize ) * numberInside );
     printColor = garmentCompositePrintElement( printColor, slotNumber );
     vec4 numberFrame = garmentGizmoFrameColor( vPrintUv, uNumberAnchorUv[ numberSlot ], uNumberScale[ numberSlot ], uNumberGizmoHalf[ numberSlot ], uGizmoRotation, uNumberPartRotation[ numberSlot ], uNumberGizmoEnabled * uNumberGizmoFrameActive[ numberSlot ], numberInside );
     printColor = garmentCompositeGizmoFrame( printColor, numberFrame );

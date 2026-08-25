@@ -5,8 +5,8 @@ const garmentTestoMapFragment = `
     float testoInside = garmentNameInsidePart( vPrintUv, uTestoPartBounds[ testoSlot ] ) * uTestoSlotActive[ testoSlot ];
 
     vec4 slotTesto = vec4( 0.0 );
-    slotTesto = garmentCompositeNameLayer( slotTesto, uTestoStrokeColors[ testoSlot ], garmentNameSampleStrokeChannel( uTestoMask, testoStampUv, testoChannel ) * testoInside );
-    slotTesto = garmentCompositeNameLayer( slotTesto, uTestoTextColors[ testoSlot ], garmentNameSampleFillChannel( uTestoMask, testoStampUv, testoChannel ) * testoInside );
+    slotTesto = garmentCompositeNameLayer( slotTesto, uTestoStrokeColors[ testoSlot ], garmentNameSampleStrokeChannel( uTestoMask, testoStampUv, testoChannel, uTestoStampSize ) * testoInside );
+    slotTesto = garmentCompositeNameLayer( slotTesto, uTestoTextColors[ testoSlot ], garmentNameSampleFillChannel( uTestoMask, testoStampUv, testoChannel, uTestoStampSize ) * testoInside );
     printColor = garmentCompositePrintElement( printColor, slotTesto );
     vec4 testoFrame = garmentGizmoFrameColor( vPrintUv, uTestoAnchorUv[ testoSlot ], uTestoScale[ testoSlot ], uTestoGizmoHalf[ testoSlot ], uGizmoRotation, uTestoPartRotation[ testoSlot ], uTestoGizmoEnabled * uTestoGizmoFrameActive[ testoSlot ], testoInside );
     printColor = garmentCompositeGizmoFrame( printColor, testoFrame );
