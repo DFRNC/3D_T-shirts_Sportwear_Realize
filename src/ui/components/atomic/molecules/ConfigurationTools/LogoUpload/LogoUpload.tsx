@@ -74,7 +74,7 @@ const LogoUpload = ({ canUpload, loading, error, onOpenFilePicker, onFileSelecte
                 void handleFile(e.dataTransfer.files[0]);
               }
         }
-        className={cn('w-full shrink-0', isDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer', dragOver && !isDisabled && 'ring-2 ring-active/30 rounded-[8px]')}
+        className={cn('w-full shrink-0', isDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer', dragOver && !isDisabled && 'ring-2 ring-active/30 rounded-lg')}
       >
         <Button
           variant="upload"

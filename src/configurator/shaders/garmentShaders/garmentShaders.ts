@@ -1,6 +1,7 @@
 const garmentFragmentUvPars = `
 #include <uv_pars_fragment>
 varying vec2 vPrintUv;
+varying vec3 vGarmentWorldPos;
 #ifdef USE_GRADIENT
 uniform vec4 uPartUvBounds;
 uniform float uGradientEnabled;
@@ -9,15 +10,27 @@ uniform float uGradientRotation;
 uniform float uGradientPosition;
 uniform float uGradientSoftness;
 uniform float uGradientOpacity;
+uniform vec3 uGradientOrigin;
+uniform vec3 uGradientExtent;
+uniform vec3 uGradientDir;
+uniform vec2 uGradientUvAxis;
 
-float garmentGradientMask( vec2 uv ) {
-  vec2 dir = vec2( cos( uGradientRotation ), sin( uGradientRotation ) );
-  vec2 gradStart = vec2( 0.5 ) - dir * 0.5;
-  vec2 gradEnd = vec2( 0.5 ) + dir * 0.5;
-  vec2 gradVec = gradEnd - gradStart;
-  float t = dot( uv - gradStart, gradVec ) / dot( gradVec, gradVec );
-  t = clamp( t, 0.0, 1.0 );
+float garmentGradientWorldT( vec3 worldPos ) {
+  if ( dot( uGradientUvAxis, uGradientUvAxis ) > 0.25 ) {
+    vec2 partSize = max( uPartUvBounds.zw - uPartUvBounds.xy, vec2( 1e-5 ) );
+    vec2 partUv = ( vPrintUv - uPartUvBounds.xy ) / partSize;
+    vec2 toward = max( uGradientUvAxis, vec2( 0.0 ) );
+    vec2 fromHem = max( -uGradientUvAxis, vec2( 0.0 ) );
+    return clamp( dot( partUv, toward ) + dot( vec2( 1.0 ) - partUv, fromHem ), 0.0, 1.0 );
+  }
 
+  vec3 dir = uGradientDir;
+  vec3 local = worldPos - uGradientOrigin;
+  float span = abs( dir.x ) * uGradientExtent.x + abs( dir.y ) * uGradientExtent.y + abs( dir.z ) * uGradientExtent.z;
+  return clamp( dot( local, dir ) / max( span, 1e-5 ) * 0.5 + 0.5, 0.0, 1.0 );
+}
+
+float garmentGradientMask( float t ) {
   float mid = uGradientPosition;
   float spread = uGradientSoftness * 0.5;
   float stop0 = max( 0.0, mid - spread );

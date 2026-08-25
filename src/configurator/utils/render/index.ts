@@ -5,6 +5,16 @@ export {
   syncProductAppearanceTextures,
 } from './garmentAppearance/garmentProductAppearanceCache';
 export { applyGarmentGradient, applyGarmentPartUvBounds } from './garmentGradient/applyGarmentGradient';
+export type { garmentGradientPartRefType, garmentGradientWorldFrameType } from './garmentGradient/resolveGarmentGradientWorldFrame';
+export {
+  evaluateGarmentGradientMask,
+  evaluateGarmentGradientUvT,
+  evaluateGarmentGradientWorldT,
+  isSleeveGarmentPart,
+  resolveGarmentGradientDir,
+  resolveGarmentGradientWorldFrame,
+  resolveGarmentPartGradientFrame,
+} from './garmentGradient/resolveGarmentGradientWorldFrame';
 export {
   clampUvToPartBounds,
   isColorOnlyGarmentPart,

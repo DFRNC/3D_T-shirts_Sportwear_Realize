@@ -16,7 +16,7 @@ import {
   getEmptyPrintTexture,
 } from '@configurator/utils';
 import { MeshStandardMaterial, Vector4 } from 'three';
-const GARMENT_SHADER_VERSION = 'garment-print-v96-logo-stable-stamp-slots';
+const GARMENT_SHADER_VERSION = 'garment-print-v99-sleeve-hem-uv-gradient';
 
 const garmentPrintFragmentPars = garmentFragmentUvPars.replace('#include <uv_pars_fragment>\n', '');
 
@@ -51,8 +51,9 @@ const buildGarmentProgramCacheKey = (material: MeshStandardMaterial) => {
 
 const appendGarmentPrintShaderChunks = (shader: { vertexShader: string; fragmentShader: string }, features: garmentPrintFeatureFlagsType) => {
   shader.vertexShader = shader.vertexShader
-    .replace('#include <uv_pars_vertex>', `#include <uv_pars_vertex>\nvarying vec2 vPrintUv;`)
-    .replace('#include <uv_vertex>', `#include <uv_vertex>\nvPrintUv = uv;`);
+    .replace('#include <uv_pars_vertex>', `#include <uv_pars_vertex>\nvarying vec2 vPrintUv;\nvarying vec3 vGarmentWorldPos;`)
+    .replace('#include <uv_vertex>', `#include <uv_vertex>\nvPrintUv = uv;`)
+    .replace('#include <project_vertex>', `#include <project_vertex>\nvGarmentWorldPos = (modelMatrix * vec4(transformed, 1.0)).xyz;`);
 
   const featureDefines = buildGarmentFeatureDefines(features);
 

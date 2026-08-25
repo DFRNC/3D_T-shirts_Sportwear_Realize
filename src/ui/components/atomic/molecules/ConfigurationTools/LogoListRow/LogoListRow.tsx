@@ -18,7 +18,7 @@ const LogoListRow = ({ part, onEdit, onDelete }: logoListRowPropsType) => (
           type="button"
           variant="outline"
           size="icon"
-          className="w-[26px] h-[26px] max-xl:w-5.25 max-xl:h-5.25 border border-gray-30 hover:bg-white"
+          className="w-6.5 h-6.5 max-xl:w-5.25 max-xl:h-5.25 border border-gray-30 hover:bg-white"
           onClick={onEdit}
           aria-label="Modifica logo"
         >
@@ -28,7 +28,7 @@ const LogoListRow = ({ part, onEdit, onDelete }: logoListRowPropsType) => (
           type="button"
           variant="outline"
           size="icon"
-          className="w-[26px] h-[26px] max-xl:w-5.25 max-xl:h-5.25 border border-error text-error hover:bg-white hover:text-error"
+          className="w-6.5 h-6.5 max-xl:w-5.25 max-xl:h-5.25 border border-error text-error hover:bg-white hover:text-error"
           onClick={onDelete}
           aria-label="Elimina logo"
         >

@@ -12,13 +12,15 @@ import {
 } from '@configurator/constants';
 import { getGizmoButtonScale } from '@configurator/gizmo/gizmoButtonScale';
 import {
+  type garmentGradientWorldFrameType,
   hydrateGarmentLogoUniforms,
   hydrateGarmentNameUniforms,
   hydrateGarmentNumberUniforms,
   hydrateGarmentTestoUniforms,
+  resolveGarmentGradientDir,
   resolveLogoShaderSlotCount,
 } from '@configurator/utils';
-import { Color, MeshStandardMaterial, Vector2, Vector4 } from 'three';
+import { Color, MeshStandardMaterial, Vector2, Vector3, Vector4 } from 'three';
 type GarmentGradientState = {
   color2: string;
   rotation: number;
@@ -53,12 +55,29 @@ const bindGarmentPrintShaderUniforms = (
   shader.uniforms.uGradientPosition = { value: gradient?.position ?? 0.5 };
   shader.uniforms.uGradientSoftness = { value: gradient?.softness ?? 0.5 };
   shader.uniforms.uGradientOpacity = { value: gradient?.opacity ?? 1 };
+  shader.uniforms.uGradientOrigin = { value: new Vector3() };
+  shader.uniforms.uGradientExtent = { value: new Vector3(1, 1, 1) };
+  shader.uniforms.uGradientDir = { value: new Vector3(0, -1, 0) };
+  shader.uniforms.uGradientUvAxis = { value: new Vector2(0, 0) };
   material.userData.uGradientEnabledUniform = shader.uniforms.uGradientEnabled;
   material.userData.uGradientColor2Uniform = shader.uniforms.uGradientColor2;
   material.userData.uGradientRotationUniform = shader.uniforms.uGradientRotation;
   material.userData.uGradientPositionUniform = shader.uniforms.uGradientPosition;
   material.userData.uGradientSoftnessUniform = shader.uniforms.uGradientSoftness;
   material.userData.uGradientOpacityUniform = shader.uniforms.uGradientOpacity;
+  material.userData.uGradientOriginUniform = shader.uniforms.uGradientOrigin;
+  material.userData.uGradientExtentUniform = shader.uniforms.uGradientExtent;
+  material.userData.uGradientDirUniform = shader.uniforms.uGradientDir;
+  material.userData.uGradientUvAxisUniform = shader.uniforms.uGradientUvAxis;
+  const savedWorldFrame = material.userData.garmentGradientWorldFrame as garmentGradientWorldFrameType | undefined;
+  const rotationRad = ((gradient?.rotation ?? 0) * Math.PI) / 180;
+  const dir = resolveGarmentGradientDir(savedWorldFrame, rotationRad);
+  shader.uniforms.uGradientDir.value.set(dir.x, dir.y, dir.z);
+  shader.uniforms.uGradientUvAxis.value.set(savedWorldFrame?.uvAxis?.x ?? 0, savedWorldFrame?.uvAxis?.y ?? 0);
+  if (savedWorldFrame) {
+    shader.uniforms.uGradientOrigin.value.set(savedWorldFrame.origin.x, savedWorldFrame.origin.y, savedWorldFrame.origin.z);
+    shader.uniforms.uGradientExtent.value.set(savedWorldFrame.extent.x, savedWorldFrame.extent.y, savedWorldFrame.extent.z);
+  }
   shader.uniforms.uDefaultLogos = { value: printState?.defaultLogos ?? emptyPrint };
   const savedAtlasWidth = material.userData.garmentPrintAtlasWidth as number | undefined;
   const savedAtlasHeight = material.userData.garmentPrintAtlasHeight as number | undefined;
