@@ -63,13 +63,7 @@
         "maxY": 0.9384
       },
       "printRotation": -90,
-      "gradient": {
-        "reversed": false,
-        "rotation": 90,
-        "position": 0.5,
-        "softness": 0.5,
-        "opacity": 1
-      }
+      "colorOnly": true
     },
     {
       "name": "Manica 2",
@@ -84,13 +78,7 @@
         "maxY": 0.9967
       },
       "printRotation": 270,
-      "gradient": {
-        "reversed": true,
-        "rotation": 270,
-        "position": 0.5,
-        "softness": 0.5,
-        "opacity": 1
-      }
+      "colorOnly": true
     },
     {
       "name": "Collo",

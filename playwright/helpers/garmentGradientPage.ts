@@ -16,7 +16,7 @@ const waitForConfigurator = async (page: Page, route: string) => {
 const openShadingStep = async (page: Page) => {
   await page.locator('[data-slot="tabs-trigger"]', { hasText: 'Sfumatura' }).click();
   await expect(page.getByTestId('skeleton-step-accordion')).toHaveCount(0, { timeout: 30_000 });
-  await expect(page.locator('[data-slot="accordion-item"]').filter({ hasText: 'Manica 1' })).toBeVisible();
+  await expect(page.locator('[data-slot="accordion-item"]').filter({ hasText: 'Davanti' })).toBeVisible();
 };
 
 const partAccordionItem = (page: Page, label: string) => page.locator('[data-slot="accordion-item"]').filter({ hasText: label }).first();
