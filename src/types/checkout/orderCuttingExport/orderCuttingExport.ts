@@ -1,7 +1,9 @@
 import type { configuratorStepValueType } from '@configurator/types';
 import type { cartItemConfigurationType, checkoutProductType, modelIdType, uvBoundsType, uvPointType } from '@types';
 
-type orderCuttingExportComposeKindType = 'design-layer' | 'design-mix' | 'color-atlas' | 'gradient-atlas' | 'text-layer';
+type orderCuttingExportComposeKindType = 'design-layer' | 'design-mix' | 'color-atlas' | 'gradient-atlas' | 'text-layer' | 'complex-atlas';
+
+type orderCuttingExportStepKeyType = configuratorStepValueType | 'complex';
 
 type orderCuttingExportDesignComposeKindType = orderCuttingExportComposeKindType;
 
@@ -43,6 +45,16 @@ interface orderCuttingExportTextLayerSpecType {
   letterSpacing?: number;
 }
 
+interface orderCuttingExportLogoStampSpecType {
+  src: string;
+  uv: uvPointType;
+  rotation: number;
+  opacity: number;
+  scale: number;
+  naturalWidth: number;
+  naturalHeight: number;
+}
+
 interface orderCuttingExportDownloadFileType {
   key: string;
   label: string;
@@ -57,6 +69,8 @@ interface orderCuttingExportDownloadFileType {
   uvBounds?: uvBoundsType;
   colorParts?: orderCuttingExportColorPartSpecType[];
   textLayers?: orderCuttingExportTextLayerSpecType[];
+  logoStamps?: orderCuttingExportLogoStampSpecType[];
+  defaultLogosSrc?: string;
   atlasWidth?: number;
   atlasHeight?: number;
   modelSrc?: string;
@@ -76,7 +90,7 @@ interface orderCuttingExportStepDetailType {
 
 interface orderCuttingExportConfigurationStepType {
   step: number;
-  key: configuratorStepValueType;
+  key: orderCuttingExportStepKeyType;
   title: string;
   isConfigured: boolean;
   emptyMessage: string;
@@ -152,10 +166,12 @@ export type {
   orderCuttingExportDesignLayerSpecType,
   orderCuttingExportDownloadFileType,
   orderCuttingExportGradientSpecType,
+  orderCuttingExportLogoStampSpecType,
   orderCuttingExportPrintAtlasType,
   orderCuttingExportProductType,
   orderCuttingExportStepDetailParamType,
   orderCuttingExportStepDetailType,
+  orderCuttingExportStepKeyType,
   orderCuttingExportTextLayerSpecType,
   orderCuttingExportType,
 };

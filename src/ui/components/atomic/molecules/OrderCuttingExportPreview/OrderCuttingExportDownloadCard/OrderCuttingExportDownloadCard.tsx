@@ -3,9 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import type { orderCuttingExportDownloadFileType } from '@types';
-import { composeGarmentColorUvAtlas } from '@utils/composeGarmentColorUvAtlas';
-import { composeDesignUvLayerPreview, composeDesignUvMixPreview } from '@utils/composeDesignUvPreview';
-import { composeTextUvLayer } from '@utils/composeTextUvLayer';
+import { composeOrderCuttingExportDownloadFile } from '@utils/composeOrderCuttingExportDownloadFile';
 import { openOrderCuttingExportDownloadTarget, resolveOrderCuttingExportDownloadHref } from '@utils/resolveOrderCuttingExportDownloadHref';
 import { AtomImage, Box } from '@atoms';
 
@@ -33,21 +31,7 @@ const OrderCuttingExportDownloadCard = ({ cartItemId, file }: orderCuttingExport
       setComposedUrl(null);
 
       try {
-        if (file.composeKind === 'design-layer' && file.maskSrc && file.color) {
-          objectUrl = await composeDesignUvLayerPreview(file.maskSrc, file.color, file.opacity ?? 1);
-        } else if (file.composeKind === 'design-mix' && file.layers?.length) {
-          objectUrl = await composeDesignUvMixPreview(file.layers, file.opacity ?? 1);
-        } else if (
-          (file.composeKind === 'color-atlas' || file.composeKind === 'gradient-atlas') &&
-          file.modelSrc &&
-          file.colorParts?.length &&
-          file.atlasWidth &&
-          file.atlasHeight
-        ) {
-          objectUrl = await composeGarmentColorUvAtlas(file.modelSrc, file.atlasWidth, file.atlasHeight, file.colorParts);
-        } else if (file.composeKind === 'text-layer' && file.textLayers?.length && file.atlasWidth && file.atlasHeight) {
-          objectUrl = await composeTextUvLayer(file.atlasWidth, file.atlasHeight, file.textLayers);
-        }
+        objectUrl = await composeOrderCuttingExportDownloadFile(file);
 
         if (isCancelled) {
           if (objectUrl) {
@@ -89,6 +73,8 @@ const OrderCuttingExportDownloadCard = ({ cartItemId, file }: orderCuttingExport
     file.modelSrc,
     file.opacity,
     file.textLayers,
+    file.logoStamps,
+    file.defaultLogosSrc,
   ]);
 
   const previewUrl = needsComposition ? composedUrl : staticPreviewUrl;
