@@ -47,7 +47,6 @@ const CheckoutRowEditModal = ({ open, onOpenChange, row, printAvailability, onPa
 
   const showName = printAvailability?.hasName ?? false;
   const showNumber = printAvailability?.hasNumber ?? false;
-  const showTesto = printAvailability?.hasTesto ?? false;
 
   const handleRemove = () => {
     onRemoveRow(row.id);
@@ -108,19 +107,6 @@ const CheckoutRowEditModal = ({ open, onOpenChange, row, printAvailability, onPa
                 maxLength={NUMBER_MAX_LENGTH}
                 onChange={(number) => onPatchRow(row.id, { number: sanitizeNumberText(number) })}
                 onClear={() => onPatchRow(row.id, { number: '' })}
-              />
-            </Flex>
-          )}
-
-          {showTesto && (
-            <Flex variant="checkout_modal_field_group">
-              <Text variant="checkout_modal_field_label">Testo</Text>
-              <ClearableField
-                value={row.testoTexts[0] ?? ''}
-                placeholder="Testo"
-                ariaLabel="Testo"
-                onChange={(testoText) => onPatchRow(row.id, { testoTextIndex: 0, testoText })}
-                onClear={() => onPatchRow(row.id, { testoTextIndex: 0, testoText: '' })}
               />
             </Flex>
           )}
