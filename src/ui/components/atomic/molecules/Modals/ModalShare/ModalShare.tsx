@@ -72,15 +72,21 @@ const ModalShare = () => {
 
   return (
     <AtomDialog open={isOpen} onOpenChange={handleOpenChange}>
-      <AtomDialogContent aria-label="Condividi configurazione" className="max-w-[560px]! h-auto! max-h-[calc((var(--viewport-height)-var(--embed-header-offset))*0.8)]">
-        <AtomDialogTitle className="text-[24px] leading-[1.2] font-semibold max-sm:text-[20px]">Condividi la tua configurazione</AtomDialogTitle>
-        <AtomDialogDescription className="mt-2 text-gray-30">
+      <AtomDialogContent
+        aria-label="Condividi configurazione"
+        className="h-auto w-full max-w-[560px] gap-0 max-sm:min-w-0 max-sm:max-w-[calc(100%-32px)] max-sm:p-5"
+        closeButtonClassName="max-sm:top-4 max-sm:right-4"
+      >
+        <AtomDialogTitle className="pr-10 text-[24px] leading-[1.2] font-semibold max-sm:pr-8 max-sm:text-[20px]">
+          Condividi la tua configurazione
+        </AtomDialogTitle>
+        <AtomDialogDescription className="mt-2 w-full text-gray-30">
           Chiunque abbia questo link potrà aprire e visualizzare la configurazione che hai creato.
         </AtomDialogDescription>
 
-        <Box className="mt-6">
+        <Box className="mt-3 w-full min-w-0">
           {status === 'pending' && (
-            <Flex className="items-center gap-3">
+            <Flex className="w-full items-center justify-start gap-3">
               <Box className="size-4 shrink-0 animate-spin rounded-full border-2 border-gray-30 border-t-transparent" aria-hidden />
               <Text>Creazione del link in corso…</Text>
             </Flex>
@@ -89,16 +95,20 @@ const ModalShare = () => {
           {status === 'error' && <Text className="text-destructive">Non è stato possibile creare il link. Chiudi la finestra e riprova.</Text>}
 
           {status === 'ready' && shareUrl && (
-            <Flex className="items-center gap-2 max-sm:flex-col max-sm:items-stretch">
+            <Flex variant="share_dialog_row">
               <AtomInput
                 variant="checkout"
-                className="flex-1 max-sm:w-full"
+                className="box-border h-12 min-h-12 w-full min-w-0 flex-1 px-4 text-sm"
                 value={shareUrl}
                 readOnly
                 onFocus={handleSelectAll}
                 aria-label="Link di condivisione"
               />
-              <Button variant="primary" size="sm" onClick={handleCopy} className="shrink-0 max-sm:w-full">
+              <Button
+                variant="primary"
+                onClick={handleCopy}
+                className="box-border h-12 min-h-12 w-full shrink-0 rounded-[8px] px-4 py-0 text-sm leading-4 sm:w-auto"
+              >
                 <SvgIcon name="share" />
                 {isCopied ? 'Copiato' : 'Copia link'}
               </Button>

@@ -189,6 +189,7 @@ type flexVariantType =
   | 'step_design_mobile_padded'
   | 'modal_add_product_preview_row'
   | 'modal_add_product_actions'
+  | 'share_dialog_row'
   | 'part_color_switch_row'
   | 'part_color_switch_inner'
   | 'configurator_product_root'

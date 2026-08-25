@@ -100,6 +100,7 @@ const variantFlex = cva('flex w-fit items-center justify-center', {
       step_design_mobile_padded: cn('flex-col gap-7 w-full max-sm:py-1', 'max-xl:gap-5.5', 'max-sm:gap-2'),
       modal_add_product_preview_row: 'mx-auto items-center justify-center gap-1',
       modal_add_product_actions: 'w-full flex-col gap-3',
+      share_dialog_row: 'w-full min-w-0 flex-col items-stretch gap-3 sm:flex-row sm:items-stretch sm:gap-2',
       part_color_switch_row: 'min-w-0 flex-1 items-center justify-start gap-3 text-inherit max-xl:gap-2.5 max-sm:gap-2',
       part_color_switch_inner: 'min-w-0 items-center gap-2 max-xl:gap-1.5',
       configurator_product_root: 'w-full flex-col items-start gap-3 max-xl:gap-2.5',
