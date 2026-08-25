@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg id="_Шар_1" data-name="Шар_1" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:i="http://ns.adobe.com/AdobeIllustrator/10.0/" viewBox="0 0 60 79">
   <!-- Generator: Adobe Illustrator 30.7.0, SVG Export Plug-In . SVG Version: 2.1.4 Build 114)  -->
+  <g id="color1">
   <polygon points=".34 73.742 .043 73.601 .043 78.988 .783 74.469 6.18 70.956 .34 73.742"/>
   <polygon points="6.419 70.721 11.81 67.071 12.141 60.536 12.704 67.065 18.108 70.555 12.295 67.816 6.419 70.721"/>
   <polygon points="42.331 70.728 47.753 67.113 48.143 60.581 48.646 67.113 54.016 70.636 48.23 67.861 42.331 70.728"/>
@@ -296,7 +297,7 @@
     <polygon points="12.701 19.668 18.055 17.199 23.272 19.572 18.035 16.711 12.701 19.668"/>
     <polygon points="23.88 19.898 29.021 23.018 29.107 29.032 28.59 23.21 23.88 19.898"/>
     <polygon points="29.067 29.536 28.922 35.538 23.549 38.65 28.544 35.306 29.067 29.536"/>
-  </g>
+  </g>  </g>
   <metadata>
     <i:aipgfRef id="adobe_illustrator_pgf"/>
     <i:aipgf id="adobe_illustrator_pgf" i:pgfEncoding="zstd/base64" i:pgfVersion="24">

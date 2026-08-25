@@ -297,6 +297,8 @@ const buildDesignDownloadFiles = (configuration: cartItemConfigurationType, mode
   return files;
 };
 
+const resolveLogoExportLabel = (instance: logoInstanceType) => instance.label || instance.fileName || 'Logo';
+
 const buildLogoStampSpecs = (configuration: cartItemConfigurationType, model: garmentConfigType): orderCuttingExportLogoStampSpecType[] =>
   configuration.logo.instances
     .filter((instance) => instance.src.trim())
@@ -305,6 +307,8 @@ const buildLogoStampSpecs = (configuration: cartItemConfigurationType, model: ga
 
       return {
         src: instance.src,
+        label: resolveLogoExportLabel(instance),
+        fileName: instance.fileName || undefined,
         uv: instance.uv,
         rotation: instance.rotation + (instance.uploadRotation ?? LOGO_UPLOAD_ROTATION_DEG) + (part ? resolvePartPrintRotation(part) : 0),
         opacity: instance.opacity ?? 1,
@@ -365,7 +369,7 @@ const buildLogoDownloadFiles = (configuration: cartItemConfigurationType): order
     .filter((instance) => !instance.isDefault && instance.src.trim())
     .map((instance) => ({
       key: `logo-${instance.id}`,
-      label: instance.label || instance.fileName || 'Logo',
+      label: resolveLogoExportLabel(instance),
       fileName: instance.fileName || `logo-${instance.id}`,
       downloadUrl: instance.src,
       previewSrc: instance.src,

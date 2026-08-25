@@ -35,11 +35,8 @@ const DesignCardPreview = ({ src, layerColors, eager }: { src: string; layerColo
   );
 };
 
-const resolvePreviewLayerColors = (
-  pattern: designPatternItemType,
-  activePattern: designPatternItemType | null,
-  getPartColor: (partKey: string) => string,
-) => (activePattern?.key === pattern.key ? pattern.colorParts.map((part) => getPartColor(part.key)) : undefined);
+const resolvePreviewLayerColors = (pattern: designPatternItemType, activePattern: designPatternItemType | null, getPartColor: (partKey: string) => string) =>
+  activePattern?.key === pattern.key ? pattern.colorParts.map((part) => getPartColor(part.key)) : undefined;
 
 const ConfigurationDesign = () => {
   const product = useConfiguratorProduct((state) => state.product);

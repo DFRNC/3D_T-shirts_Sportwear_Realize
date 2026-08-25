@@ -47,6 +47,8 @@ interface orderCuttingExportTextLayerSpecType {
 
 interface orderCuttingExportLogoStampSpecType {
   src: string;
+  label?: string;
+  fileName?: string;
   uv: uvPointType;
   rotation: number;
   opacity: number;

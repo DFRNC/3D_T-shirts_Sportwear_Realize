@@ -5,11 +5,14 @@ import { renderToBuffer } from '@react-pdf/renderer';
 import sharp from 'sharp';
 import { describe, expect, it } from 'vitest';
 
+import { CHECKOUT_CUTTING_EXPORT_FILENAME, CHECKOUT_ORDER_EXPORT_FILENAME } from '@constants';
+import { setOrderMetafields, uploadShopifyFile } from '@shopify';
 import { shopifyAdminGraphql } from '@shopify/adminClient';
 import { buildCheckoutOrderExport } from '@utils/buildCheckoutOrderExport';
 import { CheckoutOrderExportPdfDocument } from '@utils/buildCheckoutOrderExportPdf/CheckoutOrderExportPdfDocument';
 import { buildOrderCuttingExport } from '@utils/buildOrderCuttingExport';
 import { buildDownloadPreviewKey, OrderCuttingExportPdfDocument } from '@utils/buildOrderCuttingExportPdf/OrderCuttingExportPdfDocument';
+import { COMPLEX_PREVIEW_LABEL, fillMissingComplexUvPreviews, pngBufferFromDataUrl } from '@utils/composeComplexUvAtlasFromPreviews';
 import { buildPublicAssetDownloadUrl } from '@utils/resolvePublicAppOrigin';
 
 const ORDER_QUERY = `#graphql
@@ -169,30 +172,79 @@ describe('regenerate order pdfs', () => {
 
     const downloadPreviewByKey = new Map<string, string | null>();
     const downloadLinkByKey = new Map<string, string>();
-    await Promise.all(
-      config.products.flatMap((product: any) =>
-        (product.uvImages ?? [])
-          .filter((uv: any) => isHttpUrl(uv.url))
-          .map(async (uv: any) => {
-            const key = buildDownloadPreviewKey(product.cartItemId, uv.label);
-            downloadPreviewByKey.set(key, await fetchImageAsDataUrl(uv.url));
-            downloadLinkByKey.set(key, buildPublicAssetDownloadUrl(appOrigin, uv.url, `${uv.label}.${resolveExtension(uv.url)}`));
-          }),
-      ),
+    const previewEntries = config.products.flatMap((product: any) =>
+      (product.uvImages ?? []).filter((uv: any) => isHttpUrl(uv.url)).map((uv: any) => ({ product, uv })),
     );
+    const previewLayers = (
+      await Promise.all(
+        previewEntries.map(async ({ product, uv }: { product: any; uv: any }) => {
+          const dataUrl = await fetchImageAsDataUrl(uv.url);
+          if (!dataUrl) return null;
+
+          const key = buildDownloadPreviewKey(product.cartItemId, uv.label);
+          downloadPreviewByKey.set(key, dataUrl);
+          downloadLinkByKey.set(key, buildPublicAssetDownloadUrl(appOrigin, uv.url, `${uv.label}.${resolveExtension(uv.url)}`));
+          return { cartItemId: product.cartItemId as string, label: uv.label as string, dataUrl };
+        }),
+      )
+    ).filter((layer): layer is { cartItemId: string; label: string; dataUrl: string } => layer !== null);
+
+    for (const product of cuttingExport.products) {
+      const complexKey = buildDownloadPreviewKey(product.cartItemId, COMPLEX_PREVIEW_LABEL);
+      downloadPreviewByKey.delete(complexKey);
+      downloadLinkByKey.delete(complexKey);
+    }
+
+    await fillMissingComplexUvPreviews({
+      products: cuttingExport.products,
+      layers: previewLayers.filter((layer) => layer.label !== COMPLEX_PREVIEW_LABEL),
+      downloadPreviewByKey,
+      overwrite: true,
+    });
+
+    await mkdir(outDir, { recursive: true });
+    const slug = String(order.name).replace(/[^a-z0-9]+/gi, '');
+
+    for (const product of cuttingExport.products) {
+      const complexKey = buildDownloadPreviewKey(product.cartItemId, COMPLEX_PREVIEW_LABEL);
+      const dataUrl = downloadPreviewByKey.get(complexKey);
+      if (!dataUrl) continue;
+
+      const pngBuffer = pngBufferFromDataUrl(dataUrl);
+      const pngName = cuttingExport.products.length > 1 ? `complex_uv_atlas-${slug}-${product.cartItemId}.png` : `complex_uv_atlas-${slug}.png`;
+      await writeFile(path.join(outDir, pngName), pngBuffer);
+
+      const fileUrl = await uploadShopifyFile(new Blob([Uint8Array.from(pngBuffer)], { type: 'image/png' }), 'complex_uv_atlas.png', 'image/png');
+      downloadLinkByKey.set(complexKey, buildPublicAssetDownloadUrl(appOrigin, fileUrl, 'complex_uv_atlas.png'));
+    }
 
     console.log('[regen] download links:');
     downloadLinkByKey.forEach((link, key) => console.log('  ', key, '->', link));
+    cuttingExport.products.forEach((product) => {
+      const complexKey = buildDownloadPreviewKey(product.cartItemId, COMPLEX_PREVIEW_LABEL);
+      console.log('[regen] complex preview', complexKey, downloadPreviewByKey.has(complexKey) ? 'ready' : 'missing');
+    });
 
     const [orderPdfBuffer, cuttingPdfBuffer] = await Promise.all([
       renderToBuffer(<CheckoutOrderExportPdfDocument exportData={orderExport as any} images={{ logoSrc, previewBySrc }} />),
       renderToBuffer(<OrderCuttingExportPdfDocument exportData={cuttingExport} images={{ downloadPreviewByKey, downloadLinkByKey }} />),
     ]);
 
-    await mkdir(outDir, { recursive: true });
-    const slug = String(order.name).replace(/[^a-z0-9]+/gi, '');
     await writeFile(path.join(outDir, `order-${slug}.pdf`), orderPdfBuffer);
     await writeFile(path.join(outDir, `cutting-${slug}.pdf`), cuttingPdfBuffer);
+
+    if (process.env.UPLOAD === '1') {
+      const [orderPdfUrl, cuttingPdfUrl] = await Promise.all([
+        uploadShopifyFile(new Blob([Uint8Array.from(orderPdfBuffer)], { type: 'application/pdf' }), CHECKOUT_ORDER_EXPORT_FILENAME, 'application/pdf'),
+        uploadShopifyFile(new Blob([Uint8Array.from(cuttingPdfBuffer)], { type: 'application/pdf' }), CHECKOUT_CUTTING_EXPORT_FILENAME, 'application/pdf'),
+      ]);
+      await setOrderMetafields(order.id, [
+        { key: 'order_pdf_url', type: 'url', value: orderPdfUrl },
+        { key: 'cutting_pdf_url', type: 'url', value: cuttingPdfUrl },
+      ]);
+      await writeFile(path.join(outDir, `shopify-urls-${slug}.json`), JSON.stringify({ orderPdfUrl, cuttingPdfUrl }, null, 2));
+    }
+
     console.log('[regen] written to', outDir);
 
     expect(orderPdfBuffer.byteLength).toBeGreaterThan(1000);

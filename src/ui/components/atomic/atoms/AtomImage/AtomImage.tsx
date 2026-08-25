@@ -41,7 +41,8 @@ const AtomImage = ({
   const resolvedLoading = loading ?? (priority ? 'eager' : 'lazy');
   const resolvedSrc = src || EMPTY_IMAGE_SRC;
   const isLocalStaticSrc = resolvedSrc.startsWith('/');
-  const shouldDisableOptimization = !isLocalStaticSrc;
+  const isSvgSrc = /\.svg(?:$|\?)/i.test(resolvedSrc);
+  const shouldDisableOptimization = !isLocalStaticSrc || isSvgSrc;
 
   const imageStyle: CSSProperties = useFill ? { ...style, objectFit: fit } : { width: 'auto', height: 'auto', ...style };
 

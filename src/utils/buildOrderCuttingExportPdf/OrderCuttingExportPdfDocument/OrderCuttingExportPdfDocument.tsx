@@ -131,23 +131,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     overflow: 'hidden',
   },
-  downloadFileClip: {
-    width: '100%',
-    maxHeight: 17,
-    marginTop: 2,
-    overflow: 'hidden',
-  },
-  downloadFile: {
-    width: '100%',
-    fontSize: 7,
-    lineHeight: 1.2,
-    color: COLOR_MUTED,
-    textAlign: 'center',
-  },
   pageNumber: { position: 'absolute', right: 27, bottom: 14, fontSize: 7.5, color: COLOR_MUTED, textAlign: 'right' },
 });
-
-const wrapDownloadFileName = (fileName: string) => fileName.split('').join('\u200B');
 
 const buildDownloadPreviewKey = (cartItemId: string, label: string) => `${cartItemId}:${label}`;
 
@@ -174,9 +159,6 @@ const DownloadCard = ({
       <Text style={styles.downloadLabel} wrap={false}>
         {file.label}
       </Text>
-      <View style={styles.downloadFileClip}>
-        <Text style={styles.downloadFile}>{wrapDownloadFileName(file.fileName)}</Text>
-      </View>
     </>
   );
 
@@ -248,7 +230,7 @@ const ProductSection = ({ product, images }: { product: orderCuttingExportProduc
     {product.steps.map((step) => (
       <View key={`${product.cartItemId}-${step.key}`} style={styles.step} wrap={false}>
         <View style={styles.stepHeader}>
-          <Text style={styles.stepIndex}>{step.step}.</Text>
+          <Text style={styles.stepIndex}>{`${step.step}.`}</Text>
           <Text style={styles.stepTitle}>{step.title}</Text>
         </View>
 
