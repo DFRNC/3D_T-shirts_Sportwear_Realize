@@ -8,9 +8,18 @@ import { Box, Button, Flex, Grid, SvgIcon, Text } from '@atoms';
 
 import { redoConfiguration, undoConfiguration, useConfigurationCart, useConfigurationControl, useConfigurationHistory, useTutorialDialog } from '@store';
 
+const NAME_STEP = 4;
+const NUMBER_STEP = 5;
+const TESTO_STEP = 6;
+const LOGO_STEP = 7;
+
+const isGizmoToggleStep = (step: number) => step === NAME_STEP || step === NUMBER_STEP || step === TESTO_STEP || step === LOGO_STEP;
+
 const AsideConfigurationUtility = () => {
   const isGizmoVisible = useConfigurationControl((state) => state.isGizmoVisible);
   const toggleGizmoVisible = useConfigurationControl((state) => state.toggleGizmoVisible);
+  const activeStep = useConfigurationControl((state) => state.activeStep);
+  const showGizmoToggle = isGizmoToggleStep(activeStep);
   const setTutorialOpen = useTutorialDialog((state) => state.setIsOpen);
   const activeItemId = useConfigurationCart((state) => state.activeItemId);
   const historyStack = useConfigurationHistory((state) => state.stacks[activeItemId]);
@@ -52,16 +61,18 @@ const AsideConfigurationUtility = () => {
               <span className="max-xl:[writing-mode:vertical-rl] max-xl:text-[14px] max-sm:text-[11px]">Tutorial</span>
             </Button>
           </Flex>
-          <Button
-            size="sm"
-            onClick={handleToggleGizmo}
-            aria-pressed={isGizmoVisible}
-            aria-label={isGizmoVisible ? 'Nascondi gizmo' : 'Mostra gizmo'}
-            data-active={isGizmoVisible}
-            className="hidden max-xl:flex max-xl:size-8 max-xl:p-0 max-sm:size-9 data-[active=false]:opacity-50"
-          >
-            <AiOutlineBorderOuter className="size-4 max-sm:size-4 shrink-0" aria-hidden />
-          </Button>
+          {showGizmoToggle ? (
+            <Button
+              size="sm"
+              onClick={handleToggleGizmo}
+              aria-pressed={isGizmoVisible}
+              aria-label={isGizmoVisible ? 'Nascondi gizmo' : 'Mostra gizmo'}
+              data-active={isGizmoVisible}
+              className="hidden max-xl:flex max-xl:size-8 max-xl:p-0 max-sm:size-9 data-[active=false]:opacity-50"
+            >
+              <AiOutlineBorderOuter className="size-4 max-sm:size-4 shrink-0" aria-hidden />
+            </Button>
+          ) : null}
         </Flex>
       </aside>
     </Box>

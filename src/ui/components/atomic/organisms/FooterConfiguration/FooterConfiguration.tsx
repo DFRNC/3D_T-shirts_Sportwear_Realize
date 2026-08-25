@@ -10,11 +10,20 @@ import { useNavigateToCheckout, useRequestAddProduct, useShareConfiguration } fr
 import { useConfigurationCart, useConfigurationControl, useInfoDialog } from '@store';
 import { cn } from '@utils';
 
+const NAME_STEP = 4;
+const NUMBER_STEP = 5;
+const TESTO_STEP = 6;
+const LOGO_STEP = 7;
+
+const isGizmoToggleStep = (step: number) => step === NAME_STEP || step === NUMBER_STEP || step === TESTO_STEP || step === LOGO_STEP;
+
 const FooterConfiguration = () => {
   const items = useConfigurationCart((state) => state.items);
   const activeItemId = useConfigurationCart((state) => state.activeItemId);
   const isGizmoVisible = useConfigurationControl((state) => state.isGizmoVisible);
   const toggleGizmoVisible = useConfigurationControl((state) => state.toggleGizmoVisible);
+  const activeStep = useConfigurationControl((state) => state.activeStep);
+  const showGizmoToggle = isGizmoToggleStep(activeStep);
   const { requestAddProduct } = useRequestAddProduct();
   const duplicateActiveItem = useConfigurationCart((state) => state.duplicateActiveItem);
   const setIsOpen = useInfoDialog((state) => state.setIsOpen);
@@ -63,15 +72,17 @@ const FooterConfiguration = () => {
           <SvgIcon name="info" />
           Info
         </Button>
-        <Button
-          size="sm"
-          onClick={handleToggleGizmo}
-          aria-pressed={isGizmoVisible}
-          aria-label={isGizmoVisible ? 'Nascondi gizmo' : 'Mostra gizmo'}
-          className={cn('px-3 max-xl:hidden', !isGizmoVisible && 'opacity-50')}
-        >
-          <AiOutlineBorderOuter className="size-6 shrink-0" aria-hidden />
-        </Button>
+        {showGizmoToggle ? (
+          <Button
+            size="sm"
+            onClick={handleToggleGizmo}
+            aria-pressed={isGizmoVisible}
+            aria-label={isGizmoVisible ? 'Nascondi gizmo' : 'Mostra gizmo'}
+            className={cn('px-3 max-xl:hidden', !isGizmoVisible && 'opacity-50')}
+          >
+            <AiOutlineBorderOuter className="size-6 shrink-0" aria-hidden />
+          </Button>
+        ) : null}
         <Button variant="primary" size="sm" onClick={navigateToCheckout}>
           <SvgIcon name="cart" />
           Completa Config.

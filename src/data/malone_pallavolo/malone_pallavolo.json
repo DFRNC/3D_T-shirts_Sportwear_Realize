@@ -244,7 +244,7 @@
       "id": "right-bottom",
       "src": "/png/text_areas/shorts/number/left_bottom.png",
       "heightMinCm": 1,
-      "heightMaxCm": 27,
+      "heightMaxCm": 10,
       "widthMinCm": 1,
       "widthMaxCm": 200
     },
@@ -262,7 +262,7 @@
       "id": "right-top",
       "src": "/png/text_areas/shorts/number/left_top.png",
       "heightMinCm": 1,
-      "heightMaxCm": 27,
+      "heightMaxCm": 10,
       "widthMinCm": 1,
       "widthMaxCm": 200
     },
@@ -283,7 +283,7 @@
         "testo": ["right"]
       },
       "heightMinCm": 1,
-      "heightMaxCm": 27,
+      "heightMaxCm": 10,
       "widthMinCm": 1,
       "widthMaxCm": 200
     },
@@ -301,7 +301,7 @@
       "id": "left-top",
       "src": "/png/text_areas/shorts/number/right.png",
       "heightMinCm": 1,
-      "heightMaxCm": 27,
+      "heightMaxCm": 10,
       "widthMinCm": 1,
       "widthMaxCm": 200
     }
