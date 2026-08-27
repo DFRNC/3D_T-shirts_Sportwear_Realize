@@ -53,7 +53,6 @@ type garmentPartHorizonFacingType = 'front' | 'back';
 
 type garmentHorizonProductType = {
   type?: string;
-  parts: Array<{ label: string }>;
 };
 
 const isShortsHorizonLabel = (label: string) => {
@@ -61,16 +60,14 @@ const isShortsHorizonLabel = (label: string) => {
   return normalized === 'lacci' || normalized === 'gamba sinistra' || normalized === 'gamba destra';
 };
 
-const isShortsHorizonProduct = (product: garmentHorizonProductType) =>
-  product.type === 'shorts' || product.parts.some((part) => isShortsHorizonLabel(part.label));
+const isShortsHorizonPart = (part: { label: string }, product?: garmentHorizonProductType) =>
+  isShortsHorizonLabel(part.label) || product?.type === 'shorts';
 
 const resolveGarmentPartHorizonFacing = (
   part: { id: string; label: string },
   product?: garmentHorizonProductType,
 ): garmentPartHorizonFacingType | null => {
-  if (product ? isShortsHorizonProduct(product) : isShortsHorizonLabel(part.label)) {
-    return 'front';
-  }
+  if (isShortsHorizonPart(part, product)) return null;
 
   const id = part.id.toLowerCase();
   const label = part.label.trim().toLowerCase();

@@ -171,6 +171,15 @@ const useOrbitCameraFocus = () => {
 
   useEffect(() => subscribeConfiguratorCameraFocus(invalidate), [invalidate]);
 
+  useEffect(
+    () => () => {
+      if (!animationRef.current) return;
+      animationRef.current = null;
+      syncOrbitControlsEnabled();
+    },
+    [],
+  );
+
   useEffect(() => {
     return registerConfiguratorCameraDebug(() => {
       const controls = getOrbitControls();
