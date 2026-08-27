@@ -51,6 +51,8 @@ const FRONT_BACK_AZIMUTH_SNAP = 0.18;
 
 type garmentPartHorizonFacingType = 'front' | 'back';
 
+type garmentHorizonViewModeType = 'part' | 'surface';
+
 type garmentHorizonProductType = {
   type?: string;
 };
@@ -63,11 +65,15 @@ const isShortsHorizonLabel = (label: string) => {
 const isShortsHorizonPart = (part: { label: string }, product?: garmentHorizonProductType) =>
   isShortsHorizonLabel(part.label) || product?.type === 'shorts';
 
+// Shorts part ids (`*_front` / `*_back`) name the leg, not the side it faces: both legs sit on the
+// front. Framing a whole leg must therefore stay on the front camera, but a print placed at a given
+// UV lands on a side surface, so it is framed from its own normal instead.
 const resolveGarmentPartHorizonFacing = (
   part: { id: string; label: string },
   product?: garmentHorizonProductType,
+  viewMode: garmentHorizonViewModeType = 'part',
 ): garmentPartHorizonFacingType | null => {
-  if (isShortsHorizonPart(part, product)) return null;
+  if (isShortsHorizonPart(part, product)) return viewMode === 'part' ? 'front' : null;
 
   const id = part.id.toLowerCase();
   const label = part.label.trim().toLowerCase();

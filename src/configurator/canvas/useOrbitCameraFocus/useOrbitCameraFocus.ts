@@ -61,7 +61,7 @@ const useOrbitCameraFocus = () => {
     const resolved = resolvePrintUvWorldPoint({ scene, meshNames: part.meshNames, atlasUv }, focusPointRef.current, focusNormalRef.current);
     if (!resolved) return null;
 
-    const partFacing = resolveGarmentPartHorizonFacing(part, product);
+    const partFacing = resolveGarmentPartHorizonFacing(part, product, viewMode);
     const poseResolved = resolveOrbitFocusPose(
       {
         scene,

@@ -22,7 +22,7 @@ const usePartAccordionCameraFocus = ({ partIds, defaultOpenPartIds }: usePartAcc
       const part = parts.find((item) => item.id === partId);
       if (!part) return;
 
-      focusGarmentCamera({ partId, uv: resolvePartCenterUv(part) });
+      focusGarmentCamera({ partId, uv: resolvePartCenterUv(part) }, 'part');
     },
     [partIds, parts],
   );

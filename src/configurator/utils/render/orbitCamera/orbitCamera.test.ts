@@ -54,18 +54,20 @@ describe('resolveGarmentPartHorizonFacing', () => {
     expect(resolveGarmentPartHorizonFacing({ id: 'sleeve_left', label: 'Manica' })).toBeNull();
   });
 
-  it('gives shorts legs no fixed horizon so the camera follows the surface normal', () => {
-    expect(resolveGarmentPartHorizonFacing({ id: 'cruijff_calcio_back', label: 'Gamba Destra' })).toBeNull();
-    expect(resolveGarmentPartHorizonFacing({ id: 'cruijff_calcio_front', label: 'Gamba Sinistra' })).toBeNull();
-    expect(resolveGarmentPartHorizonFacing({ id: 'cruijff_calcio_laces', label: 'Lacci' })).toBeNull();
+  it('keeps a whole shorts leg on the front camera even when the part id ends with _back', () => {
+    expect(resolveGarmentPartHorizonFacing({ id: 'cruijff_calcio_back', label: 'Gamba Destra' })).toBe('front');
+    expect(resolveGarmentPartHorizonFacing({ id: 'cruijff_calcio_front', label: 'Gamba Sinistra' }, undefined, 'part')).toBe('front');
+    expect(resolveGarmentPartHorizonFacing({ id: 'panel_back', label: 'Retro' }, { type: 'shorts' }, 'part')).toBe('front');
   });
 
-  it('gives every part of a shorts-typed product no fixed horizon', () => {
-    expect(resolveGarmentPartHorizonFacing({ id: 'panel_back', label: 'Retro' }, { type: 'shorts' })).toBeNull();
+  it('gives a shorts print no fixed horizon so the camera follows its surface normal', () => {
+    expect(resolveGarmentPartHorizonFacing({ id: 'cruijff_calcio_back', label: 'Gamba Destra' }, undefined, 'surface')).toBeNull();
+    expect(resolveGarmentPartHorizonFacing({ id: 'cruijff_calcio_laces', label: 'Lacci' }, undefined, 'surface')).toBeNull();
   });
 
-  it('still classifies shirt parts of a combined product', () => {
-    expect(resolveGarmentPartHorizonFacing({ id: 'cruijff_completo_back', label: 'Retro' }, { type: 'completo' })).toBe('back');
+  it('still classifies shirt parts of a combined product in both view modes', () => {
+    expect(resolveGarmentPartHorizonFacing({ id: 'cruijff_completo_back', label: 'Retro' }, { type: 'completo' }, 'part')).toBe('back');
+    expect(resolveGarmentPartHorizonFacing({ id: 'cruijff_completo_back', label: 'Retro' }, { type: 'completo' }, 'surface')).toBe('back');
   });
 });
 
