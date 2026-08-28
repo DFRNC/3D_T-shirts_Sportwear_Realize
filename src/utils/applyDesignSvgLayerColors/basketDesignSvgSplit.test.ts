@@ -7,8 +7,7 @@ import canottaMagikBasket from '../../data/canotta_magik_basket/canotta_magik_ba
 
 const SHAPE_PATTERN = /<(?:path|polygon|rect|circle|ellipse|polyline)\b[^>]*?\/>/g;
 
-const readThumbnail = (designId: string) =>
-  readFileSync(path.resolve(__dirname, `../../../public/svg/design/basket/${designId}.svg`), 'utf8');
+const readThumbnail = (designId: string) => readFileSync(path.resolve(__dirname, `../../../public/svg/design/basket/${designId}.svg`), 'utf8');
 
 const readColorGroups = (svgText: string) => {
   const groups: string[] = [];
@@ -41,14 +40,8 @@ const readColorGroups = (svgText: string) => {
 
 const countShapes = (svgText: string) => svgText.match(SHAPE_PATTERN)?.length ?? 0;
 
-// design_10 is authored as a single silhouette: its two 3D masks are the same shape with a small
-// outline offset, so the thumbnail has nothing to split. Tracked as an asset defect, not a code one.
-const SINGLE_SHAPE_DESIGNS = new Set(['design_10']);
-
 describe('basket design thumbnails', () => {
-  const patterns = canottaMagikBasket.patterns
-    .filter((pattern) => !SINGLE_SHAPE_DESIGNS.has(pattern.designId))
-    .map((pattern) => [pattern.designId, pattern.parts.length] as const);
+  const patterns = canottaMagikBasket.patterns.map((pattern) => [pattern.designId, pattern.parts.length] as const);
 
   it.each(patterns)('%s exposes one color group per configured part', (designId, partCount) => {
     expect(readColorGroups(readThumbnail(designId))).toHaveLength(partCount);
