@@ -24,6 +24,7 @@ export { Notification } from './Notification';
 export { Search } from './Search';
 export { UserBar } from './UserBar';
 export { ModalAddProductDesign, ModalInfo, ModalShare, ModalTutorial } from './Modals';
+export { ScrollHintTutorial } from './ScrollHintTutorial';
 export { CanvasLoaderBackground } from './Loaders/CanvasLoader';
 export { MainLoader, MainLoaderBackground } from './Loaders/MainLoader';
 export { VideoPlayer, VideoPlayerPreview } from './VideoPlayer';

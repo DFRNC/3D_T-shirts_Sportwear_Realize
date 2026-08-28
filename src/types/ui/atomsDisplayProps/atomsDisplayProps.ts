@@ -71,6 +71,7 @@ interface scrollAreaPropsType {
   fadeEdges?: boolean;
   edgeShadows?: boolean;
   orientation?: 'vertical' | 'horizontal';
+  onRootElementChange?: (element: HTMLElement | null) => void;
 }
 
 interface logoPropsType {

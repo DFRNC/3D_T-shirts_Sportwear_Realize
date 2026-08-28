@@ -8,10 +8,11 @@ import { CardAddProduct, ConfiguratorLogoStepNotice, ConfiguratorProduct, Config
 import { registerAsideOrbitGuard } from '@configurator/canvas';
 import { useProductStepsConfiguration, useShowConfigurationSkeleton } from '@hooks';
 import { ConfigurationStepSkeleton, ConfiguratorProductDescriptionSkeleton } from '@skeletons';
-import { useConfigurationControl } from '@store';
+import { useConfigurationControl, useScrollHintTutorial } from '@store';
 
 const ActiveStepContent = () => {
   const activeStep = useConfigurationControl((state) => state.activeStep);
+  const setScrollHintTarget = useScrollHintTutorial((state) => state.setTargetElement);
   const showSkeleton = useShowConfigurationSkeleton();
   const availableSteps = useProductStepsConfiguration();
   const stepConfig = availableSteps.find(({ step }) => step === activeStep);
@@ -23,7 +24,7 @@ const ActiveStepContent = () => {
 
   return (
     <Box variant="content_panel">
-      <ScrollArea className="min-h-0 flex-1 w-full pt-0">
+      <ScrollArea className="min-h-0 flex-1 w-full pt-0" onRootElementChange={setScrollHintTarget}>
         <Flex variant="step_design_mobile_padded">
           <ConfiguratorProduct className="hidden max-sm:flex" />
           {showSkeleton ? (

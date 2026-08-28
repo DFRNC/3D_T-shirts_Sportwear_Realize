@@ -8,12 +8,7 @@ export {
   areGarmentPrintStoresSynced,
   useConfigurationCart,
 } from './useConfigurationCart';
-export {
-  applyConfigurationHistoryEntry,
-  redoConfiguration,
-  undoConfiguration,
-  useConfigurationHistory,
-} from './useConfigurationHistory';
+export { applyConfigurationHistoryEntry, redoConfiguration, undoConfiguration, useConfigurationHistory } from './useConfigurationHistory';
 export type { configurationHistoryEntryType } from './useConfigurationHistory';
 export { useConfiguratorProduct } from './useConfiguratorProduct';
 export { useConfiguratorSceneLoad } from './useConfiguratorSceneLoad';
@@ -51,6 +46,7 @@ export { resolveCanAddUserLogo, resolveLogoInstancesForRender, useGarmentLogo } 
 export { resolvePrintPositionConflicts } from './resolvePrintPositionConflicts';
 export { useAddProductDesignDialog } from './useAddProductDesignDialog';
 export { useInfoDialog } from './useInfoDialog';
+export { useScrollHintTutorial } from './useScrollHintTutorial';
 export { useShareDialog } from './useShareDialog';
 export type { shareDialogStatusType } from './useShareDialog';
 export { useTutorialDialog } from './useTutorialDialog';

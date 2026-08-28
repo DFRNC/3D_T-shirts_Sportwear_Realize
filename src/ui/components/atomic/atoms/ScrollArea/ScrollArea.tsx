@@ -11,7 +11,7 @@ import type { scrollAreaPropsType } from '@types';
 const FADE_SIZE = 3;
 const EDGE_SHADOW_SIZE = 24;
 
-const ScrollArea = ({ children, className, fadeEdges = false, edgeShadows = false, orientation = 'vertical' }: scrollAreaPropsType) => {
+const ScrollArea = ({ children, className, fadeEdges = false, edgeShadows = false, orientation = 'vertical', onRootElementChange }: scrollAreaPropsType) => {
   const isHorizontal = orientation === 'horizontal';
   const targetRef = useRef<HTMLElement>(null);
   const viewportRef = useRef<HTMLElement>(null);
@@ -77,6 +77,13 @@ const ScrollArea = ({ children, className, fadeEdges = false, edgeShadows = fals
 
     return undefined;
   }, [fadeEdges, isHorizontal, showTopFade, showBottomFade]);
+
+  useLayoutEffect(() => {
+    if (!onRootElementChange) return;
+
+    onRootElementChange(targetRef.current);
+    return () => onRootElementChange(null);
+  }, [onRootElementChange]);
 
   useLayoutEffect(() => {
     updateFade();

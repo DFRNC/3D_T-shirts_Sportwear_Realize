@@ -27,6 +27,7 @@ export { useConfigurationPositionPicker } from './useConfigurationPositionPicker
 export { useControlledState } from './useControlledState';
 export { useSlidingIndicator } from './useSlidingIndicator';
 export { useShowConfigurationSkeleton } from './useShowConfigurationSkeleton';
+export { useScrollHintTutorialTrigger } from './useScrollHintTutorialTrigger';
 export { useLogoFileHandler } from './useLogoFileHandler';
 export { useProductStepsConfiguration } from './useProductStepsConfiguration';
 export { useStepLogo } from './useStepLogo';
