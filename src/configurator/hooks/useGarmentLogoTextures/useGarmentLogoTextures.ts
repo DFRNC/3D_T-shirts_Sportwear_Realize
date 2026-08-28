@@ -232,16 +232,7 @@ const useGarmentLogoTextures = () => {
     });
     applyStampToMaterials(textureRef.current!, referenceCellSize, grid);
     applyLogoStyleAndFrame(latestInstances);
-  }, [
-    applyLogoStyleAndFrame,
-    applyStampToMaterials,
-    atlasSize.height,
-    atlasSize.width,
-    ensureNaturalSizes,
-    instancesForRender.length,
-    isLogoSynced,
-    product.path,
-  ]);
+  }, [applyLogoStyleAndFrame, applyStampToMaterials, ensureNaturalSizes, instancesForRender.length, isLogoSynced, product.path]);
 
   useEffect(() => {
     if (!isLogoSynced) {
