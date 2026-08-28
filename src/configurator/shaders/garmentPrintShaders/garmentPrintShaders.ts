@@ -47,11 +47,7 @@ const garmentPbrShadeCaptureFragment = `
 #ifdef USE_PRINT
 
   float diffuseLuma = max( max( totalDiffuse.r, totalDiffuse.g ), totalDiffuse.b );
-  #ifdef USE_GRADIENT
-  vec3 shadeAlbedo = garmentBaseAlbedo;
-  #else
   vec3 shadeAlbedo = diffuseColor.rgb;
-  #endif
   float albedoLuma = max( max( shadeAlbedo.r, shadeAlbedo.g ), shadeAlbedo.b );
   garmentPbrShade = clamp( diffuseLuma / max( albedoLuma, 0.001 ), 0.42, 1.0 );
 #endif

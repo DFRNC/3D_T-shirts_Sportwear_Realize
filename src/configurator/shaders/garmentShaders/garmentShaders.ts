@@ -140,7 +140,6 @@ uniform float uPatternOpacity;
 
 vec4 garmentGizmoUiColor;
 vec4 garmentPrintColor;
-vec3 garmentBaseAlbedo;
 float garmentPbrShade;
 
 #ifdef USE_GARMENT_TEXT
@@ -416,7 +415,7 @@ vec4 garmentGizmoButtons( vec2 worldUv, vec2 anchor, float scale, vec2 halfPx, f
 const garmentGizmoLightsFragment = `
 #ifdef USE_PRINT
   if ( garmentGizmoUiColor.a > 0.001 ) {
-    vec3 fabricShaded = garmentBaseAlbedo * garmentPbrShade;
+    vec3 fabricShaded = diffuseColor.rgb * garmentPbrShade;
 
     gl_FragColor.rgb = garmentGizmoUiColor.rgb + fabricShaded * ( 1.0 - garmentGizmoUiColor.a );
   }

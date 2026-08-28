@@ -64,6 +64,7 @@ export {
 export { applyGarmentPatternTints, applyGarmentPrint, emptyMaskPair } from './garmentPrint/applyGarmentPrint';
 export { getEmptyPrintTexture } from './garmentPrint/emptyPrintTexture';
 export { packStackedTextMaskCanvas, packStackedTextMaskTexture } from './garmentPrint/packStackedTextMask';
+export { canvasToLogoLayerTexture } from './garmentPrint/canvasToLogoLayerTexture';
 export { canvasToMaskTexture } from './garmentPrint/canvasToMaskTexture';
 export { configureImageTextureSampling, configureMaskTextureSampling, imageToMaskTexture, imageToTexture } from './garmentPrint/imageToTexture';
 export { resolveRasterDesignSrc } from './garmentPrint/resolveRasterDesignSrc';

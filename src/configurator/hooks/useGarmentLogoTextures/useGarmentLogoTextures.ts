@@ -16,7 +16,7 @@ import {
   applyGarmentPrintAtlasSize,
   buildLogoGizmoFrameUniforms,
   buildLogoStyleUniforms,
-  canvasToMaskTexture,
+  canvasToLogoLayerTexture,
   compileGarmentShader,
   composeLogoStampAtlas,
   getEmptyPrintTexture,
@@ -177,7 +177,7 @@ const useGarmentLogoTextures = () => {
 
     if (sizeChanged) {
       textureRef.current?.dispose();
-      textureRef.current = canvasToMaskTexture(canvas);
+      textureRef.current = canvasToLogoLayerTexture(canvas);
       canvasSizeRef.current = { width: canvas.width, height: canvas.height };
       return;
     }
