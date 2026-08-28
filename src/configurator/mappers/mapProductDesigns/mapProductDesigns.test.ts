@@ -17,8 +17,8 @@ const product = {
       name: 'Design 10',
       designId: 'design_10',
       parts: [
-        { path_name: 'design_10_color_1.webp', colorIndex: 2 },
-        { path_name: 'design_10_color_2.webp', colorIndex: 1 },
+        { path_name: 'design_10_a.webp', colorIndex: 2 },
+        { path_name: 'design_10_b.webp', colorIndex: 1 },
       ],
     },
   ],
@@ -40,12 +40,12 @@ describe('mapProductDesigns', () => {
     const [, design10] = mapProductDesigns(product);
 
     expect(design10.parts.map((part) => part.src)).toEqual([
-      '/models/canotta_magik_basket/designs/design_10_color_1.webp',
-      '/models/canotta_magik_basket/designs/design_10_color_2.webp',
+      '/models/canotta_magik_basket/designs/design_10_a.webp',
+      '/models/canotta_magik_basket/designs/design_10_b.webp',
     ]);
     expect(design10.colorParts.map((part) => part.src)).toEqual([
-      '/models/canotta_magik_basket/designs/design_10_color_2.webp',
-      '/models/canotta_magik_basket/designs/design_10_color_1.webp',
+      '/models/canotta_magik_basket/designs/design_10_b.webp',
+      '/models/canotta_magik_basket/designs/design_10_a.webp',
     ]);
   });
 });

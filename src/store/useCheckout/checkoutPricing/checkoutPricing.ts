@@ -7,10 +7,22 @@ const getProductRowQuantity = (product: checkoutProductType) => product.rows.red
 
 const getCheckoutTotalQuantity = (products: checkoutProductType[]) => products.reduce((sum, product) => sum + getProductRowQuantity(product), 0);
 
-const getCheckoutMinimumQuantity = (products: checkoutProductType[]) =>
-  products.reduce((minimum, product) => Math.max(minimum, product.business.minimumCount || 0), CONFIGURATOR_DEFAULT_MINIMUM_COUNT);
+const getProductMinimumQuantity = (product: checkoutProductType) => product.business.minimumCount || CONFIGURATOR_DEFAULT_MINIMUM_COUNT;
 
-const isCheckoutMinimumQuantityMet = (products: checkoutProductType[]) => getCheckoutTotalQuantity(products) >= getCheckoutMinimumQuantity(products);
+const isProductMinimumQuantityMet = (product: checkoutProductType) => getProductRowQuantity(product) >= getProductMinimumQuantity(product);
+
+// Reported to the UI as the minimum still to be met: the first product that is short,
+// falling back to the largest configured minimum once every product qualifies.
+const getCheckoutMinimumQuantity = (products: checkoutProductType[]) => {
+  const shortProduct = products.find((product) => !isProductMinimumQuantityMet(product));
+  if (shortProduct) return getProductMinimumQuantity(shortProduct);
+
+  return products.reduce((minimum, product) => Math.max(minimum, getProductMinimumQuantity(product)), CONFIGURATOR_DEFAULT_MINIMUM_COUNT);
+};
+
+// Every product must reach its own minimum on its own — a large order of one product
+// does not cover a second product that is still short.
+const isCheckoutMinimumQuantityMet = (products: checkoutProductType[]) => products.length > 0 && products.every(isProductMinimumQuantityMet);
 
 const getCheckoutDiscountPercent = (totalQuantity: number): number => {
   if (totalQuantity >= 110) return 10;
@@ -33,8 +45,10 @@ export {
   getCheckoutDiscountPercent,
   getCheckoutMinimumQuantity,
   getCheckoutTotalQuantity,
+  getProductMinimumQuantity,
   getProductRowQuantity,
   getProductUnitPrice,
   getProductsSubtotal,
   isCheckoutMinimumQuantityMet,
+  isProductMinimumQuantityMet,
 };

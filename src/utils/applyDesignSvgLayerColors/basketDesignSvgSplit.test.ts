@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import canottaMagikBasket from '../../data/canotta_magik_basket/canotta_magik_basket.json';
+import canottaMagikBasket from '@data/canotta_magik_basket/canotta_magik_basket.json';
 
 const SHAPE_PATTERN = /<(?:path|polygon|rect|circle|ellipse|polyline)\b[^>]*?\/>/g;
 
