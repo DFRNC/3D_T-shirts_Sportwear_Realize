@@ -1,6 +1,7 @@
 import {
   applyCardinalHorizonDirection,
   applyFrontOrBackHorizonDirection,
+  applyPartHorizonDirection,
   resolveGarmentPartHorizonFacing,
   resolveOrbitFocusPose,
 } from '@configurator/utils';
@@ -36,6 +37,26 @@ describe('applyCardinalHorizonDirection', () => {
   it('falls back to +Z when the vector is empty', () => {
     const direction = applyCardinalHorizonDirection(new Vector3(0, 0, 0));
     expect(direction).toEqual(new Vector3(0, 0, 1));
+  });
+});
+
+describe('applyPartHorizonDirection', () => {
+  it('keeps a sleeve on its own side instead of snapping to the front', () => {
+    expect(applyPartHorizonDirection(new Vector3(0.95, 0.1, 0.05))).toEqual(new Vector3(1, 0, 0));
+    expect(applyPartHorizonDirection(new Vector3(-0.9, 0.2, 0.1))).toEqual(new Vector3(-1, 0, 0));
+  });
+
+  it('looks down on a collar instead of snapping to the front', () => {
+    expect(applyPartHorizonDirection(new Vector3(0.05, 0.98, 0.02))).toEqual(new Vector3(0, 1, 0));
+  });
+
+  it('still resolves torso-facing normals horizontally', () => {
+    expect(applyPartHorizonDirection(new Vector3(0.05, 0.3, 0.9))).toEqual(new Vector3(0, 0, 1));
+    expect(applyPartHorizonDirection(new Vector3(0.05, 0.3, -0.9))).toEqual(new Vector3(0, 0, -1));
+  });
+
+  it('falls back to +Z when the vector is empty', () => {
+    expect(applyPartHorizonDirection(new Vector3(0, 0, 0))).toEqual(new Vector3(0, 0, 1));
   });
 });
 

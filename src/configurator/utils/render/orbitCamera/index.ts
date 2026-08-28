@@ -4,6 +4,7 @@ export {
   ORBIT_MIN_DISTANCE,
   ORBIT_MAX_DISTANCE,
   applyCardinalHorizonDirection,
+  applyPartHorizonDirection,
   applyFrontOrBackHorizonDirection,
   applyOrbitZoomAroundPoint,
   clampOrbitCameraOutsideGarment,

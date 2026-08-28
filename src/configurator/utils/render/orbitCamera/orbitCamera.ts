@@ -62,8 +62,7 @@ const isShortsHorizonLabel = (label: string) => {
   return normalized === 'lacci' || normalized === 'gamba sinistra' || normalized === 'gamba destra';
 };
 
-const isShortsHorizonPart = (part: { label: string }, product?: garmentHorizonProductType) =>
-  isShortsHorizonLabel(part.label) || product?.type === 'shorts';
+const isShortsHorizonPart = (part: { label: string }, product?: garmentHorizonProductType) => isShortsHorizonLabel(part.label) || product?.type === 'shorts';
 
 // Shorts part ids (`*_front` / `*_back`) name the leg, not the side it faces: both legs sit on the
 // front. Framing a whole leg must therefore stay on the front camera, but a print placed at a given
@@ -97,6 +96,24 @@ const applyCardinalHorizonDirection = (direction: Vector3) => {
 
   direction.set(direction.x >= 0 ? 1 : -1, 0, 0);
   return direction;
+};
+
+const VERTICAL_FACING_MIN_RATIO = 0.72;
+
+const applyPartHorizonDirection = (direction: Vector3) => {
+  if (direction.lengthSq() < 1e-8) {
+    direction.set(0, 0, 1);
+    return direction;
+  }
+
+  direction.normalize();
+
+  if (Math.abs(direction.y) >= VERTICAL_FACING_MIN_RATIO) {
+    direction.set(0, direction.y >= 0 ? 1 : -1, 0);
+    return direction;
+  }
+
+  return applyCardinalHorizonDirection(direction);
 };
 
 const applyFrontOrBackHorizonDirection = (direction: Vector3, facing?: garmentPartHorizonFacingType) => {
@@ -286,7 +303,11 @@ const resolveOrbitFocusPose = (
     if (viewDirection.lengthSq() < 1e-8) {
       viewDirection.copy(currentCamera).sub(currentTarget);
     }
-    applyFrontOrBackHorizonDirection(viewDirection, partFacing);
+    if (partFacing) {
+      applyFrontOrBackHorizonDirection(viewDirection, partFacing);
+    } else {
+      applyPartHorizonDirection(viewDirection);
+    }
   } else {
     viewDirection.copy(surfaceNormal);
     if (viewDirection.lengthSq() < 1e-8) {
@@ -357,6 +378,7 @@ export {
   recenterOrbitTargetByZoom,
   resolveCursorFocusPoint,
   resolveGarmentCenter,
+  applyPartHorizonDirection,
   resolveGarmentPartHorizonFacing,
   resolveOrbitFocusPose,
   resolveShortestAngleDelta,
