@@ -17,6 +17,7 @@ const HIGHLIGHT_RADIUS = 12;
 const CAPTION_GAP = 16;
 const BACKDROP_SPREAD = 9999;
 const PREVIEW_SCROLL_DISTANCE = 28;
+const AUTO_DISMISS_MS = 3_000;
 const FADE = { duration: 0.28, ease: 'easeInOut' } as const;
 
 type highlightRectType = {
@@ -103,11 +104,14 @@ const ScrollHintTutorial = () => {
       if (event.key === 'Escape') releaseToUser();
     };
 
+    const autoDismissId = window.setTimeout(releaseToUser, AUTO_DISMISS_MS);
+
     window.addEventListener('keydown', onKeyDown);
     scrollViewport.addEventListener('touchmove', releaseToUser, { passive: true, once: true });
 
     return () => {
       controls?.stop();
+      window.clearTimeout(autoDismissId);
       window.removeEventListener('keydown', onKeyDown);
       scrollViewport.removeEventListener('touchmove', releaseToUser);
     };

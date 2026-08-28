@@ -58,14 +58,31 @@ test('touching the panel without dragging keeps the hint open', async ({ page })
   await expect(hint).toBeVisible();
 });
 
-test('preview animation alone does not dismiss the hint', async ({ page }) => {
+test('preview animation alone does not dismiss the hint early', async ({ page }) => {
   await waitForConfigurator(page, ROUTE);
 
   const hint = page.getByRole('dialog', { name: HINT });
   await expect(hint).toBeVisible({ timeout: 30_000 });
 
-  await page.waitForTimeout(2500);
+  await page.waitForTimeout(2000);
   await expect(hint).toBeVisible();
+});
+
+test('scroll hint auto-hides after 3s and persists that it ran', async ({ page }) => {
+  await waitForConfigurator(page, ROUTE);
+
+  const hint = page.getByRole('dialog', { name: HINT });
+  await expect(hint).toBeVisible({ timeout: 30_000 });
+
+  await expect(hint).toBeHidden({ timeout: 10_000 });
+
+  const stored = await page.evaluate(() => window.localStorage.getItem('realize:scroll-hint-seen'));
+  expect(stored).toBe('1');
+
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await expect(page.getByTestId('configurator-canvas')).toBeVisible({ timeout: 90_000 });
+  await page.waitForTimeout(3000);
+  await expect(page.getByRole('dialog', { name: HINT })).toHaveCount(0);
 });
 
 test('scroll hint stays hidden on desktop', async ({ page }) => {
