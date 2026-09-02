@@ -25,13 +25,14 @@ const CanvasBrandLogo = ({ className }: { className?: string }) => {
       rel="noopener noreferrer"
       aria-label="DFRNC su LinkedIn"
       className={cn(
-        'pointer-events-auto absolute right-2 bottom-8 z-30',
+        'pointer-events-auto absolute right-8 bottom-8 z-30',
         'opacity-60 transition-opacity duration-200 ease-in hover:opacity-90',
-        'max-sm:right-3 max-sm:bottom-3',
+        'max-xl:right-4 max-xl:bottom-8',
+        'max-sm:right-5 max-sm:bottom-1',
         className,
       )}
     >
-      <span role="img" aria-hidden className="block h-15 aspect-312/392 shrink-0 max-sm:h-11" style={LOGO_MASK_STYLE} />
+      <span role="img" aria-hidden className="block h-8 aspect-312/392 shrink-0 max-sm:h-6" style={LOGO_MASK_STYLE} />
     </a>
   );
 };
