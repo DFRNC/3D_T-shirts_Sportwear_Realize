@@ -11,18 +11,17 @@ const getProductMinimumQuantity = (product: checkoutProductType) => product.busi
 
 const isProductMinimumQuantityMet = (product: checkoutProductType) => getProductRowQuantity(product) >= getProductMinimumQuantity(product);
 
-// Reported to the UI as the minimum still to be met: the first product that is short,
-// falling back to the largest configured minimum once every product qualifies.
+// Reported to the UI as the minimum still to be met: the smallest minimum the order could
+// reach, since a single qualifying product unlocks the whole cart.
 const getCheckoutMinimumQuantity = (products: checkoutProductType[]) => {
-  const shortProduct = products.find((product) => !isProductMinimumQuantityMet(product));
-  if (shortProduct) return getProductMinimumQuantity(shortProduct);
+  if (products.length === 0) return CONFIGURATOR_DEFAULT_MINIMUM_COUNT;
 
-  return products.reduce((minimum, product) => Math.max(minimum, getProductMinimumQuantity(product)), CONFIGURATOR_DEFAULT_MINIMUM_COUNT);
+  return products.reduce((minimum, product) => Math.min(minimum, getProductMinimumQuantity(product)), Infinity);
 };
 
-// Every product must reach its own minimum on its own — a large order of one product
-// does not cover a second product that is still short.
-const isCheckoutMinimumQuantityMet = (products: checkoutProductType[]) => products.length > 0 && products.every(isProductMinimumQuantityMet);
+// At least one product must reach its own minimum — that unlocks the order, and every other
+// product may then be ordered in any quantity, down to a single piece.
+const isCheckoutMinimumQuantityMet = (products: checkoutProductType[]) => products.some(isProductMinimumQuantityMet);
 
 const getCheckoutDiscountPercent = (totalQuantity: number): number => {
   if (totalQuantity >= 110) return 10;
