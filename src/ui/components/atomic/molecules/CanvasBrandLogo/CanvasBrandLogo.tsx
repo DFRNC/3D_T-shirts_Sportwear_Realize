@@ -1,0 +1,39 @@
+'use client';
+
+import { DFRNC_LOGO_SRC, DFRNC_LOGO_URL } from '@constants';
+import { cn } from '@utils';
+
+// The asset ships as a near-white mark that disappears against the light canvas, so the PNG is
+// used as an alpha mask and filled with the canvas control grey instead of being drawn directly.
+const LOGO_MASK_STYLE = {
+  backgroundColor: 'var(--color-primary-10)',
+  maskImage: `url(${DFRNC_LOGO_SRC})`,
+  WebkitMaskImage: `url(${DFRNC_LOGO_SRC})`,
+  maskRepeat: 'no-repeat',
+  WebkitMaskRepeat: 'no-repeat',
+  maskPosition: 'center',
+  WebkitMaskPosition: 'center',
+  maskSize: 'contain',
+  WebkitMaskSize: 'contain',
+} as const;
+
+const CanvasBrandLogo = ({ className }: { className?: string }) => {
+  return (
+    <a
+      href={DFRNC_LOGO_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="DFRNC su LinkedIn"
+      className={cn(
+        'pointer-events-auto absolute right-2 bottom-8 z-30',
+        'opacity-60 transition-opacity duration-200 ease-in hover:opacity-90',
+        'max-sm:right-3 max-sm:bottom-3',
+        className,
+      )}
+    >
+      <span role="img" aria-hidden className="block h-15 aspect-312/392 shrink-0 max-sm:h-11" style={LOGO_MASK_STYLE} />
+    </a>
+  );
+};
+
+export { CanvasBrandLogo };

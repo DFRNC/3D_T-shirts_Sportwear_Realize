@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { cameraBridge } from '@configurator/canvas';
-import { CanvasButtons } from '@molecules';
+import { CanvasBrandLogo, CanvasButtons } from '@molecules';
 import { Configurator } from '@organisms/Configurator';
 import { ConfiguratorCanvasLoader } from '@organisms/ConfiguratorCanvasLoader';
 import { useConfiguratorSceneLoad } from '@store';
@@ -81,6 +81,7 @@ const ConfiguratorView = () => {
       <Flex variant="configurator_view_canvas">
         {canMountCanvas ? <Configurator /> : null}
         <ConfiguratorCanvasLoader />
+        <CanvasBrandLogo />
       </Flex>
       <CanvasButtons camera={cameraBridge} />
     </Flex>

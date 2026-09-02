@@ -171,6 +171,9 @@ const LOGO_ACCEPTED_MIMES = new Set([
 ]);
 
 const TUTORIAL_VIDEO_URL = 'https://youtu.be/dQw4w9WgXcQ?si=uL2ObwuN8FpWsScY';
+
+const DFRNC_LOGO_SRC = '/png/dfrnc_logo.png';
+const DFRNC_LOGO_URL = 'https://www.linkedin.com/company/dfrnc/posts/?feedView=all';
 const VIDEO_PLAYER_DEFAULT_VOLUME = 0.2;
 const VIDEO_PLAYER_YOUTUBE_CONFIG = {
   enablejsapi: 1,
@@ -255,6 +258,8 @@ export {
   SHARE_CONFIG_EXPORT_FILENAME_PREFIX,
   SHARE_CONFIG_QUERY_PARAM,
   SHARE_CONFIG_ROUTE_BASE,
+  DFRNC_LOGO_SRC,
+  DFRNC_LOGO_URL,
   TUTORIAL_VIDEO_URL,
   VIDEO_PLAYER_DEFAULT_VOLUME,
   VIDEO_PLAYER_YOUTUBE_CONFIG,
