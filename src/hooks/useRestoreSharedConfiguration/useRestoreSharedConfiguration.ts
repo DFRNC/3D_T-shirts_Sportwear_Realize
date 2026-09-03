@@ -22,6 +22,7 @@ const useRestoreSharedConfiguration = () => {
     if (!shareId || restoredShareIdRef.current === shareId) return;
 
     restoredShareIdRef.current = shareId;
+    stripShareParamFromUrl();
 
     let isCancelled = false;
 
@@ -62,8 +63,6 @@ const useRestoreSharedConfiguration = () => {
         applyGarmentConfiguration(garment, shareExport.configuration);
       } catch (error) {
         console.error('[share] Failed to restore shared configuration.', error);
-      } finally {
-        if (!isCancelled) stripShareParamFromUrl();
       }
     };
 

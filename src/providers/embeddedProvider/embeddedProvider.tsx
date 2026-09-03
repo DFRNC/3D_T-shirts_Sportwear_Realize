@@ -10,20 +10,21 @@ import { EmbeddedFlagBridge } from '@providers/embeddedProvider/EmbeddedFlagBrid
 import { EmbeddedHeaderHeightBridge } from '@providers/embeddedProvider/EmbeddedHeaderHeightBridge';
 import { EmbeddedUrlSyncBridge } from '@providers/embeddedProvider/EmbeddedUrlSyncBridge';
 
-const EmbeddedContext = createContext<embeddedContextType>({
-  embedded: false,
-  shop: null,
-  host: null,
-});
+const EMBEDDED_DEFAULT: embeddedContextType = { embedded: false, shop: null, host: null, shopOrigin: null };
 
-const EMBEDDED_DEFAULT: embeddedContextType = { embedded: false, shop: null, host: null };
+const EmbeddedContext = createContext<embeddedContextType>(EMBEDDED_DEFAULT);
 
 let cachedEmbeddedSnapshot: embeddedContextType = EMBEDDED_DEFAULT;
 
 const getEmbeddedContextSnapshot = (): embeddedContextType => {
   const next = resolveEmbeddedContext();
 
-  if (cachedEmbeddedSnapshot.embedded === next.embedded && cachedEmbeddedSnapshot.shop === next.shop && cachedEmbeddedSnapshot.host === next.host) {
+  if (
+    cachedEmbeddedSnapshot.embedded === next.embedded &&
+    cachedEmbeddedSnapshot.shop === next.shop &&
+    cachedEmbeddedSnapshot.host === next.host &&
+    cachedEmbeddedSnapshot.shopOrigin === next.shopOrigin
+  ) {
     return cachedEmbeddedSnapshot;
   }
 

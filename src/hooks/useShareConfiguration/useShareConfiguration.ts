@@ -2,9 +2,9 @@
 
 import { useCallback } from 'react';
 
-import { SHARE_CONFIG_EXPORT_FILENAME_PREFIX, SHARE_CONFIG_ROUTE_BASE } from '@constants';
+import { SHARE_CONFIG_EXPORT_FILENAME_PREFIX, SHARE_CONFIG_QUERY_PARAM, SHARE_CONFIG_ROUTE_BASE } from '@constants';
 import { captureGarmentConfiguration, useConfigurationCart, useShareDialog } from '@store';
-import { buildShareConfigExport, uploadCheckoutAssetsDirect } from '@utils';
+import { buildShareConfigExport, buildStorefrontProductPath, resolveStorefrontOrigin, uploadCheckoutAssetsDirect } from '@utils';
 
 const createShareId = (): string => {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -14,7 +14,15 @@ const createShareId = (): string => {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 };
 
-const buildShareUrl = (shareId: string): string => `${window.location.origin}${SHARE_CONFIG_ROUTE_BASE}/${shareId}`;
+const buildShareUrl = (shareId: string, slug: string): string => {
+  const storefrontOrigin = resolveStorefrontOrigin();
+
+  if (storefrontOrigin && slug) {
+    return `${storefrontOrigin}${buildStorefrontProductPath(slug)}?${SHARE_CONFIG_QUERY_PARAM}=${encodeURIComponent(shareId)}`;
+  }
+
+  return `${window.location.origin}${SHARE_CONFIG_ROUTE_BASE}/${shareId}`;
+};
 
 const useShareConfiguration = () => {
   const openPending = useShareDialog((state) => state.openPending);
@@ -57,7 +65,7 @@ const useShareConfiguration = () => {
         throw new Error('Share configuration upload returned no URL.');
       }
 
-      resolveShareUrl(buildShareUrl(shareId));
+      resolveShareUrl(buildShareUrl(shareId, activeItem.slug));
     } catch (error) {
       console.error('[share] Failed to share configuration.', error);
       failShare();

@@ -1,7 +1,8 @@
 export { DEFAULT_CURRENCY_CODE, DEFAULT_MODEL_ID, deriveLocalBusiness, getModel, hasModel, MODELS, resolveProductPreviewSrc } from './garmentCatalog';
 export { cn } from './cn';
-export { buildAppPath, isEmbeddedSession, resolveEmbeddedContext } from './embeddedSession';
+export { buildAppPath, isEmbeddedSession, normalizeShopOrigin, resolveEmbeddedContext } from './embeddedSession';
 export { buildCollectionPath, buildConfiguratorPath, isConfiguratorPath, isInternalAppPath } from './appPaths';
+export { buildStorefrontProductPath, resolveStorefrontOrigin } from './shopifyStorefrontUrl';
 export { buildOrderPreset } from './buildOrderPreset';
 export { buildCheckoutConfigExport, CHECKOUT_CONFIG_EXPORT_VERSION } from './buildCheckoutConfigExport';
 export type { checkoutConfigExportType, checkoutConfigProductExportType } from './buildCheckoutConfigExport';
