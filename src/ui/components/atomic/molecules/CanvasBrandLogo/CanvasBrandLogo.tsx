@@ -3,8 +3,6 @@
 import { DFRNC_LOGO_SRC, DFRNC_LOGO_URL } from '@constants';
 import { cn } from '@utils';
 
-// The asset ships as a near-white mark that disappears against the light canvas, so the PNG is
-// used as an alpha mask and filled with the canvas control grey instead of being drawn directly.
 const LOGO_MASK_STYLE = {
   backgroundColor: 'var(--color-primary-10)',
   maskImage: `url(${DFRNC_LOGO_SRC})`,
@@ -23,7 +21,7 @@ const CanvasBrandLogo = ({ className }: { className?: string }) => {
       href={DFRNC_LOGO_URL}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="DFRNC su LinkedIn"
+      aria-label="DFRNC"
       className={cn(
         'pointer-events-auto absolute right-8 bottom-8 z-30',
         'opacity-60 transition-opacity duration-200 ease-in hover:opacity-90',
