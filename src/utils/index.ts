@@ -18,6 +18,7 @@ export { buildAssetDownloadUrl } from './buildAssetDownloadUrl';
 export { buildPublicAssetDownloadUrl, parsePublicAppOrigin, resolvePublicAppOrigin } from './resolvePublicAppOrigin';
 export { triggerPdfDownload } from './triggerPdfDownload';
 export { withTimeout } from './withTimeout';
+export { randomId } from './randomId';
 export { collectOrderCuttingExportUvBlobs } from './collectOrderCuttingExportUvBlobs';
 export type { uvExportBlobType } from './collectOrderCuttingExportUvBlobs';
 export { applyCuttingExportDownloadUrls } from './applyCuttingExportDownloadUrls';

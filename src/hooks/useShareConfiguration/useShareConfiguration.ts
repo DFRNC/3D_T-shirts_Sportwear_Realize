@@ -4,15 +4,9 @@ import { useCallback } from 'react';
 
 import { SHARE_CONFIG_EXPORT_FILENAME_PREFIX, SHARE_CONFIG_QUERY_PARAM, SHARE_CONFIG_ROUTE_BASE } from '@constants';
 import { captureGarmentConfiguration, useConfigurationCart, useShareDialog } from '@store';
-import { buildShareConfigExport, buildStorefrontProductPath, resolveStorefrontOrigin, uploadCheckoutAssetsDirect } from '@utils';
+import { buildShareConfigExport, buildStorefrontProductPath, randomId, resolveStorefrontOrigin, uploadCheckoutAssetsDirect } from '@utils';
 
-const createShareId = (): string => {
-  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-    return crypto.randomUUID();
-  }
-
-  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
-};
+const createShareId = (): string => randomId();
 
 const buildShareUrl = (shareId: string, slug: string): string => {
   const storefrontOrigin = resolveStorefrontOrigin();

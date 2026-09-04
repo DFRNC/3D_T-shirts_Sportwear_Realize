@@ -4,6 +4,7 @@ import type { garmentConfigType, garmentLogoSnapshotType, logoInstanceType, logo
 import { LOGO_MAX_USER_FILES, LOGO_SHADER_SLOT_COUNT, LOGO_UPLOAD_ROTATION_DEG } from '@configurator/constants';
 import { createDefaultLogoInstances, createDynamicUserLogoPosition, createLogoInstance, mapProductLogoPositions } from '@store/useGarmentLogo/mapProductLogos';
 import { createSingletonStore } from '@store/createSingletonStore';
+import { randomId } from '@utils';
 interface GarmentLogoState {
   productPath: string | null;
   positionsKey: string | null;
@@ -100,7 +101,7 @@ const useGarmentLogo = createSingletonStore<GarmentLogoState>('useGarmentLogo', 
   addUserInstance: (position, src, fileName, naturalWidth, naturalHeight) => {
     if (!get().canAddUserLogo()) return;
 
-    const instance = createLogoInstance(position, `${position.key}_user_${crypto.randomUUID()}`, {
+    const instance = createLogoInstance(position, `${position.key}_user_${randomId()}`, {
       src,
       fileName,
       isDefault: false,
@@ -122,7 +123,7 @@ const useGarmentLogo = createSingletonStore<GarmentLogoState>('useGarmentLogo', 
     while (usedSlots.has(`logo-user-${freeSlot}`)) freeSlot += 1;
 
     const position = createDynamicUserLogoPosition(product, freeSlot);
-    const instance = createLogoInstance(position, `${position.key}_${crypto.randomUUID()}`, {
+    const instance = createLogoInstance(position, `${position.key}_${randomId()}`, {
       src,
       fileName,
       isDefault: false,
@@ -165,7 +166,7 @@ const useGarmentLogo = createSingletonStore<GarmentLogoState>('useGarmentLogo', 
 
       const copy: logoInstanceType = {
         ...source,
-        id: `${source.id}-copy-${crypto.randomUUID()}`,
+        id: `${source.id}-copy-${randomId()}`,
         uv: { x: source.uv.x, y: Math.min(0.98, source.uv.y + 0.04) },
         isDefault: false,
         showFrame: true,
