@@ -1,6 +1,7 @@
 'use client';
 
 import { CanvasControl } from '@configurator/canvas/CanvasControl';
+import { SceneDebugOverlay } from '@configurator/canvas/SceneDebugOverlay';
 import { SceneModel } from '@configurator/canvas/SceneModel';
 import { Canvas } from '@react-three/fiber';
 import { ACESFilmicToneMapping } from 'three';
@@ -19,6 +20,8 @@ const ConfiguratorCanvas = () => {
   const useContinuousFrameLoop = isInitialSceneLoading || isSceneTransitionLoading;
 
   return (
+    <>
+    <SceneDebugOverlay />
     <Canvas
       key={`${sceneRouteKey}:${canvasKey}`}
       camera={{ position: [0, 0, 3], fov: 45 }}
@@ -61,6 +64,7 @@ const ConfiguratorCanvas = () => {
         <SceneModel />
       </Suspense>
     </Canvas>
+    </>
   );
 };
 
