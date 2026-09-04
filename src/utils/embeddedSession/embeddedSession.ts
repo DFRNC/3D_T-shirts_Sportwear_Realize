@@ -10,6 +10,46 @@ type embeddedSessionType = {
   shopOrigin: string | null;
 };
 
+const safeSessionStorage = {
+  getItem: (key: string): string | null => {
+    try {
+      return window.sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  },
+  setItem: (key: string, value: string): void => {
+    try {
+      window.sessionStorage.setItem(key, value);
+    } catch {
+      /* storage unavailable */
+    }
+  },
+  removeItem: (key: string): void => {
+    try {
+      window.sessionStorage.removeItem(key);
+    } catch {
+      /* storage unavailable */
+    }
+  },
+};
+
+const isRunningInFrame = (): boolean => {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  try {
+    if (window.parent && window.parent !== window) {
+      return true;
+    }
+
+    return Boolean(window.top) && window.top !== window;
+  } catch {
+    return true;
+  }
+};
+
 const normalizeShopOrigin = (value: string | null): string | null => {
   if (!value) {
     return null;
@@ -34,10 +74,10 @@ const readEmbeddedSession = (): embeddedSessionType => {
   }
 
   return {
-    embedded: sessionStorage.getItem(EMBEDDED_STORAGE_KEY) === '1',
-    shop: sessionStorage.getItem(SHOP_STORAGE_KEY),
-    host: sessionStorage.getItem(HOST_STORAGE_KEY),
-    shopOrigin: normalizeShopOrigin(sessionStorage.getItem(SHOP_ORIGIN_STORAGE_KEY)),
+    embedded: safeSessionStorage.getItem(EMBEDDED_STORAGE_KEY) === '1',
+    shop: safeSessionStorage.getItem(SHOP_STORAGE_KEY),
+    host: safeSessionStorage.getItem(HOST_STORAGE_KEY),
+    shopOrigin: normalizeShopOrigin(safeSessionStorage.getItem(SHOP_ORIGIN_STORAGE_KEY)),
   };
 };
 
@@ -50,24 +90,24 @@ const persistEmbeddedSession = (embedded: boolean, shop: string | null, host: st
     return;
   }
 
-  sessionStorage.setItem(EMBEDDED_STORAGE_KEY, '1');
+  safeSessionStorage.setItem(EMBEDDED_STORAGE_KEY, '1');
 
   if (shop) {
-    sessionStorage.setItem(SHOP_STORAGE_KEY, shop);
+    safeSessionStorage.setItem(SHOP_STORAGE_KEY, shop);
   } else {
-    sessionStorage.removeItem(SHOP_STORAGE_KEY);
+    safeSessionStorage.removeItem(SHOP_STORAGE_KEY);
   }
 
   if (host) {
-    sessionStorage.setItem(HOST_STORAGE_KEY, host);
+    safeSessionStorage.setItem(HOST_STORAGE_KEY, host);
   } else {
-    sessionStorage.removeItem(HOST_STORAGE_KEY);
+    safeSessionStorage.removeItem(HOST_STORAGE_KEY);
   }
 
   const normalizedShopOrigin = normalizeShopOrigin(shopOrigin);
 
   if (normalizedShopOrigin) {
-    sessionStorage.setItem(SHOP_ORIGIN_STORAGE_KEY, normalizedShopOrigin);
+    safeSessionStorage.setItem(SHOP_ORIGIN_STORAGE_KEY, normalizedShopOrigin);
   }
 };
 
@@ -87,9 +127,10 @@ const resolveEmbeddedContext = (): embeddedSessionType => {
   }
 
   const session = readEmbeddedSession();
+  const framedFallback = !urlEmbedded && !session.embedded && isRunningInFrame();
 
   return {
-    embedded: urlEmbedded || session.embedded,
+    embedded: urlEmbedded || session.embedded || framedFallback,
     shop: urlShop ?? session.shop,
     host: urlHost ?? session.host,
     shopOrigin: urlShopOrigin ?? session.shopOrigin,
