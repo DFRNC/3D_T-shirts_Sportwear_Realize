@@ -9,7 +9,7 @@ const MainLoader = () => {
         <AtomImage src="/svg/logo.svg" alt="Logo" variant="logo" priority className="max-sm:h-14" />
         <LogoYOU />
       </Flex>
-      <Text variant="loader_tagline" className="max-sm:px-4 max-sm:text-[14px]">
+      <Text variant="loader_tagline" className="px-4 leading-[1.35] max-sm:text-[14px]">
         Made by <b className="animate-pulse motion-reduce:animate-none">YOU</b>. Worn your way.
       </Text>
     </Flex>
