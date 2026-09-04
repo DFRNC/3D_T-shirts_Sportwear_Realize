@@ -58,7 +58,7 @@ const variantFlex = cva('flex w-fit items-center justify-center', {
       skeleton_inner_column: 'w-full min-w-0 flex-col gap-3 pt-1',
       skeleton_hint_row: 'min-h-[24px] w-full items-center gap-2 px-2',
       loader_column_center_gap5: 'flex-col items-center gap-5',
-      logo_pair_row: 'items-center justify-center gap-7',
+      logo_pair_row: 'min-w-0 max-w-full items-center justify-center gap-7',
       overlay_center_column: 'absolute inset-0 z-10 w-full flex-col items-center justify-center gap-2',
       checkout_empty_state: 'min-h-[60vh] w-full flex-col items-center justify-center gap-6 text-center',
       checkout_content_column: 'min-w-0 w-full flex-col items-start justify-start gap-6 pt-9 max-sm:gap-4 max-sm:pt-4 max-sm:pb-[160px]',
@@ -91,7 +91,7 @@ const variantFlex = cva('flex w-fit items-center justify-center', {
       checkout_mobile_note_left_column: 'hidden w-full flex-col items-start gap-2 text-left max-sm:flex',
       full_width: 'w-full',
       logo_you_badge:
-        'h-[109px] w-[236px] shrink-0 animate-pulse items-center justify-center rounded-[8px] bg-linear-to-r from-[#ECD187] via-[#DC2C6F] to-[#030102] text-[72px] leading-none font-bold italic tracking-[-1px] text-white motion-reduce:animate-none',
+        'h-[109px] w-[236px] max-sm:h-[70px] max-sm:w-[152px] shrink-0 animate-pulse items-center justify-center rounded-[8px] bg-linear-to-r from-[#ECD187] via-[#DC2C6F] to-[#030102] text-[72px] max-sm:text-[46px] leading-none font-bold italic tracking-[-1px] text-white motion-reduce:animate-none',
       centered_inline: 'mx-auto items-center justify-center',
       card_list_column: 'flex-col gap-0',
       skeleton_logo_upload_column: 'w-full flex-col items-start gap-2',
