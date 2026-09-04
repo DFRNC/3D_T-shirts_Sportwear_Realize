@@ -105,7 +105,7 @@ const CheckoutPreviewCaptureHost = () => {
         gl={{
           alpha: true,
           antialias: true,
-          logarithmicDepthBuffer: true,
+          logarithmicDepthBuffer: false,
           powerPreference: 'high-performance',
           preserveDrawingBuffer: true,
           stencil: true,
