@@ -120,45 +120,66 @@ const SceneDebugOverlay = () => {
     };
   }, []);
 
+  const [open, setOpen] = useState(true);
+
   if (!isEnabled()) return null;
 
   return (
     <div
       style={{
         position: 'fixed',
-        left: 0,
-        top: 0,
+        right: 0,
+        bottom: 0,
         zIndex: 999999,
-        maxHeight: '62vh',
-        width: '100vw',
+        maxHeight: open ? '50vh' : '28px',
+        maxWidth: open ? '92vw' : '120px',
         overflow: 'auto',
         background: 'rgba(0,0,0,0.92)',
         color: '#0f0',
         font: '10px/1.35 ui-monospace, monospace',
-        padding: '8px 10px',
+        padding: open ? '6px 8px' : '4px 8px',
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-word',
+        borderTopLeftRadius: 8,
       }}
     >
-      <div style={{ color: '#fff', fontWeight: 700 }}>SCENE DEBUG — remove ?debug to hide</div>
-      {info.map((l) => (
-        <div key={l}>{l}</div>
-      ))}
-      <div style={{ color: '#ff0', marginTop: 6 }}>MESHES ({rows.length})</div>
-      {rows.map((r, i) => (
-        <div key={`${r.name}-${i}`} style={{ color: r.hasProgram ? '#7f7' : '#f66' }}>
-          {r.name} | vis={String(r.visible)} | {r.matType} | mode={r.shaderMode} | prog=
-          {String(r.hasProgram)} | #{r.color}
-        </div>
-      ))}
-      <div style={{ color: errors.length ? '#f33' : '#777', marginTop: 6, fontWeight: 700 }}>
-        SHADER ERRORS ({errors.length})
-      </div>
-      {errors.map((e, i) => (
-        <div key={i} style={{ color: '#f99' }}>
-          {e}
-        </div>
-      ))}
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        style={{
+          background: '#222',
+          color: '#fff',
+          border: '1px solid #555',
+          borderRadius: 4,
+          padding: '1px 8px',
+          font: 'inherit',
+          marginBottom: open ? 6 : 0,
+        }}
+      >
+        {open ? 'DEBUG ▲ hide' : `DEBUG ▼ (${errors.length} err)`}
+      </button>
+      {open && (
+        <>
+          {info.map((l) => (
+            <div key={l}>{l}</div>
+          ))}
+          <div style={{ color: '#ff0', marginTop: 6 }}>MESHES ({rows.length})</div>
+          {rows.map((r, i) => (
+            <div key={`${r.name}-${i}`} style={{ color: r.hasProgram ? '#7f7' : '#f66' }}>
+              {r.name} | vis={String(r.visible)} | {r.matType} | mode={r.shaderMode} | prog=
+              {String(r.hasProgram)} | #{r.color}
+            </div>
+          ))}
+          <div style={{ color: errors.length ? '#f33' : '#777', marginTop: 6, fontWeight: 700 }}>
+            SHADER ERRORS ({errors.length})
+          </div>
+          {errors.map((e, i) => (
+            <div key={i} style={{ color: '#f99' }}>
+              {e}
+            </div>
+          ))}
+        </>
+      )}
     </div>
   );
 };

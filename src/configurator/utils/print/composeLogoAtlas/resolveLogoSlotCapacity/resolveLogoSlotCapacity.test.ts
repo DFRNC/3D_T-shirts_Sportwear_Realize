@@ -33,17 +33,18 @@ describe('resolveLogoSlotCapacity', () => {
     expect(resolveLogoStampGrid(1)).toBe(1);
   });
 
-  it('precompiles enough shader slots so a fifth logo does not force a new program', () => {
-    expect(resolveLogoShaderSlotCount(0)).toBe(16);
-    expect(resolveLogoShaderSlotCount(5)).toBe(16);
+  it('sizes shader slots to the logos in use, capped at the max, to fit the mobile uniform budget', () => {
+    expect(resolveLogoShaderSlotCount(0)).toBe(4);
+    expect(resolveLogoShaderSlotCount(4)).toBe(4);
+    expect(resolveLogoShaderSlotCount(5)).toBe(9);
+    expect(resolveLogoShaderSlotCount(9)).toBe(9);
+    expect(resolveLogoShaderSlotCount(10)).toBe(16);
     expect(resolveLogoShaderSlotCount(16)).toBe(16);
-    expect(resolveLogoShaderSlotCount(17)).toBe(25);
+    // Above the hard cap the shader still only carries 16 slots.
+    expect(resolveLogoShaderSlotCount(17)).toBe(16);
   });
 
-  it('keeps the stamp atlas on the shader grid so a fifth logo does not retile existing cells', () => {
-    expect(resolveLogoStampAtlasGrid(1)).toBe(4);
-    expect(resolveLogoStampAtlasGrid(5)).toBe(4);
-    expect(resolveLogoStampAtlasGrid(16)).toBe(4);
-    expect(resolveLogoStampAtlasGrid(17)).toBe(5);
+  it('keeps the stamp atlas grid fixed so adding a logo never retiles existing cells', () => {
+    expect(resolveLogoStampAtlasGrid()).toBe(4);
   });
 });

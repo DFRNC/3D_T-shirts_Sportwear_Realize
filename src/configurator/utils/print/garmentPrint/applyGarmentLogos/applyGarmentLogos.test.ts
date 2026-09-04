@@ -16,12 +16,9 @@ const createStyleState = (scale: number[]) => ({
 });
 
 describe('hydrateGarmentLogoUniforms', () => {
-  it('writes style into the new program arrays instead of the previous shader uniforms', () => {
-    const previousScale = [1, 1, 1, 1];
-    const nextScale = Array.from({ length: 9 }, () => 1);
+  it('writes style into the packed program arrays', () => {
     const material = {
       userData: {
-        uLogoScaleUniform: { value: previousScale },
         garmentLogoStyleState: createStyleState([0.22, 0.22, 0.22, 0.22, 0.22, 1, 1, 1, 1]),
         garmentLogoStampState: {
           stamp: {} as Texture,
@@ -31,27 +28,32 @@ describe('hydrateGarmentLogoUniforms', () => {
       },
     } as unknown as MeshStandardMaterial;
 
+    const uLogoA = { value: Array.from({ length: 9 }, () => new Vector4(0, 0, 1, 0)) };
+    const uLogoB = { value: Array.from({ length: 9 }, () => new Vector4()) };
     const uniforms = {
       uLogoStamp: { value: {} as Texture },
       uLogoStampCellSize: { value: new Vector2(1, 1) },
       uLogoStampGrid: { value: 3 },
-      uLogoAnchorUv: { value: Array.from({ length: 9 }, () => new Vector2()) },
-      uLogoRotation: { value: Array.from({ length: 9 }, () => 0) },
-      uLogoUploadRotation: { value: Array.from({ length: 9 }, () => 0) },
-      uLogoPartRotation: { value: Array.from({ length: 9 }, () => 0) },
-      uLogoScale: { value: nextScale },
-      uLogoStampSlot: { value: Array.from({ length: 9 }, () => 0) },
-      uLogoSlotActive: { value: Array.from({ length: 9 }, () => 0) },
+      uLogoA,
+      uLogoB,
       uLogoPartBounds: { value: Array.from({ length: 9 }, () => new Vector4()) },
       uLogoGizmoEnabled: { value: 0 },
+      uLogoG: { value: Array.from({ length: 9 }, () => new Vector4()) },
       uLogoGizmoHalf: { value: Array.from({ length: 9 }, () => new Vector2()) },
     };
 
     hydrateGarmentLogoUniforms(material, uniforms);
 
-    expect(nextScale[0]).toBeCloseTo(0.22);
-    expect(nextScale[4]).toBeCloseTo(0.22);
-    expect(previousScale[0]).toBe(1);
+    // uLogoA = (anchor.x, anchor.y, scale, stampSlot)
+    expect(uLogoA.value[0].z).toBeCloseTo(0.22);
+    expect(uLogoA.value[4].z).toBeCloseTo(0.22);
+    expect(uLogoA.value[5].z).toBeCloseTo(1);
+    expect(uLogoA.value[0].x).toBeCloseTo(0.4);
+    expect(uLogoA.value[3].w).toBe(3);
+    // uLogoB = (rotation, uploadRotation, partRotation, slotActive)
+    expect(uLogoB.value[0].y).toBeCloseTo(Math.PI / 2);
+    expect(uLogoB.value[0].w).toBe(1);
+    expect(uLogoB.value[5].w).toBe(0);
     expect(uniforms.uLogoStampGrid.value).toBe(2);
     expect(uniforms.uLogoStampCellSize.value.x).toBe(849);
   });

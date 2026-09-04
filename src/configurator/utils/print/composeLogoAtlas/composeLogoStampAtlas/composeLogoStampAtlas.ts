@@ -40,7 +40,7 @@ const fitCellSizeToAtlasLimit = (cellSize: { width: number; height: number }, gr
 };
 
 const composeLogoStampAtlas = async ({ instances, canvas }: composeLogoStampAtlasInputType): Promise<logoStampAtlasType> => {
-  const grid = resolveLogoStampAtlasGrid(instances.length);
+  const grid = resolveLogoStampAtlasGrid();
   const packedInstances = resolveLogoStampPackOrder(instances).slice(0, grid * grid);
   const naturalById = new Map<string, { width: number; height: number }>();
 

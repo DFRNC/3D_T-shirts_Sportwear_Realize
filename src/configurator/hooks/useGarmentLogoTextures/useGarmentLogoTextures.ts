@@ -32,7 +32,7 @@ import { useThree } from '@react-three/fiber';
 import { resolveLogoInstancesForRender, useConfigurationControl, useConfiguratorProduct, useConfiguratorSceneLoad, useGarmentLogo } from '@store';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 const LOGO_STEP = 7;
-const DEFAULT_STAMP_GRID = resolveLogoStampAtlasGrid(0);
+const DEFAULT_STAMP_GRID = resolveLogoStampAtlasGrid();
 
 const useGarmentLogoTextures = () => {
   const product = useConfiguratorProduct((state) => state.product);

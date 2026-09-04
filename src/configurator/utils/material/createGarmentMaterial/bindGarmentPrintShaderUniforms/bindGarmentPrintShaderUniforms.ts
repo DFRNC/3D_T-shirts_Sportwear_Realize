@@ -151,18 +151,13 @@ const bindGarmentPrintShaderUniforms = (
   shader.uniforms.uLogoStamp = { value: emptyPrint };
   shader.uniforms.uLogoStampCellSize = { value: new Vector2(1, 1) };
   shader.uniforms.uLogoStampGrid = { value: 4 };
-  shader.uniforms.uLogoAnchorUv = { value: Array.from({ length: logoSlots }, () => new Vector2()) };
-  shader.uniforms.uLogoRotation = { value: Array.from({ length: logoSlots }, () => 0) };
-  shader.uniforms.uLogoUploadRotation = { value: Array.from({ length: logoSlots }, () => 0) };
-  shader.uniforms.uLogoPartRotation = { value: Array.from({ length: logoSlots }, () => 0) };
-  shader.uniforms.uLogoScale = { value: Array.from({ length: logoSlots }, () => 1) };
-  shader.uniforms.uLogoStampSlot = { value: Array.from({ length: logoSlots }, () => 0) };
-  shader.uniforms.uLogoSlotActive = { value: Array.from({ length: logoSlots }, () => 0) };
+  // Packed: uLogoA=(anchor.xy, scale, stampSlot)  uLogoB=(rot, uploadRot, partRot, slotActive)
+  //         uLogoG=(gizmoFrameActive, gizmoButtonsActive, gizmoButtonsReveal, _)
+  shader.uniforms.uLogoA = { value: Array.from({ length: logoSlots }, () => new Vector4(0, 0, 1, 0)) };
+  shader.uniforms.uLogoB = { value: Array.from({ length: logoSlots }, () => new Vector4(0, 0, 0, 0)) };
   shader.uniforms.uLogoPartBounds = { value: Array.from({ length: logoSlots }, () => new Vector4(0, 0, 1, 1)) };
   shader.uniforms.uLogoGizmoEnabled = { value: 0 };
-  shader.uniforms.uLogoGizmoFrameActive = { value: Array.from({ length: logoSlots }, () => 0) };
-  shader.uniforms.uLogoGizmoButtonsActive = { value: Array.from({ length: logoSlots }, () => 0) };
-  shader.uniforms.uLogoGizmoButtonsReveal = { value: Array.from({ length: logoSlots }, () => 0) };
+  shader.uniforms.uLogoG = { value: Array.from({ length: logoSlots }, () => new Vector4(0, 0, 0, 0)) };
   shader.uniforms.uLogoGizmoHalf = { value: Array.from({ length: logoSlots }, () => new Vector2(0, 0)) };
   for (let layerIndex = 0; layerIndex < PATTERN_LAYER_COUNT; layerIndex += 1) {
     shader.uniforms[`uPatternMask${layerIndex}`] = { value: printState?.patternMasks[layerIndex] ?? emptyPrint };
@@ -234,18 +229,11 @@ const bindGarmentPrintShaderUniforms = (
   material.userData.uLogoStampUniform = shader.uniforms.uLogoStamp;
   material.userData.uLogoStampCellSizeUniform = shader.uniforms.uLogoStampCellSize;
   material.userData.uLogoStampGridUniform = shader.uniforms.uLogoStampGrid;
-  material.userData.uLogoAnchorUvUniform = shader.uniforms.uLogoAnchorUv;
-  material.userData.uLogoRotationUniform = shader.uniforms.uLogoRotation;
-  material.userData.uLogoUploadRotationUniform = shader.uniforms.uLogoUploadRotation;
-  material.userData.uLogoPartRotationUniform = shader.uniforms.uLogoPartRotation;
-  material.userData.uLogoScaleUniform = shader.uniforms.uLogoScale;
-  material.userData.uLogoStampSlotUniform = shader.uniforms.uLogoStampSlot;
-  material.userData.uLogoSlotActiveUniform = shader.uniforms.uLogoSlotActive;
+  material.userData.uLogoAUniform = shader.uniforms.uLogoA;
+  material.userData.uLogoBUniform = shader.uniforms.uLogoB;
   material.userData.uLogoPartBoundsUniform = shader.uniforms.uLogoPartBounds;
   material.userData.uLogoGizmoEnabledUniform = shader.uniforms.uLogoGizmoEnabled;
-  material.userData.uLogoGizmoFrameActiveUniform = shader.uniforms.uLogoGizmoFrameActive;
-  material.userData.uLogoGizmoButtonsActiveUniform = shader.uniforms.uLogoGizmoButtonsActive;
-  material.userData.uLogoGizmoButtonsRevealUniform = shader.uniforms.uLogoGizmoButtonsReveal;
+  material.userData.uLogoGUniform = shader.uniforms.uLogoG;
   material.userData.uLogoGizmoHalfUniform = shader.uniforms.uLogoGizmoHalf;
   for (let layerIndex = 0; layerIndex < PATTERN_LAYER_COUNT; layerIndex += 1) {
     material.userData[`uPatternMask${layerIndex}Uniform`] = shader.uniforms[`uPatternMask${layerIndex}`];
@@ -311,15 +299,11 @@ const bindGarmentPrintShaderUniforms = (
     uLogoStamp: shader.uniforms.uLogoStamp,
     uLogoStampCellSize: shader.uniforms.uLogoStampCellSize,
     uLogoStampGrid: shader.uniforms.uLogoStampGrid,
-    uLogoAnchorUv: shader.uniforms.uLogoAnchorUv,
-    uLogoRotation: shader.uniforms.uLogoRotation,
-    uLogoUploadRotation: shader.uniforms.uLogoUploadRotation,
-    uLogoPartRotation: shader.uniforms.uLogoPartRotation,
-    uLogoScale: shader.uniforms.uLogoScale,
-    uLogoStampSlot: shader.uniforms.uLogoStampSlot,
-    uLogoSlotActive: shader.uniforms.uLogoSlotActive,
+    uLogoA: shader.uniforms.uLogoA,
+    uLogoB: shader.uniforms.uLogoB,
     uLogoPartBounds: shader.uniforms.uLogoPartBounds,
     uLogoGizmoEnabled: shader.uniforms.uLogoGizmoEnabled,
+    uLogoG: shader.uniforms.uLogoG,
     uLogoGizmoHalf: shader.uniforms.uLogoGizmoHalf,
   });
 };

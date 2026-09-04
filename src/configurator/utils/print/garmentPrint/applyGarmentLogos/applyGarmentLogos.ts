@@ -16,53 +16,27 @@ const applyLogoStampToUniforms = (material: MeshStandardMaterial, state: garment
   if (gridUniform) gridUniform.value = state.grid ?? 4;
 };
 
+// uLogoA = ( anchorUv.x, anchorUv.y, scale, stampSlot )
+// uLogoB = ( rotation, uploadRotation, partRotation, slotActive )
 const applyLogoStyleToUniforms = (material: MeshStandardMaterial, style: logoStyleUniformsType) => {
-  const anchorUniform = material.userData.uLogoAnchorUvUniform as { value: Vector2[] } | undefined;
-  if (anchorUniform) {
-    style.anchorUv.forEach((anchor, index) => {
-      anchorUniform.value[index]?.set(anchor.x, anchor.y);
+  const aUniform = material.userData.uLogoAUniform as { value: Vector4[] } | undefined;
+  const bUniform = material.userData.uLogoBUniform as { value: Vector4[] } | undefined;
+
+  if (aUniform) {
+    aUniform.value.forEach((vec, index) => {
+      const anchor = style.anchorUv[index];
+      vec.set(anchor?.x ?? 0, anchor?.y ?? 0, style.scale[index] ?? 1, style.stampSlot?.[index] ?? 0);
     });
   }
 
-  const rotationUniform = material.userData.uLogoRotationUniform as { value: number[] } | undefined;
-  if (rotationUniform) {
-    style.rotation.forEach((value, index) => {
-      rotationUniform.value[index] = value;
-    });
-  }
-
-  const uploadRotationUniform = material.userData.uLogoUploadRotationUniform as { value: number[] } | undefined;
-  if (uploadRotationUniform) {
-    style.uploadRotation.forEach((value, index) => {
-      uploadRotationUniform.value[index] = value;
-    });
-  }
-
-  const partRotationUniform = material.userData.uLogoPartRotationUniform as { value: number[] } | undefined;
-  if (partRotationUniform) {
-    style.partRotation.forEach((value, index) => {
-      partRotationUniform.value[index] = value;
-    });
-  }
-
-  const scaleUniform = material.userData.uLogoScaleUniform as { value: number[] } | undefined;
-  if (scaleUniform) {
-    scaleUniform.value.forEach((_, index) => {
-      scaleUniform.value[index] = style.scale[index] ?? 1;
-    });
-  }
-
-  const stampSlotUniform = material.userData.uLogoStampSlotUniform as { value: number[] } | undefined;
-  if (stampSlotUniform) {
-    stampSlotUniform.value.forEach((_, index) => {
-      stampSlotUniform.value[index] = style.stampSlot?.[index] ?? 0;
-    });
-  }
-
-  const slotActiveUniform = material.userData.uLogoSlotActiveUniform as { value: number[] } | undefined;
-  if (slotActiveUniform) {
-    slotActiveUniform.value.forEach((_, index) => {
-      slotActiveUniform.value[index] = style.slotActive[index] ?? 0;
+  if (bUniform) {
+    bUniform.value.forEach((vec, index) => {
+      vec.set(
+        style.rotation[index] ?? 0,
+        style.uploadRotation[index] ?? 0,
+        style.partRotation[index] ?? 0,
+        style.slotActive[index] ?? 0,
+      );
     });
   }
 
@@ -74,6 +48,7 @@ const applyLogoStyleToUniforms = (material: MeshStandardMaterial, style: logoSty
   }
 };
 
+// uLogoG = ( gizmoFrameActive, gizmoButtonsActive, gizmoButtonsReveal, _ )
 const applyLogoGizmoFrameToUniforms = (material: MeshStandardMaterial, state: gizmoFrameStateType) => {
   const enabledUniform = material.userData.uLogoGizmoEnabledUniform as { value: number } | undefined;
   if (enabledUniform) enabledUniform.value = state.enabled;
@@ -85,17 +60,12 @@ const applyLogoGizmoFrameToUniforms = (material: MeshStandardMaterial, state: gi
     });
   }
 
-  const frameActiveUniform = material.userData.uLogoGizmoFrameActiveUniform as { value: number[] } | undefined;
-  if (frameActiveUniform) {
-    state.frameActive.forEach((value, index) => {
-      frameActiveUniform.value[index] = value;
-    });
-  }
-
-  const buttonsActiveUniform = material.userData.uLogoGizmoButtonsActiveUniform as { value: number[] } | undefined;
-  if (buttonsActiveUniform) {
-    state.gizmoActive.forEach((value, index) => {
-      buttonsActiveUniform.value[index] = value;
+  const gUniform = material.userData.uLogoGUniform as { value: Vector4[] } | undefined;
+  if (gUniform) {
+    gUniform.value.forEach((vec, index) => {
+      vec.x = state.frameActive[index] ?? 0;
+      vec.y = state.gizmoActive[index] ?? 0;
+      // vec.z (reveal) is written separately by applyGarmentLogoGizmoButtonsReveal
     });
   }
 };
@@ -124,15 +94,11 @@ const hydrateGarmentLogoUniforms = (
     uLogoStamp: { value: Texture };
     uLogoStampCellSize: { value: Vector2 };
     uLogoStampGrid: { value: number };
-    uLogoAnchorUv: { value: Vector2[] };
-    uLogoRotation: { value: number[] };
-    uLogoUploadRotation: { value: number[] };
-    uLogoPartRotation: { value: number[] };
-    uLogoScale: { value: number[] };
-    uLogoStampSlot: { value: number[] };
-    uLogoSlotActive: { value: number[] };
+    uLogoA: { value: Vector4[] };
+    uLogoB: { value: Vector4[] };
     uLogoPartBounds: { value: Vector4[] };
     uLogoGizmoEnabled: { value: number };
+    uLogoG: { value: Vector4[] };
     uLogoGizmoHalf: { value: Vector2[] };
   },
 ) => {
@@ -148,13 +114,8 @@ const hydrateGarmentLogoUniforms = (
     applyLogoStampToUniforms(material, stampState);
   }
 
-  material.userData.uLogoAnchorUvUniform = uniforms.uLogoAnchorUv;
-  material.userData.uLogoRotationUniform = uniforms.uLogoRotation;
-  material.userData.uLogoUploadRotationUniform = uniforms.uLogoUploadRotation;
-  material.userData.uLogoPartRotationUniform = uniforms.uLogoPartRotation;
-  material.userData.uLogoScaleUniform = uniforms.uLogoScale;
-  material.userData.uLogoStampSlotUniform = uniforms.uLogoStampSlot;
-  material.userData.uLogoSlotActiveUniform = uniforms.uLogoSlotActive;
+  material.userData.uLogoAUniform = uniforms.uLogoA;
+  material.userData.uLogoBUniform = uniforms.uLogoB;
   material.userData.uLogoPartBoundsUniform = uniforms.uLogoPartBounds;
   if (styleState) {
     material.userData.garmentLogoStyleState = styleState;
@@ -162,6 +123,7 @@ const hydrateGarmentLogoUniforms = (
   }
 
   material.userData.uLogoGizmoEnabledUniform = uniforms.uLogoGizmoEnabled;
+  material.userData.uLogoGUniform = uniforms.uLogoG;
   material.userData.uLogoGizmoHalfUniform = uniforms.uLogoGizmoHalf;
   if (gizmoState) {
     applyLogoGizmoFrameToUniforms(material, gizmoState);
@@ -170,11 +132,11 @@ const hydrateGarmentLogoUniforms = (
 };
 
 const applyGarmentLogoGizmoButtonsReveal = (material: MeshStandardMaterial, reveal: number[]) => {
-  const revealUniform = material.userData.uLogoGizmoButtonsRevealUniform as { value: number[] } | undefined;
-  if (!revealUniform) return;
+  const gUniform = material.userData.uLogoGUniform as { value: Vector4[] } | undefined;
+  if (!gUniform) return;
 
   reveal.forEach((value, index) => {
-    revealUniform.value[index] = value;
+    if (gUniform.value[index]) gUniform.value[index].z = value;
   });
 };
 

@@ -106,19 +106,26 @@ uniform vec2 uNumberGizmoHalf[4];
 uniform sampler2D uLogoStamp;
 uniform vec2 uLogoStampCellSize;
 uniform float uLogoStampGrid;
-uniform vec2 uLogoAnchorUv[LOGO_SLOT_COUNT];
-uniform float uLogoRotation[LOGO_SLOT_COUNT];
-uniform float uLogoUploadRotation[LOGO_SLOT_COUNT];
-uniform float uLogoPartRotation[LOGO_SLOT_COUNT];
-uniform float uLogoScale[LOGO_SLOT_COUNT];
-uniform float uLogoStampSlot[LOGO_SLOT_COUNT];
-uniform float uLogoSlotActive[LOGO_SLOT_COUNT];
+// Packed to stay under MAX_FRAGMENT_UNIFORM_VECTORS on mobile GPUs:
+//   uLogoA = ( anchorUv.xy, scale, stampSlot )
+//   uLogoB = ( rotation, uploadRotation, partRotation, slotActive )
+//   uLogoG = ( gizmoFrameActive, gizmoButtonsActive, gizmoButtonsReveal, _ )
+uniform vec4 uLogoA[LOGO_SLOT_COUNT];
+uniform vec4 uLogoB[LOGO_SLOT_COUNT];
 uniform vec4 uLogoPartBounds[LOGO_SLOT_COUNT];
 uniform float uLogoGizmoEnabled;
-uniform float uLogoGizmoFrameActive[LOGO_SLOT_COUNT];
-uniform float uLogoGizmoButtonsActive[LOGO_SLOT_COUNT];
-uniform float uLogoGizmoButtonsReveal[LOGO_SLOT_COUNT];
+uniform vec4 uLogoG[LOGO_SLOT_COUNT];
 uniform vec2 uLogoGizmoHalf[LOGO_SLOT_COUNT];
+#define uLogoAnchorUv( i ) ( uLogoA[ i ].xy )
+#define uLogoScale( i ) ( uLogoA[ i ].z )
+#define uLogoStampSlot( i ) ( uLogoA[ i ].w )
+#define uLogoRotation( i ) ( uLogoB[ i ].x )
+#define uLogoUploadRotation( i ) ( uLogoB[ i ].y )
+#define uLogoPartRotation( i ) ( uLogoB[ i ].z )
+#define uLogoSlotActive( i ) ( uLogoB[ i ].w )
+#define uLogoGizmoFrameActive( i ) ( uLogoG[ i ].x )
+#define uLogoGizmoButtonsActive( i ) ( uLogoG[ i ].y )
+#define uLogoGizmoButtonsReveal( i ) ( uLogoG[ i ].z )
 #endif
 #ifdef USE_GARMENT_TEXT
 uniform sampler2D uNameGizmoIcons;

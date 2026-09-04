@@ -12,7 +12,7 @@ const buildLogoStyleUniforms = (
   meshPartId: string,
   stampCellSize: { width: number; height: number },
   atlasWidth: number,
-  stampGrid = resolveLogoStampAtlasGrid(0),
+  stampGrid = resolveLogoStampAtlasGrid(),
 ): logoStyleUniformsType => {
   const partsById = Object.fromEntries(parts.map((part) => [part.id, part]));
   const slotCount = resolveLogoShaderSlotCount(instances.length);

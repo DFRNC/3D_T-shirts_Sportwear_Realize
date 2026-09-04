@@ -44,7 +44,7 @@ const countOccupiedStampSlots = (canvas: HTMLCanvasElement, instanceCount: numbe
   const context = canvas.getContext('2d', { willReadFrequently: true });
   if (!context || canvas.width === 0 || canvas.height === 0) return 0;
 
-  const grid = stampAtlasMeta?.grid ?? resolveLogoStampAtlasGrid(instanceCount);
+  const grid = stampAtlasMeta?.grid ?? resolveLogoStampAtlasGrid();
   const cellWidth = Math.max(1, stampAtlasMeta?.cellWidth ?? Math.floor(canvas.width / grid));
   const cellHeight = Math.max(1, stampAtlasMeta?.cellHeight ?? Math.floor(canvas.height / grid));
 
