@@ -11,7 +11,12 @@ const resolveLogoSlotCapacity = (instanceCount: number): number => {
 
 const resolveLogoStampGrid = (capacity: number): number => Math.max(1, Math.ceil(Math.sqrt(capacity)));
 
-const resolveLogoShaderSlotCount = (instanceCount: number): number => Math.max(LOGO_SHADER_SLOT_COUNT, resolveLogoSlotCapacity(instanceCount));
+// Size the garment shader's logo arrays to the logos actually in use (rounded
+// up to an atlas-grid step), capped at LOGO_SHADER_SLOT_COUNT. Previously this
+// was always the max (16), inflating fragment uniform usage past the mobile
+// limit even on garments with no logos.
+const resolveLogoShaderSlotCount = (instanceCount: number): number =>
+  Math.min(LOGO_SHADER_SLOT_COUNT, resolveLogoSlotCapacity(instanceCount));
 
 const resolveLogoStampAtlasGrid = (instanceCount: number): number => resolveLogoStampGrid(resolveLogoShaderSlotCount(instanceCount));
 

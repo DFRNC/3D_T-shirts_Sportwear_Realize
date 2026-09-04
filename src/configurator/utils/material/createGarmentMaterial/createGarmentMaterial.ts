@@ -27,13 +27,13 @@ const buildGarmentFeatureDefines = (features: garmentPrintFeatureFlagsType): str
     features.useLogo && '#define USE_GARMENT_LOGO',
     features.useTesto && '#define USE_GARMENT_TESTO',
     (features.useName || features.useNumber || features.useLogo || features.useTesto) && '#define USE_GARMENT_TEXT',
-    `#define LOGO_SLOT_COUNT ${resolveLogoShaderSlotCount(features.logoSlotCount ?? 0)}`,
+    `#define LOGO_SLOT_COUNT ${features.useLogo ? resolveLogoShaderSlotCount(features.logoSlotCount ?? 0) : 1}`,
   ]
     .filter(Boolean)
     .join('\n');
 
 const buildGarmentFeatureCacheKey = (features: garmentPrintFeatureFlagsType): string =>
-  `${[features.useName, features.useNumber, features.useLogo, features.useTesto].map((flag) => (flag ? '1' : '0')).join('')}:${resolveLogoShaderSlotCount(features.logoSlotCount ?? 0)}`;
+  `${[features.useName, features.useNumber, features.useLogo, features.useTesto].map((flag) => (flag ? '1' : '0')).join('')}:${features.useLogo ? resolveLogoShaderSlotCount(features.logoSlotCount ?? 0) : 0}`;
 
 const buildGarmentProgramCacheKey = (material: MeshStandardMaterial) => {
   const channelKey = [

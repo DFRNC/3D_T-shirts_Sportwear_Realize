@@ -1,7 +1,6 @@
 import type { garmentPrintStateType } from '@configurator/types';
 import type { Texture, WebGLProgramParametersWithUniforms } from 'three';
 import {
-  LOGO_SHADER_SLOT_COUNT,
   NAME_GIZMO_BTN_ACTIVE_COLOR,
   NAME_GIZMO_BTN_FILL_COLOR,
   NAME_GIZMO_ICON_COLOR,
@@ -45,7 +44,9 @@ const bindGarmentPrintShaderUniforms = (
     logoSlotCount?: number;
   },
 ) => {
-  const logoSlots = resolveLogoShaderSlotCount(logoSlotCount ?? LOGO_SHADER_SLOT_COUNT);
+  // Match createGarmentMaterial's LOGO_SLOT_COUNT define: 1 placeholder slot
+  // when the material carries no logos, otherwise sized to the logos in use.
+  const logoSlots = logoSlotCount && logoSlotCount > 0 ? resolveLogoShaderSlotCount(logoSlotCount) : 1;
   shader.defines = { ...shader.defines, USE_GRADIENT: '', USE_PRINT: '' };
   shader.uniforms.uPartUvBounds = { value: material.userData.uPartUvBounds };
   material.userData.uPartUvBoundsUniform = shader.uniforms.uPartUvBounds;
