@@ -1,1 +1,1 @@
-export { SceneDebugOverlay, isSceneDebugEnabled } from './SceneDebugOverlay';
+export { SceneDebugBridge, SceneDebugOverlay, isSceneDebugEnabled } from './SceneDebugOverlay';

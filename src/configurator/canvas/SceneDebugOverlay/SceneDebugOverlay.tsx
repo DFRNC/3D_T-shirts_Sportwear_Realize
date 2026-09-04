@@ -1,16 +1,41 @@
 'use client';
 
+import { useThree } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
+import type { Scene, WebGLRenderer } from 'three';
 
 /**
  * On-screen diagnostics for devices where remote DevTools is unreachable.
  * Enable by adding `?debug` to the configurator URL.
  *
- * Pure DOM component — no r3f hooks. It reads the three.js internals off the
- * canvas element (`canvas.__r3f`, set by @react-three/fiber v9) on a timer and
- * renders a fixed panel listing GPU info, every mesh and whether its material
- * has a compiled program, plus any intercepted shader-compile errors.
+ * `SceneDebugBridge` mounts INSIDE the r3f <Canvas>, grabs the renderer + scene
+ * with a single `useThree` read and stashes them on `window`. `SceneDebugOverlay`
+ * is a plain DOM component (mounts outside the canvas) that polls that bridge and
+ * renders a fixed panel: GPU info, every mesh + whether its material has a
+ * compiled program, and any intercepted shader-compile errors.
  */
+
+type Bridge = { gl: WebGLRenderer; scene: Scene };
+
+const BRIDGE_KEY = '__configuratorSceneDebug';
+
+const isEnabled = () =>
+  typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('debug');
+
+const SceneDebugBridge = () => {
+  const gl = useThree((state) => state.gl);
+  const scene = useThree((state) => state.scene);
+
+  useEffect(() => {
+    if (!isEnabled()) return undefined;
+    (window as unknown as Record<string, Bridge>)[BRIDGE_KEY] = { gl, scene };
+    return () => {
+      delete (window as unknown as Record<string, Bridge | undefined>)[BRIDGE_KEY];
+    };
+  }, [gl, scene]);
+
+  return null;
+};
 
 type MeshRow = {
   name: string;
@@ -19,22 +44,6 @@ type MeshRow = {
   shaderMode: string;
   hasProgram: boolean;
   color: string;
-};
-
-const isEnabled = () =>
-  typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('debug');
-
-type ThreeRootLike = {
-  gl?: { getContext?: () => WebGLRenderingContext | WebGL2RenderingContext; debug?: { checkShaderErrors?: boolean } };
-  scene?: { traverse: (cb: (o: unknown) => void) => void };
-};
-
-const readRoot = (): ThreeRootLike | null => {
-  const canvas = document.querySelector('canvas');
-  if (!canvas) return null;
-  const bag = (canvas as unknown as { __r3f?: { store?: { getState?: () => ThreeRootLike }; root?: { getState?: () => ThreeRootLike } } }).__r3f;
-  const state = bag?.store?.getState?.() ?? bag?.root?.getState?.();
-  return state ?? null;
 };
 
 const SceneDebugOverlay = () => {
@@ -59,49 +68,40 @@ const SceneDebugOverlay = () => {
     let infoDone = false;
 
     const interval = window.setInterval(() => {
-      const root = readRoot();
-      if (!root?.gl || !root.scene) return;
+      const bridge = (window as unknown as Record<string, Bridge | undefined>)[BRIDGE_KEY];
+      if (!bridge) return;
+      const { gl, scene } = bridge;
 
-      if (root.gl.debug && root.gl.debug.checkShaderErrors === false) {
-        root.gl.debug.checkShaderErrors = true;
-      }
+      const debug = (gl as unknown as { debug?: { checkShaderErrors?: boolean } }).debug;
+      if (debug && debug.checkShaderErrors === false) debug.checkShaderErrors = true;
 
       if (!infoDone) {
-        const ctx = root.gl.getContext?.();
-        if (ctx) {
-          const dbg = ctx.getExtension('WEBGL_debug_renderer_info');
-          setInfo([
-            `GL: ${typeof WebGL2RenderingContext !== 'undefined' && ctx instanceof WebGL2RenderingContext ? 'WebGL2' : 'WebGL1'}`,
-            `RENDERER: ${String(ctx.getParameter(dbg ? dbg.UNMASKED_RENDERER_WEBGL : ctx.RENDERER))}`,
-            `VARYING_VECTORS: ${ctx.getParameter(ctx.MAX_VARYING_VECTORS)}`,
-            `FRAG_UNIFORM_VECTORS: ${ctx.getParameter(ctx.MAX_FRAGMENT_UNIFORM_VECTORS)}`,
-            `TEX_IMAGE_UNITS: ${ctx.getParameter(ctx.MAX_TEXTURE_IMAGE_UNITS)}`,
-            `VERT_TEX_IMAGE_UNITS: ${ctx.getParameter(ctx.MAX_VERTEX_TEXTURE_IMAGE_UNITS)}`,
-            `parallel_compile: ${ctx.getExtension('KHR_parallel_shader_compile') ? 'yes' : 'no'}`,
-          ]);
-          infoDone = true;
-        }
+        const ctx = gl.getContext();
+        const dbg = ctx.getExtension('WEBGL_debug_renderer_info');
+        setInfo([
+          `GL: ${typeof WebGL2RenderingContext !== 'undefined' && ctx instanceof WebGL2RenderingContext ? 'WebGL2' : 'WebGL1'}`,
+          `RENDERER: ${String(ctx.getParameter(dbg ? dbg.UNMASKED_RENDERER_WEBGL : ctx.RENDERER))}`,
+          `VARYING_VECTORS: ${ctx.getParameter(ctx.MAX_VARYING_VECTORS)}`,
+          `FRAG_UNIFORM_VECTORS: ${ctx.getParameter(ctx.MAX_FRAGMENT_UNIFORM_VECTORS)}`,
+          `TEX_IMAGE_UNITS: ${ctx.getParameter(ctx.MAX_TEXTURE_IMAGE_UNITS)}`,
+          `VERT_TEX_IMAGE_UNITS: ${ctx.getParameter(ctx.MAX_VERTEX_TEXTURE_IMAGE_UNITS)}`,
+          `parallel_compile: ${ctx.getExtension('KHR_parallel_shader_compile') ? 'yes' : 'no'}`,
+        ]);
+        infoDone = true;
       }
 
       const collected: MeshRow[] = [];
-      root.scene.traverse((o) => {
-        const mesh = o as {
+      scene.traverse((obj) => {
+        const mesh = obj as unknown as {
           isMesh?: boolean;
           name?: string;
           visible?: boolean;
           material?:
-            | {
-                type?: string;
-                userData?: Record<string, unknown>;
-                program?: unknown;
-                color?: { getHexString?: () => string };
-              }
-            | Array<unknown>;
+            | { type?: string; userData?: Record<string, unknown>; program?: unknown; color?: { getHexString?: () => string } }
+            | Array<{ type?: string; userData?: Record<string, unknown>; program?: unknown; color?: { getHexString?: () => string } }>;
         };
         if (!mesh.isMesh) return;
-        const mat = (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material) as
-          | { type?: string; userData?: Record<string, unknown>; program?: unknown; color?: { getHexString?: () => string } }
-          | undefined;
+        const mat = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
         collected.push({
           name: mesh.name || '(unnamed)',
           visible: Boolean(mesh.visible),
@@ -132,7 +132,7 @@ const SceneDebugOverlay = () => {
         maxHeight: '62vh',
         width: '100vw',
         overflow: 'auto',
-        background: 'rgba(0,0,0,0.9)',
+        background: 'rgba(0,0,0,0.92)',
         color: '#0f0',
         font: '10px/1.35 ui-monospace, monospace',
         padding: '8px 10px',
@@ -163,4 +163,4 @@ const SceneDebugOverlay = () => {
   );
 };
 
-export { SceneDebugOverlay, isEnabled as isSceneDebugEnabled };
+export { SceneDebugBridge, SceneDebugOverlay, isEnabled as isSceneDebugEnabled };

@@ -1,7 +1,7 @@
 'use client';
 
 import { CanvasControl } from '@configurator/canvas/CanvasControl';
-import { SceneDebugOverlay } from '@configurator/canvas/SceneDebugOverlay';
+import { SceneDebugBridge, SceneDebugOverlay } from '@configurator/canvas/SceneDebugOverlay';
 import { SceneModel } from '@configurator/canvas/SceneModel';
 import { Canvas } from '@react-three/fiber';
 import { ACESFilmicToneMapping } from 'three';
@@ -60,6 +60,7 @@ const ConfiguratorCanvas = () => {
       }}
     >
       <CanvasControl />
+      <SceneDebugBridge />
       <Suspense fallback={null}>
         <SceneModel />
       </Suspense>
