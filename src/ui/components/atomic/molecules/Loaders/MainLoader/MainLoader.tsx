@@ -10,7 +10,7 @@ const MainLoader = () => {
         <LogoYOU />
       </Flex>
       <Text variant="loader_tagline" className="px-4 leading-[1.35] max-sm:text-[14px]">
-        Made by <b className="animate-pulse motion-reduce:animate-none">YOU</b>. Worn your way.
+        Made by <b>YOU</b>. Worn your way.
       </Text>
     </Flex>
   );
