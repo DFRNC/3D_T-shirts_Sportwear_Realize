@@ -9,6 +9,7 @@ import { ConfiguratorRouteResetBridge } from '@providers/embeddedProvider/Config
 import { EmbeddedFlagBridge } from '@providers/embeddedProvider/EmbeddedFlagBridge';
 import { EmbeddedHeaderHeightBridge } from '@providers/embeddedProvider/EmbeddedHeaderHeightBridge';
 import { EmbeddedUrlSyncBridge } from '@providers/embeddedProvider/EmbeddedUrlSyncBridge';
+import { EmbeddedViewportKickBridge } from '@providers/embeddedProvider/EmbeddedViewportKickBridge';
 
 const EMBEDDED_DEFAULT: embeddedContextType = { embedded: false, shop: null, host: null, shopOrigin: null };
 
@@ -50,6 +51,7 @@ const EmbeddedProvider = ({ children }: embeddedProviderPropsType) => {
       <EmbeddedUrlSyncBridge />
       <EmbeddedFlagBridge />
       <EmbeddedHeaderHeightBridge />
+      <EmbeddedViewportKickBridge />
       <ConfiguratorRouteResetBridge />
       {children}
     </EmbeddedContext.Provider>
