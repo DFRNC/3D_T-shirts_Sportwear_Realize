@@ -16,8 +16,6 @@ const applyLogoStampToUniforms = (material: MeshStandardMaterial, state: garment
   if (gridUniform) gridUniform.value = state.grid ?? 4;
 };
 
-// uLogoA = ( anchorUv.x, anchorUv.y, scale, stampSlot )
-// uLogoB = ( rotation, uploadRotation, partRotation, slotActive )
 const applyLogoStyleToUniforms = (material: MeshStandardMaterial, style: logoStyleUniformsType) => {
   const aUniform = material.userData.uLogoAUniform as { value: Vector4[] } | undefined;
   const bUniform = material.userData.uLogoBUniform as { value: Vector4[] } | undefined;
@@ -48,7 +46,6 @@ const applyLogoStyleToUniforms = (material: MeshStandardMaterial, style: logoSty
   }
 };
 
-// uLogoG = ( gizmoFrameActive, gizmoButtonsActive, gizmoButtonsReveal, _ )
 const applyLogoGizmoFrameToUniforms = (material: MeshStandardMaterial, state: gizmoFrameStateType) => {
   const enabledUniform = material.userData.uLogoGizmoEnabledUniform as { value: number } | undefined;
   if (enabledUniform) enabledUniform.value = state.enabled;
@@ -65,7 +62,6 @@ const applyLogoGizmoFrameToUniforms = (material: MeshStandardMaterial, state: gi
     gUniform.value.forEach((vec, index) => {
       vec.x = state.frameActive[index] ?? 0;
       vec.y = state.gizmoActive[index] ?? 0;
-      // vec.z (reveal) is written separately by applyGarmentLogoGizmoButtonsReveal
     });
   }
 };

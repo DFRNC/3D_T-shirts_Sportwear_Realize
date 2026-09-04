@@ -5,8 +5,6 @@ type numberUniformType = { value: number };
 type numberArrayUniformType = { value: number[] };
 type vec4ArrayUniformType = { value: Vector4[] };
 
-// The logo block packs gizmoFrameActive / gizmoButtonsActive / gizmoButtonsReveal
-// into uLogoG = (x, y, z, _). Snapshot/zero/restore those channels directly.
 const readLogoGChannel = (uniform: vec4ArrayUniformType | undefined, channel: 'x' | 'y' | 'z') =>
   uniform ? uniform.value.map((vec) => vec[channel]) : undefined;
 

@@ -106,10 +106,6 @@ uniform vec2 uNumberGizmoHalf[4];
 uniform sampler2D uLogoStamp;
 uniform vec2 uLogoStampCellSize;
 uniform float uLogoStampGrid;
-// Packed to stay under MAX_FRAGMENT_UNIFORM_VECTORS on mobile GPUs:
-//   uLogoA = ( anchorUv.xy, scale, stampSlot )
-//   uLogoB = ( rotation, uploadRotation, partRotation, slotActive )
-//   uLogoG = ( gizmoFrameActive, gizmoButtonsActive, gizmoButtonsReveal, _ )
 uniform vec4 uLogoA[LOGO_SLOT_COUNT];
 uniform vec4 uLogoB[LOGO_SLOT_COUNT];
 uniform vec4 uLogoPartBounds[LOGO_SLOT_COUNT];

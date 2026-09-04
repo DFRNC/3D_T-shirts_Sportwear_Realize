@@ -44,8 +44,6 @@ const bindGarmentPrintShaderUniforms = (
     logoSlotCount?: number;
   },
 ) => {
-  // Match createGarmentMaterial's LOGO_SLOT_COUNT define: 1 placeholder slot
-  // when the material carries no logos, otherwise sized to the logos in use.
   const logoSlots = logoSlotCount && logoSlotCount > 0 ? resolveLogoShaderSlotCount(logoSlotCount) : 1;
   shader.defines = { ...shader.defines, USE_GRADIENT: '', USE_PRINT: '' };
   shader.uniforms.uPartUvBounds = { value: material.userData.uPartUvBounds };
@@ -151,8 +149,6 @@ const bindGarmentPrintShaderUniforms = (
   shader.uniforms.uLogoStamp = { value: emptyPrint };
   shader.uniforms.uLogoStampCellSize = { value: new Vector2(1, 1) };
   shader.uniforms.uLogoStampGrid = { value: 4 };
-  // Packed: uLogoA=(anchor.xy, scale, stampSlot)  uLogoB=(rot, uploadRot, partRot, slotActive)
-  //         uLogoG=(gizmoFrameActive, gizmoButtonsActive, gizmoButtonsReveal, _)
   shader.uniforms.uLogoA = { value: Array.from({ length: logoSlots }, () => new Vector4(0, 0, 1, 0)) };
   shader.uniforms.uLogoB = { value: Array.from({ length: logoSlots }, () => new Vector4(0, 0, 0, 0)) };
   shader.uniforms.uLogoPartBounds = { value: Array.from({ length: logoSlots }, () => new Vector4(0, 0, 1, 1)) };

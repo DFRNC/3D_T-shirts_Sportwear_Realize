@@ -4,17 +4,6 @@ import { useThree } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
 import type { Scene, WebGLRenderer } from 'three';
 
-/**
- * On-screen diagnostics for devices where remote DevTools is unreachable.
- * Enable by adding `?debug` to the configurator URL.
- *
- * `SceneDebugBridge` mounts INSIDE the r3f <Canvas>, grabs the renderer + scene
- * with a single `useThree` read and stashes them on `window`. `SceneDebugOverlay`
- * is a plain DOM component (mounts outside the canvas) that polls that bridge and
- * renders a fixed panel: GPU info, every mesh + whether its material has a
- * compiled program, and any intercepted shader-compile errors.
- */
-
 type Bridge = { gl: WebGLRenderer; scene: Scene };
 
 const BRIDGE_KEY = '__configuratorSceneDebug';

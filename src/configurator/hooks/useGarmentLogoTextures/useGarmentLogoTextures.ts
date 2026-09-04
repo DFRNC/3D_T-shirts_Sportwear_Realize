@@ -107,11 +107,6 @@ const useGarmentLogoTextures = () => {
 
   const ensureLogoSlotCapacity = useCallback(
     (instanceCount: number) => {
-      // Feed the raw logo count: resolveGarmentPrintFeatureFlags turns 0 into a
-      // shader with no logo block, and >0 into one whose LOGO_SLOT_COUNT is
-      // sized (and recompiled as more are added) to the logos in use. Track by
-      // the shader slot capacity so 1..4 logos (same 4-slot program) don't
-      // trigger a recompile, but 0 vs >0 still toggles the block.
       const features = resolveGarmentPrintFeatureFlags(product, instanceCount);
       const capacity = features.useLogo ? resolveLogoShaderSlotCount(instanceCount) : 0;
 
