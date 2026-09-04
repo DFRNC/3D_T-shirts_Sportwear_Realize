@@ -180,7 +180,6 @@ type flexVariantType =
   | 'checkout_summary_actions_column'
   | 'checkout_mobile_note_left_column'
   | 'full_width'
-  | 'logo_you_badge'
   | 'centered_inline'
   | 'card_list_column'
   | 'skeleton_logo_upload_column'

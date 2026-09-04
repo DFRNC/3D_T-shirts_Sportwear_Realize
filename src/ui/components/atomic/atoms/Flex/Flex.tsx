@@ -90,8 +90,6 @@ const variantFlex = cva('flex w-fit items-center justify-center', {
       checkout_summary_actions_column: 'w-full flex-col gap-3',
       checkout_mobile_note_left_column: 'hidden w-full flex-col items-start gap-2 text-left max-sm:flex',
       full_width: 'w-full',
-      logo_you_badge:
-        'h-[109px] w-[236px] max-sm:h-[64px] max-sm:w-auto max-sm:max-w-full max-sm:px-[16px] shrink-0 max-sm:shrink animate-pulse items-center justify-center rounded-[8px] bg-linear-to-r from-[#ECD187] via-[#DC2C6F] to-[#030102] text-[72px] max-sm:text-[40px] leading-none font-bold italic tracking-[-1px] text-white motion-reduce:animate-none',
       centered_inline: 'mx-auto items-center justify-center',
       card_list_column: 'flex-col gap-0',
       skeleton_logo_upload_column: 'w-full flex-col items-start gap-2',
