@@ -46,10 +46,4 @@ const fetchShopifyWithTimeout = async (input: RequestInfo | URL, init?: RequestI
   throw lastError;
 };
 
-export {
-  fetchShopifyWithTimeout,
-  formatShopifyRequestError,
-  isShopifyAbortError,
-  SHOPIFY_REQUEST_MAX_ATTEMPTS,
-  SHOPIFY_REQUEST_TIMEOUT_MS,
-};
+export { fetchShopifyWithTimeout, formatShopifyRequestError, isShopifyAbortError, SHOPIFY_REQUEST_MAX_ATTEMPTS, SHOPIFY_REQUEST_TIMEOUT_MS };

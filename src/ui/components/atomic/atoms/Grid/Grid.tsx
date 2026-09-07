@@ -47,7 +47,8 @@ const variantGrid = cva('grid', {
       skeleton_logo_info_panel: 'w-full grid-cols-[auto_1fr] items-center gap-2.5 rounded-[4px] p-2',
       skeleton_configurator_header: 'w-full grid-cols-[1fr_auto] gap-3',
       configurator_price_spaced: 'w-full grid-cols-[auto_1fr] items-center gap-3 mt-3',
-      position_picker_grid: 'grid max-h-[calc(var(--viewport-height)-var(--embed-header-offset)-160px)] grid-cols-3 gap-3 overflow-y-auto overscroll-contain pr-1 max-sm:gap-2 sm:gap-4',
+      position_picker_grid:
+        'grid max-h-[calc(var(--viewport-height)-var(--embed-header-offset)-160px)] grid-cols-3 gap-3 overflow-y-auto overscroll-contain pr-1 max-sm:gap-2 sm:gap-4',
     },
   },
   defaultVariants: {

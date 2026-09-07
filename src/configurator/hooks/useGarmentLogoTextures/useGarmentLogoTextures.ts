@@ -144,18 +144,7 @@ const useGarmentLogoTextures = () => {
 
       invalidate();
     },
-    [
-      activeStep,
-      atlasSize.height,
-      atlasSize.width,
-      ensureLogoSlotCapacity,
-      getMaterials,
-      gizmoIcons,
-      instancesForRender,
-      invalidate,
-      isGizmoVisible,
-      product,
-    ],
+    [activeStep, atlasSize.height, atlasSize.width, ensureLogoSlotCapacity, getMaterials, gizmoIcons, instancesForRender, invalidate, isGizmoVisible, product],
   );
 
   const applyStampToMaterials = useCallback(
@@ -172,8 +161,7 @@ const useGarmentLogoTextures = () => {
   );
 
   const syncStampTexture = (canvas: HTMLCanvasElement) => {
-    const sizeChanged =
-      !textureRef.current || canvasSizeRef.current.width !== canvas.width || canvasSizeRef.current.height !== canvas.height;
+    const sizeChanged = !textureRef.current || canvasSizeRef.current.width !== canvas.width || canvasSizeRef.current.height !== canvas.height;
 
     if (sizeChanged) {
       textureRef.current?.dispose();

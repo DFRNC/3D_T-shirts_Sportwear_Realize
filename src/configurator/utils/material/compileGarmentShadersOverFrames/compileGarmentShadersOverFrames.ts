@@ -80,9 +80,7 @@ const compileGarmentShadersOverFrames = ({
 
   materialQueue.forEach((material) => {
     const capacity = material.userData.garmentLogoSlotCapacity as number | undefined;
-    const features = capacity
-      ? resolveGarmentPrintFeatureFlags(product, capacity)
-      : resolveGarmentPrintFeatureFlags(product);
+    const features = capacity ? resolveGarmentPrintFeatureFlags(product, capacity) : resolveGarmentPrintFeatureFlags(product);
     compileGarmentShader(material, features);
     material.userData.garmentLogoSlotCapacity = features.logoSlotCount;
   });

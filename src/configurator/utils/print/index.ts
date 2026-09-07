@@ -6,7 +6,12 @@ export {
   resolveRotatedGizmoHalf,
 } from './composeLogoAtlas/composeLogoPrintAtlas';
 export { composeLogoStampAtlas, fitCellSizeToAtlasLimit } from './composeLogoAtlas/composeLogoStampAtlas';
-export { resolveLogoShaderSlotCount, resolveLogoSlotCapacity, resolveLogoStampAtlasGrid, resolveLogoStampGrid } from './composeLogoAtlas/resolveLogoSlotCapacity';
+export {
+  resolveLogoShaderSlotCount,
+  resolveLogoSlotCapacity,
+  resolveLogoStampAtlasGrid,
+  resolveLogoStampGrid,
+} from './composeLogoAtlas/resolveLogoSlotCapacity';
 export { resolveLogoStampPackOrder, resolveLogoStampSlots } from './composeLogoAtlas/resolveLogoStampSlots';
 export { composeNameMaskAtlas, resolveNameStampSize } from './composeNameAtlas/composeNameMaskAtlas';
 export { mergeMaskChannel } from './composeNameAtlas/mergeMaskChannel';

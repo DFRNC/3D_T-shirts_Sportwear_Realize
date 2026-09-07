@@ -24,5 +24,4 @@ export { ORDER_METAFIELD_NAMESPACE, setOrderMetafields } from './setOrderMetafie
 export type { orderMetafieldInputType } from './setOrderMetafields';
 export { verifyShopifyWebhookSignature } from './verifyShopifyWebhookSignature';
 
-
 export { fetchOrderById } from './fetchOrderById';

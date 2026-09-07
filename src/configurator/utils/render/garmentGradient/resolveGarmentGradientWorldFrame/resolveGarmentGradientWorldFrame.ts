@@ -26,8 +26,7 @@ const CUFF_BAND = 0.22;
 
 const isGarmentMesh = (object: Object3D) => (object as { isMesh?: boolean }).isMesh === true && object.visible && object.userData?.configuratorGarment === true;
 
-const isNamedMesh = (object: Object3D, names: Set<string>): object is Mesh =>
-  names.has(object.name) && (object as Mesh).isMesh === true && object.visible;
+const isNamedMesh = (object: Object3D, names: Set<string>): object is Mesh => names.has(object.name) && (object as Mesh).isMesh === true && object.visible;
 
 const worldBox = new Box3();
 const worldCenter = new Vector3();
@@ -142,10 +141,7 @@ const fitSleeveExtentToAxis = (dir: worldPointType, halfSpan: number) => {
 
 const meanPoint = (points: worldPointType[]) => {
   const count = points.length;
-  const mean = points.reduce(
-    (sum, point) => ({ x: sum.x + point.x, y: sum.y + point.y, z: sum.z + point.z }),
-    { x: 0, y: 0, z: 0 },
-  );
+  const mean = points.reduce((sum, point) => ({ x: sum.x + point.x, y: sum.y + point.y, z: sum.z + point.z }), { x: 0, y: 0, z: 0 });
   return { x: mean.x / count, y: mean.y / count, z: mean.z / count };
 };
 
@@ -181,12 +177,11 @@ const planeNormalFromPoints = (points: worldPointType[], fallback: worldPointTyp
   zz /= count;
 
   const inPlane = powerLargestAxis(xx, xy, xz, yy, yz, zz, { x: 0, y: 1, z: 0 });
-  const secondStart =
-    normalizeDir(
-      inPlane.y * fallback.z - inPlane.z * fallback.y,
-      inPlane.z * fallback.x - inPlane.x * fallback.z,
-      inPlane.x * fallback.y - inPlane.y * fallback.x,
-    ) ?? { x: 0, y: 0, z: 1 };
+  const secondStart = normalizeDir(
+    inPlane.y * fallback.z - inPlane.z * fallback.y,
+    inPlane.z * fallback.x - inPlane.x * fallback.z,
+    inPlane.x * fallback.y - inPlane.y * fallback.x,
+  ) ?? { x: 0, y: 0, z: 1 };
   const second = powerLargestAxis(xx, xy, xz, yy, yz, zz, secondStart, inPlane);
   const plane = normalizeDir(
     inPlane.y * second.z - inPlane.z * second.y,
@@ -359,12 +354,7 @@ const resolveSleeveHemUvAxis = (loops: worldPointType[][], garmentOrigin: worldP
   return undefined;
 };
 
-const resolveCuffPlaneDir = (
-  root: Object3D,
-  names: Set<string>,
-  garmentOrigin: worldPointType,
-  fallback: worldPointType,
-) => {
+const resolveCuffPlaneDir = (root: Object3D, names: Set<string>, garmentOrigin: worldPointType, fallback: worldPointType) => {
   let minDist = Infinity;
   let maxDist = -Infinity;
 
@@ -392,12 +382,7 @@ const resolveCuffPlaneDir = (
   });
 };
 
-const resolveSleeveHemDir = (
-  root: Object3D,
-  names: Set<string>,
-  garmentOrigin: worldPointType,
-  fallback: worldPointType,
-) => {
+const resolveSleeveHemDir = (root: Object3D, names: Set<string>, garmentOrigin: worldPointType, fallback: worldPointType) => {
   const loops = collectNamedMeshBoundaryLoops(root, names);
   if (loops.length >= 2) {
     const ranked = [...loops].sort((left, right) => {
@@ -613,7 +598,11 @@ const resolveGarmentGradientWorldFrame = (scene: Object3D): garmentGradientWorld
   return frameFromBox(worldBox);
 };
 
-const resolveGarmentPartGradientFrame = (root: Object3D, part: garmentGradientPartRefType, garmentFrame: garmentGradientWorldFrameType): garmentGradientWorldFrameType => {
+const resolveGarmentPartGradientFrame = (
+  root: Object3D,
+  part: garmentGradientPartRefType,
+  garmentFrame: garmentGradientWorldFrameType,
+): garmentGradientWorldFrameType => {
   if (!isSleeveGarmentPart(part)) return garmentFrame;
 
   partBox.makeEmpty();
@@ -647,7 +636,11 @@ const resolveGarmentGradientDir = (frame: garmentGradientWorldFrameType | undefi
   };
 };
 
-const evaluateGarmentGradientUvT = (uv: { u: number; v: number }, axis: { x: number; y: number }, bounds: { minX: number; minY: number; maxX: number; maxY: number }) => {
+const evaluateGarmentGradientUvT = (
+  uv: { u: number; v: number },
+  axis: { x: number; y: number },
+  bounds: { minX: number; minY: number; maxX: number; maxY: number },
+) => {
   const partU = (uv.u - bounds.minX) / Math.max(bounds.maxX - bounds.minX, 1e-5);
   const partV = (uv.v - bounds.minY) / Math.max(bounds.maxY - bounds.minY, 1e-5);
   const t = Math.max(axis.x, 0) * partU + Math.max(-axis.x, 0) * (1 - partU) + Math.max(axis.y, 0) * partV + Math.max(-axis.y, 0) * (1 - partV);

@@ -1,5 +1,11 @@
 import { BoxGeometry, Mesh, Scene } from 'three';
-import { evaluateGarmentGradientUvT, evaluateGarmentGradientWorldT, isSleeveGarmentPart, resolveGarmentGradientWorldFrame, resolveGarmentPartGradientFrame } from '@configurator/utils';
+import {
+  evaluateGarmentGradientUvT,
+  evaluateGarmentGradientWorldT,
+  isSleeveGarmentPart,
+  resolveGarmentGradientWorldFrame,
+  resolveGarmentPartGradientFrame,
+} from '@configurator/utils';
 import { describe, expect, it } from 'vitest';
 
 const torsoFrame = {

@@ -2,7 +2,13 @@ import type { logoSlotBounds4Type, logoSlotFloat4Type, logoSlotVec2Type, logoSty
 import type { garmentPartConfigType, logoInstanceType } from '@types';
 import { FULL_UV_BOUNDS, LOGO_UPLOAD_ROTATION_DEG } from '@configurator/constants';
 import { resolvePartUvBounds } from '@configurator/mappers';
-import { resolveLogoDisplayScale, resolveLogoShaderSlotCount, resolveLogoStampAtlasGrid, resolveLogoStampSlots, resolvePartPrintRotation } from '@configurator/utils';
+import {
+  resolveLogoDisplayScale,
+  resolveLogoShaderSlotCount,
+  resolveLogoStampAtlasGrid,
+  resolveLogoStampSlots,
+  resolvePartPrintRotation,
+} from '@configurator/utils';
 
 const DEFAULT_PART_BOUNDS = FULL_UV_BOUNDS;
 

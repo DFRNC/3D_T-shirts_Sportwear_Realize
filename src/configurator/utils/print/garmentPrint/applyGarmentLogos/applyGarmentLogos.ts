@@ -29,12 +29,7 @@ const applyLogoStyleToUniforms = (material: MeshStandardMaterial, style: logoSty
 
   if (bUniform) {
     bUniform.value.forEach((vec, index) => {
-      vec.set(
-        style.rotation[index] ?? 0,
-        style.uploadRotation[index] ?? 0,
-        style.partRotation[index] ?? 0,
-        style.slotActive[index] ?? 0,
-      );
+      vec.set(style.rotation[index] ?? 0, style.uploadRotation[index] ?? 0, style.partRotation[index] ?? 0, style.slotActive[index] ?? 0);
     });
   }
 

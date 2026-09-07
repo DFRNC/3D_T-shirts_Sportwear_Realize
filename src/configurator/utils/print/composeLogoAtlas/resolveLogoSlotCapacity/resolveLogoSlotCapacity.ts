@@ -11,8 +11,7 @@ const resolveLogoSlotCapacity = (instanceCount: number): number => {
 
 const resolveLogoStampGrid = (capacity: number): number => Math.max(1, Math.ceil(Math.sqrt(capacity)));
 
-const resolveLogoShaderSlotCount = (instanceCount: number): number =>
-  Math.min(LOGO_SHADER_SLOT_COUNT, resolveLogoSlotCapacity(instanceCount));
+const resolveLogoShaderSlotCount = (instanceCount: number): number => Math.min(LOGO_SHADER_SLOT_COUNT, resolveLogoSlotCapacity(instanceCount));
 
 const resolveLogoStampAtlasGrid = (): number => resolveLogoStampGrid(LOGO_SHADER_SLOT_COUNT);
 

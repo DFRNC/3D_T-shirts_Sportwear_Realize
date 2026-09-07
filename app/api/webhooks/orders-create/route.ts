@@ -257,7 +257,12 @@ const buildShippingAddress = (order: shopifyOrderPayloadType): orderPdfContextTy
 const buildShippingSummary = (address: orderPdfContextType['shippingAddress']): string =>
   [address.company, address.street, [address.postalCode, address.city].filter(Boolean).join(' '), address.province, address.country].filter(Boolean).join(', ');
 
-const processOrderWebhook = async (order: shopifyOrderPayloadType, configUrl: string, uvImageUrls: string | undefined, appOrigin: string | null): Promise<void> => {
+const processOrderWebhook = async (
+  order: shopifyOrderPayloadType,
+  configUrl: string,
+  uvImageUrls: string | undefined,
+  appOrigin: string | null,
+): Promise<void> => {
   const fields: orderMetafieldInputType[] = [];
   fields.push({ key: 'config_url', type: 'url', value: configUrl });
   if (uvImageUrls) fields.push({ key: 'uv_image_urls', type: 'json', value: uvImageUrls });

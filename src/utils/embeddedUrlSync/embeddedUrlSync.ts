@@ -42,7 +42,9 @@ const isEmbeddedHeaderHeightMessage = (data: unknown): data is embeddedHeaderHei
 
   const { source, type, height } = data;
 
-  return source === EMBEDDED_URL_SYNC_SOURCE_SHOPIFY && type === EMBEDDED_HEADER_HEIGHT_TYPE && typeof height === 'number' && Number.isFinite(height) && height >= 0;
+  return (
+    source === EMBEDDED_URL_SYNC_SOURCE_SHOPIFY && type === EMBEDDED_HEADER_HEIGHT_TYPE && typeof height === 'number' && Number.isFinite(height) && height >= 0
+  );
 };
 
 const EMBEDDED_CHECKOUT_REDIRECT_TYPE = 'checkout-redirect' as const;

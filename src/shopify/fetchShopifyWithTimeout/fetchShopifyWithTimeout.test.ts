@@ -1,9 +1,4 @@
-import {
-  fetchShopifyWithTimeout,
-  formatShopifyRequestError,
-  isShopifyAbortError,
-  SHOPIFY_REQUEST_TIMEOUT_MS,
-} from '@shopify/fetchShopifyWithTimeout';
+import { fetchShopifyWithTimeout, formatShopifyRequestError, isShopifyAbortError, SHOPIFY_REQUEST_TIMEOUT_MS } from '@shopify/fetchShopifyWithTimeout';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const createAbortError = () => {

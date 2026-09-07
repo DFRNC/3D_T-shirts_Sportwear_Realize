@@ -88,12 +88,4 @@ const readGarmentMeshes = async (page: Page) =>
     return { foundScene: Boolean(scene), rows };
   });
 
-export {
-  enableBodyAndSleeveGradients,
-  enablePartGradient,
-  focusPart,
-  openShadingStep,
-  readGarmentMeshes,
-  saveCanvasPng,
-  waitForConfigurator,
-};
+export { enableBodyAndSleeveGradients, enablePartGradient, focusPart, openShadingStep, readGarmentMeshes, saveCanvasPng, waitForConfigurator };

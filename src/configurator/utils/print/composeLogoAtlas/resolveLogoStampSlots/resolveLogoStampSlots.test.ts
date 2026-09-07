@@ -4,11 +4,7 @@ import { resolveLogoStampPackOrder, resolveLogoStampSlots } from '@configurator/
 
 describe('resolveLogoStampSlots', () => {
   it('keeps atlas cells stable when draw order changes', () => {
-    const packed = [
-      { id: 'logo-a' },
-      { id: 'logo-b' },
-      { id: 'logo-c' },
-    ];
+    const packed = [{ id: 'logo-a' }, { id: 'logo-b' }, { id: 'logo-c' }];
     const broughtToFront = [packed[1]!, packed[2]!, packed[0]!];
 
     expect(resolveLogoStampPackOrder(broughtToFront).map((instance) => instance.id)).toEqual(['logo-a', 'logo-b', 'logo-c']);

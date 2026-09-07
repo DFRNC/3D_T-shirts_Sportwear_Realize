@@ -8,8 +8,7 @@ type Bridge = { gl: WebGLRenderer; scene: Scene };
 
 const BRIDGE_KEY = '__configuratorSceneDebug';
 
-const isEnabled = () =>
-  typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('debug');
+const isEnabled = () => typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('debug');
 
 const SceneDebugBridge = () => {
   const gl = useThree((state) => state.gl);
@@ -159,9 +158,7 @@ const SceneDebugOverlay = () => {
               {String(r.hasProgram)} | #{r.color}
             </div>
           ))}
-          <div style={{ color: errors.length ? '#f33' : '#777', marginTop: 6, fontWeight: 700 }}>
-            SHADER ERRORS ({errors.length})
-          </div>
+          <div style={{ color: errors.length ? '#f33' : '#777', marginTop: 6, fontWeight: 700 }}>SHADER ERRORS ({errors.length})</div>
           {errors.map((e, i) => (
             <div key={i} style={{ color: '#f99' }}>
               {e}

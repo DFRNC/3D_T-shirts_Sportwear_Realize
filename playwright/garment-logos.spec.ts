@@ -1,6 +1,16 @@
 import { expect, test as base } from '@playwright/test';
 
-import { bringUserLogoToFront, deleteFirstUserLogo, expectPackedStampAtlas, expectUniqueLogoPositions, openLogoStep, readLogoState, snapshotCanvas, uploadLogo, waitForLogoState } from './helpers/garmentLogoPage';
+import {
+  bringUserLogoToFront,
+  deleteFirstUserLogo,
+  expectPackedStampAtlas,
+  expectUniqueLogoPositions,
+  openLogoStep,
+  readLogoState,
+  snapshotCanvas,
+  uploadLogo,
+  waitForLogoState,
+} from './helpers/garmentLogoPage';
 import { attachShaderErrorGuard } from './helpers/shaderErrorGuard';
 
 const test = base.extend<{ logoConfigurator: void }>({
@@ -146,10 +156,7 @@ test.describe('Garment logos on the 3D configurator', () => {
       expect(firstId).toBeTruthy();
       await bringUserLogoToFront(page, firstId!);
 
-      const after = await waitForLogoState(
-        page,
-        (current) => current.logos.length === 5 && current.occupiedSlots >= 5 && current.stampMeta?.grid === 4,
-      );
+      const after = await waitForLogoState(page, (current) => current.logos.length === 5 && current.occupiedSlots >= 5 && current.stampMeta?.grid === 4);
 
       expect(after.occupiedSlots).toBeGreaterThanOrEqual(5);
       expectPackedStampAtlas(after.stampMeta, 4);

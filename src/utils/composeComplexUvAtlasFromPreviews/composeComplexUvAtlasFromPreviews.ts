@@ -178,13 +178,7 @@ const loadStampSourceBuffer = async (
   return null;
 };
 
-const clipOverlayToAtlas = async (
-  input: Buffer,
-  left: number,
-  top: number,
-  atlasWidth: number,
-  atlasHeight: number,
-): Promise<sharp.OverlayOptions | null> => {
+const clipOverlayToAtlas = async (input: Buffer, left: number, top: number, atlasWidth: number, atlasHeight: number): Promise<sharp.OverlayOptions | null> => {
   const meta = await sharp(input).metadata();
   const overlayWidth = meta.width ?? 0;
   const overlayHeight = meta.height ?? 0;
