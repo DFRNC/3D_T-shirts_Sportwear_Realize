@@ -29,6 +29,19 @@ html:has(.configurator-shell) body {
 html[data-embedded='1'] {
   --configurator-shell-height: 100%;
   --viewport-height: 100%;
+  --embed-header-offset: 75px;
+}
+
+@media (max-width: 1023px) {
+  html[data-embedded='1'] {
+    --embed-header-offset: 72px;
+  }
+}
+
+@media (max-width: 767px) {
+  html[data-embedded='1'] {
+    --embed-header-offset: 64px;
+  }
 }
 
 @theme {
