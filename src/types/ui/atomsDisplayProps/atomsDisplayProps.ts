@@ -76,6 +76,9 @@ interface scrollAreaPropsType {
 
 interface logoPropsType {
   href?: string;
+  // When provided (configurator embedded in the storefront), a click delegates to
+  // the host store instead of navigating within the configurator app.
+  onNavigate?: () => void;
 }
 
 export type {

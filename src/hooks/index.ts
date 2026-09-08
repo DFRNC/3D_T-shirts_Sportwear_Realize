@@ -1,6 +1,7 @@
 'use client';
 
 export { useAppNavigate } from './useAppNavigate';
+export { useMagnet } from './useMagnet';
 export { useConfiguratorRouteReset } from './useConfiguratorRouteReset';
 export { useEmbeddedUrlSync } from './useEmbeddedUrlSync';
 export { isConfiguratorStepAvailable, resolveAvailableConfiguratorStepNumbers, resolveProductStepsConfiguration } from './resolveProductStepsConfiguration';
