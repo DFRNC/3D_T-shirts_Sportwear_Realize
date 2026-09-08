@@ -64,6 +64,7 @@ type textVariantType =
 type boxVariantType =
   | 'default'
   | 'header'
+  | 'header_embedded'
   | 'footer'
   | 'toggle_handle'
   | 'aside_configuration'

@@ -13,6 +13,7 @@ const variantBox = cva('block', {
     variant: {
       default: '',
       header: cn('bg-white py-5', 'max-sm:py-3'),
+      header_embedded: 'bg-white w-full',
       footer: 'bg-white py-15',
       toggle_handle: cn(
         'absolute left-0 top-[1px] w-4 h-4 bg-white rounded-full shadow transition-transform translate-x-0.5',

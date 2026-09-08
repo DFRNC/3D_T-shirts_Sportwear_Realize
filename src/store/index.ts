@@ -45,6 +45,7 @@ export {
 export { resolveCanAddUserLogo, resolveLogoInstancesForRender, useGarmentLogo } from './useGarmentLogo';
 export { resolvePrintPositionConflicts } from './resolvePrintPositionConflicts';
 export { useAddProductDesignDialog } from './useAddProductDesignDialog';
+export { useEmbeddedStoreHeader } from './useEmbeddedStoreHeader';
 export { useInfoDialog } from './useInfoDialog';
 export { useScrollHintTutorial } from './useScrollHintTutorial';
 export { useShareDialog } from './useShareDialog';
