@@ -1,7 +1,5 @@
 'use client';
 
-// 1:1 with the Shopify theme icon.liquid header icons (icon-lg = 24px,
-// stroke 1.5, viewBox 0 0 24 24).
 const iconClass = 'size-6 shrink-0 text-primary-10';
 
 const SearchGlyph = () => (

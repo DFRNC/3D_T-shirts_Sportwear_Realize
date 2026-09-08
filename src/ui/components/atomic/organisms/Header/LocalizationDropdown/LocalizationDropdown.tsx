@@ -12,32 +12,9 @@ type LocalizationDropdownProps = {
   onSelect: (value: string) => void;
 };
 
-// 1:1 with the Shopify header language switcher (header-icons.liquid
-// li.localization > details[is=details-dropdown] + theme.js DetailsDropdown +
-// theme.css .dropdown / .dropdown__nav).
-//
-// Markup: the .dropdown wrapper is `absolute top-0` (aligned to the top of the
-// trigger), `opacity-0 invisible`. Inside, .dropdown__container starts hidden
-// behind the trigger and slides down.
-//
-// Open (transitionIn):
-//   wrapper:    opacity 0->1, visibility visible, 0.6s ease [.7,0,.2,1], delay 0.2s
-//   container:  transform translateY(-105%)->0, 0.6s ease [.7,0,.2,1]
-//   items (li): translateX(20%)->0, opacity 0->1, transform 1s cubic-bezier(.075,.82,.165,1),
-//               opacity 1s cubic-bezier(.19,1,.22,1), staggered 0.3s + 0.1s per item
-// Close (transitionOut):
-//   wrapper:    opacity 0, visibility hidden, 0.3s
-//   container:  transform translateY(-105%), 0.6s
-//
-// Sizing (header, not topbar): .dropdown min-width 250px, width max-content,
-//   margin-inline-start calc(-sp-8) = -32px, border-radius clamp(1rem,1.05vw,1.25rem)
-//   on the bottom corners, background --color-background.
-//   .dropdown__container padding-block 24px / 40px (sp-6 / sp-10).
-//   .dropdown__nav li>p padding-inline 32px (sp-8), gap 6px (gap-1d5) / 8px xl.
-//
-// Selecting mirrors LocalizationListbox.onItemClick (submit /localization + reload
-// on the same path); delegated here via onSelect (postMessage when embedded).
-const EASE: [number, number, number, number] = [0.7, 0, 0.2, 1];
+const EASE_DROPDOWN: [number, number, number, number] = [0.7, 0, 0.2, 1];
+const EASE_ITEM_X: [number, number, number, number] = [0.075, 0.82, 0.165, 1];
+const EASE_ITEM_O: [number, number, number, number] = [0.19, 1, 0.22, 1];
 
 const LocalizationDropdown = ({ languages, current, onSelect }: LocalizationDropdownProps) => {
   const [open, setOpen] = useState(false);
@@ -59,64 +36,88 @@ const LocalizationDropdown = ({ languages, current, onSelect }: LocalizationDrop
     };
   }, [open]);
 
+  const isFinePointer = () => typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches;
+  const onEnter = () => {
+    if (isFinePointer()) setOpen(true);
+  };
+  const onLeave = () => {
+    if (isFinePointer()) setOpen(false);
+  };
+
   return (
-    <div ref={rootRef} className="relative">
+    <div ref={rootRef} className="relative" onMouseEnter={onEnter} onMouseLeave={onLeave}>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-haspopup="listbox"
-        className="relative z-20 rounded-full bg-black px-4 py-1.5 text-sm font-medium text-white"
+        data-open={open || undefined}
+        className="group relative z-20 flex h-12 cursor-pointer items-center overflow-hidden rounded-full border border-[rgb(23_23_23/0.1)] px-5 font-medium text-[#171717]"
+        style={{
+          fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif',
+          fontSize: 'clamp(0.875rem, 0.748rem + 0.3174vw, 1.125rem)',
+        }}
       >
-        {current}
+        <span className="relative z-10 flex items-center transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.3,1,0.3,1)] group-hover:translate-y-[-10%] group-hover:scale-[0.6] group-hover:opacity-0 group-data-open:translate-y-[-10%] group-data-open:scale-[0.6] group-data-open:opacity-0">
+          {current}
+        </span>
+        <span
+          aria-hidden
+          className="absolute inset-0 z-0 flex origin-center translate-y-full scale-[0.6] items-center justify-center rounded-full bg-[#171717] px-5 text-white transition-transform duration-500 ease-[cubic-bezier(0.3,1,0.3,1)] group-hover:translate-y-0 group-hover:scale-100 group-data-open:translate-y-0 group-data-open:scale-100"
+        >
+          {current}
+        </span>
       </button>
 
-      {/* wrapper: absolute top-0 (aligned to the top of the trigger), overflow
-          clips the container while it is translated out of view above. */}
       <AnimatePresence>
         {open && (
           <motion.div
             key="loc-dropdown"
             initial={{ opacity: 0, visibility: 'hidden' }}
-            animate={{ opacity: 1, visibility: 'visible', transition: { duration: 0.6, ease: EASE, delay: 0.2 } }}
-            exit={{ opacity: 0, visibility: 'hidden', transition: { duration: 0.3, ease: EASE } }}
-            className="absolute left-0 top-0 z-10 -ml-8 w-max min-w-62 overflow-hidden pt-9"
+            animate={{ opacity: 1, visibility: 'visible', transition: { duration: 0.6, ease: EASE_DROPDOWN, delay: 0.2 } }}
+            exit={{ opacity: 0, visibility: 'hidden', transition: { duration: 0.3, ease: EASE_DROPDOWN } }}
+            className="absolute left-0 top-full z-10 -ml-8 mt-3.5 w-max min-w-62.5 overflow-clip"
           >
             <motion.div
               initial={{ y: '-105%' }}
-              animate={{ y: 0, transition: { duration: 0.6, ease: EASE } }}
-              exit={{ y: '-105%', transition: { duration: 0.6, ease: EASE } }}
-              className="rounded-b-[clamp(1rem,1.05vw,1.25rem)] bg-white pt-6 pb-10"
+              animate={{ y: 0, transition: { duration: 0.6, ease: EASE_DROPDOWN } }}
+              exit={{ y: '-105%', transition: { duration: 0.6, ease: EASE_DROPDOWN } }}
+              className="overflow-hidden rounded-b-[clamp(1rem,1.052vw,1.25rem)] bg-white pb-10 pt-6"
               style={{ boxShadow: '0 16px 34px -10px rgba(0,0,0,.16)' }}
             >
-              <ul className="flex flex-col gap-1.5 xl:gap-2" role="listbox">
-                {languages.map((lang, i) => (
-                  <motion.li
-                    key={lang.value}
-                    className="px-8"
-                    initial={{ x: '20%', opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{
-                      x: { duration: 1, ease: [0.075, 0.82, 0.165, 1], delay: 0.3 + i * 0.1 },
-                      opacity: { duration: 1, ease: [0.19, 1, 0.22, 1], delay: 0.3 + i * 0.1 },
-                    }}
-                  >
-                    <button
-                      type="button"
-                      role="option"
-                      aria-selected={lang.label === current}
-                      onClick={() => {
-                        setOpen(false);
-                        onSelect(lang.value);
+              <ul className="flex max-h-62.5 max-w-70 flex-col gap-1.5 overflow-x-clip overflow-y-auto xl:gap-2" role="listbox">
+                {languages.map((lang, i) => {
+                  const isActive = lang.label === current;
+                  return (
+                    <motion.li
+                      key={lang.value}
+                      className="px-8"
+                      initial={{ x: '20%', opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{
+                        x: { duration: 1, ease: EASE_ITEM_X, delay: 0.3 + i * 0.1 },
+                        opacity: { duration: 1, ease: EASE_ITEM_O, delay: 0.3 + i * 0.1 },
                       }}
-                      className={`block whitespace-nowrap py-0.5 text-sm transition-opacity hover:opacity-60 ${
-                        lang.label === current ? 'pointer-events-none text-primary-10/40' : 'text-primary-10'
-                      }`}
                     >
-                      {lang.label}
-                    </button>
-                  </motion.li>
-                ))}
+                      <button
+                        type="button"
+                        role="option"
+                        aria-selected={isActive}
+                        aria-current={isActive ? 'true' : undefined}
+                        onClick={() => {
+                          setOpen(false);
+                          onSelect(lang.value);
+                        }}
+                        className={`reversed-link block cursor-pointer whitespace-nowrap text-base leading-normal text-[#171717] ${
+                          isActive ? 'pointer-events-none opacity-40' : ''
+                        }`}
+                        style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif' }}
+                      >
+                        {lang.label}
+                      </button>
+                    </motion.li>
+                  );
+                })}
               </ul>
             </motion.div>
           </motion.div>

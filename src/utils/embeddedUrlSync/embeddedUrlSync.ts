@@ -90,7 +90,7 @@ const EMBEDDED_CHECKOUT_REDIRECT_TYPE = 'checkout-redirect' as const;
 
 const EMBEDDED_HEADER_ACTION_TYPE = 'header-action' as const;
 
-const EMBEDDED_HEADER_ACTIONS = ['menu', 'search', 'cart', 'account', 'home', 'navigate'] as const;
+const EMBEDDED_HEADER_ACTIONS = ['menu', 'search', 'cart', 'account', 'home', 'navigate', 'language'] as const;
 
 type embeddedHeaderAction = (typeof EMBEDDED_HEADER_ACTIONS)[number];
 
