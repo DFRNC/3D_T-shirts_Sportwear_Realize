@@ -47,11 +47,50 @@ const isEmbeddedHeaderHeightMessage = (data: unknown): data is embeddedHeaderHei
   );
 };
 
+const EMBEDDED_STORE_HEADER_TYPE = 'store-header' as const;
+
+type storeHeaderMenuItem = {
+  title: string;
+  url: string;
+  active?: boolean;
+  children?: { title: string; url: string }[];
+};
+
+type storeHeaderData = {
+  shopName?: string;
+  logoUrl?: string;
+  language?: string;
+  cartCount?: number;
+  accountUrl?: string;
+  cartUrl?: string;
+  searchUrl?: string;
+  homeUrl?: string;
+  social?: { type: string; url: string }[];
+  announcements?: { text: string; url: string }[];
+  menu?: storeHeaderMenuItem[];
+};
+
+type embeddedStoreHeaderMessage = {
+  source: typeof EMBEDDED_URL_SYNC_SOURCE_SHOPIFY;
+  type: typeof EMBEDDED_STORE_HEADER_TYPE;
+  data: storeHeaderData;
+};
+
+const isEmbeddedStoreHeaderMessage = (data: unknown): data is embeddedStoreHeaderMessage => {
+  if (!isRecord(data)) {
+    return false;
+  }
+
+  const { source, type, data: payload } = data;
+
+  return source === EMBEDDED_URL_SYNC_SOURCE_SHOPIFY && type === EMBEDDED_STORE_HEADER_TYPE && isRecord(payload);
+};
+
 const EMBEDDED_CHECKOUT_REDIRECT_TYPE = 'checkout-redirect' as const;
 
 const EMBEDDED_HEADER_ACTION_TYPE = 'header-action' as const;
 
-const EMBEDDED_HEADER_ACTIONS = ['menu', 'search', 'cart', 'account', 'home'] as const;
+const EMBEDDED_HEADER_ACTIONS = ['menu', 'search', 'cart', 'account', 'home', 'navigate'] as const;
 
 type embeddedHeaderAction = (typeof EMBEDDED_HEADER_ACTIONS)[number];
 
@@ -59,6 +98,7 @@ type embeddedHeaderActionMessage = {
   source: typeof EMBEDDED_URL_SYNC_SOURCE_APP;
   type: typeof EMBEDDED_HEADER_ACTION_TYPE;
   action: embeddedHeaderAction;
+  href?: string;
 };
 
 const isEmbeddedHeaderActionMessage = (data: unknown): data is embeddedHeaderActionMessage => {
@@ -76,7 +116,7 @@ const isEmbeddedHeaderActionMessage = (data: unknown): data is embeddedHeaderAct
   );
 };
 
-const postEmbeddedHeaderAction = (action: embeddedHeaderAction): void => {
+const postEmbeddedHeaderAction = (action: embeddedHeaderAction, href?: string): void => {
   if (!isEmbeddedSession() || window.parent === window) {
     return;
   }
@@ -86,6 +126,7 @@ const postEmbeddedHeaderAction = (action: embeddedHeaderAction): void => {
       source: EMBEDDED_URL_SYNC_SOURCE_APP,
       type: EMBEDDED_HEADER_ACTION_TYPE,
       action,
+      ...(href ? { href } : {}),
     },
     '*',
   );
@@ -141,15 +182,25 @@ export {
   EMBEDDED_HEADER_ACTION_TYPE,
   EMBEDDED_HEADER_ACTIONS,
   EMBEDDED_HEADER_HEIGHT_TYPE,
+  EMBEDDED_STORE_HEADER_TYPE,
   EMBEDDED_URL_SYNC_SOURCE_APP,
   EMBEDDED_URL_SYNC_SOURCE_SHOPIFY,
   EMBEDDED_URL_SYNC_TYPE,
   isEmbeddedHeaderActionMessage,
   isEmbeddedHeaderHeightMessage,
+  isEmbeddedStoreHeaderMessage,
   isEmbeddedUrlSyncMessage,
   postEmbeddedCheckoutRedirect,
   postEmbeddedHeaderAction,
   postEmbeddedUrlToParent,
   redirectToShopifyCheckout,
 };
-export type { embeddedHeaderAction, embeddedHeaderActionMessage, embeddedHeaderHeightMessage, embeddedUrlSyncMessage };
+export type {
+  embeddedHeaderAction,
+  embeddedHeaderActionMessage,
+  embeddedHeaderHeightMessage,
+  embeddedStoreHeaderMessage,
+  embeddedUrlSyncMessage,
+  storeHeaderData,
+  storeHeaderMenuItem,
+};

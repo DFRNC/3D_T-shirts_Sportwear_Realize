@@ -47,6 +47,10 @@ const ConfiguratorCanvas = () => {
           requestAnimationFrame(() => invalidate());
           const canvas = gl.domElement;
           canvas.setAttribute('data-testid', 'configurator-canvas');
+          canvas.removeAttribute('tabindex');
+          new MutationObserver(() => {
+            if (canvas.hasAttribute('tabindex')) canvas.removeAttribute('tabindex');
+          }).observe(canvas, { attributes: true, attributeFilter: ['tabindex'] });
 
           canvas.addEventListener('webglcontextlost', (event) => {
             event.preventDefault();

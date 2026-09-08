@@ -3,15 +3,25 @@ export {
   EMBEDDED_HEADER_ACTION_TYPE,
   EMBEDDED_HEADER_ACTIONS,
   EMBEDDED_HEADER_HEIGHT_TYPE,
+  EMBEDDED_STORE_HEADER_TYPE,
   EMBEDDED_URL_SYNC_SOURCE_APP,
   EMBEDDED_URL_SYNC_SOURCE_SHOPIFY,
   EMBEDDED_URL_SYNC_TYPE,
   isEmbeddedHeaderActionMessage,
   isEmbeddedHeaderHeightMessage,
+  isEmbeddedStoreHeaderMessage,
   isEmbeddedUrlSyncMessage,
   postEmbeddedCheckoutRedirect,
   postEmbeddedHeaderAction,
   postEmbeddedUrlToParent,
   redirectToShopifyCheckout,
 } from './embeddedUrlSync';
-export type { embeddedHeaderAction, embeddedHeaderActionMessage, embeddedHeaderHeightMessage, embeddedUrlSyncMessage } from './embeddedUrlSync';
+export type {
+  embeddedHeaderAction,
+  embeddedHeaderActionMessage,
+  embeddedHeaderHeightMessage,
+  embeddedStoreHeaderMessage,
+  embeddedUrlSyncMessage,
+  storeHeaderData,
+  storeHeaderMenuItem,
+} from './embeddedUrlSync';
