@@ -25,24 +25,67 @@ const kickViewportRecalculation = () => {
   });
 };
 
+const PIN_WINDOW_MS = 4000;
+
 const EmbeddedViewportKickBridge = () => {
   useEffect(() => {
     if (!isEmbeddedSession() || window.parent === window) return;
 
-    kickViewportRecalculation();
+    let pinUntil = Date.now() + PIN_WINDOW_MS;
+    let userInteracted = false;
 
-    const onVisible = () => {
-      if (document.visibilityState === 'visible') kickViewportRecalculation();
+    const pinToTop = () => {
+      if (userInteracted || Date.now() > pinUntil) return;
+      if (window.scrollX !== 0 || window.scrollY !== 0) {
+        window.scrollTo(0, 0);
+      }
     };
 
-    window.addEventListener('pageshow', kickViewportRecalculation);
+    const extendPin = () => {
+      if (userInteracted) return;
+      pinUntil = Date.now() + PIN_WINDOW_MS;
+      pinToTop();
+    };
+
+    const releasePin = () => {
+      userInteracted = true;
+    };
+
+    const rafPin = () => {
+      pinToTop();
+      if (!userInteracted && Date.now() <= pinUntil) requestAnimationFrame(rafPin);
+    };
+
+    kickViewportRecalculation();
+    requestAnimationFrame(rafPin);
+
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') {
+        kickViewportRecalculation();
+        extendPin();
+      }
+    };
+    const onKick = () => {
+      kickViewportRecalculation();
+      extendPin();
+    };
+
+    window.addEventListener('scroll', pinToTop, { passive: true });
+    window.addEventListener('touchstart', releasePin, { passive: true });
+    window.addEventListener('wheel', releasePin, { passive: true });
+    window.addEventListener('pageshow', onKick);
     document.addEventListener('visibilitychange', onVisible);
-    window.addEventListener('focus', kickViewportRecalculation);
+    window.addEventListener('focus', onKick);
+    window.addEventListener('resize', extendPin);
 
     return () => {
-      window.removeEventListener('pageshow', kickViewportRecalculation);
+      window.removeEventListener('scroll', pinToTop);
+      window.removeEventListener('touchstart', releasePin);
+      window.removeEventListener('wheel', releasePin);
+      window.removeEventListener('pageshow', onKick);
       document.removeEventListener('visibilitychange', onVisible);
-      window.removeEventListener('focus', kickViewportRecalculation);
+      window.removeEventListener('focus', onKick);
+      window.removeEventListener('resize', extendPin);
     };
   }, []);
 
