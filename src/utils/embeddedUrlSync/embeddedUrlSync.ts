@@ -49,6 +49,48 @@ const isEmbeddedHeaderHeightMessage = (data: unknown): data is embeddedHeaderHei
 
 const EMBEDDED_CHECKOUT_REDIRECT_TYPE = 'checkout-redirect' as const;
 
+const EMBEDDED_HEADER_ACTION_TYPE = 'header-action' as const;
+
+const EMBEDDED_HEADER_ACTIONS = ['menu', 'search', 'cart', 'account', 'home'] as const;
+
+type embeddedHeaderAction = (typeof EMBEDDED_HEADER_ACTIONS)[number];
+
+type embeddedHeaderActionMessage = {
+  source: typeof EMBEDDED_URL_SYNC_SOURCE_APP;
+  type: typeof EMBEDDED_HEADER_ACTION_TYPE;
+  action: embeddedHeaderAction;
+};
+
+const isEmbeddedHeaderActionMessage = (data: unknown): data is embeddedHeaderActionMessage => {
+  if (!isRecord(data)) {
+    return false;
+  }
+
+  const { source, type, action } = data;
+
+  return (
+    source === EMBEDDED_URL_SYNC_SOURCE_APP &&
+    type === EMBEDDED_HEADER_ACTION_TYPE &&
+    typeof action === 'string' &&
+    (EMBEDDED_HEADER_ACTIONS as readonly string[]).includes(action)
+  );
+};
+
+const postEmbeddedHeaderAction = (action: embeddedHeaderAction): void => {
+  if (!isEmbeddedSession() || window.parent === window) {
+    return;
+  }
+
+  window.parent.postMessage(
+    {
+      source: EMBEDDED_URL_SYNC_SOURCE_APP,
+      type: EMBEDDED_HEADER_ACTION_TYPE,
+      action,
+    },
+    '*',
+  );
+};
+
 const postEmbeddedUrlToParent = (pathname: string): void => {
   if (!isEmbeddedSession() || window.parent === window) {
     return;
@@ -96,14 +138,18 @@ const redirectToShopifyCheckout = (checkoutUrl: string): void => {
 
 export {
   EMBEDDED_CHECKOUT_REDIRECT_TYPE,
+  EMBEDDED_HEADER_ACTION_TYPE,
+  EMBEDDED_HEADER_ACTIONS,
   EMBEDDED_HEADER_HEIGHT_TYPE,
   EMBEDDED_URL_SYNC_SOURCE_APP,
   EMBEDDED_URL_SYNC_SOURCE_SHOPIFY,
   EMBEDDED_URL_SYNC_TYPE,
+  isEmbeddedHeaderActionMessage,
   isEmbeddedHeaderHeightMessage,
   isEmbeddedUrlSyncMessage,
   postEmbeddedCheckoutRedirect,
+  postEmbeddedHeaderAction,
   postEmbeddedUrlToParent,
   redirectToShopifyCheckout,
 };
-export type { embeddedHeaderHeightMessage, embeddedUrlSyncMessage };
+export type { embeddedHeaderAction, embeddedHeaderActionMessage, embeddedHeaderHeightMessage, embeddedUrlSyncMessage };

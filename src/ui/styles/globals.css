@@ -29,19 +29,9 @@ html:has(.configurator-shell) body {
 html[data-embedded='1'] {
   --configurator-shell-height: 100%;
   --viewport-height: 100%;
-  --embed-header-offset: 75px;
-}
-
-@media (max-width: 1023px) {
-  html[data-embedded='1'] {
-    --embed-header-offset: 72px;
-  }
-}
-
-@media (max-width: 767px) {
-  html[data-embedded='1'] {
-    --embed-header-offset: 64px;
-  }
+  /* The embedded store header (EmbeddedStoreHeader) now sits in normal flow and
+     takes its own space, so nothing below it needs to reserve an offset. */
+  --embed-header-offset: 0px;
 }
 
 @theme {
