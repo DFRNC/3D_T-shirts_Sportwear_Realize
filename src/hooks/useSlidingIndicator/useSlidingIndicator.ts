@@ -44,14 +44,9 @@ const useSlidingIndicator = (activeIndex: number, options?: { scrollIntoView?: b
   useLayoutEffect(() => {
     if (!shouldScrollIntoView) return;
 
-    // The very first run happens during mount. When the configurator is embedded
-    // in an iframe, a synchronous scroll here makes iOS Safari pull the whole
-    // iframe into view, dragging the host store header off-screen. The tab strip
-    // starts at scrollLeft 0 with the first tab active, so the initial scroll is
-    // a no-op anyway — skip it and only align the strip on later step changes.
     if (isFirstScrollRef.current) {
+      if (activeIndex <= 0) return;
       isFirstScrollRef.current = false;
-      return;
     }
 
     const element = itemRefs.current[activeIndex];
@@ -70,7 +65,8 @@ const useSlidingIndicator = (activeIndex: number, options?: { scrollIntoView?: b
     const elementCenterOffset = elementRect.left - containerRect.left + elementRect.width / 2 - containerRect.width / 2;
     const targetScrollLeft = Math.max(0, Math.min(scrollContainer.scrollLeft + elementCenterOffset, scrollContainer.scrollWidth - scrollContainer.clientWidth));
 
-    scrollContainer.scrollTo({ left: targetScrollLeft, behavior: 'smooth' });
+    if (Math.abs(targetScrollLeft - scrollContainer.scrollLeft) < 1) return;
+    scrollContainer.scrollTo({ left: targetScrollLeft });
   }, [activeIndex, shouldScrollIntoView]);
 
   useLayoutEffect(() => {
