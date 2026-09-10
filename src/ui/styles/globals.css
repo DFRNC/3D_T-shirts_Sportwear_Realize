@@ -16,8 +16,10 @@ html:has(.configurator-shell) body {
   overscroll-behavior: none;
 }
 
-body {
-  padding-top: var(--header-height);
+@media (min-width: 601px) {
+  html[data-embedded='1'] body {
+    padding-top: var(--header-height);
+  }
 }
 
 :root {
