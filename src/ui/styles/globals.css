@@ -18,7 +18,7 @@ html:has(.configurator-shell) body {
 
 @media (min-width: 601px) {
   html[data-embedded='1'] body {
-    padding-top: var(--header-height);
+    padding-top: var(--embed-header-offset, 0px);
   }
 }
 
@@ -35,7 +35,6 @@ html:has(.configurator-shell) body {
 html[data-embedded='1'] {
   --configurator-shell-height: var(--configurator-vh, 100%);
   --viewport-height: var(--configurator-vh, 100%);
-  --embed-header-offset: 0px;
 }
 
 @theme {
