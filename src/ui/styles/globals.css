@@ -16,6 +16,10 @@ html:has(.configurator-shell) body {
   overscroll-behavior: none;
 }
 
+body {
+  padding-top: var(--header-height);
+}
+
 :root {
   --viewport-height: 100dvh;
   --embed-header-offset: 0px;
