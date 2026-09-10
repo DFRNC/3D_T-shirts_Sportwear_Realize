@@ -20,17 +20,20 @@ const tagGarmentMeshes = (object: Object3D) => {
   });
 };
 
+const INSIDE_SHELL_RENDER_ORDER = -1;
+
 const biasInsideShellDepth = (object: Object3D) => {
   object.traverse((child) => {
     if (!('isMesh' in child) || !child.isMesh) return;
 
     const mesh = child as Mesh;
+    mesh.renderOrder = INSIDE_SHELL_RENDER_ORDER;
     const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
     for (const material of materials) {
       if (!material) continue;
-      material.polygonOffset = true;
-      material.polygonOffsetFactor = 4;
-      material.polygonOffsetUnits = 4;
+      material.polygonOffset = false;
+      material.depthTest = true;
+      material.depthWrite = true;
       material.needsUpdate = true;
     }
   });
