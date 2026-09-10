@@ -2,42 +2,47 @@
 
 import { useEffect } from 'react';
 
+// iOS = iPhone/iPod, and iPadOS which reports as Mac but has touch.
 const IS_IOS =
   typeof navigator !== 'undefined' &&
   (/iP(hone|od|ad)/.test(navigator.platform || '') ||
     /iP(hone|od|ad)/.test(navigator.userAgent || '') ||
     (navigator.platform === 'MacIntel' && (navigator.maxTouchPoints || 0) > 1));
 
-const readViewportHeight = (): number => {
+const clampedViewportHeight = (): number | null => {
+  if (!IS_IOS) return null;
+
   const vv = window.visualViewport;
   const vpH = vv ? Math.round(vv.height) : window.innerHeight;
   const screenH = window.screen?.availHeight ?? 0;
   const clientH = document.documentElement.clientHeight;
 
-  let height = vpH;
+  const isClamped = Math.abs(window.innerHeight - clientH) > 40 && screenH - vpH > 60;
+  if (!isClamped) return null;
 
-  const isClamped = IS_IOS && Math.abs(window.innerHeight - clientH) > 40 && screenH - vpH > 60;
-  if (isClamped) {
-    height = screenH;
-  }
-
-  if (!(height > 120 && height < 4000)) {
-    height = window.innerHeight;
-  }
-
-  return height;
+  return screenH > 120 && screenH < 4000 ? screenH : null;
 };
 
 const EmbeddedViewportKickBridge = () => {
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || !IS_IOS) return;
 
+    const root = document.documentElement;
     let lastVh = 0;
+
     const apply = () => {
-      const height = readViewportHeight();
-      if (height > 120 && (height > lastVh || height < lastVh - 60)) {
+      const height = clampedViewportHeight();
+      if (height == null) {
+        // Not (or no longer) clamped — hand layout back to the CSS fallback.
+        if (lastVh !== 0) {
+          lastVh = 0;
+          root.style.removeProperty('--configurator-vh');
+        }
+        return;
+      }
+      if (height > lastVh || height < lastVh - 60) {
         lastVh = height;
-        document.documentElement.style.setProperty('--configurator-vh', `${Math.round(height)}px`);
+        root.style.setProperty('--configurator-vh', `${Math.round(height)}px`);
       }
     };
 
@@ -70,6 +75,7 @@ const EmbeddedViewportKickBridge = () => {
       }
       window.removeEventListener('orientationchange', onOrientation);
       window.removeEventListener('pageshow', apply);
+      root.style.removeProperty('--configurator-vh');
     };
   }, []);
 
