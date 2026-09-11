@@ -12,7 +12,7 @@ const EmbeddedHeaderHeightBridge = () => {
     const onMessage = (event: MessageEvent) => {
       if (!isEmbeddedHeaderHeightMessage(event.data)) return;
 
-      document.documentElement.style.setProperty('--embed-header-offset', `${event.data.height}px`);
+      document.documentElement.style.setProperty('--header-height', `${event.data.height}px`);
     };
 
     window.addEventListener('message', onMessage);

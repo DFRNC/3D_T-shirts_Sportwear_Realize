@@ -18,13 +18,15 @@ html:has(.configurator-shell) body {
 
 @media (min-width: 601px) {
   html[data-embedded='1'] body {
-    padding-top: var(--embed-header-offset, 0px);
+    padding-top: var(--header-height, 72px);
   }
 }
 
 :root {
   --viewport-height: 100dvh;
-  --embed-header-offset: 0px;
+  /* --header-height is not defaulted here on purpose: a declared value would
+     beat the var() fallbacks below. The parent posts the real height and
+     EmbeddedHeaderHeightBridge sets it on <html>. */
 }
 
 .configurator-shell {
