@@ -59,7 +59,7 @@ const variantBox = cva('block', {
       configurator_shell_background: 'relative flex min-h-0 flex-1 flex-col overflow-hidden bg-linear-to-t from-[#E8E8E8] to-white',
       configurator_shell_grid: 'relative grid min-h-0 flex-1 grid-cols-1 grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden',
       configurator_view_placeholder: 'relative h-full min-h-0 min-w-0 w-full',
-      tabs_list_wrapper: 'relative w-full min-w-0 pt-2',
+      tabs_list_wrapper: 'relative w-full min-w-0 pt-2 max-sm:pt-0',
       checkout_product_details_panel: 'pt-6 max-sm:pt-4',
       checkout_product_details_open: 'pt-6 max-sm:block max-sm:pt-4',
       checkout_product_details_closed: 'pt-6 max-sm:hidden max-sm:pt-4',
