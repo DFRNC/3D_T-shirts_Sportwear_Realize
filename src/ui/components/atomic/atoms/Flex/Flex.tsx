@@ -26,8 +26,8 @@ const variantFlex = cva('flex w-fit items-center justify-center', {
       info_part: 'flex flex-col items-start justify-start w-full',
       product_card_name: 'flex min-h-[36px] flex-1 flex-col items-center justify-center w-full bg-gray-20 px-1 py-1',
       header_configuration: cn(
-        'flex items-center justify-center bg-white py-2 w-full min-w-0 pt-[var(--header-height, 72px)]',
-        'max-md:pt-[var(--header-height, 65px)]',
+        'flex items-center justify-center bg-white py-2 w-full min-w-0 pt-[var(--header-height,72px)]',
+        'max-md:pt-[var(--header-height,65px)]',
         'max-xl:px-4',
         'max-sm:py-0 max-sm:px-4 max-sm:pt-0',
       ),
