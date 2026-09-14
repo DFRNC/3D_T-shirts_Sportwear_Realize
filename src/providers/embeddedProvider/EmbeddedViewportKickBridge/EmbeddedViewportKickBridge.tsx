@@ -2,47 +2,42 @@
 
 import { useEffect } from 'react';
 
-// iOS = iPhone/iPod, and iPadOS which reports as Mac but has touch.
+import { isEmbeddedSession } from '@utils';
+
 const IS_IOS =
   typeof navigator !== 'undefined' &&
   (/iP(hone|od|ad)/.test(navigator.platform || '') ||
     /iP(hone|od|ad)/.test(navigator.userAgent || '') ||
     (navigator.platform === 'MacIntel' && (navigator.maxTouchPoints || 0) > 1));
 
-const clampedViewportHeight = (): number | null => {
+const isSane = (height: number): boolean => height > 120 && height < 4000;
+
+const viewportHeight = (): number | null => {
   if (!IS_IOS) return null;
 
-  const vv = window.visualViewport;
-  const vpH = vv ? Math.round(vv.height) : window.innerHeight;
-  const screenH = window.screen?.availHeight ?? 0;
-  const clientH = document.documentElement.clientHeight;
+  const innerH = window.innerHeight;
+  const vpH = window.visualViewport ? Math.round(window.visualViewport.height) : innerH;
 
-  const isClamped = Math.abs(window.innerHeight - clientH) > 40 && screenH - vpH > 60;
-  if (!isClamped) return null;
+  if (isSane(innerH)) return innerH;
 
-  return screenH > 120 && screenH < 4000 ? screenH : null;
+  return isSane(vpH) ? vpH : null;
 };
 
 const EmbeddedViewportKickBridge = () => {
   useEffect(() => {
     if (typeof window === 'undefined' || !IS_IOS) return;
+    if (!isEmbeddedSession() || window.parent === window) return;
 
     const root = document.documentElement;
     let lastVh = 0;
 
     const apply = () => {
-      const height = clampedViewportHeight();
-      if (height == null) {
-        // Not (or no longer) clamped — hand layout back to the CSS fallback.
-        if (lastVh !== 0) {
-          lastVh = 0;
-          root.style.removeProperty('--configurator-vh');
-        }
-        return;
-      }
-      if (height > lastVh || height < lastVh - 60) {
+      const height = viewportHeight();
+      if (height == null) return;
+
+      if (Math.abs(height - lastVh) >= 2) {
         lastVh = height;
-        root.style.setProperty('--configurator-vh', `${Math.round(height)}px`);
+        root.style.setProperty('--configurator-vh', `${height}px`);
       }
     };
 
@@ -58,9 +53,8 @@ const EmbeddedViewportKickBridge = () => {
     if (window.visualViewport) {
       window.visualViewport.addEventListener('resize', apply);
       window.visualViewport.addEventListener('scroll', apply);
-    } else {
-      window.addEventListener('resize', apply);
     }
+    window.addEventListener('resize', apply);
     window.addEventListener('orientationchange', onOrientation);
     window.addEventListener('pageshow', apply);
 
@@ -70,9 +64,8 @@ const EmbeddedViewportKickBridge = () => {
       if (window.visualViewport) {
         window.visualViewport.removeEventListener('resize', apply);
         window.visualViewport.removeEventListener('scroll', apply);
-      } else {
-        window.removeEventListener('resize', apply);
       }
+      window.removeEventListener('resize', apply);
       window.removeEventListener('orientationchange', onOrientation);
       window.removeEventListener('pageshow', apply);
       root.style.removeProperty('--configurator-vh');
