@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic';
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX_REQUESTS = 30;
 const MAX_FILES_PER_REQUEST = 50;
+const CHECKOUT_ASSET_FILE_STATUS_POLL_TIMEOUT_MS = 45_000;
 
 type rateLimitEntryType = {
   count: number;
@@ -116,6 +117,7 @@ export async function POST(request: Request): Promise<Response> {
         resourceUrl: file.resourceUrl,
         contentType: file.contentType,
       })),
+      { fileStatusPollTimeoutMs: CHECKOUT_ASSET_FILE_STATUS_POLL_TIMEOUT_MS },
     );
 
     return Response.json({

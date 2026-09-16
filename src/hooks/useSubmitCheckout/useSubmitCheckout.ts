@@ -18,7 +18,9 @@ import { redirectToShopifyCheckout } from '@utils/embeddedUrlSync';
 import type { checkoutLineAttributeType, createCheckoutPayloadType, createCheckoutResultType } from '@shopify';
 
 const CHECKOUT_ENDPOINT = '/api/checkout';
-const CHECKOUT_ASSET_COLLECTION_TIMEOUT_MS = 120_000;
+const CHECKOUT_ASSET_COLLECTION_TIMEOUT_MS = 600_000;
+const CHECKOUT_ASSET_FAILURE_MESSAGE =
+  "Non è stato possibile preparare i file della tua configurazione. L'ordine non è stato creato: riprova tra qualche istante.";
 
 const createCheckoutOrderNumber = () => `#${Math.floor(1_000_000_000 + Math.random() * 9_000_000_000)}`;
 
@@ -107,16 +109,20 @@ const collectCheckoutAssetAttributes = async (): Promise<checkoutLineAttributeTy
       },
     ]);
 
-    const attributes: checkoutLineAttributeType[] = [];
     const configUrl = configUrlById.get('config-json');
 
+    if (!configUrl) {
+      throw new Error('Checkout asset upload did not return a config.json URL.');
+    }
+
+    const attributes: checkoutLineAttributeType[] = [];
     if (uvImages.length) attributes.push({ key: '_uv_image_urls', value: JSON.stringify(uvImages) });
-    if (configUrl) attributes.push({ key: '_config_url', value: configUrl });
+    attributes.push({ key: '_config_url', value: configUrl });
 
     return attributes;
   } catch (error) {
     console.error('Checkout asset upload failed', error);
-    return [];
+    throw error;
   }
 };
 
@@ -141,12 +147,12 @@ const useSubmitCheckout = () => {
         throw new Error('Nessun prodotto da ordinare.');
       }
 
-      payload.attributes = await withTimeout(collectCheckoutAssetAttributes(), CHECKOUT_ASSET_COLLECTION_TIMEOUT_MS, 'Checkout asset collection').catch(
-        (assetError: unknown) => {
-          console.error('Checkout asset collection failed', assetError);
-          return [];
-        },
-      );
+      try {
+        payload.attributes = await withTimeout(collectCheckoutAssetAttributes(), CHECKOUT_ASSET_COLLECTION_TIMEOUT_MS, 'Checkout asset collection');
+      } catch (assetError: unknown) {
+        console.error('Checkout asset collection failed', assetError);
+        throw new Error(CHECKOUT_ASSET_FAILURE_MESSAGE);
+      }
 
       const response = await fetch(CHECKOUT_ENDPOINT, {
         method: 'POST',
