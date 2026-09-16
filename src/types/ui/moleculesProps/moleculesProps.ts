@@ -24,6 +24,7 @@ interface productCatalogPopoverPropsType {
   children: ReactNode;
   contentSide?: 'top' | 'right' | 'bottom' | 'left';
   contentAlign?: 'start' | 'center' | 'end';
+  autoOpenOnRequest?: boolean;
 }
 
 type productSessionAddButtonPropsType = ButtonHTMLAttributes<HTMLButtonElement>;

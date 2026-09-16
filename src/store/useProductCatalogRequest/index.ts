@@ -1,0 +1,1 @@
+export { useProductCatalogRequest } from './useProductCatalogRequest';

@@ -12,7 +12,7 @@ import {
 } from '@constants';
 import { useAppNavigate, useCheckoutSummary, useNavigateToConfigurator, useSubmitCheckout } from '@hooks';
 import { CheckoutOrderExport, CheckoutProductCard, CheckoutSummaryPanel, OrderCuttingExport } from '@molecules';
-import { useCheckout, useConfigurationCart } from '@store';
+import { useCheckout, useConfigurationCart, useProductCatalogRequest } from '@store';
 
 const CheckoutView = () => {
   const { navigateToConfigurator } = useNavigateToConfigurator();
@@ -21,6 +21,14 @@ const CheckoutView = () => {
   const { canProceed, minimumQuantity } = useCheckoutSummary();
   const products = useCheckout((state) => state.products);
   const activeItem = useConfigurationCart((state) => state.items.find((item) => item.id === state.activeItemId) ?? state.items[0]);
+  const requestProductCatalog = useProductCatalogRequest((state) => state.request);
+
+  const handleAddMoreProducts = () => {
+    if (!activeItem) return;
+
+    requestProductCatalog();
+    navigateToConfigurator(activeItem.collectionHandle, activeItem.slug);
+  };
 
   if (products.length === 0) {
     return (
@@ -49,7 +57,7 @@ const CheckoutView = () => {
         <Button
           size="sm"
           className="self-start border border-gray-20 bg-white max-sm:hidden"
-          onClick={() => activeItem && navigateToConfigurator(activeItem.collectionHandle, activeItem.slug)}
+          onClick={handleAddMoreProducts}
           disabled={!activeItem?.collectionHandle}
         >
           <SvgIcon name="plus" />
@@ -60,7 +68,7 @@ const CheckoutView = () => {
           <Button
             size="sm"
             className="h-9 w-full justify-center gap-2 rounded-lg border-0 bg-[#D4D4D8]/80 text-[14px] leading-4 font-semibold text-black"
-            onClick={() => activeItem && navigateToConfigurator(activeItem.collectionHandle, activeItem.slug)}
+            onClick={handleAddMoreProducts}
             disabled={!activeItem?.collectionHandle}
           >
             <SvgIcon name="plus" className="size-3.5" />

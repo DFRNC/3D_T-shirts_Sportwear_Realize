@@ -13,15 +13,22 @@ import {
   Grid,
   Text,
 } from '@atoms';
+import { CONFIGURATOR_LOADER_FADE_MS } from '@constants';
 import { mapHomePageProductBusiness } from '@shopify/mapHomePageProductBusiness';
 import { useConfiguratorCatalog } from '@providers/configuratorCatalogProvider';
 import { ProductCatalogOption } from '@molecules/ProductCatalogOption';
+import { useConfiguratorSceneLoad, useProductCatalogRequest } from '@store';
 import type { homePageCollectionType, productCatalogPopoverPropsType } from '@types';
 import { cn, hasModel } from '@utils';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 
 type catalogPopoverViewType = 'collections' | 'products';
+
+const CATALOG_MOBILE_MEDIA_QUERY = '(max-width: 639px)';
+
+const isMobileViewport = () =>
+  typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia(CATALOG_MOBILE_MEDIA_QUERY).matches;
 
 const CATALOG_CARD_SIZE_PX = 160;
 const CATALOG_GRID_GAP_PX = 4;
@@ -50,12 +57,14 @@ const ProductCatalogPopover = ({
   children,
   contentSide = 'right',
   contentAlign = 'start',
+  autoOpenOnRequest = false,
 }: productCatalogPopoverPropsType) => {
   const { collections } = useConfiguratorCatalog();
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [view, setView] = useState<catalogPopoverViewType>('products');
   const [selectedCollectionHandle, setSelectedCollectionHandle] = useState(activeCollectionHandle);
+  const consumeCatalogRequest = useProductCatalogRequest((state) => state.consume);
 
   const selectedCollection = useMemo(
     () => collections.find((collection) => collection.handle === selectedCollectionHandle) ?? collections[0],
@@ -87,6 +96,41 @@ const ProductCatalogPopover = ({
     setDialogOpen(nextOpen);
     syncCatalogView(nextOpen);
   };
+
+  const openCatalogRef = useRef(handlePopoverOpenChange);
+
+  useEffect(() => {
+    openCatalogRef.current = isMobileViewport() ? handleDialogOpenChange : handlePopoverOpenChange;
+  });
+
+  useEffect(() => {
+    if (!autoOpenOnRequest) return;
+
+    let fadeTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const openWhenLoaderGone = () => {
+      if (fadeTimer) return;
+      if (!useProductCatalogRequest.getState().isRequested) return;
+      if (useConfiguratorSceneLoad.getState().isInitialSceneLoading) return;
+
+      consumeCatalogRequest();
+      fadeTimer = setTimeout(() => {
+        fadeTimer = null;
+        openCatalogRef.current(true);
+      }, CONFIGURATOR_LOADER_FADE_MS);
+    };
+
+    openWhenLoaderGone();
+
+    const unsubscribeRequest = useProductCatalogRequest.subscribe(openWhenLoaderGone);
+    const unsubscribeSceneLoad = useConfiguratorSceneLoad.subscribe(openWhenLoaderGone);
+
+    return () => {
+      if (fadeTimer) clearTimeout(fadeTimer);
+      unsubscribeRequest();
+      unsubscribeSceneLoad();
+    };
+  }, [autoOpenOnRequest, consumeCatalogRequest]);
 
   const handleProductSelect = (collectionHandle: string, product: homePageCollectionType['products'][number]) => {
     if (!product.modelId || !hasModel(product.modelId)) return;

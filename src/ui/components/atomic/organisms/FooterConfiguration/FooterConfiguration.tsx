@@ -48,6 +48,14 @@ const FooterConfiguration = () => {
     toggleGizmoVisible();
   }, [toggleGizmoVisible]);
 
+  const catalogPopoverProps = {
+    activeCollectionHandle: activeItem.collectionHandle,
+    onSelect: requestAddProduct,
+    contentSide: 'top',
+    contentAlign: 'center',
+    autoOpenOnRequest: true,
+  } as const;
+
   const smallButtonClass =
     'max-sm:h-8 max-sm:w-full max-sm:gap-0.5 max-sm:rounded-lg max-sm:bg-[#D4D4D8]/80 max-sm:px-1.5 max-sm:text-[12px] max-sm:leading-4 max-sm:font-semibold max-sm:[&_svg]:size-3 max-[375px]:text-[9px]! max-[375px]:h-6!';
 
@@ -58,7 +66,7 @@ const FooterConfiguration = () => {
           <SvgIcon name="share" />
           Condividi
         </Button>
-        <ProductCatalogPopover activeCollectionHandle={activeItem.collectionHandle} onSelect={requestAddProduct} contentSide="top" contentAlign="center">
+        <ProductCatalogPopover {...catalogPopoverProps}>
           <Button size="sm">
             <SvgIcon name="plus" />
             Prodotto
@@ -95,7 +103,7 @@ const FooterConfiguration = () => {
             <SvgIcon name="share" />
             Condividi
           </Button>
-          <ProductCatalogPopover activeCollectionHandle={activeItem.collectionHandle} onSelect={requestAddProduct} contentSide="top" contentAlign="center">
+          <ProductCatalogPopover {...catalogPopoverProps}>
             <Button size="sm" className={smallButtonClass}>
               <SvgIcon name="plus" />
               Prodotto

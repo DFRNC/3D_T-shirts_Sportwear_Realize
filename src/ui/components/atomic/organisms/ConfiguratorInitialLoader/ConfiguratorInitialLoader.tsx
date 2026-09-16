@@ -3,6 +3,8 @@
 import { motion } from 'motion/react';
 
 import { Box } from '@atoms';
+
+import { CONFIGURATOR_LOADER_FADE_SECONDS } from '@constants';
 import { MainLoader, MainLoaderBackground } from '@molecules';
 import { useConfiguratorSceneLoad } from '@store';
 
@@ -14,7 +16,7 @@ const ConfiguratorInitialLoader = () => {
       className="absolute inset-0 z-50 flex items-center justify-center overflow-hidden"
       initial={false}
       animate={{ opacity: isInitialSceneLoading ? 1 : 0 }}
-      transition={isInitialSceneLoading ? { duration: 0 } : { duration: 0.45, ease: 'easeInOut' }}
+      transition={isInitialSceneLoading ? { duration: 0 } : { duration: CONFIGURATOR_LOADER_FADE_SECONDS, ease: 'easeInOut' }}
       style={{ pointerEvents: isInitialSceneLoading ? 'auto' : 'none' }}
       aria-busy={isInitialSceneLoading}
       aria-hidden={!isInitialSceneLoading}

@@ -47,6 +47,7 @@ export { resolvePrintPositionConflicts } from './resolvePrintPositionConflicts';
 export { useAddProductDesignDialog } from './useAddProductDesignDialog';
 export { useEmbeddedStoreHeader } from './useEmbeddedStoreHeader';
 export { useInfoDialog } from './useInfoDialog';
+export { useProductCatalogRequest } from './useProductCatalogRequest';
 export { useScrollHintTutorial } from './useScrollHintTutorial';
 export { useShareDialog } from './useShareDialog';
 export type { shareDialogStatusType } from './useShareDialog';
