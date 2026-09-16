@@ -8,9 +8,9 @@ import { CHECKOUT_PRODUCT_ACTIONS } from '@constants';
 import { useShareConfiguration } from '@hooks';
 import { useInfoDialog } from '@store';
 import type { checkoutProductActionIdType, checkoutProductActionsMenuPropsType } from '@types';
-import { cn } from '@utils';
+import { cn, downloadImageSource } from '@utils';
 
-const CheckoutProductActionsMenu = ({ cartItemId, sizeChart, className }: checkoutProductActionsMenuPropsType) => {
+const CheckoutProductActionsMenu = ({ cartItemId, productName, previewSrc, sizeChart, className }: checkoutProductActionsMenuPropsType) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { shareConfiguration } = useShareConfiguration();
@@ -18,6 +18,11 @@ const CheckoutProductActionsMenu = ({ cartItemId, sizeChart, className }: checko
 
   const handleAction = (actionId: checkoutProductActionIdType) => {
     setIsOpen(false);
+
+    if (actionId === 'save-image') {
+      void downloadImageSource(previewSrc, productName);
+      return;
+    }
 
     if (actionId === 'share') {
       void shareConfiguration(cartItemId);
@@ -67,20 +72,20 @@ const CheckoutProductActionsMenu = ({ cartItemId, sizeChart, className }: checko
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
-            className="absolute left-1/2 top-full z-30 -translate-x-1/2 pt-[5px] max-sm:left-auto max-sm:right-0 max-sm:translate-x-0"
+            className="absolute left-1/2 top-full z-30 -translate-x-1/2 pt-1.25 max-sm:left-auto max-sm:right-0 max-sm:translate-x-0"
           >
             <span
-              className="absolute left-1/2 top-[5px] h-5 w-px -translate-x-1/2 bg-gray-30 max-sm:left-auto max-sm:right-[9.5px] max-sm:translate-x-0"
+              className="absolute left-1/2 top-1.25 h-5 w-px -translate-x-1/2 bg-gray-30 max-sm:left-auto max-sm:right-[9.5px] max-sm:translate-x-0"
               aria-hidden
             />
-            <div role="menu" className="mt-6 flex w-[151px] flex-col gap-1">
+            <div role="menu" className="mt-6 flex w-37.75 flex-col gap-1">
               {CHECKOUT_PRODUCT_ACTIONS.map((action) => (
                 <button
                   key={action.id}
                   type="button"
                   role="menuitem"
                   onClick={() => handleAction(action.id)}
-                  className="flex h-[28.5px] w-full shrink-0 cursor-pointer items-center gap-2 rounded-[4px] bg-primary px-3 py-1.5 text-left text-[12px] leading-[15px] font-semibold text-default transition-colors hover:bg-primary-button"
+                  className="flex h-[28.5px] w-full shrink-0 cursor-pointer items-center gap-2 rounded-sm bg-primary px-3 py-1.5 text-left text-[12px] leading-3.75 font-semibold text-default transition-colors hover:bg-primary-button"
                 >
                   <SvgIcon name={action.icon} className="size-3.5 shrink-0" />
                   {action.label}

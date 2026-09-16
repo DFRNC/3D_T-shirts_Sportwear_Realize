@@ -16,6 +16,7 @@ export type { buildOrderCuttingExportPdfBlobOptionsType } from './buildOrderCutt
 export { isPdfReadyImageSrc, rasterizeImageForPdf, rasterizeImagesForPdf } from './exportPdfAssets';
 export { buildAssetDownloadUrl } from './buildAssetDownloadUrl';
 export { buildPublicAssetDownloadUrl, parsePublicAppOrigin, resolvePublicAppOrigin } from './resolvePublicAppOrigin';
+export { downloadImageSource } from './downloadImageSource';
 export { triggerPdfDownload } from './triggerPdfDownload';
 export { withTimeout } from './withTimeout';
 export { randomId } from './randomId';

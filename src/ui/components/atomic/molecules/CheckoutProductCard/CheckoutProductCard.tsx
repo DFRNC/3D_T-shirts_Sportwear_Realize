@@ -50,7 +50,13 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
           <Flex variant="checkout_product_price_row_mobile">
             <Text variant="product_price_mobile_only">{priceFormat(subtotal)}</Text>
             <Text variant="small">prezzo totale</Text>
-            <CheckoutProductActionsMenu cartItemId={product.cartItemId} sizeChart={product.business?.sizeChart} className="ml-auto" />
+            <CheckoutProductActionsMenu
+              cartItemId={product.cartItemId}
+              productName={productName}
+              previewSrc={previewSrc}
+              sizeChart={product.business?.sizeChart}
+              className="ml-auto"
+            />
           </Flex>
           <Flex variant="checkout_product_actions" onClick={stopToggle}>
             <Button variant="primary" size="xs" className="max-sm:text-[11px] max-sm:px-2 max-sm:py-1">
@@ -79,7 +85,12 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
           <Flex variant="checkout_product_quantity_inner">
             <Text variant="product_price">{priceFormat(subtotal)}</Text>
             <Text variant="small">prezzo totale</Text>
-            <CheckoutProductActionsMenu cartItemId={product.cartItemId} sizeChart={product.business?.sizeChart} />
+            <CheckoutProductActionsMenu
+              cartItemId={product.cartItemId}
+              productName={productName}
+              previewSrc={previewSrc}
+              sizeChart={product.business?.sizeChart}
+            />
           </Flex>
           <Flex variant="checkout_product_meta_row">
             <Text variant="small">{CHECKOUT_DISCOUNT_INFO_LABEL}</Text>

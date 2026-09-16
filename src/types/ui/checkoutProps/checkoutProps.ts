@@ -6,6 +6,8 @@ interface checkoutProductCardPropsType {
 
 interface checkoutProductActionsMenuPropsType {
   cartItemId: string;
+  productName: string;
+  previewSrc: string;
   sizeChart?: modalInfoTabType;
   className?: string;
 }
