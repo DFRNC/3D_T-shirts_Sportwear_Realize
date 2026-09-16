@@ -20,6 +20,7 @@ export { registerShopifyFiles } from './registerShopifyFiles';
 export { isValidShareId, resolveShareConfigFileUrl } from './resolveShareConfigFileUrl';
 export { fetchSharedConfiguration } from './fetchSharedConfiguration';
 export type { registerShopifyFileInputType, shopifyFileContentType, stagedUploadFileInputType, stagedUploadTargetType } from './stagedUpload';
+export { fetchOrderMetafields } from './fetchOrderMetafields';
 export { ORDER_METAFIELD_NAMESPACE, setOrderMetafields } from './setOrderMetafields';
 export type { orderMetafieldInputType } from './setOrderMetafields';
 export { verifyShopifyWebhookSignature } from './verifyShopifyWebhookSignature';

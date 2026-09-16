@@ -25,7 +25,7 @@ const ORDER_METAFIELD_NAMESPACE = 'configurator';
 
 type orderMetafieldInputType = {
   key: string;
-  type: 'url' | 'json';
+  type: 'url' | 'json' | 'date_time';
   value: string;
 };
 

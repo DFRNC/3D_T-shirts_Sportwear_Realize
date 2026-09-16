@@ -24,6 +24,8 @@ type orderPdfContextType = {
   shippingAddress: { company: string; street: string; postalCode: string; city: string; province: string; country: string };
   billingNote: string;
   money: { subtotal: number; discountAmount: number; shippingCost: number; grandTotal: number };
+  existingAssets?: { orderPdfUrl?: string | null; cuttingPdfUrl?: string | null };
+  onAssetUploaded?: (key: 'order_pdf_url' | 'cutting_pdf_url', url: string) => Promise<void>;
 };
 
 type orderPdfUrlsType = {
@@ -32,6 +34,8 @@ type orderPdfUrlsType = {
   orderPdfBuffer: Buffer;
   cuttingPdfBuffer: Buffer;
 };
+
+const ORDER_ASSET_FILE_STATUS_POLL_TIMEOUT_MS = 90_000;
 
 const isHttpUrl = (value: string | null | undefined): value is string => !!value && /^https?:/i.test(value);
 
@@ -106,6 +110,23 @@ const reconstructCheckoutState = (config: checkoutConfigExportType) => {
   const cartItems = config.products.map((product) => ({ id: product.cartItemId, modelId: product.modelId }) as cartItemType);
 
   return { products, configurations, previews, cartItems };
+};
+
+const uploadOrderPdf = async (
+  buffer: Buffer,
+  filename: string,
+  key: 'order_pdf_url' | 'cutting_pdf_url',
+  context: Pick<orderPdfContextType, 'existingAssets' | 'onAssetUploaded'>,
+): Promise<string> => {
+  const existingUrl = context.existingAssets?.[key === 'order_pdf_url' ? 'orderPdfUrl' : 'cuttingPdfUrl'];
+  if (isHttpUrl(existingUrl)) return existingUrl;
+
+  const url = await uploadShopifyFile(new Blob([Uint8Array.from(buffer)], { type: 'application/pdf' }), filename, 'application/pdf', {
+    fileStatusPollTimeoutMs: ORDER_ASSET_FILE_STATUS_POLL_TIMEOUT_MS,
+  });
+
+  await context.onAssetUploaded?.(key, url);
+  return url;
 };
 
 const generateOrderPdfs = async (context: orderPdfContextType): Promise<orderPdfUrlsType> => {
@@ -187,6 +208,7 @@ const generateOrderPdfs = async (context: orderPdfContextType): Promise<orderPdf
       new Blob([Uint8Array.from(pngBufferFromDataUrl(dataUrl))], { type: 'image/png' }),
       'complex_uv_atlas.png',
       'image/png',
+      { fileStatusPollTimeoutMs: ORDER_ASSET_FILE_STATUS_POLL_TIMEOUT_MS },
     );
     downloadLinkByKey.set(complexKey, buildPublicAssetDownloadUrl(context.appOrigin, fileUrl, 'complex_uv_atlas.png'));
   }
@@ -197,8 +219,8 @@ const generateOrderPdfs = async (context: orderPdfContextType): Promise<orderPdf
   ]);
 
   const [orderPdfUrl, cuttingPdfUrl] = await Promise.all([
-    uploadShopifyFile(new Blob([Uint8Array.from(orderPdfBuffer)], { type: 'application/pdf' }), CHECKOUT_ORDER_EXPORT_FILENAME, 'application/pdf'),
-    uploadShopifyFile(new Blob([Uint8Array.from(cuttingPdfBuffer)], { type: 'application/pdf' }), CHECKOUT_CUTTING_EXPORT_FILENAME, 'application/pdf'),
+    uploadOrderPdf(orderPdfBuffer, CHECKOUT_ORDER_EXPORT_FILENAME, 'order_pdf_url', context),
+    uploadOrderPdf(cuttingPdfBuffer, CHECKOUT_CUTTING_EXPORT_FILENAME, 'cutting_pdf_url', context),
   ]);
 
   return { orderPdfUrl, cuttingPdfUrl, orderPdfBuffer, cuttingPdfBuffer };

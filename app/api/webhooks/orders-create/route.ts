@@ -1,5 +1,5 @@
 import { sendOrderEmails } from '@mail';
-import { getShopifyAdminClientSecret, setOrderMetafields, verifyShopifyWebhookSignature } from '@shopify';
+import { fetchOrderMetafields, getShopifyAdminClientSecret, setOrderMetafields, verifyShopifyWebhookSignature } from '@shopify';
 import type { orderMetafieldInputType } from '@shopify';
 import { formatCheckoutOrderDate } from '@utils/buildCheckoutOrderExport';
 import { resolvePublicAppOrigin } from '@utils/resolvePublicAppOrigin';
@@ -100,6 +100,8 @@ type shopifyOrderPayloadType = {
   billing_address?: shopifyAddressType | null;
   note_attributes?: shopifyOrderNoteAttributeType[];
 };
+
+const ORDER_EMAILS_SENT_METAFIELD_KEY = 'emails_sent_at';
 
 const NOTE_ATTRIBUTE_KEYS = {
   uvImageUrls: '_uv_image_urls',
@@ -263,9 +265,24 @@ const processOrderWebhook = async (
   uvImageUrls: string | undefined,
   appOrigin: string | null,
 ): Promise<void> => {
-  const fields: orderMetafieldInputType[] = [];
-  fields.push({ key: 'config_url', type: 'url', value: configUrl });
-  if (uvImageUrls) fields.push({ key: 'uv_image_urls', type: 'json', value: uvImageUrls });
+  const orderGid = `gid://shopify/Order/${order.id}`;
+
+  let existingMetafields = new Map<string, string>();
+  try {
+    existingMetafields = await fetchOrderMetafields(orderGid);
+  } catch (error) {
+    console.error(`[shopify webhook] Failed to read existing metafields for order ${order.name ?? order.id}:`, error);
+  }
+
+  const baseFields: orderMetafieldInputType[] = [];
+  baseFields.push({ key: 'config_url', type: 'url', value: configUrl });
+  if (uvImageUrls) baseFields.push({ key: 'uv_image_urls', type: 'json', value: uvImageUrls });
+
+  try {
+    await setOrderMetafields(orderGid, baseFields);
+  } catch (error) {
+    console.error(`[shopify webhook] Failed to persist base metafields for order ${order.name ?? order.id}:`, error);
+  }
 
   const orderNumber = order.name ?? `#${order.id}`;
   const orderDate = formatCheckoutOrderDate(order.created_at ? new Date(order.created_at) : new Date());
@@ -286,11 +303,29 @@ const processOrderWebhook = async (
       shippingCost: toNumber(order.total_shipping_price_set?.shop_money?.amount),
       grandTotal: toNumber(order.total_price),
     },
+    existingAssets: {
+      orderPdfUrl: existingMetafields.get('order_pdf_url') ?? null,
+      cuttingPdfUrl: existingMetafields.get('cutting_pdf_url') ?? null,
+    },
+    onAssetUploaded: async (key, url) => {
+      try {
+        await setOrderMetafields(orderGid, [{ key, type: 'url', value: url }]);
+      } catch (error) {
+        console.error(`[shopify webhook] Failed to persist ${key} for order ${orderNumber}:`, error);
+      }
+    },
   });
 
-  fields.push({ key: 'order_pdf_url', type: 'url', value: orderPdfUrl });
-  fields.push({ key: 'cutting_pdf_url', type: 'url', value: cuttingPdfUrl });
-  await setOrderMetafields(`gid://shopify/Order/${order.id}`, fields);
+  await setOrderMetafields(orderGid, [
+    ...baseFields,
+    { key: 'order_pdf_url', type: 'url', value: orderPdfUrl },
+    { key: 'cutting_pdf_url', type: 'url', value: cuttingPdfUrl },
+  ]);
+
+  if (existingMetafields.has(ORDER_EMAILS_SENT_METAFIELD_KEY)) {
+    console.info(`[shopify webhook] Order ${orderNumber} emails already sent — skipping.`);
+    return;
+  }
 
   try {
     const emailResult = await sendOrderEmails({
@@ -304,8 +339,17 @@ const processOrderWebhook = async (
       cuttingPdfBuffer,
     });
     console.info(`[shopify webhook] Order ${orderNumber} emails — customer: ${emailResult.customer}, owner: ${emailResult.owner}.`);
+
+    if (emailResult.customer === 'failed' || emailResult.owner === 'failed') {
+      throw new Error(`Order emails partially failed — customer: ${emailResult.customer}, owner: ${emailResult.owner}.`);
+    }
+
+    if (emailResult.customer === 'sent' || emailResult.owner === 'sent') {
+      await setOrderMetafields(orderGid, [{ key: ORDER_EMAILS_SENT_METAFIELD_KEY, type: 'date_time', value: new Date().toISOString() }]);
+    }
   } catch (error) {
     console.error(`[shopify webhook] Failed to send order emails for ${orderNumber}:`, error);
+    throw error;
   }
 };
 
