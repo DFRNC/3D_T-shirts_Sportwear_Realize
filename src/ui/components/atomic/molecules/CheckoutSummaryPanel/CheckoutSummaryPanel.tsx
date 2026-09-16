@@ -145,7 +145,9 @@ const CheckoutSummaryMeta = ({ deliveryTimeline, compact }: Pick<CheckoutSummary
                 <Text variant="checkout_summary_timeline_step_label">{step.label}</Text>
                 <Text variant="checkout_summary_timeline_step_date">{date}</Text>
               </Flex>
-              {index < CHECKOUT_SUMMARY_TIMELINE_STEPS.length - 1 && <AtomSeparator className="mt-3 w-full max-w-16 shrink bg-[#9CA3AF]" />}
+              {index < CHECKOUT_SUMMARY_TIMELINE_STEPS.length - 1 && (
+                <AtomSeparator className="mt-3 w-full max-w-10 shrink bg-[#9CA3AF] max-xl:mt-2.5 max-xl:max-w-4 max-sm:max-w-10" />
+              )}
             </Fragment>
           );
         })}
