@@ -163,6 +163,7 @@ type flexVariantType =
   | 'checkout_product_details'
   | 'checkout_product_quantity_row'
   | 'checkout_product_quantity_inner'
+  | 'checkout_product_price_row_mobile'
   | 'checkout_product_side_column'
   | 'checkout_product_meta_row'
   | 'skeleton_step_inner_column'

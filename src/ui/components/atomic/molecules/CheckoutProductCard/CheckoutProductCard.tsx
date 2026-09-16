@@ -3,10 +3,11 @@
 import { ChevronDown } from 'lucide-react';
 
 import type { checkoutProductCardPropsType } from '@types';
-import { AtomImage, Box, Button, Flex, SvgIcon, Text } from '@atoms';
+import { AtomImage, Box, Button, Flex, Text } from '@atoms';
 import { CHECKOUT_DISCOUNT_INFO_LABEL, CHECKOUT_SHIPPING_DAYS_LABEL } from '@constants';
 import { useNavigateToConfigurator } from '@hooks';
 import { CheckoutConfigurationTable } from '@molecules/CheckoutConfigurationTable';
+import { CheckoutProductActionsMenu } from '@molecules/CheckoutProductActionsMenu';
 import { resolveCheckoutPrintAvailability, useCheckout, useConfigurationCart } from '@store';
 import { cn, getModel, priceFormat, resolveCartItemDisplayPreview } from '@utils';
 import { useMemo, useState } from 'react';
@@ -43,13 +44,14 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
       }}
     >
       <Flex variant="checkout_product_layout">
-        <AtomImage src={previewSrc} alt={productName} className="h-25.25 w-31.5 max-sm:h-16 max-sm:w-20" />
+        <AtomImage src={previewSrc} alt={productName} className="h-25.25 w-31.5 max-sm:h-16 max-sm:w-20 max-[359px]:h-12! max-[359px]:w-15!" />
         <Flex variant="checkout_product_details">
           <Text variant="product_name_no_margin">{productName}</Text>
-          <Text variant="product_price_mobile_only">
-            {priceFormat(subtotal)}
-            <span className="text-[12px] font-normal text-gray"> prezzo totale</span>
-          </Text>
+          <Flex variant="checkout_product_price_row_mobile">
+            <Text variant="product_price_mobile_only">{priceFormat(subtotal)}</Text>
+            <Text variant="small">prezzo totale</Text>
+            <CheckoutProductActionsMenu cartItemId={product.cartItemId} sizeChart={product.business?.sizeChart} className="ml-auto" />
+          </Flex>
           <Flex variant="checkout_product_actions" onClick={stopToggle}>
             <Button variant="primary" size="xs" className="max-sm:text-[11px] max-sm:px-2 max-sm:py-1">
               Elenco giocatori
@@ -77,7 +79,7 @@ const CheckoutProductCard = ({ product }: checkoutProductCardPropsType) => {
           <Flex variant="checkout_product_quantity_inner">
             <Text variant="product_price">{priceFormat(subtotal)}</Text>
             <Text variant="small">prezzo totale</Text>
-            <SvgIcon name="three_dots" className="size-7 text-gray" />
+            <CheckoutProductActionsMenu cartItemId={product.cartItemId} sizeChart={product.business?.sizeChart} />
           </Flex>
           <Flex variant="checkout_product_meta_row">
             <Text variant="small">{CHECKOUT_DISCOUNT_INFO_LABEL}</Text>

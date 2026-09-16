@@ -3,6 +3,7 @@ export type {
   checkoutConfigurationTableColumnHandlersType,
   checkoutConfigurationTableColumnType,
   checkoutConfigurationTablePropsType,
+  checkoutProductActionsMenuPropsType,
   checkoutProductCardPropsType,
   checkoutQuantityStepperPropsType,
   checkoutRowEditModalPropsType,

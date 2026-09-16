@@ -23,48 +23,52 @@ const useShareConfiguration = () => {
   const resolveShareUrl = useShareDialog((state) => state.resolveShareUrl);
   const failShare = useShareDialog((state) => state.failShare);
 
-  const shareConfiguration = useCallback(async () => {
-    const { items, activeItemId } = useConfigurationCart.getState();
-    const activeItem = items.find((item) => item.id === activeItemId) ?? items[0];
+  const shareConfiguration = useCallback(
+    async (cartItemId?: string) => {
+      const { items, activeItemId, getConfiguration } = useConfigurationCart.getState();
+      const targetId = cartItemId ?? activeItemId;
+      const targetItem = items.find((item) => item.id === targetId) ?? items[0];
 
-    if (!activeItem) {
-      openPending();
-      failShare();
-      return;
-    }
-
-    openPending();
-
-    try {
-      const shareExport = buildShareConfigExport({
-        collectionHandle: activeItem.collectionHandle,
-        slug: activeItem.slug,
-        modelId: activeItem.modelId,
-        business: activeItem.business,
-        configuration: captureGarmentConfiguration(),
-      });
-
-      const shareId = createShareId();
-
-      const urlById = await uploadCheckoutAssetsDirect([
-        {
-          id: 'share-config',
-          blob: new Blob([JSON.stringify(shareExport)], { type: 'application/json' }),
-          filename: `${SHARE_CONFIG_EXPORT_FILENAME_PREFIX}-${shareId}.json`,
-          mimeType: 'application/json',
-        },
-      ]);
-
-      if (!urlById.get('share-config')) {
-        throw new Error('Share configuration upload returned no URL.');
+      if (!targetItem) {
+        openPending();
+        failShare();
+        return;
       }
 
-      resolveShareUrl(buildShareUrl(shareId, activeItem.slug));
-    } catch (error) {
-      console.error('[share] Failed to share configuration.', error);
-      failShare();
-    }
-  }, [openPending, resolveShareUrl, failShare]);
+      openPending();
+
+      try {
+        const shareExport = buildShareConfigExport({
+          collectionHandle: targetItem.collectionHandle,
+          slug: targetItem.slug,
+          modelId: targetItem.modelId,
+          business: targetItem.business,
+          configuration: getConfiguration(targetItem.id) ?? captureGarmentConfiguration(),
+        });
+
+        const shareId = createShareId();
+
+        const urlById = await uploadCheckoutAssetsDirect([
+          {
+            id: 'share-config',
+            blob: new Blob([JSON.stringify(shareExport)], { type: 'application/json' }),
+            filename: `${SHARE_CONFIG_EXPORT_FILENAME_PREFIX}-${shareId}.json`,
+            mimeType: 'application/json',
+          },
+        ]);
+
+        if (!urlById.get('share-config')) {
+          throw new Error('Share configuration upload returned no URL.');
+        }
+
+        resolveShareUrl(buildShareUrl(shareId, targetItem.slug));
+      } catch (error) {
+        console.error('[share] Failed to share configuration.', error);
+        failShare();
+      }
+    },
+    [openPending, resolveShareUrl, failShare],
+  );
 
   return { shareConfiguration };
 };

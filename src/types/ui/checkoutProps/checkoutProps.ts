@@ -1,7 +1,13 @@
-import type { checkoutLineRowPatchType, checkoutLineRowType, checkoutPrintAvailabilityType, checkoutProductType } from '@types';
+import type { checkoutLineRowPatchType, checkoutLineRowType, checkoutPrintAvailabilityType, checkoutProductType, modalInfoTabType } from '@types';
 import type { ReactNode } from 'react';
 interface checkoutProductCardPropsType {
   product: checkoutProductType;
+}
+
+interface checkoutProductActionsMenuPropsType {
+  cartItemId: string;
+  sizeChart?: modalInfoTabType;
+  className?: string;
 }
 
 interface checkoutConfigurationTablePropsType {
@@ -78,6 +84,7 @@ export type {
   checkoutConfigurationTableColumnHandlersType,
   checkoutConfigurationTableColumnType,
   checkoutConfigurationTablePropsType,
+  checkoutProductActionsMenuPropsType,
   checkoutProductCardPropsType,
   checkoutQuantityStepperPropsType,
   checkoutRowEditModalPropsType,

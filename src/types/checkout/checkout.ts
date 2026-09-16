@@ -1,4 +1,4 @@
-import type { garmentBusinessType, modelIdType } from '@types';
+import type { garmentBusinessType, modelIdType, svgIconNameType } from '@types';
 
 interface checkoutLineRowType {
   id: string;
@@ -35,4 +35,20 @@ interface checkoutPrintAvailabilityType {
   hasTesto: boolean;
 }
 
-export type { checkoutLineRowPatchType, checkoutLineRowType, checkoutPrintAvailabilityType, checkoutProductType, checkoutRowPresetType };
+type checkoutProductActionIdType = 'save-image' | 'share' | 'order-info';
+
+interface checkoutProductActionType {
+  id: checkoutProductActionIdType;
+  label: string;
+  icon: svgIconNameType;
+}
+
+export type {
+  checkoutLineRowPatchType,
+  checkoutLineRowType,
+  checkoutPrintAvailabilityType,
+  checkoutProductActionIdType,
+  checkoutProductActionType,
+  checkoutProductType,
+  checkoutRowPresetType,
+};

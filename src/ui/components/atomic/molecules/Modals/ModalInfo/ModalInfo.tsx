@@ -9,7 +9,9 @@ import { useState } from 'react';
 const ModalInfo = () => {
   const isOpen = useInfoDialog((state) => state.isOpen);
   const setIsOpen = useInfoDialog((state) => state.setIsOpen);
-  const sizeChart = useConfiguratorProduct((state) => state.business.sizeChart);
+  const productSizeChart = useConfiguratorProduct((state) => state.business.sizeChart);
+  const overrideSizeChart = useInfoDialog((state) => state.sizeChart);
+  const sizeChart = overrideSizeChart ?? productSizeChart;
   const [activeTab, setActiveTab] = useState(MODAL_INFO_TABS[0]?.value ?? 'faq');
 
   return (

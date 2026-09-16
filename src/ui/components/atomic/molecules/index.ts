@@ -16,6 +16,7 @@ export { CheckoutConfigurationTable } from './CheckoutConfigurationTable';
 export { CheckoutQuantityStepper } from './CheckoutQuantityStepper';
 export { CheckoutRowEditModal } from './CheckoutRowEditModal';
 export { CheckoutSizePopover } from './CheckoutSizePopover';
+export { CheckoutProductActionsMenu } from './CheckoutProductActionsMenu';
 export { CheckoutProductCard } from './CheckoutProductCard';
 export { CheckoutOrderExport } from './CheckoutOrderExport';
 export { OrderCuttingExport } from './OrderCuttingExport';

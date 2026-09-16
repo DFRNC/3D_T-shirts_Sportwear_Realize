@@ -1,6 +1,6 @@
 import { LOGO_MAX_USER_FILES } from '@configurator/constants';
 import type { configuratorStepValueType } from '@configurator/types';
-import type { modelIdType } from '@types';
+import type { checkoutProductActionType, modelIdType } from '@types';
 
 const DEFAULT_CONFIGURATOR_MODEL_ID: modelIdType = 'federer_pallavolo';
 const DEFAULT_CONFIGURATOR_SLUG = 'federer_pallavolo';
@@ -8,6 +8,12 @@ const DEFAULT_CONFIGURATOR_COLLECTION_HANDLE = '';
 
 const CONFIGURATOR_PRODUCT_DESCRIPTION = "Eventuali liste dei giocatori, quantità e taglie da inserire dopo in 'Completa config.'";
 const CONFIGURATOR_DEFAULT_MINIMUM_COUNT = 5;
+
+const CHECKOUT_PRODUCT_ACTIONS = [
+  { id: 'save-image', label: 'Salva Immagine', icon: 'download' },
+  { id: 'share', label: 'Condividi', icon: 'share_filled' },
+  { id: 'order-info', label: 'Info Ordine', icon: 'info_filled' },
+] as const satisfies readonly checkoutProductActionType[];
 
 const CONFIGURATOR_LOADER_FADE_SECONDS = 0.45;
 const CONFIGURATOR_LOADER_FADE_MS = CONFIGURATOR_LOADER_FADE_SECONDS * 1000;
@@ -238,6 +244,7 @@ export {
   CONFIGURATOR_DEFAULT_BRAND_LOGO_SRC,
   CONFIGURATOR_DEFAULT_BRAND_LOGO_TITLE,
   CONFIGURATOR_DEFAULT_MINIMUM_COUNT,
+  CHECKOUT_PRODUCT_ACTIONS,
   CONFIGURATOR_LOADER_FADE_MS,
   CONFIGURATOR_LOADER_FADE_SECONDS,
   CONFIGURATOR_GRADIENT_ACTIVE_LABEL,
